@@ -1,1 +1,1 @@
-rootProject.name = "commons"
+rootProject.name = "bratek20-commons"
