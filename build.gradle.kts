@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "pl.bratek20"
-version = "1.0-SNAPSHOT"
+version = "1.0"
 
 dependencies {
     // scripts
