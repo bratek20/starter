@@ -11,7 +11,7 @@ repositories {
 publishing {
     publications {
         create<MavenPublication>("myPublication") {
-            // configuration for the Maven publication
+            from(components["java"])
         }
     }
     repositories {
