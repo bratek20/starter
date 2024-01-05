@@ -4,6 +4,10 @@ plugins {
     id("io.freefair.lombok")
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+}
+
 dependencies {
     // dependency injection
     implementation("org.springframework:spring-context:6.1.2")
