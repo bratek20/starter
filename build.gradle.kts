@@ -1,11 +1,11 @@
 plugins {
-    `java-library`
+    id("bratek20-commons.library-conventions")
 
-    id("commons.base-conventions")
+    id("bratek20-commons.local-publish-conventions")
 }
 
 group = "pl.bratek20"
-version = "1.0.3"
+version = "1.0.4"
 
 dependencies {
     // scripts
@@ -16,11 +16,7 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-core:2.21.0")
     implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.21.0")
 
-    // testing
-    testImplementation(platform("org.junit:junit-bom:5.9.1"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
+    //event bus
+    implementation("com.google.guava:guava:32.1.2-jre")
 }
 
-tasks.test {
-    useJUnitPlatform()
-}

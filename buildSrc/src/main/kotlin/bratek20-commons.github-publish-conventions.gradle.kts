@@ -1,11 +1,5 @@
 plugins {
-    id("io.freefair.lombok")
-
     `maven-publish`
-}
-
-repositories {
-    mavenCentral()
 }
 
 publishing {
