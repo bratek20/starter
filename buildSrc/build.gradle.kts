@@ -4,9 +4,6 @@ plugins {
     `maven-publish`
 }
 
-group = "pl.bratek20"
-version = "1.0.4"
-
 repositories {
     gradlePluginPortal()
 }
@@ -17,8 +14,10 @@ dependencies {
 
 publishing {
     publications {
-        create<MavenPublication>("myPublication") {
-            from(components["kotlin"])
+        create<MavenPublication>("pluginMaven") {
+            groupId = "pl.bratek20"
+            artifactId = "buildSrc"
+            version = "1.0.4"
         }
     }
     repositories {
