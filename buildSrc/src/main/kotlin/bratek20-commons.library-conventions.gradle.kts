@@ -1,5 +1,3 @@
-import gradle.kotlin.dsl.accessors._bbdd540c3f1a7230be14131199c11eda.implementation
-
 plugins {
     id("bratek20-commons.base-conventions")
 
