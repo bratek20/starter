@@ -1,7 +1,7 @@
 plugins {
-    id("bratek20-commons.library-conventions")
+    id("pl.bratek20.library-conventions")
 
-    id("bratek20-commons.local-publish-conventions")
+    id("pl.bratek20.local-publish-conventions")
 }
 
 group = "pl.bratek20"

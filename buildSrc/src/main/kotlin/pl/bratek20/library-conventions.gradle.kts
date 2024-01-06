@@ -1,5 +1,7 @@
+package pl.bratek20
+
 plugins {
-    id("bratek20-commons.base-conventions")
+    id("pl.bratek20.base-conventions")
 
     `java-library`
 

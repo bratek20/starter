@@ -1,3 +1,5 @@
+package pl.bratek20
+
 plugins {
     `maven-publish`
 }
