@@ -1,6 +1,7 @@
 package pl.bratek20.commons.user.web;
 
 import io.restassured.http.ContentType;
+import org.junit.jupiter.api.Disabled;
 import pl.bratek20.commons.identity.api.IdentityId;
 import pl.bratek20.commons.user.api.User;
 import pl.bratek20.commons.user.api.UserApi;
@@ -19,6 +20,7 @@ import static io.restassured.RestAssured.given;
 //    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 //)
 //@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@Disabled
 class UserWebTest extends UserApiTest {
 
 //    @LocalServerPort

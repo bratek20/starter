@@ -13,12 +13,16 @@ publishing {
     repositories {
         mavenLocal()
 
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/bratek20/commons")
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
+        when {
+            System.getenv("GITHUB_ACTOR") != null && System.getenv("GITHUB_TOKEN") != null -> {
+                maven {
+                    name = "GitHubPackages"
+                    url = uri("https://maven.pkg.github.com/bratek20/commons")
+                    credentials {
+                        username = System.getenv("GITHUB_ACTOR")
+                        password = System.getenv("GITHUB_TOKEN")
+                    }
+                }
             }
         }
     }
