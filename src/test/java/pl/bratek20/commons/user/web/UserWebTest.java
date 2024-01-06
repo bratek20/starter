@@ -1,8 +1,13 @@
 package pl.bratek20.commons.user.web;
 
+import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Disabled;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import pl.bratek20.commons.identity.api.IdentityId;
+import pl.bratek20.commons.spring.web.SpringWebContextCreator;
+import pl.bratek20.commons.spring.web.WebAppConfig;
 import pl.bratek20.commons.user.api.User;
 import pl.bratek20.commons.user.api.UserApi;
 import pl.bratek20.commons.user.api.UserApiTest;
@@ -12,27 +17,15 @@ import pl.bratek20.commons.user.api.exceptions.WrongUserPasswordException;
 
 import static io.restassured.RestAssured.given;
 
-//@SpringBootTest(
-//    classes = {
-//        BaseWebConfig.class,
-//        UserWebServerConfig.class,
-//    },
-//    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-//)
-//@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-@Disabled
 class UserWebTest extends UserApiTest {
-
-//    @LocalServerPort
-//    private int port;
-
-    @Override
-    protected void setup() {
-//        RestAssured.port = port;
-    }
 
     @Override
     protected UserApi createApi() {
+        var x = new SpringWebContextCreator(
+            WebAppConfig.class,
+            UserWebServerConfig.class
+        ).build();
+        RestAssured.port = x.port;
         return new WebClient();
     }
 

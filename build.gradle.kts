@@ -1,5 +1,7 @@
+
 plugins {
     id("pl.bratek20.library-conventions")
+    id("pl.bratek20.spring-conventions")
 }
 
 group = "pl.bratek20"
@@ -18,12 +20,13 @@ dependencies {
     implementation("com.google.guava:guava:32.1.2-jre")
 
     // dependency injection
-    implementation("org.springframework:spring-context:6.1.2")
+    //implementation("org.springframework:spring-context:6.1.2")
 
     //spring web
-    implementation("org.springframework:spring-web:6.1.2")
+    //implementation("org.springframework:spring-web:6.1.2")
 
     testImplementation("io.rest-assured:rest-assured:5.3.0")
 
+    implementation("org.springframework.boot:spring-boot-starter-web")
 }
 
