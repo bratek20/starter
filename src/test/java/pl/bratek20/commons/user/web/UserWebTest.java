@@ -2,18 +2,14 @@ package pl.bratek20.commons.user.web;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.junit.jupiter.api.Disabled;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import pl.bratek20.commons.identity.api.IdentityId;
-import pl.bratek20.commons.spring.web.SpringWebContextCreator;
-import pl.bratek20.commons.spring.web.WebAppConfig;
 import pl.bratek20.commons.user.api.User;
 import pl.bratek20.commons.user.api.UserApi;
 import pl.bratek20.commons.user.api.UserApiTest;
 import pl.bratek20.commons.user.api.exceptions.UserAlreadyExistsException;
 import pl.bratek20.commons.user.api.exceptions.UserNotExistsException;
 import pl.bratek20.commons.user.api.exceptions.WrongUserPasswordException;
+import pl.bratek20.spring.web.SpringWebAppBuilder;
 
 import static io.restassured.RestAssured.given;
 
@@ -21,8 +17,7 @@ class UserWebTest extends UserApiTest {
 
     @Override
     protected UserApi createApi() {
-        var x = new SpringWebContextCreator(
-            WebAppConfig.class,
+        var x = new SpringWebAppBuilder(
             UserWebServerConfig.class
         ).build();
         RestAssured.port = x.port;

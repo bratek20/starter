@@ -1,4 +1,4 @@
-package pl.bratek20.commons.spring.di;
+package pl.bratek20.spring.di;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.Bean;

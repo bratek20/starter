@@ -18,8 +18,8 @@ dependencies {
 publishing {
     publications {
         create<MavenPublication>("pluginMaven") {
-            groupId = "pl.bratek20.plugins"
-            artifactId = "plugins-conventions"
+            groupId = "pl.bratek20"
+            artifactId = "bratek20-conventions"
             version = "1.0.4"
         }
     }

@@ -1,4 +1,4 @@
-package pl.bratek20.commons.spring.di;
+package pl.bratek20.spring.di;
 
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

@@ -2,7 +2,7 @@ package pl.bratek20.commons.script;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import pl.bratek20.commons.spring.di.SpringContext;
+import pl.bratek20.spring.di.SpringContext;
 
 @RequiredArgsConstructor
 public class SpringScriptRunner<TApi, TArgs> {
