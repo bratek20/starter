@@ -3,6 +3,8 @@ package pl.bratek20
 plugins {
     id("pl.bratek20.base-conventions")
 
+    id("pl.bratek20.publish-conventions")
+
     `java-library`
 
     `java-test-fixtures`

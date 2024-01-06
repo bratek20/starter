@@ -11,9 +11,6 @@ java {
 }
 
 dependencies {
-    // dependency injection
-    implementation("org.springframework:spring-context:6.1.2")
-
     // testing
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
