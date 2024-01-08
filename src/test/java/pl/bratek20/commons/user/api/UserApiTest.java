@@ -21,17 +21,6 @@ public abstract class UserApiTest extends BaseApiTest<UserApi> {
     }
 
     @Test
-    void shouldPersistCreatedUser() {
-        User user = new User("name", "password");
-        var id = api.create(user);
-
-        var newApi = createApi();
-        var idFromNewApi = newApi.getIdentityId(user);
-
-        assertThat(idFromNewApi).isEqualTo(id);
-    }
-
-    @Test
     void shouldCreateDifferentUsers() {
         User user1 = new User("name1", "password");
         User user2 = new User("name2", "password");

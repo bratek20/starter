@@ -3,7 +3,7 @@ package pl.bratek20.commons.events.impl;
 import pl.bratek20.commons.events.api.EventsApi;
 import pl.bratek20.commons.events.api.EventsApiTest;
 import pl.bratek20.commons.events.impl.infrastructure.EventsConfig;
-import pl.bratek20.spring.di.SpringContextBuilder;
+import pl.bratek20.spring.context.SpringContextBuilder;
 
 public class EventsImplTest extends EventsApiTest {
 

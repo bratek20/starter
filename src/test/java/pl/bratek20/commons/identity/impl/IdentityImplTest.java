@@ -2,7 +2,7 @@ package pl.bratek20.commons.identity.impl;
 
 import pl.bratek20.commons.identity.api.IdentityApi;
 import pl.bratek20.commons.identity.api.IdentityApiTest;
-import pl.bratek20.spring.di.SpringContextBuilder;
+import pl.bratek20.spring.context.SpringContextBuilder;
 
 public class IdentityImplTest extends IdentityApiTest {
 
