@@ -1,4 +1,4 @@
-package pl.bratek20.commons.user.impl.appli;
+package pl.bratek20.commons.user.impl.application;
 
 import java.util.Optional;
 

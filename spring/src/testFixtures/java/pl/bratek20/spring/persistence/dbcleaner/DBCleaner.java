@@ -1,4 +1,4 @@
-package pl.bratek20.spring.persistance.dbcleaner;
+package pl.bratek20.spring.persistence.dbcleaner;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;

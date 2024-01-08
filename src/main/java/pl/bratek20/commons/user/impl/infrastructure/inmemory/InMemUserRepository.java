@@ -1,7 +1,7 @@
-package pl.bratek20.commons.user.impl.infra;
+package pl.bratek20.commons.user.impl.infrastructure.inmemory;
 
-import pl.bratek20.commons.user.impl.appli.UserIdentity;
-import pl.bratek20.commons.user.impl.appli.UserRepository;
+import pl.bratek20.commons.user.impl.application.UserIdentity;
+import pl.bratek20.commons.user.impl.application.UserRepository;
 
 import java.util.HashMap;
 import java.util.Map;

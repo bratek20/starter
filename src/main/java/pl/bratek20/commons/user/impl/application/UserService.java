@@ -1,4 +1,4 @@
-package pl.bratek20.commons.user.impl.appli;
+package pl.bratek20.commons.user.impl.application;
 
 import lombok.RequiredArgsConstructor;
 import pl.bratek20.commons.identity.api.IdentityApi;

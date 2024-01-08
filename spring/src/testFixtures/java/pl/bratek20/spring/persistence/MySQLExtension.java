@@ -1,4 +1,4 @@
-package pl.bratek20.spring.persistance;
+package pl.bratek20.spring.persistence;
 
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;

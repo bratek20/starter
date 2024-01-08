@@ -1,4 +1,4 @@
-package pl.bratek20.commons.user.impl.appli;
+package pl.bratek20.commons.user.impl.application;
 
 import pl.bratek20.commons.identity.api.IdentityId;
 import pl.bratek20.commons.user.api.User;

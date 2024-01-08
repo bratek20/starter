@@ -1,4 +1,4 @@
-package pl.bratek20.spring.persistance.dbcleaner;
+package pl.bratek20.spring.persistence.dbcleaner;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
