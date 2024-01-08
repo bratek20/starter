@@ -8,6 +8,9 @@ group = "pl.bratek20.spring"
 version = "1.0.0"
 
 dependencies {
+    implementation(project(":spring:di"))
+    testFixturesImplementation(project(":spring:di"))
+
     implementation("org.springframework.boot:spring-boot-starter-web")
     testFixturesImplementation("org.springframework.boot:spring-boot-starter-web")
 }

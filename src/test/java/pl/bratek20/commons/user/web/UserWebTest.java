@@ -9,7 +9,7 @@ import pl.bratek20.commons.user.api.UserApiTest;
 import pl.bratek20.commons.user.api.exceptions.UserAlreadyExistsException;
 import pl.bratek20.commons.user.api.exceptions.UserNotExistsException;
 import pl.bratek20.commons.user.api.exceptions.WrongUserPasswordException;
-import pl.bratek20.spring.web.SpringWebAppBuilder;
+import pl.bratek20.spring.web.TestWebAppRunner;
 
 import static io.restassured.RestAssured.given;
 
@@ -17,10 +17,11 @@ class UserWebTest extends UserApiTest {
 
     @Override
     protected UserApi createApi() {
-        var x = new SpringWebAppBuilder(
+        var runner = new TestWebAppRunner(
             UserWebServerConfig.class
-        ).build();
-        RestAssured.port = x.port;
+        );
+        runner.run();
+        RestAssured.port = runner.getPort();
         return new WebClient();
     }
 

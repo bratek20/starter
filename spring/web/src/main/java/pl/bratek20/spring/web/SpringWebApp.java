@@ -2,6 +2,7 @@ package pl.bratek20.spring.web;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import pl.bratek20.spring.di.SpringContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +15,9 @@ public class SpringWebApp {
         this.configurations.add(WebAppConfig.class);
     }
 
-    ConfigurableApplicationContext run(int port) {
+    SpringContext run(int port) {
         var app = new SpringApplication(configurations.toArray(Class[]::new));
-        return app.run("--server.port=" + port);
+        return new SpringContext(app.run("--server.port=" + port));
     }
 }
 

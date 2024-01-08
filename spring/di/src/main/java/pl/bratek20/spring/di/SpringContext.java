@@ -1,11 +1,12 @@
 package pl.bratek20.spring.di;
 
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class SpringContext {
-    private final AnnotationConfigApplicationContext value;
+    private final ConfigurableApplicationContext value;
 
-    public SpringContext(AnnotationConfigApplicationContext value) {
+    public SpringContext(ConfigurableApplicationContext value) {
         this.value = value;
     }
 
