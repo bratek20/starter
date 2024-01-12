@@ -21,8 +21,7 @@ dependencies {
     implementation("org.flywaydb:flyway-mysql")
 
     // testcontainers
-    val testcontainersVersion = "1.16.0"
-    testFixturesImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
-    testFixturesImplementation("org.testcontainers:junit-jupiter:$testcontainersVersion")
-    testFixturesImplementation("org.testcontainers:mysql:$testcontainersVersion")
+    testFixturesImplementation("org.testcontainers:testcontainers")
+    testFixturesImplementation("org.testcontainers:junit-jupiter")
+    testFixturesImplementation("org.testcontainers:mysql")
 }
