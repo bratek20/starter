@@ -9,7 +9,12 @@ version = "1.0.5"
 dependencies {
     implementation(project(":spring"))
     testImplementation(testFixtures(project(":spring")))
+    testImplementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    testRuntimeOnly("com.h2database:h2")
+    runtimeOnly("com.h2database:h2")
+    implementation("org.springframework.boot:spring-boot-starter-web")
 
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     // scripts
     api("commons-cli:commons-cli:1.5.0")
 

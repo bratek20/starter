@@ -19,7 +19,7 @@ public class TestWebAppRunner {
     }
 
     public SpringContext run() {
-        var app = new WebApp(configurations);
+        var app = new WebApp(configurations, false, new String[]{});
         return app.run(port);
     }
 }

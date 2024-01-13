@@ -9,11 +9,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import pl.bratek20.commons.user.impl.application.UserRepository;
 
 @Configuration
-@Import({
-    DataSourceAutoConfiguration.class,
-})
-@EnableJpaRepositories
-@EntityScan
+//@Import({
+//    DataSourceAutoConfiguration.class,
+//})
+//@EnableJpaRepositories
+//@EntityScan
 public class CrudRepositoryConfig {
 
     @Bean
