@@ -8,7 +8,7 @@ import pl.bratek20.commons.user.impl.application.UserRepository;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public class CrudUserRepository implements UserRepository {
+class CrudUserRepository implements UserRepository {
 
     private final CrudUserEntityRepository repository;
 
