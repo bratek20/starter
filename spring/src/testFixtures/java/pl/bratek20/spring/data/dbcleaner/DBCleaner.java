@@ -1,4 +1,4 @@
-package pl.bratek20.spring.persistence.dbcleaner;
+package pl.bratek20.spring.data.dbcleaner;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

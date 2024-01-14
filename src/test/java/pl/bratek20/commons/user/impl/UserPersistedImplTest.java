@@ -5,20 +5,15 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import pl.bratek20.commons.user.api.UserApi;
 import pl.bratek20.commons.user.api.UserPersistedApiTest;
 import pl.bratek20.commons.user.impl.infrastructure.UserConfig;
 import pl.bratek20.commons.user.impl.infrastructure.persistance.CrudRepositoryConfig;
 import pl.bratek20.spring.context.SpringContextBuilder;
-import pl.bratek20.spring.persistence.MySQLExtension;
-import pl.bratek20.spring.persistence.dbcleaner.DBCleaner;
-
-import javax.sql.DataSource;
+import pl.bratek20.spring.data.MySQLExtension;
+import pl.bratek20.spring.data.dbcleaner.DBCleaner;
 
 @ExtendWith(MySQLExtension.class)
 public class UserPersistedImplTest extends UserPersistedApiTest {

@@ -1,7 +1,6 @@
-package pl.bratek20.spring.persistence;
+package pl.bratek20.spring.data;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import pl.bratek20.somepackage.somemodule.SomeModuleConfig;
 import pl.bratek20.somepackage.somemodule.SomeModuleEntity;
 import pl.bratek20.somepackage.somemodule.SomeModuleRepository;
@@ -9,33 +8,31 @@ import pl.bratek20.spring.context.SpringContextBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(MySQLExtension.class)
-class PersistenceConfigTest {
+abstract class DataConfigBaseTest {
+    abstract Class<?> getConfigClass();
 
-    @Test
-    void shouldGetRepository() {
+    private SomeModuleRepository getRepository() {
         var context = new SpringContextBuilder(
-            PersistenceConfig.class,
+            getConfigClass(),
             SomeModuleConfig.class
         ).build();
 
-        var repo = context.get(SomeModuleRepository.class);
+        return context.get(SomeModuleRepository.class);
+    }
+
+    @Test
+    void shouldGetRepository() {
+        var repo = getRepository();
+
         assertThat(repo).isNotNull();
     }
 
     @Test
     void shouldSaveEntity() {
-        var context = new SpringContextBuilder(
-            PersistenceConfig.class,
-            SomeModuleConfig.class
-        ).build();
-
-        var repo = context.get(SomeModuleRepository.class);
+        var repo = getRepository();
 
         var entity = new SomeModuleEntity();
         entity.id = 1L;
         repo.save(entity);
     }
-
-
 }

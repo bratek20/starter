@@ -1,4 +1,4 @@
-package pl.bratek20.spring.persistence;
+package pl.bratek20.spring.data;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 @Import({
     BaseConfig.class
 })
-public class PersistenceInMemoryConfig {
+public class InMemoryDataConfig {
 
     @Bean
     public DataSource dataSource() {

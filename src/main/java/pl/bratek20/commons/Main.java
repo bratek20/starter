@@ -5,14 +5,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import pl.bratek20.commons.user.impl.infrastructure.persistance.CrudRepositoryConfig;
 import pl.bratek20.commons.user.web.UserWebServerConfig;
-import pl.bratek20.spring.persistence.PersistenceInMemoryConfig;
+import pl.bratek20.spring.data.InMemoryDataConfig;
 import pl.bratek20.spring.web.WebApp;
 
 public class Main {
     @Configuration
     @EnableAutoConfiguration
     @Import({
-        PersistenceInMemoryConfig.class,
+        InMemoryDataConfig.class,
         CrudRepositoryConfig.class,
         UserWebServerConfig.class
     })

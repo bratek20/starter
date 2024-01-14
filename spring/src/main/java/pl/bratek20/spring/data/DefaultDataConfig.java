@@ -1,4 +1,4 @@
-package pl.bratek20.spring.persistence;
+package pl.bratek20.spring.data;
 
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +10,6 @@ import pl.bratek20.spring.config.BaseConfig;
     BaseConfig.class,
     DataSourceAutoConfiguration.class,
 })
-public class PersistenceConfig {
+public class DefaultDataConfig {
 
 }

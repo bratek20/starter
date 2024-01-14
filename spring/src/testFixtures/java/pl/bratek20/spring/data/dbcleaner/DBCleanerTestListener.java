@@ -1,4 +1,4 @@
-package pl.bratek20.spring.persistence.dbcleaner;
+package pl.bratek20.spring.data.dbcleaner;
 
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.TestExecutionListener;
