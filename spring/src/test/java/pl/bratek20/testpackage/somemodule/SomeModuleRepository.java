@@ -1,4 +1,4 @@
-package pl.bratek20.somepackage.somemodule;
+package pl.bratek20.testpackage.somemodule;
 
 import org.springframework.data.repository.CrudRepository;
 
