@@ -11,6 +11,9 @@ dependencies {
     // context
     api("org.springframework:spring-context")
 
+    //web
+    api("org.springframework:spring-web")
+
     implementation("org.springframework.boot:spring-boot-starter-web")
     testFixturesImplementation("org.springframework.boot:spring-boot-starter-web")
 

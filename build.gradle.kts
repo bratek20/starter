@@ -9,12 +9,7 @@ version = "1.0.5"
 dependencies {
     implementation(project(":spring"))
     testImplementation(testFixtures(project(":spring")))
-    testImplementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    testRuntimeOnly("com.h2database:h2")
-    runtimeOnly("com.h2database:h2")
-    implementation("org.springframework.boot:spring-boot-starter-web")
 
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     // scripts
     api("commons-cli:commons-cli:1.5.0")
 
@@ -25,8 +20,6 @@ dependencies {
 
     //event bus
     implementation("com.google.guava:guava:32.1.2-jre")
-
-    implementation("org.springframework:spring-web")
 
     testImplementation("io.rest-assured:rest-assured:5.3.0")
 }

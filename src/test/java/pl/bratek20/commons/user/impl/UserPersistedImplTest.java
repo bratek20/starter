@@ -12,29 +12,12 @@ import pl.bratek20.commons.user.api.UserPersistedApiTest;
 import pl.bratek20.commons.user.impl.infrastructure.UserConfig;
 import pl.bratek20.commons.user.impl.infrastructure.persistance.CrudRepositoryConfig;
 import pl.bratek20.spring.context.SpringContextBuilder;
+import pl.bratek20.spring.data.DefaultDataConfig;
 import pl.bratek20.spring.data.MySQLExtension;
 import pl.bratek20.spring.data.dbcleaner.DBCleaner;
 
 @ExtendWith(MySQLExtension.class)
 public class UserPersistedImplTest extends UserPersistedApiTest {
-
-    @Configuration
-    @Import({
-        DataSourceAutoConfiguration.class,
-        JdbcTemplateAutoConfiguration.class,
-        JpaRepositoriesAutoConfiguration.class,
-    })
-    //@EnableAutoConfiguration
-    public static class MyPersistenceConfig {
-
-    }
-
-    @Configuration
-    @EnableAutoConfiguration
-    public static class MyPersistenceAutoConfig {
-
-    }
-
     private DBCleaner dbCleaner;
 
     @Override
@@ -42,8 +25,7 @@ public class UserPersistedImplTest extends UserPersistedApiTest {
         var context = new SpringContextBuilder(
                 UserConfig.class,
                 CrudRepositoryConfig.class,
-                MyPersistenceAutoConfig.class,
-                //MyPersistenceConfig.class,
+                DefaultDataConfig.class,
                 DBCleaner.class
             )
             .build();
