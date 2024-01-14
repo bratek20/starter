@@ -6,3 +6,7 @@ plugins {
 }
 
 extra["testcontainers.version"] = "1.16.2"
+
+tasks.named("bootJar").configure {
+    enabled = false
+}

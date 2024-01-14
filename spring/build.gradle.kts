@@ -1,11 +1,9 @@
 plugins {
     id("pl.bratek20.library-conventions")
-
-    id("pl.bratek20.spring-conventions")
 }
 
 group = "pl.bratek20.spring"
-version = "1.0.0"
+version = "1.0.1"
 
 dependencies {
     // context
@@ -23,7 +21,6 @@ dependencies {
     testFixturesImplementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
     implementation("org.flywaydb:flyway-mysql")
-
 
     // data runtimes
     runtimeOnly("com.mysql:mysql-connector-j")

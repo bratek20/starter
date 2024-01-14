@@ -4,6 +4,8 @@ plugins {
     java
 
     id("io.freefair.lombok")
+
+    id("pl.bratek20.spring-library-conventions")
 }
 
 java {

@@ -1,10 +1,9 @@
 plugins {
     id("pl.bratek20.library-conventions")
-    id("pl.bratek20.spring-conventions")
 }
 
 group = "pl.bratek20"
-version = "1.0.5"
+version = "1.0.6"
 
 dependencies {
     implementation(project(":spring"))
