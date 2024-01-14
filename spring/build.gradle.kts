@@ -8,6 +8,7 @@ group = "pl.bratek20.spring"
 version = "1.0.0"
 
 dependencies {
+    // context
     api("org.springframework:spring-context")
 
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -28,6 +29,7 @@ dependencies {
     // swagger
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 
+    // web testing
     testImplementation("io.rest-assured:rest-assured:5.3.0")
 
 }
