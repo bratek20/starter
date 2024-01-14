@@ -1,2 +1,2 @@
 rootProject.name = "bratek20-commons"
-include("spring")
+include("bratek20-spring")

@@ -2,7 +2,7 @@ plugins {
     id("pl.bratek20.library-conventions")
 }
 
-group = "pl.bratek20.spring"
+group = "pl.bratek20"
 version = "1.0.1"
 
 dependencies {
@@ -36,5 +36,4 @@ dependencies {
 
     // web testing
     testImplementation("io.rest-assured:rest-assured:5.3.0")
-
 }

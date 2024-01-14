@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestWebAppRunner {
-    private static int lastPort = 8080;
+    private static int lastPort = 8081;
 
     private final List<Class<?>> configurations;
     @Getter

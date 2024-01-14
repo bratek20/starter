@@ -6,8 +6,8 @@ group = "pl.bratek20"
 version = "1.0.6"
 
 dependencies {
-    implementation(project(":spring"))
-    testImplementation(testFixtures(project(":spring")))
+    implementation(project(":bratek20-spring"))
+    testImplementation(testFixtures(project(":bratek20-spring")))
 
     // scripts
     api("commons-cli:commons-cli:1.5.0")

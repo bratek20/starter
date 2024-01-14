@@ -20,18 +20,20 @@ publishing {
         create<MavenPublication>("pluginMaven") {
             groupId = "pl.bratek20"
             artifactId = "bratek20-conventions"
-            version = "1.0.4"
+            version = "1.0.5"
         }
     }
     repositories {
         mavenLocal()
 
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/bratek20/commons")
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
+        if (System.getenv("GITHUB_ACTOR") != null) {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/bratek20/commons")
+                credentials {
+                    username = System.getenv("GITHUB_ACTOR")
+                    password = System.getenv("GITHUB_TOKEN")
+                }
             }
         }
     }

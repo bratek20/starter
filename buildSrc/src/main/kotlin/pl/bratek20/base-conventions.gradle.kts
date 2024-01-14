@@ -1,6 +1,8 @@
 package pl.bratek20
 
 plugins {
+    id("pl.bratek20.internal.repositories-conventions")
+
     java
 
     id("io.freefair.lombok")
@@ -19,10 +21,6 @@ dependencies {
 
     // assertions
     testImplementation("org.assertj:assertj-core:3.24.2")
-}
-
-repositories {
-    mavenCentral()
 }
 
 tasks.test {
