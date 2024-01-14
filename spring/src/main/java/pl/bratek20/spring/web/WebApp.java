@@ -10,16 +10,11 @@ public class WebApp {
     private final List<Class<?>> configurations;
     private final String[] args;
 
-    WebApp(List<Class<?>> configurations, boolean autoConfiguration, String[] args) {
+    WebApp(List<Class<?>> configurations, String[] args) {
         this.configurations = new ArrayList<>(configurations);
         this.args = args;
 
-        if (autoConfiguration) {
-            this.configurations.add(WebAppAutoConfig.class);
-        }
-        else {
-            this.configurations.add(WebAppMinimalConfig.class);
-        }
+        this.configurations.add(WebAppConfig.class);
     }
 
     SpringContext run(int port) {
@@ -30,12 +25,12 @@ public class WebApp {
     }
 
     public static void main(String[] args) {
-        var app = new WebApp(List.of(), true, args);
+        var app = new WebApp(List.of(), args);
         app.run(8080);
     }
 
     public static void run(Class<?> config, String[] args) {
-        var app = new WebApp(List.of(config), true, args);
+        var app = new WebApp(List.of(config), args);
         app.run(8080);
     }
 }

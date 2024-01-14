@@ -12,7 +12,7 @@ public class Main {
     @Configuration
     @EnableAutoConfiguration
     @Import({
-        //PersistenceInMemoryConfig.class,
+        PersistenceInMemoryConfig.class,
         CrudRepositoryConfig.class,
         UserWebServerConfig.class
     })
@@ -20,6 +20,6 @@ public class Main {
 
     }
     public static void main(String[] args) {
-        WebApp.run(MainConfig.class, new String[]{});
+        WebApp.run(MainConfig.class, new String[]{"--debug"});
     }
 }

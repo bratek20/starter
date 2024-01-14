@@ -28,4 +28,6 @@ dependencies {
     // swagger
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 
+    testImplementation("io.rest-assured:rest-assured:5.3.0")
+
 }

@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SpringDIModuleTest {
+class SpringContextTest {
     public record SomeClass(String someField) {}
 
     @Configuration
