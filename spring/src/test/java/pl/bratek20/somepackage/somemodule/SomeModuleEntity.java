@@ -1,4 +1,4 @@
-package pl.bratek20.spring.persistence;
+package pl.bratek20.somepackage.somemodule;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -6,8 +6,8 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "test")
-class TestEntity {
+public class SomeModuleEntity {
 
     @Id
-    Long id;
+    public Long id;
 }
