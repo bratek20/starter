@@ -18,8 +18,8 @@ public class App {
         return new SpringContext(context);
     }
 
-    public static void run(Class<?> config, String[] args) {
+    public static SpringContext run(Class<?> config, String[] args) {
         var app = new App(config, args);
-        app.run();
+        return app.run();
     }
 }
