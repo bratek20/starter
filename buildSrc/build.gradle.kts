@@ -15,12 +15,12 @@ dependencies {
     implementation("io.spring.gradle:dependency-management-plugin:1.1.3")
 }
 
+group = "pl.bratek20"
+version = "1.0.5"
 publishing {
     publications {
         create<MavenPublication>("pluginMaven") {
-            groupId = "pl.bratek20"
             artifactId = "bratek20-conventions"
-            version = "1.0.5"
         }
     }
     repositories {
