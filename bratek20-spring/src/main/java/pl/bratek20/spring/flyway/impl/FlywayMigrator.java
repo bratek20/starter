@@ -8,8 +8,8 @@ import java.util.Collection;
 
 @RequiredArgsConstructor
 public class FlywayMigrator {
-    private static final String FLYWAY_USERNAME = "flyway-user";
-    private static final String FLYWAY_PASSWORD = "flyway-user-password";
+    public static final String FLYWAY_USERNAME = "flyway-user";
+    public static final String FLYWAY_PASSWORD = "flyway-user-password";
 
     private final String dataSourceUrl;
     private final Collection<FlywayMigration> migrations;

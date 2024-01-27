@@ -1,20 +1,18 @@
 package pl.bratek20.spring.flyway;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import pl.bratek20.spring.context.SpringContextBuilder;
-import pl.bratek20.spring.data.DefaultDataConfig;
-import pl.bratek20.spring.data.MySQLExtension;
 import pl.bratek20.spring.flyway.api.FlywayMigration;
 import pl.bratek20.spring.flyway.impl.FlywayConfig;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(MySQLExtension.class)
-class FlywayModuleTest {
+abstract class BaseFlywayModuleTest {
+    protected abstract Class<?> getDataConfig();
+
     @Configuration
     static class Module1Config {
         @Bean
@@ -35,7 +33,7 @@ class FlywayModuleTest {
     void shouldMigrateTwoModules() {
         var context = new SpringContextBuilder()
             .withConfigs(
-                DefaultDataConfig.class,
+                getDataConfig(),
                 FlywayConfig.class,
                 Module1Config.class,
                 Module2Config.class
