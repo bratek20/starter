@@ -36,7 +36,7 @@ class FlywayModuleTest {
     void shouldMigrateTwoModules() {
         var context = new SpringContextBuilder()
             .withConfigs(
-                BaseConfig.class,
+                DefaultDataConfig.class,
                 FlywayConfig.class,
                 Module1Config.class,
                 Module2Config.class
@@ -56,6 +56,6 @@ class FlywayModuleTest {
         var l = jdbcTemplate.queryForList(selectSql);
 
         assertThat(l).hasSize(1);
-        assertThat(l.get(0)).containsEntry("id", 1);
+        assertThat(l.get(0)).containsEntry("id", 1L);
     }
 }
