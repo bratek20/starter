@@ -3,13 +3,11 @@ package pl.bratek20.spring.data;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.bratek20.spring.context.SpringContext;
-import pl.bratek20.testpackage.othermodule.OtherModuleConfig;
-import pl.bratek20.testpackage.othermodule.OtherModuleEntity;
-import pl.bratek20.testpackage.othermodule.OtherModuleRepository;
-import pl.bratek20.testpackage.somemodule.SomeModuleConfig;
-import pl.bratek20.testpackage.somemodule.SomeModuleEntity;
-import pl.bratek20.testpackage.somemodule.SomeModuleRepository;
 import pl.bratek20.spring.context.SpringContextBuilder;
+import pl.bratek20.spring.flyway.impl.FlywayConfig;
+import pl.bratek20.testpackage.somemodule.SomeModuleConfig;
+import pl.bratek20.testpackage.somemodule.SomeTableEntity;
+import pl.bratek20.testpackage.somemodule.SomeModuleRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,8 +20,8 @@ abstract class DataConfigBaseTest {
     void beforeEach() {
         context = new SpringContextBuilder(
             getConfigClass(),
-            SomeModuleConfig.class,
-            OtherModuleConfig.class
+            FlywayConfig.class,
+            SomeModuleConfig.class
         ).build();
     }
 
@@ -35,20 +33,19 @@ abstract class DataConfigBaseTest {
     }
 
     @Test
-    void shouldSaveSomeModuleEntity() {
+    void shouldSupportCrudOperations() {
         var repo = context.get(SomeModuleRepository.class);
 
-        var entity = new SomeModuleEntity();
+        var entity = new SomeTableEntity();
         entity.id = 1L;
         repo.save(entity);
-    }
 
-    @Test
-    void shouldSaveOtherModuleEntity() {
-        var repo = context.get(OtherModuleRepository.class);
+        var savedEntity = repo.findById(1L);
+        assertThat(savedEntity).isPresent();
 
-        var entity = new OtherModuleEntity();
-        entity.id = 1L;
-        repo.save(entity);
+        repo.delete(entity);
+
+        var deletedEntity = repo.findById(1L);
+        assertThat(deletedEntity).isEmpty();
     }
 }
