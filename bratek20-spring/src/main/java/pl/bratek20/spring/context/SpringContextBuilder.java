@@ -7,13 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SpringContextBuilder {
-    private final List<Class<?>> configurations;
+    private final List<Class<?>> configurations = new ArrayList<>();
 
     record Singleton(String name, Object object) {}
     private final List<Singleton> singletonsToRegister = new ArrayList<>();
 
     public SpringContextBuilder(Class<?>... configurations) {
-        this.configurations = List.of(configurations);
+        this.configurations.addAll(List.of(configurations));
+    }
+
+    public SpringContextBuilder withConfigs(Class<?>... configurations) {
+        this.configurations.addAll(List.of(configurations));
+        return this;
     }
 
     public SpringContextBuilder registerSingleton(String singletonName, Object singletonObject) {

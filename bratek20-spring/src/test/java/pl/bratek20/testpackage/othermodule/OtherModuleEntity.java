@@ -1,10 +1,8 @@
 package pl.bratek20.testpackage.othermodule;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Entity
 @Table(name = "other_module_table")
 public class OtherModuleEntity {
 

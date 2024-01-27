@@ -17,8 +17,8 @@ dependencies {
 
     testFixturesImplementation("org.springframework.boot:spring-boot-starter-test")
 
-    api("org.springframework.boot:spring-boot-starter-data-jpa")
-    testFixturesImplementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    api("org.springframework.boot:spring-boot-starter-data-jdbc")
+    testFixturesImplementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 
     implementation("org.flywaydb:flyway-mysql")
 
