@@ -36,8 +36,8 @@ abstract class DataConfigBaseTest {
         testCrudOperations(
             repo,
             newEntity,
-            AutoIncrementEntity::setValue,
-            AutoIncrementEntity::getValue
+            AutoIncrementEntity::setSomeValue,
+            AutoIncrementEntity::getSomeValue
         );
     }
 
@@ -46,13 +46,13 @@ abstract class DataConfigBaseTest {
         var repo = context.get(OwnIdRepository.class);
 
         var newEntity = new OwnIdEntity(1L);
-        newEntity.setValue("value");
+        newEntity.setSomeValue("value");
 
         testCrudOperations(
             repo,
             newEntity,
-            OwnIdEntity::setValue,
-            OwnIdEntity::getValue
+            OwnIdEntity::setSomeValue,
+            OwnIdEntity::getSomeValue
         );
     }
 

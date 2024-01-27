@@ -14,7 +14,7 @@ import javax.sql.DataSource;
     BaseConfig.class
 })
 public class InMemoryDataConfig {
-    private static final String DB_URL = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE;MODE=MySQL";
+    private static final String DB_URL = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE";
 
     @Bean
     public DataSource dataSource() {
