@@ -5,7 +5,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
-import pl.bratek20.spring.config.BaseConfig;
 import pl.bratek20.spring.context.SpringContextBuilder;
 import pl.bratek20.spring.data.DefaultDataConfig;
 import pl.bratek20.spring.data.MySQLExtension;

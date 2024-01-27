@@ -2,12 +2,14 @@ package pl.bratek20.spring.data;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.repository.CrudRepository;
 import pl.bratek20.spring.context.SpringContext;
 import pl.bratek20.spring.context.SpringContextBuilder;
 import pl.bratek20.spring.flyway.impl.FlywayConfig;
-import pl.bratek20.testpackage.somemodule.SomeModuleConfig;
-import pl.bratek20.testpackage.somemodule.SomeTableEntity;
-import pl.bratek20.testpackage.somemodule.SomeModuleRepository;
+import pl.bratek20.testpackage.somemodule.*;
+
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,24 +28,54 @@ abstract class DataConfigBaseTest {
     }
 
     @Test
-    void shouldGetSomeModuleRepository() {
-        var repo = context.get(SomeModuleRepository.class);
+    void shouldSupportCrudOperations_AutoIncrement() {
+        var repo = context.get(AutoIncrementRepository.class);
 
-        assertThat(repo).isNotNull();
+        var newEntity = new AutoIncrementEntity("value");
+
+        testCrudOperations(
+            repo,
+            newEntity,
+            AutoIncrementEntity::setValue,
+            AutoIncrementEntity::getValue
+        );
     }
 
     @Test
-    void shouldSupportCrudOperations() {
-        var repo = context.get(SomeModuleRepository.class);
+    void shouldSupportCrudOperations_OwnId() {
+        var repo = context.get(OwnIdRepository.class);
 
-        var entity = new SomeTableEntity();
-        entity.id = 1L;
-        repo.save(entity);
+        var newEntity = new OwnIdEntity(1L);
+        newEntity.setValue("value");
+
+        testCrudOperations(
+            repo,
+            newEntity,
+            OwnIdEntity::setValue,
+            OwnIdEntity::getValue
+        );
+    }
+
+    <T> void testCrudOperations(
+        CrudRepository<T, Long> repo,
+        T newEntity,
+        BiConsumer<T, String> setValue,
+        Function<T, String> getValue
+    ) {
+        repo.save(newEntity);
 
         var savedEntity = repo.findById(1L);
         assertThat(savedEntity).isPresent();
+        assertThat(getValue.apply(savedEntity.get())).isEqualTo("value");
 
-        repo.delete(entity);
+        setValue.accept(newEntity, "value2");
+        repo.save(newEntity);
+
+        var updatedEntity = repo.findById(1L);
+        assertThat(updatedEntity).isPresent();
+        assertThat(getValue.apply(updatedEntity.get())).isEqualTo("value2");
+
+        repo.delete(newEntity);
 
         var deletedEntity = repo.findById(1L);
         assertThat(deletedEntity).isEmpty();
