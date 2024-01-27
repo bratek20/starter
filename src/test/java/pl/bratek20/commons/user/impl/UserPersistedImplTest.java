@@ -15,6 +15,7 @@ import pl.bratek20.spring.context.SpringContextBuilder;
 import pl.bratek20.spring.data.DefaultDataConfig;
 import pl.bratek20.spring.data.MySQLExtension;
 import pl.bratek20.spring.data.dbcleaner.DBCleaner;
+import pl.bratek20.spring.flyway.impl.FlywayConfig;
 
 @ExtendWith(MySQLExtension.class)
 public class UserPersistedImplTest extends UserPersistedApiTest {
@@ -25,6 +26,7 @@ public class UserPersistedImplTest extends UserPersistedApiTest {
         var context = new SpringContextBuilder(
                 UserConfig.class,
                 CrudRepositoryConfig.class,
+                FlywayConfig.class,
                 DefaultDataConfig.class,
                 DBCleaner.class
             )
@@ -37,6 +39,6 @@ public class UserPersistedImplTest extends UserPersistedApiTest {
 
     @Override
     protected void clean() {
-        dbCleaner.deleteAllTables();
+        dbCleaner.deleteAllTables("users");
     }
 }

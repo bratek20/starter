@@ -7,6 +7,7 @@ import pl.bratek20.commons.user.impl.infrastructure.persistance.CrudRepositoryCo
 import pl.bratek20.spring.context.SpringContextBuilder;
 import pl.bratek20.spring.data.InMemoryDataConfig;
 import pl.bratek20.spring.data.dbcleaner.DBCleaner;
+import pl.bratek20.spring.flyway.impl.FlywayConfig;
 
 public class UserHibernateImplTest extends UserPersistedApiTest {
     private DBCleaner dbCleaner;
@@ -16,6 +17,7 @@ public class UserHibernateImplTest extends UserPersistedApiTest {
         var context = new SpringContextBuilder(
                 UserConfig.class,
                 CrudRepositoryConfig.class,
+                FlywayConfig.class,
                 InMemoryDataConfig.class,
                 DBCleaner.class
             )
@@ -27,6 +29,6 @@ public class UserHibernateImplTest extends UserPersistedApiTest {
 
     @Override
     protected void clean() {
-        dbCleaner.deleteAllTables();
+        dbCleaner.deleteAllTables("users");
     }
 }

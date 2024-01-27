@@ -1,4 +1,4 @@
-CREATE TABLE users
+CREATE TABLE users.users
 (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     identity_id BIGINT NOT NULL,

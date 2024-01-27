@@ -7,10 +7,10 @@ public class DBCleanerTestListener implements TestExecutionListener {
 
     @Override
     public void afterTestMethod(TestContext testContext) {
-        var context = testContext.getApplicationContext();
-        if (context.containsBean("dbCleaner")) {
-            var dbCleaner = context.getBean(DBCleaner.class);
-            dbCleaner.deleteAllTables();
-        }
+//        var context = testContext.getApplicationContext();
+//        if (context.containsBean("dbCleaner")) {
+//            var dbCleaner = context.getBean(DBCleaner.class);
+//            dbCleaner.deleteAllTables();
+//        }
     }
 }

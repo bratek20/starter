@@ -9,19 +9,21 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class DBCleaner {
     private final JdbcTemplate jdbcTemplate;
 
-    public void deleteAll(String tableName) {
+    public void deleteAll(String schema, String tableName) {
         if (tableName.equals("flyway_schema_history")) {
             log.info("Skipping deleting flyway_schema_history");
             return;
         }
-        log.info("Deleting all from {}", tableName);
-        jdbcTemplate.update(String.format("DELETE FROM %s", tableName));
+
+        String fullTableName = String.format("%s.%s", schema, tableName);
+        log.info("Deleting all from {}", fullTableName);
+        jdbcTemplate.update(String.format("DELETE FROM %s", fullTableName));
     }
 
-    public void deleteAllTables() {
-        jdbcTemplate.queryForList("SHOW TABLES").forEach(table -> {
+    public void deleteAllTables(String schema) {
+        jdbcTemplate.queryForList(String.format("SHOW TABLES from %s;", schema)).forEach(table -> {
             String tableName = table.values().iterator().next().toString();
-            deleteAll(tableName);
+            deleteAll(schema, tableName);
         });
     }
 }
