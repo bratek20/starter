@@ -8,7 +8,7 @@ public class HttpImpl implements HttpApi {
 
     @Override
     public HttpResponse send(HttpRequest request) {
-        return new HttpResponse(200);
+        return new HttpResponse(200, "");
     }
 
     @Override
