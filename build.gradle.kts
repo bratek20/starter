@@ -23,6 +23,6 @@ dependencies {
     testImplementation("io.rest-assured:rest-assured:5.3.0")
 
     //http
-    testImplementation("com.github.tomakehurst:wiremock:2.27.2")
+    testImplementation("com.github.tomakehurst:wiremock:3.0.0")
 }
 
