@@ -37,14 +37,4 @@ public class HttpImpl implements HttpApi {
                 throw new IllegalArgumentException("Unsupported request type: " + type);
         }
     }
-
-    @Override
-    public void store(HttpRequest request) {
-
-    }
-
-    @Override
-    public void sendStored() {
-
-    }
 }

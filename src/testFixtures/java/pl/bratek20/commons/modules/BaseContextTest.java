@@ -2,7 +2,7 @@ package pl.bratek20.commons.modules;
 
 import org.junit.jupiter.api.BeforeEach;
 
-public abstract class BaseApiWithContextTest<T> {
+public abstract class BaseContextTest<T> {
     protected abstract T createContext();
     protected abstract void applyContext(T context);
 
