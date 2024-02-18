@@ -1,8 +1,8 @@
-package pl.bratek20.commons.events;
+package pl.bratek20.architecture.events;
 
-import pl.bratek20.commons.events.api.Event;
-import pl.bratek20.commons.events.api.EventListener;
-import pl.bratek20.commons.events.api.EventsApi;
+import pl.bratek20.architecture.events.api.Event;
+import pl.bratek20.architecture.events.api.EventListener;
+import pl.bratek20.architecture.events.api.EventsApi;
 
 import java.util.ArrayList;
 import java.util.List;

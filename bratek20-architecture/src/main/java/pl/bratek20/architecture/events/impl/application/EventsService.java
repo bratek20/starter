@@ -1,11 +1,11 @@
-package pl.bratek20.commons.events.impl.application;
+package pl.bratek20.architecture.events.impl.application;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import lombok.RequiredArgsConstructor;
-import pl.bratek20.commons.events.api.Event;
-import pl.bratek20.commons.events.api.EventListener;
-import pl.bratek20.commons.events.api.EventsApi;
+import pl.bratek20.architecture.events.api.Event;
+import pl.bratek20.architecture.events.api.EventListener;
+import pl.bratek20.architecture.events.api.EventsApi;
 
 @RequiredArgsConstructor
 public class EventsService implements EventsApi {

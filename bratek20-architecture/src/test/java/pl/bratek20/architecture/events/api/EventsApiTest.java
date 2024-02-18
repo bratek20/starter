@@ -1,15 +1,15 @@
-package pl.bratek20.commons.events.api;
+package pl.bratek20.architecture.events.api;
 
 import lombok.Value;
 import org.junit.jupiter.api.Test;
-import pl.bratek20.commons.modules.BaseApiTest;
+import pl.bratek20.architecture.tests.ApiTest;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public abstract class EventsApiTest extends BaseApiTest<EventsApi> {
+public abstract class EventsApiTest extends ApiTest<EventsApi> {
 
     @Value
     class TestEvent implements Event {
