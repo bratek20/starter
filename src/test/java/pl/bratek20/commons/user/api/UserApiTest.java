@@ -1,7 +1,7 @@
 package pl.bratek20.commons.user.api;
 
 import org.junit.jupiter.api.Test;
-import pl.bratek20.commons.modules.BaseApiTest;
+import pl.bratek20.architecture.tests.ApiTest;
 import pl.bratek20.commons.user.api.exceptions.UserAlreadyExistsException;
 import pl.bratek20.commons.user.api.exceptions.UserNotExistsException;
 import pl.bratek20.commons.user.api.exceptions.WrongUserPasswordException;
@@ -9,7 +9,7 @@ import pl.bratek20.commons.user.api.exceptions.WrongUserPasswordException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public abstract class UserApiTest extends BaseApiTest<UserApi> {
+public abstract class UserApiTest extends ApiTest<UserApi> {
 
     @Test
     void shouldCreateUser() {

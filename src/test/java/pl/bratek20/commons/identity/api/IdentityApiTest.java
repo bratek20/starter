@@ -1,11 +1,10 @@
 package pl.bratek20.commons.identity.api;
 
 import org.junit.jupiter.api.Test;
-import pl.bratek20.commons.modules.BaseApiTest;
+import pl.bratek20.architecture.tests.ApiTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
-public abstract class IdentityApiTest extends BaseApiTest<IdentityApi> {
+public abstract class IdentityApiTest extends ApiTest<IdentityApi> {
     @Test
     void shouldGenerateDifferentIdentityId() {
         IdentityId id1 = api.generate();
