@@ -1,24 +1,26 @@
 package pl.bratek20.commons.http.api;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import org.junit.jupiter.api.Test;
-import pl.bratek20.commons.modules.BaseApiTest;
+import pl.bratek20.architecture.tests.ApiTest;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public abstract class HttpApiTest extends BaseApiTest<HttpApi> {
+public abstract class HttpApiTest extends ApiTest<HttpApi> {
 
     private WireMockServer server;
 
     @Override
     protected void setup() {
+        super.setup();
         server = new WireMockServer(8080);
         server.start();
     }
 
     @Override
     protected void clean() {
+        super.clean();
         if (server != null) {
             server.stop();
         }
@@ -27,8 +29,8 @@ public abstract class HttpApiTest extends BaseApiTest<HttpApi> {
     @Test
     void shouldSendGetRequest() {
         server.stubFor(
-            get(urlEqualTo("/get"))
-            .willReturn(aResponse()
+            WireMock.get(WireMock.urlEqualTo("/get"))
+            .willReturn(WireMock.aResponse()
                 .withHeader("Content-Type", "application/json")
                 .withStatus(200)
                 .withBody("{\"message\": \"Hello World\"}")));
