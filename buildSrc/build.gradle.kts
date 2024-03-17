@@ -17,7 +17,7 @@ dependencies {
 
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.toVersion(libs.versions.java.get())
 }
 
 group = "pl.bratek20"
