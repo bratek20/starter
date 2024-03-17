@@ -1,2 +1,2 @@
 # commons
-Commons for all other projects
+Starter aggregating multiple base gradle modules
