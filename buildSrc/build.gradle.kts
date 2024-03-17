@@ -15,8 +15,12 @@ dependencies {
     implementation("io.spring.gradle:dependency-management-plugin:1.1.3")
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+}
+
 group = "pl.bratek20"
-version = "1.0.5"
+version = "1.0.6"
 publishing {
     publications {
         create<MavenPublication>("pluginMaven") {
