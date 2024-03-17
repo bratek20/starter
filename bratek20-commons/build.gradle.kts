@@ -22,5 +22,8 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion")
 
     testImplementation("io.rest-assured:rest-assured:$restAssuredVersion")
+
+    //http
+    testImplementation("com.github.tomakehurst:wiremock:3.0.0")
 }
 
