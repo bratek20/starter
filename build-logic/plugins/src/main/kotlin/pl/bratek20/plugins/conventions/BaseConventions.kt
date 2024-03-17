@@ -9,12 +9,14 @@ import org.gradle.api.tasks.testing.Test
 class BaseConventions : Plugin<Project> {
     override fun apply(project: Project) {
         with(project) {
-            plugins.apply {
+            with(plugins) {
                 apply("pl.bratek20.internal.repositories-conventions")
 
                 apply("java")
 
                 apply("io.freefair.lombok")
+
+                apply("pl.bratek20.spring-library-conventions")
 
             }
 
@@ -22,7 +24,7 @@ class BaseConventions : Plugin<Project> {
             javaPluginExtension?.sourceCompatibility = JavaVersion.VERSION_17
 
             // Configure dependencies
-            dependencies.apply {
+            with(dependencies) {
                 // Testing
                 add("testImplementation", platform("org.junit:junit-bom:5.9.1"))
                 add("testImplementation", "org.junit.jupiter:junit-jupiter")
