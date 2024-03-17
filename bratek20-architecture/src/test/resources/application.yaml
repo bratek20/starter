@@ -1,0 +1,9 @@
+someProperty:
+  value: "some value"
+  otherValue: "other value"
+
+somePropertyList:
+  - value: "some value 1"
+    otherValue: "x"
+  - value: "some value 2"
+    otherValue: "x"
