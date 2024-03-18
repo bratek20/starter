@@ -2,18 +2,20 @@ package pl.bratek20.plugins.conventions
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.plugins.JavaLibraryPlugin
+import org.gradle.api.plugins.JavaTestFixturesPlugin
 
 class LibraryConventions : Plugin<Project> {
     override fun apply(project: Project) {
         with(project) {
             with(plugins) {
-                apply("pl.bratek20.base-conventions")
+                apply(BaseConventions::class.java)
 
-                apply("pl.bratek20.publish-conventions")
+                apply(PublishConventions::class.java)
 
-                apply("java-library")
+                apply(JavaLibraryPlugin::class.java)
 
-                apply("java-test-fixtures")
+                apply(JavaTestFixturesPlugin::class.java)
             }
 
             with(dependencies) {

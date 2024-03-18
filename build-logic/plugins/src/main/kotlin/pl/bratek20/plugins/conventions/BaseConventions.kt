@@ -3,20 +3,22 @@ package pl.bratek20.plugins.conventions
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.testing.Test
+import pl.bratek20.plugins.conventions.internal.RepositoriesConventions
 
 class BaseConventions : Plugin<Project> {
     override fun apply(project: Project) {
         with(project) {
             with(plugins) {
-                apply("pl.bratek20.internal.repositories-conventions")
+                apply(RepositoriesConventions::class.java)
 
-                apply("java")
+                apply(JavaPlugin::class.java)
 
                 apply("io.freefair.lombok")
 
-                apply("pl.bratek20.spring-library-conventions")
+                apply(SpringLibraryConventions::class.java)
 
             }
 
