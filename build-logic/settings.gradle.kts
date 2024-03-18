@@ -1,7 +1,4 @@
 dependencyResolutionManagement {
-    repositories {
-        mavenCentral()
-    }
     versionCatalogs {
         create("libs") {
             from(files("../gradle/libs.versions.toml"))
@@ -10,4 +7,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "build-logic"
-include(":plugins")
+include(":conventions")

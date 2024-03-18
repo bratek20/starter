@@ -1,24 +1,18 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     `kotlin-dsl`
     `maven-publish`
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-}
-tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
 }
 
 dependencies {
     implementation(libs.lombok.plugin)
     implementation(libs.spring.dependency.management.plugin)
     implementation(libs.spring.boot.plugin)
+}
+
+java {
+    toolchain {
+        version = libs.versions.java
+    }
 }
 
 gradlePlugin {
@@ -70,4 +64,8 @@ publishing {
             }
         }
     }
+}
+
+repositories {
+    mavenCentral()
 }
