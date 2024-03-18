@@ -25,7 +25,7 @@ public class PublishConventions implements Plugin<Project> {
                 if (System.getenv("GITHUB_ACTOR") != null && System.getenv("GITHUB_TOKEN") != null) {
                     repositories.maven(maven -> {
                         maven.setName("GitHubPackages");
-                        maven.setUrl(project.uri("https://maven.pkg.github.com/bratek20/commons"));
+                        maven.setUrl(project.uri("https://maven.pkg.github.com/bratek20/starter"));
                         maven.credentials(credentials -> {
                             credentials.setUsername(System.getenv("GITHUB_ACTOR"));
                             credentials.setPassword(System.getenv("GITHUB_TOKEN"));
