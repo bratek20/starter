@@ -5,15 +5,13 @@ plugins {
 group = "pl.bratek20"
 version = "1.0.0"
 
-val guavaVersion = "32.1.2-jre"
-
 dependencies {
     //event bus
-    implementation("com.google.guava:guava:$guavaVersion")
+    implementation(libs.guava)
     implementation(project(":bratek20-spring"))
 
     //properties
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.17.0")
+    implementation(libs.jackson.dataformat.yaml)
 
     testImplementation(project(":bratek20-tests"))
     testImplementation(project(":bratek20-spring"))
