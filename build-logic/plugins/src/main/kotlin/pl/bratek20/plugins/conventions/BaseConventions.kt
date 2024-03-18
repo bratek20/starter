@@ -1,5 +1,6 @@
 package pl.bratek20.plugins.conventions
 
+import io.freefair.gradle.plugins.lombok.LombokPlugin
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -7,6 +8,7 @@ import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.testing.Test
 import pl.bratek20.plugins.conventions.internal.RepositoriesConventions
+import pl.bratek20.plugins.extensions.versionCatalog
 
 class BaseConventions : Plugin<Project> {
     override fun apply(project: Project) {
@@ -16,23 +18,22 @@ class BaseConventions : Plugin<Project> {
 
                 apply(JavaPlugin::class.java)
 
-                apply("io.freefair.lombok")
+                apply(LombokPlugin::class.java)
 
                 apply(SpringLibraryConventions::class.java)
 
             }
 
             val javaPluginExtension = extensions.findByType(JavaPluginExtension::class.java)
-            javaPluginExtension?.sourceCompatibility = JavaVersion.VERSION_17
+            val javaVersion = JavaVersion.toVersion(versionCatalog().findVersion("java").get())
+            javaPluginExtension?.sourceCompatibility = javaVersion
+            javaPluginExtension?.targetCompatibility = javaVersion
 
-            // Configure dependencies
             with(dependencies) {
-                // Testing
-                add("testImplementation", platform("org.junit:junit-bom:5.9.1"))
-                add("testImplementation", "org.junit.jupiter:junit-jupiter")
+                add("testImplementation", versionCatalog().findLibrary("junit-jupiter-api").get())
+                add("testRuntimeOnly", versionCatalog().findLibrary("junit-jupiter-engine").get())
 
-                // Assertions
-                add("testImplementation", "org.assertj:assertj-core:3.24.2")
+                add("testImplementation", versionCatalog().findLibrary("assertj-core").get())
             }
 
             tasks.withType(Test::class.java).configureEach {

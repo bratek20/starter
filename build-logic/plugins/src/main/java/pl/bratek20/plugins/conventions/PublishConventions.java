@@ -32,9 +32,6 @@ public class PublishConventions implements Plugin<Project> {
                         });
                     });
                 }
-                repositories.maven(maven -> {
-                    maven.setUrl(URI.create("https://my-publishing-repo.com"));
-                });
             });
         });
     }

@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `kotlin-dsl`
+    `maven-publish`
 }
 
 java {
@@ -30,6 +31,10 @@ gradlePlugin {
             id = "pl.bratek20.base-conventions"
             implementationClass = "pl.bratek20.plugins.conventions.BaseConventions"
         }
+        register("simple-library-conventions") {
+            id = "pl.bratek20.simple-library-conventions"
+            implementationClass = "pl.bratek20.plugins.conventions.SimpleLibraryConventions"
+        }
         register("library-conventions") {
             id = "pl.bratek20.library-conventions"
             implementationClass = "pl.bratek20.plugins.conventions.LibraryConventions"
@@ -49,26 +54,20 @@ gradlePlugin {
     }
 }
 
-//group = "pl.bratek20"
-//version = "1.0.6"
-//publishing {
-//    publications {
-//        create<MavenPublication>("pluginMaven") {
-//            artifactId = "bratek20-conventions"
-//        }
-//    }
-//    repositories {
-//        mavenLocal()
-//
-//        if (System.getenv("GITHUB_ACTOR") != null) {
-//            maven {
-//                name = "GitHubPackages"
-//                url = uri("https://maven.pkg.github.com/bratek20/commons")
-//                credentials {
-//                    username = System.getenv("GITHUB_ACTOR")
-//                    password = System.getenv("GITHUB_TOKEN")
-//                }
-//            }
-//        }
-//    }
-//}
+version = "1.1.0"
+publishing {
+    repositories {
+        mavenLocal()
+
+        if (System.getenv("GITHUB_ACTOR") != null) {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/bratek20/commons")
+                credentials {
+                    username = System.getenv("GITHUB_ACTOR")
+                    password = System.getenv("GITHUB_TOKEN")
+                }
+            }
+        }
+    }
+}
