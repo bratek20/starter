@@ -15,8 +15,9 @@ tasks.withType<KotlinCompile>().configureEach {
 }
 
 dependencies {
-//    implementation(libs.android.gradle.plugin)
-//    implementation(libs.kotlin.gradle.plugin)
+    implementation(libs.lombok.plugin)
+    implementation(libs.spring.dependency.management.plugin)
+    implementation(libs.spring.boot.plugin)
 }
 
 gradlePlugin {
