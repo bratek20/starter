@@ -10,6 +10,9 @@ val restAssuredVersion = "5.3.0"
 
 dependencies {
     implementation(project(":bratek20-spring"))
+
+    testFixturesImplementation(project(":bratek20-spring"))
+
     testImplementation(testFixtures(project(":bratek20-spring")))
     testImplementation(testFixtures(project(":bratek20-architecture")))
 

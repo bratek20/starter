@@ -18,5 +18,7 @@ dependencies {
     testImplementation(project(":bratek20-tests"))
     testImplementation(project(":bratek20-spring"))
 
+    testFixturesImplementation(project(":bratek20-spring"))
+
     testFixturesApi(project(":bratek20-tests"))
 }
