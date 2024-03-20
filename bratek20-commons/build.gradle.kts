@@ -2,9 +2,6 @@ plugins {
     id("pl.bratek20.library-conventions")
 }
 
-group = "pl.bratek20"
-version = "1.0.6"
-
 val log4jVersion = "2.21.0"
 val restAssuredVersion = "5.3.0"
 

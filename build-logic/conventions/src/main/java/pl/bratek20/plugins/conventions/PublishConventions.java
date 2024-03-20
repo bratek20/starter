@@ -18,6 +18,13 @@ public class PublishConventions implements Plugin<Project> {
             publishing.publications(publications -> {
                 publications.create("myPublication", MavenPublication.class, publication -> {
                     publication.from(project.getComponents().getByName("java"));
+
+                    project.afterEvaluate(proj -> {
+                        String groupId = publication.getGroupId() == null ? project.getGroup().toString() : publication.getGroupId();
+                        String artifactId = publication.getArtifactId();
+                        String version = publication.getVersion() == null ? project.getVersion().toString() : publication.getVersion();
+                        proj.getLogger().lifecycle("Publishing artifact: " + groupId + ":" + artifactId + ":" + version);
+                    });
                 });
             });
             publishing.repositories(repositories -> {
@@ -25,7 +32,6 @@ public class PublishConventions implements Plugin<Project> {
 
                 var username = System.getenv("GITHUB_ACTOR");
                 var password = System.getenv("GITHUB_TOKEN");
-                project.getLogger().warn("Username: {}, password: {}", username, password);
 
                 if (username != null && password != null) {
                     repositories.maven(maven -> {

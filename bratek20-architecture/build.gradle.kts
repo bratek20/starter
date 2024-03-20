@@ -2,9 +2,6 @@ plugins {
     id("pl.bratek20.library-conventions")
 }
 
-group = "pl.bratek20"
-version = "1.0.0"
-
 dependencies {
     //event bus
     implementation(libs.guava)

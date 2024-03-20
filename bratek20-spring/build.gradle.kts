@@ -2,9 +2,6 @@ plugins {
     id("pl.bratek20.library-conventions")
 }
 
-group = "pl.bratek20"
-version = "1.0.1"
-
 dependencies {
     // context
     api("org.springframework:spring-context")
