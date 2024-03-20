@@ -6,7 +6,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Run Tests
         uses: bratek20/github-actions/publish-artifacts-action@main
