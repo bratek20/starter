@@ -22,13 +22,18 @@ public class PublishConventions implements Plugin<Project> {
             });
             publishing.repositories(repositories -> {
                 repositories.mavenLocal();
-                if (System.getenv("GITHUB_ACTOR") != null && System.getenv("GITHUB_TOKEN") != null) {
+
+                var username = System.getenv("GITHUB_ACTOR");
+                var password = System.getenv("GITHUB_TOKEN");
+                project.getLogger().warn("Username: {}, password: {}", username, password);
+
+                if (username != null && password != null) {
                     repositories.maven(maven -> {
                         maven.setName("GitHubPackages");
                         maven.setUrl(project.uri("https://maven.pkg.github.com/bratek20/starter"));
                         maven.credentials(credentials -> {
-                            credentials.setUsername(System.getenv("GITHUB_ACTOR"));
-                            credentials.setPassword(System.getenv("GITHUB_TOKEN"));
+                            credentials.setUsername(username);
+                            credentials.setPassword(password);
                         });
                     });
                 }
