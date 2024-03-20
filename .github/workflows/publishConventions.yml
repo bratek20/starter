@@ -10,8 +10,7 @@ jobs:
       contents: read
       packages: write
     steps:
-      - name: Run Tests
-        uses: bratek20/github-actions/publish-artifacts-action@main
+      - uses: bratek20/github-actions/publish-artifacts-action@main
         with:
           module-name: build-logic
           github-token: ${{ secrets.GITHUB_TOKEN }}
