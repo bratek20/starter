@@ -12,5 +12,5 @@ jobs:
     steps:
       - uses: bratek20/github-actions/publish-artifacts-action@main
         with:
-          module-name: build-logic
+          project-name: build-logic
           github-token: ${{ secrets.GITHUB_TOKEN }}
