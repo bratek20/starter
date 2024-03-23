@@ -12,6 +12,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Publish locally version catalog (TODO publish only locally)
+        uses: bratek20/github-actions/publish-artifacts-action@main
+        with:
+          project-name: version-catalog
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run Tests
         uses: bratek20/github-actions/run-tests-action@main
         with:
