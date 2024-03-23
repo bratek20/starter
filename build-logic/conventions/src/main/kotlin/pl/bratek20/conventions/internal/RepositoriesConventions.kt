@@ -14,7 +14,7 @@ class RepositoriesConventions : Plugin<Project> {
             if (System.getenv("GITHUB_ACTOR") != null) {
                 maven {
                     name = "GitHubPackages"
-                    url = URI.create("https://maven.pkg.github.com/bratek20/commons")
+                    url = URI.create("https://maven.pkg.github.com/bratek20/starter")
                     credentials {
                         username = System.getenv("GITHUB_ACTOR")
                         password = System.getenv("GITHUB_TOKEN")
