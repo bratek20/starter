@@ -8,7 +8,7 @@ import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.testing.Test
 import pl.bratek20.plugins.conventions.internal.RepositoriesConventions
-import pl.bratek20.plugins.extensions.versionCatalog
+import pl.bratek20.extensions.versionCatalog
 
 class BaseConventions : Plugin<Project> {
     override fun apply(project: Project) {
@@ -21,7 +21,6 @@ class BaseConventions : Plugin<Project> {
                 apply(LombokPlugin::class.java)
 
                 apply(SpringLibraryConventions::class.java)
-
             }
 
             val javaPluginExtension = extensions.findByType(JavaPluginExtension::class.java)

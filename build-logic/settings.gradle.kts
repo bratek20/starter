@@ -1,3 +1,7 @@
+pluginManagement {
+    includeBuild("../bratek20-version-catalog")
+}
+
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {

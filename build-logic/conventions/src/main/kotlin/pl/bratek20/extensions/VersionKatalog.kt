@@ -1,4 +1,4 @@
-package pl.bratek20.plugins.extensions
+package pl.bratek20.extensions
 
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalog
