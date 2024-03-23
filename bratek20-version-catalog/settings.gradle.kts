@@ -1,1 +1,0 @@
-rootProject.name = "bratek20-version-catalog"

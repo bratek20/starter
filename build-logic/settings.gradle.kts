@@ -1,12 +1,16 @@
 pluginManagement {
-    includeBuild("../bratek20-version-catalog")
+    includeBuild("../version-catalog")
 }
 
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
-            from(files("../gradle/libs.versions.toml"))
+            from("pl.bratek20:version-catalog:1.0.0-SNAPSHOT")
         }
+    }
+
+    repositories {
+        mavenLocal()
     }
 }
 
