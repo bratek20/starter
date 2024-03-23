@@ -17,6 +17,7 @@ class BaseConventions : Plugin<Project> {
                 apply(RepositoriesConventions::class.java)
 
                 apply(JavaPlugin::class.java)
+                apply("org.jetbrains.kotlin.jvm")
 
                 apply(LombokPlugin::class.java)
 

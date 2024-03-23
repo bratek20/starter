@@ -4,6 +4,8 @@ plugins {
 }
 
 dependencies {
+    implementation(libs.kotlin.jvm.plugin)
+
     implementation(libs.lombok.plugin)
     implementation(libs.spring.dependency.management.plugin)
     implementation(libs.spring.boot.plugin)

@@ -7,22 +7,40 @@ catalog {
     // declare the aliases, bundles and versions in this block
     versionCatalog {
         version("java", "17")
+        version("kotlin", "1.9.23")
+
         version("lombok", "8.3")
         version("junit", "5.9.1")
         version("spring-boot", "3.1.3")
         version("assertj", "3.24.2")
+        version("protobuf", "3.25.2")
+
+        version("bratek20", "1.0.0-SNAPSHOT")
+
+        //plugins
+        library("kotlin-jvm-plugin", "org.jetbrains.kotlin.jvm", "org.jetbrains.kotlin.jvm.gradle.plugin").versionRef("kotlin")
 
         library("lombok-plugin", "io.freefair.gradle", "lombok-plugin").versionRef("lombok")
         library("spring-boot-plugin", "org.springframework.boot", "spring-boot-gradle-plugin").versionRef("spring-boot")
         library("spring-dependency-management-plugin", "io.spring.gradle", "dependency-management-plugin").version("1.1.3")
 
+        library("protobuf-plugin", "com.google.protobuf", "protobuf-gradle-plugin").version("0.9.4")
+
+        //impl dependencies
+        library("guava", "com.google.guava", "guava").version("32.1.2-jre")
+        library("jackson-dataformat-yaml", "com.fasterxml.jackson.dataformat", "jackson-dataformat-yaml").version("2.17.0")
+
+        library("protobuf-protoc", "com.google.protobuf", "protoc").versionRef("protobuf")
+        library("protobuf-java", "com.google.protobuf", "protobuf-java").versionRef("protobuf")
+
+        //test dependencies
         library("junit-jupiter-api", "org.junit.jupiter", "junit-jupiter-api").versionRef("junit")
         library("junit-jupiter-engine", "org.junit.jupiter", "junit-jupiter-engine").versionRef("junit")
 
         library("assertj-core", "org.assertj", "assertj-core").versionRef("assertj")
 
-        library("guava", "com.google.guava", "guava").version("32.1.2-jre")
-        library("jackson-dataformat-yaml", "com.fasterxml.jackson.dataformat", "jackson-dataformat-yaml").version("2.17.0")
+        //bratek20 dependencies
+        library("bratek20-starter", "pl.bratek20", "bratek20-starter").versionRef("bratek20")
     }
 }
 
@@ -40,16 +58,15 @@ publishing {
     repositories {
         mavenLocal()
 
-        //TODO fix when local publish done or better way of using version catalog in starter multiproject
-//        if (System.getenv("GITHUB_ACTOR") != null) {
-//            maven {
-//                name = "GitHubPackages"
-//                url = uri("https://maven.pkg.github.com/bratek20/starter")
-//                credentials {
-//                    username = System.getenv("GITHUB_ACTOR")
-//                    password = System.getenv("GITHUB_TOKEN")
-//                }
-//            }
-//        }
+        if (System.getenv("GITHUB_ACTOR") != null) {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/bratek20/starter")
+                credentials {
+                    username = System.getenv("GITHUB_ACTOR")
+                    password = System.getenv("GITHUB_TOKEN")
+                }
+            }
+        }
     }
 }
