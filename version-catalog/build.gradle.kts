@@ -24,8 +24,6 @@ catalog {
         library("spring-boot-plugin", "org.springframework.boot", "spring-boot-gradle-plugin").versionRef("spring-boot")
         library("spring-dependency-management-plugin", "io.spring.gradle", "dependency-management-plugin").version("1.1.3")
 
-        library("protobuf-plugin", "com.google.protobuf", "protobuf-gradle-plugin").version("0.9.4")
-
         //impl dependencies
         library("guava", "com.google.guava", "guava").version("32.1.2-jre")
         library("jackson-dataformat-yaml", "com.fasterxml.jackson.dataformat", "jackson-dataformat-yaml").version("2.17.0")
@@ -41,6 +39,10 @@ catalog {
 
         //bratek20 dependencies
         library("bratek20-starter", "pl.bratek20", "bratek20-starter").versionRef("bratek20")
+
+        plugin("protobuf", "com.google.protobuf").version("0.9.4")
+
+        plugin("bratek20-base-conventions", "pl.bratek20.base-conventions").versionRef("bratek20")
     }
 }
 
