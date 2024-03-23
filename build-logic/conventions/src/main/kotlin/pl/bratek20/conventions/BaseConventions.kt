@@ -1,4 +1,4 @@
-package pl.bratek20.plugins.conventions
+package pl.bratek20.conventions
 
 import io.freefair.gradle.plugins.lombok.LombokPlugin
 import org.gradle.api.JavaVersion
@@ -7,7 +7,7 @@ import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.testing.Test
-import pl.bratek20.plugins.conventions.internal.RepositoriesConventions
+import pl.bratek20.conventions.internal.RepositoriesConventions
 import pl.bratek20.extensions.versionCatalog
 
 class BaseConventions : Plugin<Project> {

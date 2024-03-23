@@ -1,4 +1,4 @@
-package pl.bratek20.plugins.conventions
+package pl.bratek20.conventions
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project

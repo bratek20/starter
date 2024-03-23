@@ -40,15 +40,16 @@ publishing {
     repositories {
         mavenLocal()
 
-        if (System.getenv("GITHUB_ACTOR") != null) {
-            maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/bratek20/starter")
-                credentials {
-                    username = System.getenv("GITHUB_ACTOR")
-                    password = System.getenv("GITHUB_TOKEN")
-                }
-            }
-        }
+        //TODO fix when local publish done or better way of using version catalog in starter multiproject
+//        if (System.getenv("GITHUB_ACTOR") != null) {
+//            maven {
+//                name = "GitHubPackages"
+//                url = uri("https://maven.pkg.github.com/bratek20/starter")
+//                credentials {
+//                    username = System.getenv("GITHUB_ACTOR")
+//                    password = System.getenv("GITHUB_TOKEN")
+//                }
+//            }
+//        }
     }
 }

@@ -1,4 +1,4 @@
-package pl.bratek20.plugins.conventions
+package pl.bratek20.conventions
 
 import io.spring.gradle.dependencymanagement.DependencyManagementPlugin
 import org.gradle.api.Plugin
