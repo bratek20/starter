@@ -1,4 +1,4 @@
-name: Publish modules to GitHub Packages
+name: Publish starter and submodules
 
 on:
   workflow_dispatch:

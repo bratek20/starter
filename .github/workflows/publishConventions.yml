@@ -1,4 +1,4 @@
-name: Publish conventions to GitHub Packages
+name: Publish conventions
 
 on:
   workflow_dispatch:

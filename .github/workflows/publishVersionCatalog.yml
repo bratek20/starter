@@ -1,4 +1,4 @@
-name: Publish version catalog to GitHub Packages
+name: Publish version catalog
 
 on:
   workflow_dispatch:
