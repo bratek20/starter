@@ -3,6 +3,8 @@ plugins {
 }
 
 dependencies {
+    api(platform(libs.spring.boot.dependencies))
+
     // context
     api("org.springframework:spring-context")
 

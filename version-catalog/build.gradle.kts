@@ -11,7 +11,7 @@ catalog {
 
         version("lombok", "8.3")
         version("junit", "5.9.1")
-        version("spring-boot", "3.1.3")
+        version("spring-boot", "3.2.4")
         version("assertj", "3.24.2")
         version("protobuf", "3.25.2")
 
@@ -22,7 +22,7 @@ catalog {
 
         library("lombok-plugin", "io.freefair.gradle", "lombok-plugin").versionRef("lombok")
         library("spring-boot-plugin", "org.springframework.boot", "spring-boot-gradle-plugin").versionRef("spring-boot")
-        library("spring-dependency-management-plugin", "io.spring.gradle", "dependency-management-plugin").version("1.1.3")
+        library("spring-boot-dependencies", "org.springframework.boot", "spring-boot-dependencies").versionRef("spring-boot")
 
         //impl dependencies
         library("guava", "com.google.guava", "guava").version("32.1.2-jre")
