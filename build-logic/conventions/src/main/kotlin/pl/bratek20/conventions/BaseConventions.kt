@@ -20,8 +20,6 @@ class BaseConventions : Plugin<Project> {
                 apply("org.jetbrains.kotlin.jvm")
 
                 apply(LombokPlugin::class.java)
-
-                apply(SpringLibraryConventions::class.java)
             }
 
             val javaPluginExtension = extensions.findByType(JavaPluginExtension::class.java)
