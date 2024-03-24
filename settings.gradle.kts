@@ -1,5 +1,6 @@
 pluginManagement {
-    includeBuild("build-logic")
+    includeBuild("version-catalog")
+    includeBuild("conventions")
 }
 
 dependencyResolutionManagement {

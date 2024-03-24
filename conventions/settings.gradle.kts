@@ -1,6 +1,4 @@
-pluginManagement {
-    includeBuild("../version-catalog")
-}
+
 
 dependencyResolutionManagement {
     versionCatalogs {
@@ -24,5 +22,4 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "build-logic"
-include(":conventions")
+rootProject.name = "conventions"
