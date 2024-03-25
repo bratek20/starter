@@ -3,6 +3,8 @@ plugins {
 }
 
 dependencies {
+    api(platform(libs.spring.boot.dependencies))
+
     // context
     api("org.springframework:spring-context")
 
@@ -24,13 +26,13 @@ dependencies {
     runtimeOnly("com.h2database:h2")
 
     // testcontainers
-    testFixturesImplementation("org.testcontainers:testcontainers")
-    testFixturesImplementation("org.testcontainers:junit-jupiter")
-    testFixturesImplementation("org.testcontainers:mysql")
+    testFixturesImplementation(libs.testcontainers)
+    testFixturesImplementation(libs.testcontainers.junit.jupiter)
+    testFixturesImplementation(libs.testcontainers.mysql)
 
     // swagger
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
+    implementation(libs.spring.boot.swagger)
 
     // web testing
-    testImplementation("io.rest-assured:rest-assured:5.3.0")
+    testImplementation("io.rest-assured:rest-assured")
 }
