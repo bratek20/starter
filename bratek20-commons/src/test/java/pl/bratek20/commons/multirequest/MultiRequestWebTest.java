@@ -32,9 +32,7 @@ class MultiRequestWebTest {
             MultiRequestConfig.class
         );
 
-        RestAssured.port = runner.getPort();
-
-        runner.run();
+        RestAssured.port = runner.run();
     }
 
     @Test

@@ -22,8 +22,7 @@ class UserWebTest extends UserApiTest {
             InMemoryConfig.class,
             UserWebServerConfig.class
         );
-        runner.run();
-        RestAssured.port = runner.getPort();
+        RestAssured.port = runner.run();
         return new WebClient();
     }
 

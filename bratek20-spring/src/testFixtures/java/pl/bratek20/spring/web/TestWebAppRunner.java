@@ -1,15 +1,11 @@
 package pl.bratek20.spring.web;
 
-import lombok.Getter;
-import pl.bratek20.spring.context.SpringContext;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class TestWebAppRunner {
     private final List<Class<?>> configurations;
-    @Getter
     private final int port;
 
     public TestWebAppRunner(Class<?>... configurations) {
@@ -17,9 +13,10 @@ public class TestWebAppRunner {
         port = generateRandomPort();
     }
 
-    public SpringContext run() {
+    public int run() {
         var app = new WebApp(configurations, new String[]{});
-        return app.run(port);
+        app.run(port);
+        return port;
     }
 
     public static int generateRandomPort() {
