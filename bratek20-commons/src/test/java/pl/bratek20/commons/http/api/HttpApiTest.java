@@ -4,18 +4,22 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import org.junit.jupiter.api.Test;
 import pl.bratek20.architecture.tests.ApiTest;
+import pl.bratek20.tests.InterfaceTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public abstract class HttpApiTest extends ApiTest<HttpApi> {
+public abstract class HttpApiTest extends InterfaceTest<HttpClientFactory> {
 
     private WireMockServer server;
+    private HttpClient client;
 
     @Override
     protected void setup() {
         super.setup();
         server = new WireMockServer(8080);
         server.start();
+
+        client = instance.create("http://localhost:8080");
     }
 
     @Override
@@ -35,14 +39,9 @@ public abstract class HttpApiTest extends ApiTest<HttpApi> {
                 .withStatus(200)
                 .withBody("{\"message\": \"Hello World\"}")));
 
-        HttpRequest request = new HttpRequest(
-                HttpRequestType.GET,
-                "http://localhost:8080/get"
-        );
+        var response = client.get("/get");
 
-        var response = api.send(request);
-
-        assertThat(response.code()).isEqualTo(200);
-        assertThat(response.body()).isEqualTo("{\"message\": \"Hello World\"}");
+        assertThat(response.getStatusCode()).isEqualTo(200);
+        assertThat(response.getBody()).isEqualTo("{\"message\": \"Hello World\"}");
     }
 }

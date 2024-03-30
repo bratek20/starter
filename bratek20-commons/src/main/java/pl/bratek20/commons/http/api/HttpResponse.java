@@ -1,5 +1,6 @@
 package pl.bratek20.commons.http.api;
 
-public record HttpResponse(int code, String body) {
-
+public interface HttpResponse {
+    int getStatusCode();
+    String getBody();
 }
