@@ -23,7 +23,7 @@ public class PublishConventions implements Plugin<Project> {
                         String groupId = publication.getGroupId() == null ? project.getGroup().toString() : publication.getGroupId();
                         String artifactId = publication.getArtifactId();
                         String version = publication.getVersion() == null ? project.getVersion().toString() : publication.getVersion();
-                        proj.getLogger().lifecycle("Publishing artifact: " + groupId + ":" + artifactId + ":" + version);
+                        proj.getLogger().lifecycle("Publishes artifact: " + groupId + ":" + artifactId + ":" + version);
                     });
                 });
             });

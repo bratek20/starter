@@ -2,9 +2,6 @@ plugins {
     id("pl.bratek20.library-conventions")
 }
 
-val log4jVersion = "2.21.0"
-val restAssuredVersion = "5.3.0"
-
 dependencies {
     implementation(project(":bratek20-spring"))
     implementation(project(":bratek20-architecture"))
@@ -15,19 +12,18 @@ dependencies {
     testImplementation(testFixtures(project(":bratek20-architecture")))
 
     // scripts
-    api("commons-cli:commons-cli:1.5.0")
+    api(libs.commons.cli)
 
     // logging
-    implementation("org.apache.logging.log4j:log4j-api:$log4jVersion")
-    implementation("org.apache.logging.log4j:log4j-core:$log4jVersion")
-    implementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion")
+    implementation(libs.log4j.api)
+    implementation(libs.log4j.core)
+    implementation(libs.log4j.slf4j.impl)
 
-    testImplementation("io.rest-assured:rest-assured:$restAssuredVersion")
+    testImplementation(libs.rest.assured)
 
     //http
-    testImplementation("com.github.tomakehurst:wiremock:3.0.0")
+    testImplementation(libs.wiremock)
 
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")
-
+    implementation(libs.jackson.databind)
 }
 

@@ -15,6 +15,9 @@ catalog {
         version("assertj", "3.24.2")
         version("protobuf", "3.25.2")
         version("testcontainers", "1.16.2")
+        version("log4j", "2.21.0")
+        version("rest-assured", "5.3.0")
+        version("jackson", "2.17.0")
 
         version("bratek20", "1.0.0-SNAPSHOT")
 
@@ -29,10 +32,17 @@ catalog {
         library("spring-boot-swagger", "org.springdoc", "springdoc-openapi-starter-webmvc-ui").version("2.2.0")
 
         library("guava", "com.google.guava", "guava").version("32.1.2-jre")
-        library("jackson-dataformat-yaml", "com.fasterxml.jackson.dataformat", "jackson-dataformat-yaml").version("2.17.0")
+        library("jackson-dataformat-yaml", "com.fasterxml.jackson.dataformat", "jackson-dataformat-yaml").versionRef("jackson")
+        library("jackson-databind", "com.fasterxml.jackson.core", "jackson-databind").versionRef("jackson")
 
         library("protobuf-protoc", "com.google.protobuf", "protoc").versionRef("protobuf")
         library("protobuf-java", "com.google.protobuf", "protobuf-java").versionRef("protobuf")
+
+        library("log4j-api", "org.apache.logging.log4j", "log4j-api").versionRef("log4j")
+        library("log4j-core", "org.apache.logging.log4j", "log4j-core").versionRef("log4j")
+        library("log4j-slf4j-impl", "org.apache.logging.log4j", "log4j-slf4j-impl").versionRef("log4j")
+
+        library("commons-cli", "commons-cli", "commons-cli").version("1.5.0")
 
         //test dependencies
         library("junit-jupiter-api", "org.junit.jupiter", "junit-jupiter-api").versionRef("junit")
@@ -43,6 +53,9 @@ catalog {
         library("testcontainers", "org.testcontainers", "testcontainers").versionRef("testcontainers")
         library("testcontainers-junit-jupiter", "org.testcontainers", "junit-jupiter").versionRef("testcontainers")
         library("testcontainers-mysql", "org.testcontainers", "mysql").versionRef("testcontainers")
+
+        library("wiremock", "com.github.tomakehurst", "wiremock").version("3.0.0")
+        library("rest-assured", "io.rest-assured", "rest-assured").version("5.3.0")
 
         //bratek20 dependencies
         library("bratek20-starter", "pl.bratek20", "bratek20-starter").versionRef("bratek20")
