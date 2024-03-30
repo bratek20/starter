@@ -61,8 +61,10 @@ catalog {
         library("bratek20-starter", "pl.bratek20", "bratek20-starter").versionRef("bratek20")
 
         plugin("protobuf", "com.google.protobuf").version("0.9.4")
+        plugin("jib", "com.google.cloud.tools.jib").version("3.3.1")
 
         plugin("bratek20-base-conventions", "pl.bratek20.base-conventions").versionRef("bratek20")
+        plugin("bratek20-spring-app-conventions", "pl.bratek20.spring-app-conventions").versionRef("bratek20")
     }
 }
 

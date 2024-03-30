@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     `kotlin-dsl`
     `maven-publish`
@@ -12,7 +14,13 @@ dependencies {
 
 java {
     toolchain {
-        version = libs.versions.java
+        version = libs.versions.java.get()
+    }
+}
+
+tasks.withType(KotlinCompile::class.java) {
+    kotlinOptions {
+        jvmTarget = libs.versions.java.get()
     }
 }
 

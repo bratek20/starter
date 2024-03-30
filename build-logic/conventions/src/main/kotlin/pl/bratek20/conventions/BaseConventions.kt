@@ -7,6 +7,9 @@ import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.testing.Test
+import org.gradle.jvm.toolchain.JavaLanguageVersion
+import org.gradle.platform.base.ToolChain
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import pl.bratek20.conventions.internal.RepositoriesConventions
 import pl.bratek20.extensions.versionCatalog
 
@@ -22,10 +25,17 @@ class BaseConventions : Plugin<Project> {
                 apply(LombokPlugin::class.java)
             }
 
-            val javaPluginExtension = extensions.findByType(JavaPluginExtension::class.java)
             val javaVersion = JavaVersion.toVersion(versionCatalog().findVersion("java").get())
-            javaPluginExtension?.sourceCompatibility = javaVersion
-            javaPluginExtension?.targetCompatibility = javaVersion
+
+            project.extensions.getByType(JavaPluginExtension::class.java)
+                .toolchain.languageVersion
+                    .set(JavaLanguageVersion.of(javaVersion.majorVersion))
+
+            project.tasks.withType(KotlinCompile::class.java) {
+                kotlinOptions {
+                    jvmTarget = javaVersion.majorVersion
+                }
+            }
 
             with(dependencies) {
                 add("testImplementation", versionCatalog().findLibrary("junit-jupiter-api").get())
