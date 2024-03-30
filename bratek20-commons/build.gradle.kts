@@ -26,5 +26,8 @@ dependencies {
 
     //http
     testImplementation("com.github.tomakehurst:wiremock:3.0.0")
+
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")
+
 }
 

@@ -30,8 +30,10 @@ public abstract class HttpApiTest extends InterfaceTest<HttpClientFactory> {
         }
     }
 
+    record ExampleBody(String message) {}
+
     @Test
-    void shouldSendGetRequest() {
+    void shouldSupportGet() {
         server.stubFor(
             WireMock.get(WireMock.urlEqualTo("/get"))
             .willReturn(WireMock.aResponse()
@@ -42,6 +44,24 @@ public abstract class HttpApiTest extends InterfaceTest<HttpClientFactory> {
         var response = client.get("/get");
 
         assertThat(response.getStatusCode()).isEqualTo(200);
-        assertThat(response.getBody()).isEqualTo("{\"message\": \"Hello World\"}");
+        assertThat(response.getBody(ExampleBody.class))
+            .isEqualTo(new ExampleBody("Hello World"));
+    }
+
+    @Test
+    void shouldSupportPost() {
+        server.stubFor(
+            WireMock.post(WireMock.urlEqualTo("/post"))
+                .withRequestBody(WireMock.equalToJson("{\"message\": \"Request\"}"))
+                .willReturn(WireMock.aResponse()
+                    .withHeader("Content-Type", "application/json")
+                    .withStatus(200)
+                    .withBody("{\"message\": \"Response\"}")));
+
+        var response = client.post("/post", new ExampleBody("Request"));
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+        assertThat(response.getBody(ExampleBody.class))
+            .isEqualTo(new ExampleBody("Response"));
     }
 }

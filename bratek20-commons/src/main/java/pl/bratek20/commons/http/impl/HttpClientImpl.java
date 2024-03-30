@@ -1,6 +1,7 @@
 package pl.bratek20.commons.http.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
@@ -14,10 +15,8 @@ public class HttpClientImpl implements HttpClient {
 
     @Override
     public HttpResponse get(String path) {
-        String url = baseUrl + path;
-
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-            url,
+            getFullUrl(path),
             HttpMethod.GET,
             null,
             String.class
@@ -28,6 +27,17 @@ public class HttpClientImpl implements HttpClient {
 
     @Override
     public <T> HttpResponse post(String path, T body) {
-        return null;
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+            getFullUrl(path),
+            HttpMethod.POST,
+            new HttpEntity<>(body),
+            String.class
+        );
+
+        return new HttpResponseImpl(responseEntity.getStatusCode().value(), responseEntity.getBody());
+    }
+
+    private String getFullUrl(String path) {
+        return baseUrl + path;
     }
 }
