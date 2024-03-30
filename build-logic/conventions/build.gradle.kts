@@ -38,10 +38,6 @@ gradlePlugin {
             id = "pl.bratek20.publish-conventions"
             implementationClass = "pl.bratek20.conventions.PublishConventions"
         }
-        register("spring-library-conventions") {
-            id = "pl.bratek20.spring-library-conventions"
-            implementationClass = "pl.bratek20.conventions.SpringLibraryConventions"
-        }
         register("spring-app-conventions") {
             id = "pl.bratek20.spring-app-conventions"
             implementationClass = "pl.bratek20.conventions.SpringAppConventions"
