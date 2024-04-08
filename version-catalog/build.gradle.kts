@@ -65,6 +65,8 @@ catalog {
 
         plugin("bratek20-base-conventions", "pl.bratek20.base-conventions").versionRef("bratek20")
         plugin("bratek20-spring-app-conventions", "pl.bratek20.spring-app-conventions").versionRef("bratek20")
+        plugin("bratek20-library-conventions", "pl.bratek20.library-conventions").versionRef("bratek20")
+        plugin("bratek20-simple-library-conventions", "pl.bratek20.simple-library-conventions").versionRef("bratek20")
     }
 }
 
