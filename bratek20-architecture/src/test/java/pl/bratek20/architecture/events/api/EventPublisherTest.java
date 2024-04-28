@@ -2,14 +2,16 @@ package pl.bratek20.architecture.events.api;
 
 import lombok.Value;
 import org.junit.jupiter.api.Test;
-import pl.bratek20.tests.ParamsContextTest;
+import pl.bratek20.architecture.context.spring.SpringContextBuilder;
+import pl.bratek20.architecture.events.impl.EventsModule;
+import pl.bratek20.tests.InterfaceTest;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public abstract class EventPublisherTest extends ParamsContextTest<List<EventListener<?>>, EventPublisher> {
+public class EventPublisherTest extends InterfaceTest<EventPublisher>{
 
     @Value
     public static class TestEvent implements Event {
@@ -44,19 +46,20 @@ public abstract class EventPublisherTest extends ParamsContextTest<List<EventLis
     private TestEventListener listener1;
     private TestEventListener listener2;
     private OtherEventListener otherListener;
-    private EventPublisher api;
 
     @Override
-    protected List<EventListener<?>> defaultParams() {
+    protected EventPublisher createInstance() {
         listener1 = new TestEventListener();
         listener2 = new TestEventListener();
         otherListener = new OtherEventListener();
-        return List.of(listener1, listener2, otherListener);
-    }
 
-    @Override
-    protected void applyContext(EventPublisher context) {
-        api = context;
+        return new SpringContextBuilder()
+            .withObject(listener1)
+            .withObject(listener2)
+            .withObject(otherListener)
+            .withModule(new EventsModule())
+            .build()
+            .get(EventPublisher.class);
     }
 
     @Test
@@ -64,9 +67,9 @@ public abstract class EventPublisherTest extends ParamsContextTest<List<EventLis
         // given
 
         // when
-        api.publish(new TestEvent(1));
-        api.publish(new TestEvent(2));
-        api.publish(new OtherEvent(3));
+        instance.publish(new TestEvent(1));
+        instance.publish(new TestEvent(2));
+        instance.publish(new OtherEvent(3));
 
         // then
         assertThat(listener1.events)

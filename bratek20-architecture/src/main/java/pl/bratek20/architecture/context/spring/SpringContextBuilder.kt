@@ -1,10 +1,14 @@
 package pl.bratek20.architecture.context.spring
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import pl.bratek20.architecture.context.api.Context
 import pl.bratek20.architecture.context.api.ContextBuilder
+import pl.bratek20.architecture.context.api.ContextModule
+import java.util.*
 
 class SpringContextBuilder: ContextBuilder {
     private val classes = mutableListOf<Class<*>>()
+    private val objects = mutableListOf<Any>()
 
     override fun withClass(type: Class<*>): ContextBuilder {
         classes.add(type)
@@ -16,7 +20,24 @@ class SpringContextBuilder: ContextBuilder {
         return this
     }
 
+    override fun withModule(module: ContextModule): ContextBuilder {
+        module.apply(this)
+        return this
+    }
+
+    override fun withObject(obj: Any): ContextBuilder {
+        objects.add(obj)
+        return this
+    }
+
     override fun build(): Context {
-        return SpringContext(*classes.toTypedArray())
+        val context = AnnotationConfigApplicationContext()
+        classes.forEach { context.register(it) }
+        objects.forEach {
+            val suffix = UUID.randomUUID().toString()
+            context.beanFactory.registerSingleton(it::class.java.name + suffix, it)
+        }
+        context.refresh()
+        return SpringContext(context)
     }
 }
