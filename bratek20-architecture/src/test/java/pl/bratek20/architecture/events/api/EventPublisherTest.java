@@ -2,34 +2,52 @@ package pl.bratek20.architecture.events.api;
 
 import lombok.Value;
 import org.junit.jupiter.api.Test;
-import pl.bratek20.architecture.tests.ApiTest;
+import pl.bratek20.tests.ParamsContextTest;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public abstract class EventsApiTest extends ApiTest<EventsApi> {
+public abstract class EventPublisherTest extends ParamsContextTest<EventPublisherTest.TestEventListener, EventPublisher> {
 
     @Value
-    class TestEvent implements Event {
+    public static class TestEvent implements Event {
         int value;
     }
 
     @Value
-    class TestEventListener implements EventListener<TestEvent> {
+    public class TestEventListener implements EventListener<TestEvent> {
         List<TestEvent> events = new ArrayList<>();
 
         @Override
         public void handleEvent(TestEvent event) {
             events.add(event);
         }
+
+        @Override
+        public Class<TestEvent> getEventType() {
+            return TestEvent.class;
+        }
     }
+
+    private TestEventListener listener;
+    private EventPublisher api;
+
+    @Override
+    protected TestEventListener defaultParams() {
+        listener = new TestEventListener();
+        return listener;
+    }
+
+    @Override
+    protected void applyContext(EventPublisher context) {
+        api = context;
+    }
+
     @Test
     void shouldWork() {
         // given
-        var listener = new TestEventListener();
-        api.subscribe(TestEvent.class, listener);
 
         // when
         api.publish(new TestEvent(1));

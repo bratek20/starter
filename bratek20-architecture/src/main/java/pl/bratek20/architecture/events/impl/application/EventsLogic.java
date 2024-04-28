@@ -2,22 +2,27 @@ package pl.bratek20.architecture.events.impl.application;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
-import lombok.RequiredArgsConstructor;
 import pl.bratek20.architecture.events.api.Event;
 import pl.bratek20.architecture.events.api.EventListener;
-import pl.bratek20.architecture.events.api.EventsApi;
+import pl.bratek20.architecture.events.api.EventPublisher;
 
-@RequiredArgsConstructor
-public class EventsService implements EventsApi {
+import java.util.List;
+
+public class EventsLogic implements EventPublisher {
     private final EventBus eventBus;
+
+    public EventsLogic(EventBus eventBus, List<EventListener<?>> listeners) {
+        this.eventBus = eventBus;
+        //listeners.forEach(listener -> subscribe2(listener.getEventType(), listener));
+    }
 
     @Override
     public void publish(Event event) {
         eventBus.post(event);
     }
 
-    @Override
-    public <T extends Event> void subscribe(Class<T> eventType, EventListener<T> listener) {
+
+    private  <T extends Event> void subscribe2(Class<T> eventType, EventListener<T> listener) {
         class EventListenerWrapper {
             @Subscribe
             public void handleEvent(T event) {
