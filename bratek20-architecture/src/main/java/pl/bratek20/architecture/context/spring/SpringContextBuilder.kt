@@ -3,10 +3,10 @@ package pl.bratek20.architecture.context.spring
 import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import pl.bratek20.architecture.context.api.Context
 import pl.bratek20.architecture.context.api.ContextBuilder
-import pl.bratek20.architecture.context.api.ContextModule
+import pl.bratek20.architecture.context.impl.AbstractContextBuilder
 import java.util.*
 
-class SpringContextBuilder: ContextBuilder {
+class SpringContextBuilder: AbstractContextBuilder() {
     private val classes = mutableListOf<Class<*>>()
     private val objects = mutableListOf<Any>()
 
@@ -15,13 +15,8 @@ class SpringContextBuilder: ContextBuilder {
         return this
     }
 
-    override fun <I, T : I> withBind(interfaceType: Class<I>, implementationType: Class<T>): ContextBuilder {
+    override fun <I, T : I> bind(interfaceType: Class<I>, implementationType: Class<T>): ContextBuilder {
         classes.add(implementationType)
-        return this
-    }
-
-    override fun withModule(module: ContextModule): ContextBuilder {
-        module.apply(this)
         return this
     }
 

@@ -2,8 +2,8 @@ package pl.bratek20.architecture.context.api
 
 interface Context {
     @Throws(
-        ClassNotFoundInContextException::class,
-        MultipleClassesFoundInContextException::class
+        ClassNotFoundException::class,
+        MultipleClassesFoundException::class
     )
     fun <T> get(type: Class<T>): T
 

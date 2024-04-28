@@ -5,15 +5,15 @@ plugins {
 dependencies {
     //event bus
     implementation(libs.guava)
-    implementation(project(":bratek20-spring"))
+
+    //spring context
+    implementation(platform(libs.spring.boot.dependencies))
+    implementation("org.springframework:spring-context")
 
     //properties
     implementation(libs.jackson.dataformat.yaml)
 
     testImplementation(project(":bratek20-tests"))
-    testImplementation(project(":bratek20-spring"))
-
-    testFixturesImplementation(project(":bratek20-spring"))
 
     testFixturesApi(project(":bratek20-tests"))
 }

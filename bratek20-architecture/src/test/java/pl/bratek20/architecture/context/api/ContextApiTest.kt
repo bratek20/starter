@@ -24,8 +24,8 @@ abstract class ContextApiTest: InterfaceTest<ContextBuilder>() {
 
     private fun context() = instance
         .withClass(X::class.java)
-        .withBind(A::class.java, AImpl1::class.java)
-        .withBind(A::class.java, AImpl2::class.java)
+        .bind(A::class.java, AImpl1::class.java)
+        .bind(A::class.java, AImpl2::class.java)
         .withModule(SomeModuleContext())
         .withObject(WithValue("value"))
         .withObject(WithValue("value2"))
@@ -66,14 +66,14 @@ abstract class ContextApiTest: InterfaceTest<ContextBuilder>() {
     @Test
     fun `should throw exception when class not found`() {
         assertThatThrownBy { context().get(String::class.java) }
-            .isInstanceOf(ClassNotFoundInContextException::class.java)
+            .isInstanceOf(ClassNotFoundException::class.java)
             .hasMessage("Class String not found in context")
     }
 
     @Test
     fun `should throw exception when multiple classes found`() {
         assertThatThrownBy { context().get(A::class.java) }
-            .isInstanceOf(MultipleClassesFoundInContextException::class.java)
+            .isInstanceOf(MultipleClassesFoundException::class.java)
             .hasMessage("Multiple classes found for A in context")
     }
 }
