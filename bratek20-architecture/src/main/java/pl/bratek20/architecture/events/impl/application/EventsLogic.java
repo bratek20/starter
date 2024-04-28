@@ -13,7 +13,7 @@ public class EventsLogic implements EventPublisher {
 
     public EventsLogic(EventBus eventBus, List<EventListener<?>> listeners) {
         this.eventBus = eventBus;
-        //listeners.forEach(listener -> subscribe2(listener.getEventType(), listener));
+        listeners.forEach(this::subscribe);
     }
 
     @Override
@@ -21,8 +21,7 @@ public class EventsLogic implements EventPublisher {
         eventBus.post(event);
     }
 
-
-    private  <T extends Event> void subscribe2(Class<T> eventType, EventListener<T> listener) {
+    private <T extends Event> void subscribe(EventListener<T> listener) {
         class EventListenerWrapper {
             @Subscribe
             public void handleEvent(T event) {

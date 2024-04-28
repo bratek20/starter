@@ -9,10 +9,15 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public abstract class EventPublisherTest extends ParamsContextTest<EventPublisherTest.TestEventListener, EventPublisher> {
+public abstract class EventPublisherTest extends ParamsContextTest<List<EventListener<?>>, EventPublisher> {
 
     @Value
     public static class TestEvent implements Event {
+        int value;
+    }
+
+    @Value
+    public static class OtherEvent implements Event {
         int value;
     }
 
@@ -24,20 +29,29 @@ public abstract class EventPublisherTest extends ParamsContextTest<EventPublishe
         public void handleEvent(TestEvent event) {
             events.add(event);
         }
+    }
+
+    @Value
+    public class OtherEventListener implements EventListener<OtherEvent> {
+        List<OtherEvent> events = new ArrayList<>();
 
         @Override
-        public Class<TestEvent> getEventType() {
-            return TestEvent.class;
+        public void handleEvent(OtherEvent event) {
+            events.add(event);
         }
     }
 
-    private TestEventListener listener;
+    private TestEventListener listener1;
+    private TestEventListener listener2;
+    private OtherEventListener otherListener;
     private EventPublisher api;
 
     @Override
-    protected TestEventListener defaultParams() {
-        listener = new TestEventListener();
-        return listener;
+    protected List<EventListener<?>> defaultParams() {
+        listener1 = new TestEventListener();
+        listener2 = new TestEventListener();
+        otherListener = new OtherEventListener();
+        return List.of(listener1, listener2, otherListener);
     }
 
     @Override
@@ -52,12 +66,22 @@ public abstract class EventPublisherTest extends ParamsContextTest<EventPublishe
         // when
         api.publish(new TestEvent(1));
         api.publish(new TestEvent(2));
+        api.publish(new OtherEvent(3));
 
         // then
-        assertThat(listener.events)
+        assertThat(listener1.events)
             .containsExactly(
                 new TestEvent(1),
                 new TestEvent(2)
+            );
+        assertThat(listener2.events)
+            .containsExactly(
+                new TestEvent(1),
+                new TestEvent(2)
+            );
+        assertThat(otherListener.events)
+            .containsExactly(
+                new OtherEvent(3)
             );
     }
 }
