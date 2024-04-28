@@ -3,7 +3,7 @@ package pl.bratek20.architecture.events.api;
 import lombok.Value;
 import org.junit.jupiter.api.Test;
 import pl.bratek20.architecture.context.spring.SpringContextBuilder;
-import pl.bratek20.architecture.events.impl.EventsModule;
+import pl.bratek20.architecture.events.impl.EventsContextModule;
 import pl.bratek20.tests.InterfaceTest;
 
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class EventPublisherTest extends InterfaceTest<EventPublisher>{
             .withObject(listener1)
             .withObject(listener2)
             .withObject(otherListener)
-            .withModule(new EventsModule())
+            .withModule(new EventsContextModule())
             .build()
             .get(EventPublisher.class);
     }
