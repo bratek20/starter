@@ -19,7 +19,7 @@ catalog {
         version("rest-assured", "5.3.0")
         version("jackson", "2.17.0")
 
-        version("bratek20", "1.0.0-SNAPSHOT")
+        version("bratek20", "1.0.1")
 
         //plugins
         library("kotlin-jvm-plugin", "org.jetbrains.kotlin.jvm", "org.jetbrains.kotlin.jvm.gradle.plugin").versionRef("kotlin")
@@ -70,6 +70,8 @@ catalog {
     }
 }
 
+val catalogVersion = "1.0.1"
+
 publishing {
     publications {
         create<MavenPublication>("maven") {
@@ -77,7 +79,7 @@ publishing {
 
             groupId = "pl.bratek20"
             artifactId = "version-catalog"
-            version = "1.0.0-SNAPSHOT"
+            version = catalogVersion
         }
     }
 

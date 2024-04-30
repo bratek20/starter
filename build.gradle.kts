@@ -2,12 +2,15 @@ plugins {
     id("pl.bratek20.library-conventions")
 }
 
-group = "pl.bratek20"
-version = "1.0.0-SNAPSHOT"
+val groupAll = "pl.bratek20"
+val versionAll = "1.0.1"
+
+group = groupAll
+version = versionAll
 
 subprojects {
-    group = "pl.bratek20"
-    version = "1.0.0-SNAPSHOT"
+    group = groupAll
+    version = versionAll
 }
 
 dependencies {
