@@ -7,3 +7,6 @@ class ClassNotFoundException(message: String)
 
 class MultipleClassesFoundException(message: String)
     : ApiException(message)
+
+class DependentClassNotFoundException(message: String)
+    : ApiException(message)

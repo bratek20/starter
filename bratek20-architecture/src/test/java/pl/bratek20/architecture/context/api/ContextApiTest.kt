@@ -3,27 +3,37 @@ package pl.bratek20.architecture.context.api
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
+import pl.bratek20.architecture.context.spring.SpringContextBuilder
 import pl.bratek20.tests.InterfaceTest
 
-abstract class ContextApiTest: InterfaceTest<ContextBuilder>() {
-    class X
-    interface A
-    class AImpl1: A
-    class AImpl2: A
+class X
+interface A
+class AImpl1: A
+class AImpl2: A
 
-    class SomeClass
+class SomeClass
 
-    class SomeModuleContext: ContextModule {
-        override fun apply(builder: ContextBuilder) {
-            builder.withClass(SomeClass::class.java)
-        }
+class WithXClass(
+    val x: X
+)
+
+class SomeModuleContext: ContextModule {
+    override fun apply(builder: ContextBuilder) {
+        builder.withClass(SomeClass::class.java)
     }
+}
 
 
-    class WithValue(val value: String)
+class WithValue(val value: String)
+
+class ContextApiTest: InterfaceTest<ContextBuilder>() {
+    override fun createInstance(): ContextBuilder {
+        return SpringContextBuilder();
+    }
 
     private fun context() = instance
         .withClass(X::class.java)
+        .withClass(WithXClass::class.java)
         .bind(A::class.java, AImpl1::class.java)
         .bind(A::class.java, AImpl2::class.java)
         .withModule(SomeModuleContext())
@@ -36,6 +46,14 @@ abstract class ContextApiTest: InterfaceTest<ContextBuilder>() {
         val x = context().get(X::class.java)
 
         assertThat(x).isInstanceOf(X::class.java)
+    }
+
+    @Test
+    fun `should get class that needs other class`() {
+        val withX = context().get(WithXClass::class.java)
+
+        assertThat(withX).isInstanceOf(WithXClass::class.java)
+        assertThat(withX.x).isNotNull()
     }
 
     @Test
@@ -75,5 +93,16 @@ abstract class ContextApiTest: InterfaceTest<ContextBuilder>() {
         assertThatThrownBy { context().get(A::class.java) }
             .isInstanceOf(MultipleClassesFoundException::class.java)
             .hasMessage("Multiple classes found for A in context")
+    }
+
+    @Test
+    fun `should throw exception if class to inject not found`() {
+        assertThatThrownBy {
+            createInstance()
+                .withClass(WithXClass::class.java)
+                .build()
+        }
+        .isInstanceOf(DependentClassNotFoundException::class.java)
+        .hasMessage("Class X needed by class WithXClass not found")
     }
 }

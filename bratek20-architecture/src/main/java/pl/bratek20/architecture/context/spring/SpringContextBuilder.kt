@@ -1,8 +1,10 @@
 package pl.bratek20.architecture.context.spring
 
+import org.springframework.beans.factory.UnsatisfiedDependencyException
 import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import pl.bratek20.architecture.context.api.Context
 import pl.bratek20.architecture.context.api.ContextBuilder
+import pl.bratek20.architecture.context.api.DependentClassNotFoundException
 import pl.bratek20.architecture.context.impl.AbstractContextBuilder
 import java.util.*
 
@@ -32,7 +34,20 @@ class SpringContextBuilder: AbstractContextBuilder() {
             val suffix = UUID.randomUUID().toString()
             context.beanFactory.registerSingleton(it::class.java.name + suffix, it)
         }
-        context.refresh()
+        try {
+            context.refresh()
+        }
+        catch (ex: UnsatisfiedDependencyException) {
+            val msg = ex.message ?: "";
+            val beanWithError = msg.substringAfter("Error creating bean with name '").substringBefore("'")
+            val classWithError = beanWithError[0].uppercase() + beanWithError.substring(1)
+
+            val fullDependentClassName = msg.substringAfter("No qualifying bean of type '").substringBefore("'")
+            val dependentClass = fullDependentClassName.substringAfterLast(".")
+
+            throw DependentClassNotFoundException("Class $dependentClass needed by class $classWithError not found")
+        }
+
         return SpringContext(context)
     }
 }
