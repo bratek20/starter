@@ -1,13 +1,10 @@
 package pl.bratek20.architecture.context.guice
 
 import com.google.inject.Injector
-import pl.bratek20.architecture.context.impl.AbstractContext
+import pl.bratek20.architecture.context.api.Context
 
-class GuiceContext(private val injector: Injector) : AbstractContext() {
-    override fun <T> getMany(type: Class<T>): List<T> {
-        return injector.allBindings.entries
-            .filter { it.key.typeLiteral.rawType == type }
-            .map { injector.getInstance(it.key) }
-            .map { type.cast(it) }
+class GuiceContext(private val injector: Injector) : Context {
+    override fun <T> get(type: Class<T>): T {
+        return injector.getInstance(type)
     }
 }

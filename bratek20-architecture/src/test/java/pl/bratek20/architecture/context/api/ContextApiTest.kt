@@ -50,26 +50,33 @@ abstract class ContextApiTest: InterfaceTest<ContextBuilder>() {
         assertThat(withX.x).isNotNull()
     }
 
+    class As @Inject constructor(
+        val value: Set<A>
+    )
+
     @Test
-    fun `should get many classes`() {
+    fun `should inject classes list`() {
         val a = createInstance()
             .bind(A::class.java, AImpl1::class.java)
             .bind(A::class.java, AImpl2::class.java)
+            .withClass(As::class.java)
             .build()
-            .getMany(A::class.java)
+            .get(As::class.java).value.toList();
 
         assertThat(a).hasSize(2)
         assertThat(a[0]).isInstanceOf(AImpl1::class.java)
         assertThat(a[1]).isInstanceOf(AImpl2::class.java)
     }
 
+    data class Values @Inject constructor(val value: Set<WithValue>)
     @Test
     fun `should get many objects`() {
         val result = createInstance()
             .withObject(WithValue("value"))
             .withObject(WithValue("value2"))
+            .withClass(Values::class.java)
             .build()
-            .getMany(WithValue::class.java)
+            .get(Values::class.java).value.toList()
 
         assertThat(result).hasSize(2)
         assertThat(result[0].value).isEqualTo("value")
