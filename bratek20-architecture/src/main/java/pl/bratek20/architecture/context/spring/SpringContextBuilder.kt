@@ -12,7 +12,7 @@ class SpringContextBuilder: AbstractContextBuilder() {
     private val classes = mutableListOf<Class<*>>()
     private val objects = mutableListOf<Any>()
 
-    override fun withClass(type: Class<*>): ContextBuilder {
+    override fun <T> withClass(type: Class<T>): ContextBuilder {
         classes.add(type)
         return this
     }

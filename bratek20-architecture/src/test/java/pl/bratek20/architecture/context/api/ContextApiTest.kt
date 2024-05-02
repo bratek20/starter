@@ -1,6 +1,5 @@
 package pl.bratek20.architecture.context.api
 
-import com.google.inject.Inject
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
@@ -13,7 +12,7 @@ class AImpl2: A
 
 class SomeClass
 
-class WithXClass @Inject constructor(
+class WithXClass(
     val x: X
 )
 
@@ -50,7 +49,7 @@ abstract class ContextApiTest: InterfaceTest<ContextBuilder>() {
         assertThat(withX.x).isNotNull()
     }
 
-    class As @Inject constructor(
+    class As(
         val value: Set<A>
     )
 
@@ -68,7 +67,8 @@ abstract class ContextApiTest: InterfaceTest<ContextBuilder>() {
         assertThat(a[1]).isInstanceOf(AImpl2::class.java)
     }
 
-    data class Values @Inject constructor(val value: Set<WithValue>)
+    data class Values(val value: Set<WithValue>)
+
     @Test
     fun `should get many objects`() {
         val result = createInstance()
