@@ -1,9 +1,9 @@
 package pl.bratek20.architecture.context.api
 
+import com.google.inject.Inject
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
-import pl.bratek20.architecture.context.spring.SpringContextBuilder
 import pl.bratek20.tests.InterfaceTest
 
 class X
@@ -13,11 +13,11 @@ class AImpl2: A
 
 class SomeClass
 
-class WithXClass(
+class WithXClass @Inject constructor(
     val x: X
 )
 
-class SomeModuleContext: ContextModule {
+class SomeModuleContextModule: ContextModule {
     override fun apply(builder: ContextBuilder) {
         builder.withClass(SomeClass::class.java)
     }
@@ -26,31 +26,25 @@ class SomeModuleContext: ContextModule {
 
 class WithValue(val value: String)
 
-class ContextApiTest: InterfaceTest<ContextBuilder>() {
-    override fun createInstance(): ContextBuilder {
-        return SpringContextBuilder();
-    }
-
-    private fun context() = instance
-        .withClass(X::class.java)
-        .withClass(WithXClass::class.java)
-        .bind(A::class.java, AImpl1::class.java)
-        .bind(A::class.java, AImpl2::class.java)
-        .withModule(SomeModuleContext())
-        .withObject(WithValue("value"))
-        .withObject(WithValue("value2"))
-        .build()
+abstract class ContextApiTest: InterfaceTest<ContextBuilder>() {
 
     @Test
     fun `should get class`() {
-        val x = context().get(X::class.java)
+        val x = createInstance()
+            .withClass(X::class.java)
+            .build()
+            .get(X::class.java)
 
         assertThat(x).isInstanceOf(X::class.java)
     }
 
     @Test
     fun `should get class that needs other class`() {
-        val withX = context().get(WithXClass::class.java)
+        val withX = createInstance()
+            .withClass(X::class.java)
+            .withClass(WithXClass::class.java)
+            .build()
+            .get(WithXClass::class.java)
 
         assertThat(withX).isInstanceOf(WithXClass::class.java)
         assertThat(withX.x).isNotNull()
@@ -58,7 +52,11 @@ class ContextApiTest: InterfaceTest<ContextBuilder>() {
 
     @Test
     fun `should get many classes`() {
-        val a = context().getMany(A::class.java)
+        val a = createInstance()
+            .bind(A::class.java, AImpl1::class.java)
+            .bind(A::class.java, AImpl2::class.java)
+            .build()
+            .getMany(A::class.java)
 
         assertThat(a).hasSize(2)
         assertThat(a[0]).isInstanceOf(AImpl1::class.java)
@@ -67,7 +65,11 @@ class ContextApiTest: InterfaceTest<ContextBuilder>() {
 
     @Test
     fun `should get many objects`() {
-        val result = context().getMany(WithValue::class.java)
+        val result = createInstance()
+            .withObject(WithValue("value"))
+            .withObject(WithValue("value2"))
+            .build()
+            .getMany(WithValue::class.java)
 
         assertThat(result).hasSize(2)
         assertThat(result[0].value).isEqualTo("value")
@@ -76,23 +78,32 @@ class ContextApiTest: InterfaceTest<ContextBuilder>() {
 
     @Test
     fun `should get class from module`() {
-        val someClass = context().get(SomeClass::class.java)
+        val someClass = createInstance()
+            .withModule(SomeModuleContextModule())
+            .build()
+            .get(SomeClass::class.java)
 
         assertThat(someClass).isInstanceOf(SomeClass::class.java)
     }
 
     @Test
     fun `should throw exception when class not found`() {
-        assertThatThrownBy { context().get(String::class.java) }
+        assertThatThrownBy { createInstance().build().get(String::class.java) }
             .isInstanceOf(ClassNotFoundException::class.java)
             .hasMessage("Class String not found in context")
     }
 
     @Test
     fun `should throw exception when multiple classes found`() {
-        assertThatThrownBy { context().get(A::class.java) }
-            .isInstanceOf(MultipleClassesFoundException::class.java)
-            .hasMessage("Multiple classes found for A in context")
+        assertThatThrownBy {
+            createInstance()
+                .withClass(AImpl1::class.java)
+                .withClass(AImpl2::class.java)
+                .build()
+                .get(A::class.java)
+        }
+        .isInstanceOf(MultipleClassesFoundException::class.java)
+        .hasMessage("Multiple classes found for A in context")
     }
 
     @Test

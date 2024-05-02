@@ -19,7 +19,8 @@ catalog {
         version("rest-assured", "5.3.0")
         version("jackson", "2.17.0")
 
-        version("bratek20", "1.0.1")
+        version("bratek20-starter", "1.0.1")
+        version("bratek20-plugins", "1.0.0-SNAPSHOT")
 
         //plugins
         library("kotlin-jvm-plugin", "org.jetbrains.kotlin.jvm", "org.jetbrains.kotlin.jvm.gradle.plugin").versionRef("kotlin")
@@ -58,15 +59,15 @@ catalog {
         library("rest-assured", "io.rest-assured", "rest-assured").version("5.3.0")
 
         //bratek20 dependencies
-        library("bratek20-starter", "pl.bratek20", "bratek20-starter").versionRef("bratek20")
+        library("bratek20-starter", "pl.bratek20", "bratek20-starter").versionRef("bratek20-starter")
 
         plugin("protobuf", "com.google.protobuf").version("0.9.4")
         plugin("jib", "com.google.cloud.tools.jib").version("3.3.1")
 
-        plugin("bratek20-base-conventions", "pl.bratek20.base-conventions").versionRef("bratek20")
-        plugin("bratek20-spring-app-conventions", "pl.bratek20.spring-app-conventions").versionRef("bratek20")
-        plugin("bratek20-library-conventions", "pl.bratek20.library-conventions").versionRef("bratek20")
-        plugin("bratek20-simple-library-conventions", "pl.bratek20.simple-library-conventions").versionRef("bratek20")
+        plugin("bratek20-base-conventions", "pl.bratek20.base-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-spring-app-conventions", "pl.bratek20.spring-app-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-library-conventions", "pl.bratek20.library-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-simple-library-conventions", "pl.bratek20.simple-library-conventions").versionRef("bratek20-plugins")
     }
 }
 
