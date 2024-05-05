@@ -39,6 +39,7 @@ class BaseConventions : Plugin<Project> {
 
             with(dependencies) {
                 add("testImplementation", versionCatalog().findLibrary("junit-jupiter-api").get())
+                add("testImplementation", versionCatalog().findLibrary("junit-jupiter-params").get())
                 add("testRuntimeOnly", versionCatalog().findLibrary("junit-jupiter-engine").get())
 
                 add("testImplementation", versionCatalog().findLibrary("assertj-core").get())
