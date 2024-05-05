@@ -2,11 +2,11 @@ package pl.bratek20.architecture.context.api
 
 import pl.bratek20.architecture.exceptions.ApiException
 
-class ClassNotFoundException(message: String)
+class ClassNotFoundInContextException(message: String)
     : ApiException(message)
 
-class MultipleClassesFoundException(message: String)
+class MultipleClassesFoundInContextException(message: String)
     : ApiException(message)
 
-class DependentClassNotFoundException(message: String)
+class DependentClassNotFoundInContextException(message: String)
     : ApiException(message)

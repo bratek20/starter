@@ -96,7 +96,7 @@ abstract class ContextApiTest: InterfaceTest<ContextBuilder>() {
     @Test
     fun `should throw exception when class not found`() {
         assertThatThrownBy { createInstance().build().get(String::class.java) }
-            .isInstanceOf(ClassNotFoundException::class.java)
+            .isInstanceOf(ClassNotFoundInContextException::class.java)
             .hasMessage("Class String not found in context")
     }
 
@@ -109,7 +109,7 @@ abstract class ContextApiTest: InterfaceTest<ContextBuilder>() {
                 .build()
                 .get(A::class.java)
         }
-        .isInstanceOf(MultipleClassesFoundException::class.java)
+        .isInstanceOf(MultipleClassesFoundInContextException::class.java)
         .hasMessage("Multiple classes found for A in context")
     }
 
@@ -120,7 +120,7 @@ abstract class ContextApiTest: InterfaceTest<ContextBuilder>() {
                 .setClass(WithXClass::class.java)
                 .build()
         }
-        .isInstanceOf(DependentClassNotFoundException::class.java)
+        .isInstanceOf(DependentClassNotFoundInContextException::class.java)
         .hasMessage("Class X needed by class WithXClass not found")
     }
 }
