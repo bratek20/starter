@@ -1,6 +1,7 @@
 package pl.bratek20.architecture.context.api
 
-import org.assertj.core.api.Assertions.*
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import pl.bratek20.tests.InterfaceTest
 
@@ -51,6 +52,31 @@ abstract class ContextApiTest: InterfaceTest<ContextBuilder>() {
     class As(
         val value: Set<A>
     )
+
+
+    @Test
+    fun `should get the same object for interface and impl (setImpl)`() {
+        val c = createInstance()
+            .setImpl(A::class.java, AImpl1::class.java)
+            .build()
+
+        val a = c.get(A::class.java)
+        val aImpl = c.get(AImpl1::class.java)
+
+        assertThat(a).isEqualTo(aImpl)
+    }
+
+    @Test
+    fun `should get the same object for interface and impl (addImpl)`() {
+        val c = createInstance()
+            .addImpl(A::class.java, AImpl1::class.java)
+            .build()
+
+        val a = c.getMany(A::class.java).first()
+        val aImpl = c.get(AImpl1::class.java)
+
+        assertThat(a).isEqualTo(aImpl)
+    }
 
     @Test
     fun `should inject classes set and get the same instances`() {

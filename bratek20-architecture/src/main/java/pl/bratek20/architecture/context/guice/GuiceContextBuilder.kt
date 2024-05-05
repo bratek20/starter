@@ -57,8 +57,11 @@ class GuiceContextBuilder: AbstractContextBuilder() {
     override fun <I, T : I> setImpl(interfaceType: Class<I>, implementationType: Class<T>): ContextBuilder {
         modules.add(object: AbstractModule() {
             override fun configure() {
-                myBind(bind(interfaceType), implementationType)
                 myBind(bind(implementationType), implementationType)
+
+                bind(interfaceType)
+                    .to(implementationType)
+                    .`in`(Scopes.SINGLETON)
             }
         })
         return this
@@ -68,8 +71,11 @@ class GuiceContextBuilder: AbstractContextBuilder() {
         modules.add(object: AbstractModule() {
             override fun configure() {
                 val multibinder = Multibinder.newSetBinder(binder(), interfaceType)
-                myBind(multibinder.addBinding(), implementationType)
                 myBind(bind(implementationType), implementationType)
+
+                multibinder.addBinding()
+                    .to(implementationType)
+                    .`in`(Scopes.SINGLETON)
             }
         })
         return this

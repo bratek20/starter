@@ -1,11 +1,13 @@
 package pl.bratek20.architecture.events.api
 
 import org.assertj.core.api.Assertions
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import pl.bratek20.architecture.context.api.ContextBuilder
 import pl.bratek20.architecture.context.guice.GuiceContextBuilder
+import pl.bratek20.architecture.context.someContextBuilder
 import pl.bratek20.architecture.context.spring.SpringContextBuilder
 import pl.bratek20.architecture.events.impl.EventsContextModule
 import java.util.stream.Stream
@@ -36,11 +38,10 @@ class EventPublisherTest {
         }
     }
 
-    @ParameterizedTest(name = "{0}")
-    @MethodSource("provideArguments")
-    fun shouldWork(name: String?, builder: ContextBuilder) {
+    @Test
+    fun shouldWork() {
         // given
-        val c = builder
+        val c = someContextBuilder()
             .addImpl(EventListener::class.java, TestEventListener::class.java)
             .addImpl(EventListener::class.java, OtherEventListener::class.java)
             .withModule(EventsContextModule())
@@ -68,15 +69,5 @@ class EventPublisherTest {
             .containsExactly(
                 OtherEvent(3)
             )
-    }
-
-    companion object {
-        @JvmStatic
-        fun provideArguments(): Stream<Arguments> {
-            return Stream.of(
-                Arguments.of("Spring", SpringContextBuilder()),
-                Arguments.of("Guice", GuiceContextBuilder())
-            )
-        }
     }
 }

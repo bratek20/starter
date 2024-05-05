@@ -3,6 +3,8 @@ plugins {
     `maven-publish`
 }
 
+val catalogVersion = "1.0.3"
+
 catalog {
     // declare the aliases, bundles and versions in this block
     versionCatalog {
@@ -19,7 +21,7 @@ catalog {
         version("rest-assured", "5.3.0")
         version("jackson", "2.17.0")
 
-        version("bratek20-starter", "1.0.1")
+        version("bratek20-starter", "1.0.2")
         version("bratek20-plugins", "1.0.0-SNAPSHOT")
 
         //plugins
@@ -61,18 +63,19 @@ catalog {
 
         //bratek20 dependencies
         library("bratek20-starter", "pl.bratek20", "bratek20-starter").versionRef("bratek20-starter")
+        library("bratek20-architecture", "pl.bratek20", "bratek20-architecture").versionRef("bratek20-starter")
 
+        //plugins
         plugin("protobuf", "com.google.protobuf").version("0.9.4")
         plugin("jib", "com.google.cloud.tools.jib").version("3.3.1")
 
+        //bratek20 plugins
         plugin("bratek20-base-conventions", "pl.bratek20.base-conventions").versionRef("bratek20-plugins")
         plugin("bratek20-spring-app-conventions", "pl.bratek20.spring-app-conventions").versionRef("bratek20-plugins")
         plugin("bratek20-library-conventions", "pl.bratek20.library-conventions").versionRef("bratek20-plugins")
         plugin("bratek20-simple-library-conventions", "pl.bratek20.simple-library-conventions").versionRef("bratek20-plugins")
     }
 }
-
-val catalogVersion = "1.0.1"
 
 publishing {
     publications {
