@@ -8,7 +8,7 @@ import pl.bratek20.architecture.context.api.Context
 import pl.bratek20.architecture.context.api.MultipleClassesFoundInContextException
 
 class SpringContext(private val value: AnnotationConfigApplicationContext): Context {
-    override fun <T> get(type: Class<T>): T {
+    override fun <T: Any> get(type: Class<T>): T {
         try {
             return value.getBean(type)
         } catch (e: NoUniqueBeanDefinitionException) {

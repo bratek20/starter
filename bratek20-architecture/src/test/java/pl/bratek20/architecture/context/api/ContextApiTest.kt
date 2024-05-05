@@ -104,8 +104,8 @@ abstract class ContextApiTest: InterfaceTest<ContextBuilder>() {
     fun `should throw exception when multiple classes found`() {
         assertThatThrownBy {
             createInstance()
-                .addClass(AImpl1::class.java)
-                .addClass(AImpl2::class.java)
+                .addImpl(A::class.java, AImpl1::class.java)
+                .addImpl(A::class.java, AImpl2::class.java)
                 .build()
                 .get(A::class.java)
         }
