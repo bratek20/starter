@@ -3,7 +3,7 @@ plugins {
     `maven-publish`
 }
 
-val catalogVersion = "1.0.3"
+val catalogVersion = "1.0.4"
 
 catalog {
     // declare the aliases, bundles and versions in this block
@@ -21,7 +21,7 @@ catalog {
         version("rest-assured", "5.3.0")
         version("jackson", "2.17.0")
 
-        version("bratek20-starter", "1.0.2")
+        version("bratek20-starter", "1.0.3")
         version("bratek20-plugins", "1.0.0-SNAPSHOT")
 
         //plugins
