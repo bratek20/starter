@@ -18,7 +18,7 @@ class WithXClass(
 
 class SomeModuleContextModule: ContextModule {
     override fun apply(builder: ContextBuilder) {
-        builder.withClass(SomeClass::class.java)
+        builder.setClass(SomeClass::class.java)
     }
 }
 
@@ -30,7 +30,7 @@ abstract class ContextApiTest: InterfaceTest<ContextBuilder>() {
     @Test
     fun `should get class`() {
         val x = createInstance()
-            .withClass(X::class.java)
+            .setClass(X::class.java)
             .build()
             .get(X::class.java)
 
@@ -40,8 +40,8 @@ abstract class ContextApiTest: InterfaceTest<ContextBuilder>() {
     @Test
     fun `should get class that needs other class`() {
         val withX = createInstance()
-            .withClass(X::class.java)
-            .withClass(WithXClass::class.java)
+            .setClass(X::class.java)
+            .setClass(WithXClass::class.java)
             .build()
             .get(WithXClass::class.java)
 
@@ -56,9 +56,9 @@ abstract class ContextApiTest: InterfaceTest<ContextBuilder>() {
     @Test
     fun `should inject classes list`() {
         val a = createInstance()
-            .bind(A::class.java, AImpl1::class.java)
-            .bind(A::class.java, AImpl2::class.java)
-            .withClass(As::class.java)
+            .addImpl(A::class.java, AImpl1::class.java)
+            .addImpl(A::class.java, AImpl2::class.java)
+            .setClass(As::class.java)
             .build()
             .get(As::class.java).value.toList();
 
@@ -72,9 +72,9 @@ abstract class ContextApiTest: InterfaceTest<ContextBuilder>() {
     @Test
     fun `should get many objects`() {
         val result = createInstance()
-            .withObject(WithValue("value"))
-            .withObject(WithValue("value2"))
-            .withClass(Values::class.java)
+            .addObject(WithValue("value"))
+            .addObject(WithValue("value2"))
+            .setClass(Values::class.java)
             .build()
             .get(Values::class.java).value.toList()
 
@@ -104,8 +104,8 @@ abstract class ContextApiTest: InterfaceTest<ContextBuilder>() {
     fun `should throw exception when multiple classes found`() {
         assertThatThrownBy {
             createInstance()
-                .withClass(AImpl1::class.java)
-                .withClass(AImpl2::class.java)
+                .addClass(AImpl1::class.java)
+                .addClass(AImpl2::class.java)
                 .build()
                 .get(A::class.java)
         }
@@ -117,7 +117,7 @@ abstract class ContextApiTest: InterfaceTest<ContextBuilder>() {
     fun `should throw exception if class to inject not found`() {
         assertThatThrownBy {
             createInstance()
-                .withClass(WithXClass::class.java)
+                .setClass(WithXClass::class.java)
                 .build()
         }
         .isInstanceOf(DependentClassNotFoundException::class.java)

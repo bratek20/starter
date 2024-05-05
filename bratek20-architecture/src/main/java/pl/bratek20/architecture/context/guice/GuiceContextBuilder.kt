@@ -19,7 +19,7 @@ private fun <T> constructorToBind(type: Class<T>): Constructor<T> {
 class GuiceContextBuilder: AbstractContextBuilder() {
     private val modules = mutableListOf<AbstractModule>()
 
-    override fun <T> withClass(type: Class<T>): ContextBuilder {
+    override fun <T> setClass(type: Class<T>): ContextBuilder {
         modules.add(object: AbstractModule() {
             override fun configure() {
                 bind(type).toConstructor(constructorToBind(type))
@@ -28,7 +28,26 @@ class GuiceContextBuilder: AbstractContextBuilder() {
         return this
     }
 
-    override fun <I, T : I> bind(interfaceType: Class<I>, implementationType: Class<T>): ContextBuilder {
+    override fun <T> addClass(type: Class<T>): ContextBuilder {
+        modules.add(object: AbstractModule() {
+            override fun configure() {
+                val multibinder = Multibinder.newSetBinder(binder(), type)
+                multibinder.addBinding().toConstructor(constructorToBind(type))
+            }
+        })
+        return this
+    }
+
+    override fun <I, T : I> setImpl(interfaceType: Class<I>, implementationType: Class<T>): ContextBuilder {
+        modules.add(object: AbstractModule() {
+            override fun configure() {
+                bind(interfaceType).toConstructor(constructorToBind(implementationType))
+            }
+        })
+        return this
+    }
+
+    override fun <I, T : I> addImpl(interfaceType: Class<I>, implementationType: Class<T>): ContextBuilder {
         modules.add(object: AbstractModule() {
             override fun configure() {
                 val multibinder = Multibinder.newSetBinder(binder(), interfaceType)
@@ -38,10 +57,18 @@ class GuiceContextBuilder: AbstractContextBuilder() {
         return this
     }
 
-    override fun withObject(obj: Any): ContextBuilder {
+    override fun setObject(obj: Any): ContextBuilder {
         modules.add(object: AbstractModule() {
             override fun configure() {
-                //bind(obj::class.java as Class<Any>).toInstance(obj)
+                bind(obj::class.java as Class<Any>).toInstance(obj)
+            }
+        })
+        return this
+    }
+
+    override fun addObject(obj: Any): ContextBuilder {
+        modules.add(object: AbstractModule() {
+            override fun configure() {
                 val multibinder = Multibinder.newSetBinder(binder(), obj::class.java as Class<Any>)
                 multibinder.addBinding().toInstance(obj)
             }

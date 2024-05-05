@@ -5,6 +5,6 @@ import pl.bratek20.architecture.context.api.ContextModule
 
 class EventsContextModule: ContextModule {
     override fun apply(builder: ContextBuilder) {
-        builder.withClass(EventsLogic::class.java)
+        builder.setClass(EventsLogic::class.java)
     }
 }

@@ -12,17 +12,32 @@ class SpringContextBuilder: AbstractContextBuilder() {
     private val classes = mutableListOf<Class<*>>()
     private val objects = mutableListOf<Any>()
 
-    override fun <T> withClass(type: Class<T>): ContextBuilder {
+    override fun <T> setClass(type: Class<T>): ContextBuilder {
         classes.add(type)
         return this
     }
 
-    override fun <I, T : I> bind(interfaceType: Class<I>, implementationType: Class<T>): ContextBuilder {
+    override fun <T> addClass(type: Class<T>): ContextBuilder {
+        classes.add(type)
+        return this
+    }
+
+    override fun <I, T : I> setImpl(interfaceType: Class<I>, implementationType: Class<T>): ContextBuilder {
         classes.add(implementationType)
         return this
     }
 
-    override fun withObject(obj: Any): ContextBuilder {
+    override fun <I, T : I> addImpl(interfaceType: Class<I>, implementationType: Class<T>): ContextBuilder {
+        classes.add(implementationType)
+        return this
+    }
+
+    override fun setObject(obj: Any): ContextBuilder {
+        objects.add(obj)
+        return this
+    }
+
+    override fun addObject(obj: Any): ContextBuilder {
         objects.add(obj)
         return this
     }

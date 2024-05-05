@@ -54,9 +54,9 @@ public class EventPublisherTest extends InterfaceTest<EventPublisher>{
         otherListener = new OtherEventListener();
 
         return new SpringContextBuilder()
-            .withObject(listener1)
-            .withObject(listener2)
-            .withObject(otherListener)
+            .setObject(listener1)
+            .setObject(listener2)
+            .setObject(otherListener)
             .withModule(new EventsContextModule())
             .build()
             .get(EventPublisher.class);

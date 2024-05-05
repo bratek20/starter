@@ -8,6 +8,6 @@ public class EventsMockContextModule implements ContextModule {
 
     @Override
     public void apply(ContextBuilder builder) {
-        builder.bind(EventPublisher.class, EventPublisherMock.class);
+        builder.setImpl(EventPublisher.class, EventPublisherMock.class);
     }
 }
