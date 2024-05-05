@@ -32,13 +32,13 @@ class SpringContextBuilder: AbstractContextBuilder() {
         return this
     }
 
-    override fun setObject(obj: Any): ContextBuilder {
-        objects.add(obj)
+    override fun <I: Any, T : I> setImplObject(interfaceType: Class<I>, implementationObj: T): ContextBuilder {
+        objects.add(implementationObj)
         return this
     }
 
-    override fun addObject(obj: Any): ContextBuilder {
-        objects.add(obj)
+    override fun <I: Any, T : I> addImplObject(interfaceType: Class<I>, implementationObj: T): ContextBuilder {
+        objects.add(implementationObj)
         return this
     }
 

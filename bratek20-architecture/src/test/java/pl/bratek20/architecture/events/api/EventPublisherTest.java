@@ -2,16 +2,23 @@ package pl.bratek20.architecture.events.api;
 
 import lombok.Value;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.provider.MethodSource;
+import pl.bratek20.architecture.context.api.ContextBuilder;
+import pl.bratek20.architecture.context.guice.GuiceContextBuilder;
 import pl.bratek20.architecture.context.spring.SpringContextBuilder;
 import pl.bratek20.architecture.events.impl.EventsContextModule;
 import pl.bratek20.tests.InterfaceTest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EventPublisherTest extends InterfaceTest<EventPublisher>{
+public class EventPublisherTest {
 
     @Value
     public static class TestEvent implements Event {
@@ -24,7 +31,7 @@ public class EventPublisherTest extends InterfaceTest<EventPublisher>{
     }
 
     @Value
-    public class TestEventListener implements EventListener<TestEvent> {
+    public static class TestEventListener implements EventListener<TestEvent> {
         List<TestEvent> events = new ArrayList<>();
 
         @Override
@@ -34,7 +41,7 @@ public class EventPublisherTest extends InterfaceTest<EventPublisher>{
     }
 
     @Value
-    public class OtherEventListener implements EventListener<OtherEvent> {
+    public static class OtherEventListener implements EventListener<OtherEvent> {
         List<OtherEvent> events = new ArrayList<>();
 
         @Override
@@ -43,41 +50,35 @@ public class EventPublisherTest extends InterfaceTest<EventPublisher>{
         }
     }
 
-    private TestEventListener listener1;
-    private TestEventListener listener2;
-    private OtherEventListener otherListener;
-
-    @Override
-    protected EventPublisher createInstance() {
-        listener1 = new TestEventListener();
-        listener2 = new TestEventListener();
-        otherListener = new OtherEventListener();
-
-        return new SpringContextBuilder()
-            .setObject(listener1)
-            .setObject(listener2)
-            .setObject(otherListener)
-            .withModule(new EventsContextModule())
-            .build()
-            .get(EventPublisher.class);
+    static Stream<Arguments> provideArguments() {
+        return Stream.of(
+            Arguments.of("Spring", new SpringContextBuilder()),
+            Arguments.of("Guice", new GuiceContextBuilder())
+        );
     }
 
-    @Test
-    void shouldWork() {
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("provideArguments")
+    void shouldWork(String name, ContextBuilder builder) {
         // given
+        var c = builder
+            .addImpl(EventListener.class, TestEventListener.class)
+            .addImpl(EventListener.class, OtherEventListener.class)
+            .withModule(new EventsContextModule())
+            .build();
+
+        var listener = c.get(TestEventListener.class);
+        var otherListener = c.get(OtherEventListener.class);
+
+        var publisher = c.get(EventPublisher.class);
 
         // when
-        instance.publish(new TestEvent(1));
-        instance.publish(new TestEvent(2));
-        instance.publish(new OtherEvent(3));
+        publisher.publish(new TestEvent(1));
+        publisher.publish(new TestEvent(2));
+        publisher.publish(new OtherEvent(3));
 
         // then
-        assertThat(listener1.events)
-            .containsExactly(
-                new TestEvent(1),
-                new TestEvent(2)
-            );
-        assertThat(listener2.events)
+        assertThat(listener.events)
             .containsExactly(
                 new TestEvent(1),
                 new TestEvent(2)

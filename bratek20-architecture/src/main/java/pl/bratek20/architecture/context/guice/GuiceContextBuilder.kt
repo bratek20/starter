@@ -66,25 +66,27 @@ class GuiceContextBuilder: AbstractContextBuilder() {
             override fun configure() {
                 val multibinder = Multibinder.newSetBinder(binder(), interfaceType)
                 multibinder.addBinding().toConstructor(constructorToBind(implementationType))
+
+                bind(implementationType).toConstructor(constructorToBind(implementationType))
             }
         })
         return this
     }
 
-    override fun setObject(obj: Any): ContextBuilder {
+    override fun <I: Any, T : I> setImplObject(interfaceType: Class<I>, implementationObj: T): ContextBuilder {
         modules.add(object: AbstractModule() {
             override fun configure() {
-                bind(obj::class.java as Class<Any>).toInstance(obj)
+                bind(interfaceType).toInstance(implementationObj)
             }
         })
         return this
     }
 
-    override fun addObject(obj: Any): ContextBuilder {
+    override fun <I: Any, T : I> addImplObject(interfaceType: Class<I>, implementationObj: T): ContextBuilder {
         modules.add(object: AbstractModule() {
             override fun configure() {
-                val multibinder = Multibinder.newSetBinder(binder(), obj::class.java as Class<Any>)
-                multibinder.addBinding().toInstance(obj)
+                val multibinder = Multibinder.newSetBinder(binder(), interfaceType)
+                multibinder.addBinding().toInstance(implementationObj)
             }
         })
         return this

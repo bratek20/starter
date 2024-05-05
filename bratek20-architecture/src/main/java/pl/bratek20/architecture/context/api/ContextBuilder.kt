@@ -7,8 +7,8 @@ interface ContextBuilder {
     fun <I, T: I> setImpl(interfaceType: Class<I>, implementationType: Class<T>): ContextBuilder
     fun <I, T: I> addImpl(interfaceType: Class<I>, implementationType: Class<T>): ContextBuilder
 
-    fun setObject(obj: Any): ContextBuilder
-    fun addObject(obj: Any): ContextBuilder
+    fun <I: Any, T: I> setImplObject(interfaceType: Class<I>, implementationObj: T): ContextBuilder
+    fun <I: Any, T: I> addImplObject(interfaceType: Class<I>, implementationObj: T): ContextBuilder
 
     fun withModule(module: ContextModule): ContextBuilder
 

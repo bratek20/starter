@@ -1,7 +1,6 @@
 package pl.bratek20.architecture.context.api
 
-import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Test
 import pl.bratek20.tests.InterfaceTest
 
@@ -54,7 +53,7 @@ abstract class ContextApiTest: InterfaceTest<ContextBuilder>() {
     )
 
     @Test
-    fun `should inject classes list`() {
+    fun `should inject classes set`() {
         val a = createInstance()
             .addImpl(A::class.java, AImpl1::class.java)
             .addImpl(A::class.java, AImpl2::class.java)
@@ -67,13 +66,24 @@ abstract class ContextApiTest: InterfaceTest<ContextBuilder>() {
         assertThat(a[1]).isInstanceOf(AImpl2::class.java)
     }
 
+    @Test
+    fun `should get impl classes`() {
+        val c = createInstance()
+            .addImpl(A::class.java, AImpl1::class.java)
+            .addImpl(A::class.java, AImpl2::class.java)
+            .build()
+
+        assertThatCode { c.get(AImpl1::class.java) }.doesNotThrowAnyException()
+        assertThatCode { c.get(AImpl2::class.java) }.doesNotThrowAnyException()
+    }
+
     data class Values(val value: Set<WithValue>)
 
     @Test
     fun `should get many objects`() {
         val result = createInstance()
-            .addObject(WithValue("value"))
-            .addObject(WithValue("value2"))
+            .addImplObject(WithValue::class.java, WithValue("value"))
+            .addImplObject(WithValue::class.java, WithValue("value2"))
             .setClass(Values::class.java)
             .build()
             .get(Values::class.java).value.toList()
