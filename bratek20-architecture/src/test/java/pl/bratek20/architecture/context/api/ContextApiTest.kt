@@ -1,7 +1,6 @@
 package pl.bratek20.architecture.context.api
 
 import org.assertj.core.api.Assertions.*
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import pl.bratek20.tests.InterfaceTest
 
@@ -54,17 +53,27 @@ abstract class ContextApiTest: InterfaceTest<ContextBuilder>() {
     )
 
     @Test
-    fun `should inject classes set`() {
-        val a = createInstance()
+    fun `should inject classes set and get the same instances`() {
+        val c = createInstance()
             .addImpl(A::class.java, AImpl1::class.java)
             .addImpl(A::class.java, AImpl2::class.java)
             .setClass(As::class.java)
             .build()
-            .get(As::class.java).value.toList();
 
-        assertThat(a).hasSize(2)
-        assertThat(a[0]).isInstanceOf(AImpl1::class.java)
-        assertThat(a[1]).isInstanceOf(AImpl2::class.java)
+        val asValues = c.get(As::class.java).value.toList();
+
+        assertThat(asValues).hasSize(2)
+        assertThat(asValues[0]).isInstanceOf(AImpl1::class.java)
+        assertThat(asValues[1]).isInstanceOf(AImpl2::class.java)
+
+        val aInstances = c.getMany(A::class.java).toList()
+
+        assertThat(aInstances).hasSize(2)
+        assertThat(aInstances[0]).isInstanceOf(AImpl1::class.java)
+        assertThat(aInstances[0]).isEqualTo(asValues[0])
+
+        assertThat(aInstances[1]).isInstanceOf(AImpl2::class.java)
+        assertThat(aInstances[1]).isEqualTo(asValues[1])
     }
 
     data class Values(val value: Set<WithValue>)

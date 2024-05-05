@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule
 import com.google.inject.CreationException
 import com.google.inject.Guice
 import com.google.inject.Scopes
+import com.google.inject.binder.LinkedBindingBuilder
 import com.google.inject.multibindings.Multibinder
 import pl.bratek20.architecture.context.api.Context
 import pl.bratek20.architecture.context.api.ContextBuilder
@@ -37,7 +38,7 @@ class GuiceContextBuilder: AbstractContextBuilder() {
     override fun <T> setClass(type: Class<T>): ContextBuilder {
         modules.add(object: AbstractModule() {
             override fun configure() {
-                bind(type).toConstructor(constructorToBind(type))
+                myBind(bind(type), type)
             }
         })
         return this
@@ -47,7 +48,7 @@ class GuiceContextBuilder: AbstractContextBuilder() {
         modules.add(object: AbstractModule() {
             override fun configure() {
                 val multibinder = Multibinder.newSetBinder(binder(), type)
-                multibinder.addBinding().toConstructor(constructorToBind(type))
+                myBind(multibinder.addBinding(), type)
             }
         })
         return this
@@ -56,7 +57,8 @@ class GuiceContextBuilder: AbstractContextBuilder() {
     override fun <I, T : I> setImpl(interfaceType: Class<I>, implementationType: Class<T>): ContextBuilder {
         modules.add(object: AbstractModule() {
             override fun configure() {
-                bind(interfaceType).toConstructor(constructorToBind(implementationType))
+                myBind(bind(interfaceType), implementationType)
+                myBind(bind(implementationType), implementationType)
             }
         })
         return this
@@ -66,13 +68,18 @@ class GuiceContextBuilder: AbstractContextBuilder() {
         modules.add(object: AbstractModule() {
             override fun configure() {
                 val multibinder = Multibinder.newSetBinder(binder(), interfaceType)
-                val constructor = constructorToBind(implementationType)
-                multibinder.addBinding().toConstructor(constructor)
-
-                bind(implementationType).toConstructor(constructor)
+                myBind(multibinder.addBinding(), implementationType)
+                myBind(bind(implementationType), implementationType)
             }
         })
         return this
+    }
+
+    //TODO rename and better tests for everything being singleton
+    private fun <T, T2: T> myBind(binding: LinkedBindingBuilder<T>, type: Class<T2>) {
+        binding
+            .toConstructor(constructorToBind(type))
+            .`in`(Scopes.SINGLETON)
     }
 
     override fun <I: Any, T : I> setImplObject(interfaceType: Class<I>, implementationObj: T): ContextBuilder {
