@@ -67,8 +67,17 @@ public class EventPublisherTest {
             .withModule(new EventsContextModule())
             .build();
 
-        var listener = c.get(TestEventListener.class);
-        var otherListener = c.get(OtherEventListener.class);
+        var listeners = c.getMany(EventListener.class);
+        var listener = listeners.stream()
+            .filter(l -> l instanceof TestEventListener)
+            .map(l -> (TestEventListener) l)
+            .findFirst()
+            .orElseThrow();
+        var otherListener = listeners.stream()
+            .filter(l -> l instanceof OtherEventListener)
+            .map(l -> (OtherEventListener) l)
+            .findFirst()
+            .orElseThrow();
 
         var publisher = c.get(EventPublisher.class);
 

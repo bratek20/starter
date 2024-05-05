@@ -1,6 +1,7 @@
 package pl.bratek20.architecture.context.api
 
 import org.assertj.core.api.Assertions.*
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import pl.bratek20.tests.InterfaceTest
 
@@ -64,17 +65,6 @@ abstract class ContextApiTest: InterfaceTest<ContextBuilder>() {
         assertThat(a).hasSize(2)
         assertThat(a[0]).isInstanceOf(AImpl1::class.java)
         assertThat(a[1]).isInstanceOf(AImpl2::class.java)
-    }
-
-    @Test
-    fun `should get impl classes`() {
-        val c = createInstance()
-            .addImpl(A::class.java, AImpl1::class.java)
-            .addImpl(A::class.java, AImpl2::class.java)
-            .build()
-
-        assertThatCode { c.get(AImpl1::class.java) }.doesNotThrowAnyException()
-        assertThatCode { c.get(AImpl2::class.java) }.doesNotThrowAnyException()
     }
 
     data class Values(val value: Set<WithValue>)

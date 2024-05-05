@@ -27,4 +27,7 @@ class SpringContext(private val value: AnnotationConfigApplicationContext): Cont
         }
     }
 
+    override fun <T : Any> getMany(type: Class<T>): Set<T> {
+        return value.getBeansOfType(type).values.toSet()
+    }
 }

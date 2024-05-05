@@ -25,6 +25,10 @@ class GuiceContext(private val injector: Injector) : Context {
         }
     }
 
+    override fun <T : Any> getMany(type: Class<T>): Set<T> {
+        return injector.getInstance(Key.get(setOf(type)))
+    }
+
     fun <T> setOf(type: Class<T>?): TypeLiteral<Set<T>> {
         return TypeLiteral.get(Types.setOf(type)) as TypeLiteral<Set<T>>
     }

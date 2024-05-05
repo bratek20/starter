@@ -3,6 +3,7 @@ package pl.bratek20.architecture.context.guice
 import com.google.inject.AbstractModule
 import com.google.inject.CreationException
 import com.google.inject.Guice
+import com.google.inject.Scopes
 import com.google.inject.multibindings.Multibinder
 import pl.bratek20.architecture.context.api.Context
 import pl.bratek20.architecture.context.api.ContextBuilder
@@ -65,9 +66,10 @@ class GuiceContextBuilder: AbstractContextBuilder() {
         modules.add(object: AbstractModule() {
             override fun configure() {
                 val multibinder = Multibinder.newSetBinder(binder(), interfaceType)
-                multibinder.addBinding().toConstructor(constructorToBind(implementationType))
+                val constructor = constructorToBind(implementationType)
+                multibinder.addBinding().toConstructor(constructor)
 
-                bind(implementationType).toConstructor(constructorToBind(implementationType))
+                bind(implementationType).toConstructor(constructor)
             }
         })
         return this
