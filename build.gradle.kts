@@ -3,7 +3,7 @@ plugins {
 }
 
 val groupAll = "pl.bratek20"
-val versionAll = "1.0.3"
+val versionAll = "1.0.4"
 
 group = groupAll
 version = versionAll
