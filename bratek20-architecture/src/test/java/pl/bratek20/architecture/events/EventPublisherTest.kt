@@ -1,16 +1,12 @@
-package pl.bratek20.architecture.events.api
+package pl.bratek20.architecture.events
 
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.Arguments
-import org.junit.jupiter.params.provider.MethodSource
-import pl.bratek20.architecture.context.api.ContextBuilder
-import pl.bratek20.architecture.context.guice.GuiceContextBuilder
 import pl.bratek20.architecture.context.someContextBuilder
-import pl.bratek20.architecture.context.spring.SpringContextBuilder
-import pl.bratek20.architecture.events.impl.EventsContextModule
-import java.util.stream.Stream
+import pl.bratek20.architecture.events.api.Event
+import pl.bratek20.architecture.events.api.EventListener
+import pl.bratek20.architecture.events.api.EventPublisher
+import pl.bratek20.architecture.events.impl.EventsModule
 
 class EventPublisherTest {
     data class TestEvent(
@@ -44,7 +40,7 @@ class EventPublisherTest {
         val c = someContextBuilder()
             .addImpl(EventListener::class.java, TestEventListener::class.java)
             .addImpl(EventListener::class.java, OtherEventListener::class.java)
-            .withModule(EventsContextModule())
+            .withModule(EventsModule())
             .build()
 
         val listeners = c.getMany(EventListener::class.java)

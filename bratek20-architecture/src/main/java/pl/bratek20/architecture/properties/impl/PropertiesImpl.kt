@@ -3,7 +3,7 @@ package pl.bratek20.architecture.properties.impl
 import pl.bratek20.architecture.properties.api.*
 
 class PropertiesImpl(
-    private val sources: List<PropertiesSource>
+    private val sources: Set<PropertiesSource>
 ) : Properties {
     override fun <T> get(source: PropertiesSourceName, key: PropertyKey, type: Class<T>): T {
         return sources.find { it.getName() == source }?.get(key, type) ?: throw PropertiesSourceNotFoundException(source.value)

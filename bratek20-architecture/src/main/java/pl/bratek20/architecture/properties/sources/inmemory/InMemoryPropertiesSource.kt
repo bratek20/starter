@@ -1,5 +1,7 @@
 package pl.bratek20.architecture.properties.sources.inmemory
 
+import pl.bratek20.architecture.context.api.ContextBuilder
+import pl.bratek20.architecture.context.api.ContextModule
 import pl.bratek20.architecture.properties.api.PropertiesSource
 import pl.bratek20.architecture.properties.api.PropertiesSourceName
 import pl.bratek20.architecture.properties.api.PropertyKey
@@ -31,5 +33,11 @@ class InMemoryPropertiesSource : PropertiesSource {
     override fun <T> hasOfType(key: PropertyKey, type: Class<T>): Boolean {
         val property = properties[key]
         return type.isInstance(property)
+    }
+}
+
+class InMemoryPropertiesSourceModule: ContextModule {
+    override fun apply(builder: ContextBuilder) {
+        builder.addImpl(PropertiesSource::class.java, InMemoryPropertiesSource::class.java)
     }
 }

@@ -12,5 +12,10 @@ interface ContextBuilder {
 
     fun withModule(module: ContextModule): ContextBuilder
 
+    fun withModules(vararg modules: ContextModule): ContextBuilder {
+        modules.forEach { withModule(it) }
+        return this
+    }
+
     fun build(): Context
 }

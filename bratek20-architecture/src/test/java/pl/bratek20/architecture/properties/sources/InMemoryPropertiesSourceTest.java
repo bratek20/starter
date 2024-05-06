@@ -1,7 +1,8 @@
-package pl.bratek20.architecture.properties.sources.inmemory;
+package pl.bratek20.architecture.properties.sources;
 
 import pl.bratek20.architecture.properties.api.PropertiesSource;
-import pl.bratek20.architecture.properties.api.PropertiesSourceTest;
+import pl.bratek20.architecture.properties.PropertiesSourceTest;
+import pl.bratek20.architecture.properties.sources.inmemory.InMemoryPropertiesSource;
 
 class InMemoryPropertiesSourceTest extends PropertiesSourceTest {
 

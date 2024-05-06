@@ -1,8 +1,10 @@
-package pl.bratek20.architecture.properties.api;
+package pl.bratek20.architecture.properties;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import pl.bratek20.architecture.properties.api.PropertiesSource;
+import pl.bratek20.architecture.properties.api.PropertyKey;
 
 import java.util.List;
 
