@@ -18,4 +18,8 @@ interface ContextBuilder {
     }
 
     fun build(): Context
+
+    fun <T: Any> get(type: Class<T>): T {
+        return build().get(type)
+    }
 }
