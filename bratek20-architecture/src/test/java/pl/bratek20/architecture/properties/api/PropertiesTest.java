@@ -8,8 +8,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public abstract class PropertiesApiTest extends InterfaceParamsTest<PropertiesApi, List<PropertiesSource>> {
-    private final InMemoryPropertiesSource source = new InMemoryPropertiesSource("mock");
+public abstract class PropertiesTest extends InterfaceParamsTest<Properties, List<PropertiesSource>> {
+    private final InMemoryPropertiesSource source = new InMemoryPropertiesSource();
 
     @Override
     protected List<PropertiesSource> defaultParams() {
@@ -18,7 +18,7 @@ public abstract class PropertiesApiTest extends InterfaceParamsTest<PropertiesAp
         );
     }
 
-    private PropertiesApi api;
+    private Properties api;
 
     @Override
     protected void setup() {
@@ -31,9 +31,9 @@ public abstract class PropertiesApiTest extends InterfaceParamsTest<PropertiesAp
     @Test
     void shouldGetProperty() {
         var prop = new MyProperty("x");
-        source.set("mine", prop);
+        source.set(new PropertyKey("mine"), prop);
 
-        var x = api.get("mine", MyProperty.class);
+        var x = api.get(InMemoryPropertiesSource.Companion.getName(), new PropertyKey("mine"), MyProperty.class);
 
         assertEquals(prop, x);
     }

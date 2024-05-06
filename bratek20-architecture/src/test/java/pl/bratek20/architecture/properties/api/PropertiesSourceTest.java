@@ -13,17 +13,17 @@ public abstract class PropertiesSourceTest {
     protected record SomeProperty(String value, String otherValue) { }
     protected record OtherProperty(String value) { }
 
-    protected static String SOME_PROPERTY_NAME = "someProperty";
+    protected static PropertyKey SOME_PROPERTY_NAME = new PropertyKey("someProperty");
     protected static SomeProperty EXPECTED_SOME_PROPERTY = new SomeProperty("some value", "other value");
 
-    protected static String SOME_PROPERTY_LIST_NAME = "somePropertyList";
+    protected static PropertyKey SOME_PROPERTY_LIST_NAME = new PropertyKey("somePropertyList");
     protected static List<SomeProperty> EXPECTED_SOME_PROPERTY_LIST = List.of(
         new SomeProperty("some value 1", "x"),
         new SomeProperty("some value 2", "x")
     );
 
     protected abstract PropertiesSource createAndSetupSource();
-    protected abstract PropertiesSourceId expectedName();
+    protected abstract String expectedName();
 
     private PropertiesSource source;
 
@@ -34,7 +34,7 @@ public abstract class PropertiesSourceTest {
 
     @Test
     void shouldReturnExpectedName() {
-        assertThat(source.getId()).isEqualTo(expectedName());
+        assertThat(source.getName().getValue()).isEqualTo(expectedName());
     }
 
     @Test
@@ -59,7 +59,7 @@ public abstract class PropertiesSourceTest {
 
         @Test
         void shouldReturnFalseForNotExistingProperty() {
-            assertThat(source.hasOfType("notExisting", SomeProperty.class))
+            assertThat(source.hasOfType(new PropertyKey("notExisting"), SomeProperty.class))
                 .isFalse();
         }
 

@@ -7,7 +7,8 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import lombok.SneakyThrows;
 import pl.bratek20.architecture.properties.api.PropertiesSource;
-import pl.bratek20.architecture.properties.api.PropertiesSourceId;
+import pl.bratek20.architecture.properties.api.PropertiesSourceName;
+import pl.bratek20.architecture.properties.api.PropertyKey;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,12 +34,13 @@ public class YamlPropertiesSource implements PropertiesSource {
     }
 
     @Override
-    public PropertiesSourceId getId() {
-        return new PropertiesSourceId("yaml");
+    public PropertiesSourceName getName() {
+        return new PropertiesSourceName("yaml");
     }
 
     @Override
-    public <T> T get(String name, Class<T> type) {
+    public <T> T get(PropertyKey key, Class<T> type) {
+        var name = key.getValue();
         return parseYamlSection("application.yaml", name, new TypeReference<T>() {
             @Override
             public Type getType() {
@@ -57,12 +59,14 @@ public class YamlPropertiesSource implements PropertiesSource {
     }
 
     @Override
-    public <T> List<T> getList(String name, Class<T> clazz) {
+    public <T> List<T> getList(PropertyKey key, Class<T> clazz) {
+        var name = key.getValue();
         return parseYamlSection("application.yaml", name, listTypeRef(clazz));
     }
 
     @Override
-    public <T> boolean hasOfType(String name, Class<T> type) {
+    public <T> boolean hasOfType(PropertyKey key, Class<T> type) {
+        var name = key.getValue();
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {
             // Load the YAML file
