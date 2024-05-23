@@ -19,7 +19,7 @@ class InMemoryPropertiesSource(
         return PropertiesSourceName(name)
     }
 
-    override fun <T : Any> hasKey(keyName: String): Boolean {
+    override fun hasKey(keyName: String): Boolean {
         return properties.keys.any { it.name == keyName }
     }
 

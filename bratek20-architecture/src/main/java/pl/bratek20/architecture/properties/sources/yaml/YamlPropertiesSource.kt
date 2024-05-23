@@ -21,7 +21,7 @@ class YamlPropertiesSource(
         return PropertiesSourceName("yaml")
     }
 
-    override fun <T : Any> hasKey(keyName: String): Boolean {
+    override fun hasKey(keyName: String): Boolean {
         return privateHasKey(keyName)
     }
 
@@ -127,7 +127,7 @@ class YamlPropertiesSource(
     }
 }
 
-class YamlPropertiesSourceModule(
+class YamlPropertiesSourceImpl(
     private val propertiesPath: String = "properties.yaml"
 ) : ContextModule {
     override fun apply(builder: ContextBuilder) {

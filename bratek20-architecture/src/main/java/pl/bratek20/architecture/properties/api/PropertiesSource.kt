@@ -5,7 +5,7 @@ import kotlin.reflect.KClass
 interface PropertiesSource {
     fun getName(): PropertiesSourceName
 
-    fun <T: Any> hasKey(keyName: String): Boolean
+    fun hasKey(keyName: String): Boolean
 
     fun <T: Any> isObjectOfType(keyName: String, type: KClass<T>): Boolean
     fun <T: Any> isListWithWrappedType(keyName: String, type: KClass<T>): Boolean

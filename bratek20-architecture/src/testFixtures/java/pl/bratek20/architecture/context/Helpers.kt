@@ -9,3 +9,7 @@ fun someContextBuilder(): ContextBuilder {
     return if (randomInt % 2 == 0)
         SpringContextBuilder() else GuiceContextBuilder()
 }
+
+fun stableContextBuilder(): ContextBuilder {
+    return SpringContextBuilder()
+}
