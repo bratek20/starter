@@ -2,17 +2,16 @@ package pl.bratek20.architecture.properties.sources.inmemory
 
 import pl.bratek20.architecture.context.api.ContextBuilder
 import pl.bratek20.architecture.context.api.ContextModule
-import pl.bratek20.architecture.properties.api.PropertiesSource
-import pl.bratek20.architecture.properties.api.PropertiesSourceName
-import pl.bratek20.architecture.properties.api.PropertyKey
+import pl.bratek20.architecture.properties.api.*
+import kotlin.reflect.KClass
 
 class InMemoryPropertiesSource(
     private val name: String
 ) : PropertiesSource {
 
-    private val properties: MutableMap<PropertyKey, Any> = HashMap()
+    private val properties: MutableMap<TypedPropertyKey<*>, Any> = HashMap()
 
-    fun set(key: PropertyKey, property: Any) {
+    fun set(key: TypedPropertyKey<*>, property: Any) {
         properties[key] = property
     }
 
@@ -20,18 +19,28 @@ class InMemoryPropertiesSource(
         return PropertiesSourceName(name)
     }
 
-    override fun <T> get(key: PropertyKey, type: Class<T>): T {
-        return type.cast(properties[key])
+    override fun <T : Any> hasKey(keyName: String): Boolean {
+        return properties.keys.any { it.name == keyName }
     }
 
-    override fun <T> getList(key: PropertyKey, type: Class<T>): List<T> {
-        val property = properties[key]
-        return property as List<T>
+    override fun <T : Any> isObjectOfType(keyName: String, type: KClass<T>): Boolean {
+        val property = properties.keys.firstOrNull { it.name == keyName }
+        return property != null && type.isInstance(properties[property])
     }
 
-    override fun <T> hasOfType(key: PropertyKey, type: Class<T>): Boolean {
-        val property = properties[key]
-        return type.isInstance(property)
+    override fun <T : Any> isListWithWrappedType(keyName: String, type: KClass<T>): Boolean {
+        val property = properties.keys.firstOrNull { it.name == keyName }
+        return property != null && properties[property] is List<*> && (properties[property] as List<*>).all { type.isInstance(it) }
+    }
+
+    override fun <T : Any> getList(key: ListPropertyKey<T>): List<T> {
+        val property = properties.keys.firstOrNull { it.name == key.name }
+        return properties[property] as List<T>
+    }
+
+    override fun <T : Any> getObject(key: ObjectPropertyKey<T>): T {
+        val property = properties.keys.firstOrNull { it.name == key.name }
+        return properties[property] as T
     }
 }
 

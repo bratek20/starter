@@ -6,7 +6,7 @@ data class PropertiesSourceName(val value: String)
 
 data class PropertyKey(val value: String)
 
-open class TypedPropertyKey<T: Any>(val name: String)
+open class TypedPropertyKey<T>(val name: String)
 
 class ListPropertyKey<T: Any>(name: String, val elementType: KClass<T>)
     : TypedPropertyKey<List<T>>(name)
