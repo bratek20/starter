@@ -5,12 +5,17 @@ import pl.bratek20.architecture.context.api.ContextModule
 import pl.bratek20.architecture.properties.api.Properties
 import pl.bratek20.architecture.properties.api.PropertiesSourceName
 import pl.bratek20.architecture.properties.api.PropertyKey
+import pl.bratek20.architecture.properties.api.TypedPropertyKey
 
 class PropertiesMock : Properties {
     private val values: MutableMap<PropertiesSourceName, MutableMap<PropertyKey, Any>> = HashMap()
 
     override fun <T> get(source: PropertiesSourceName, key: PropertyKey, type: Class<T>): T {
         return type.cast(values[source]?.get(key))
+    }
+
+    override fun <T : Any> get(key: TypedPropertyKey<T>): T {
+        TODO("Not yet implemented")
     }
 
     override fun <T> getList(source: PropertiesSourceName, key: PropertyKey, type: Class<T>): List<T> {

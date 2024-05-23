@@ -6,10 +6,9 @@ import pl.bratek20.architecture.properties.api.PropertiesSource
 import pl.bratek20.architecture.properties.api.PropertiesSourceName
 import pl.bratek20.architecture.properties.api.PropertyKey
 
-class InMemoryPropertiesSource : PropertiesSource {
-    companion object {
-        val name = PropertiesSourceName("inMemory")
-    }
+class InMemoryPropertiesSource(
+    private val name: String
+) : PropertiesSource {
 
     private val properties: MutableMap<PropertyKey, Any> = HashMap()
 
@@ -18,7 +17,7 @@ class InMemoryPropertiesSource : PropertiesSource {
     }
 
     override fun getName(): PropertiesSourceName {
-        return name
+        return PropertiesSourceName(name)
     }
 
     override fun <T> get(key: PropertyKey, type: Class<T>): T {
@@ -36,8 +35,10 @@ class InMemoryPropertiesSource : PropertiesSource {
     }
 }
 
-class InMemoryPropertiesSourceModule: ContextModule {
+class InMemoryPropertiesSourceImpl(
+    private val name: String
+): ContextModule {
     override fun apply(builder: ContextBuilder) {
-        builder.addImpl(PropertiesSource::class.java, InMemoryPropertiesSource::class.java)
+        builder.addImplObject(PropertiesSource::class.java, InMemoryPropertiesSource(name))
     }
 }
