@@ -1,6 +1,6 @@
 package pl.bratek20.architecture.properties
 
-import org.junit.jupiter.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import pl.bratek20.architecture.context.someContextBuilder
@@ -36,13 +36,24 @@ class PropertiesTest {
 
     }
     @Test
-    fun shouldGetProperty() {
+    fun shouldGetObjectProperty() {
+        val expectedProp = MyProperty("x")
+        val key = ObjectPropertyKey("mine", MyProperty::class)
+        source1.set(key, expectedProp)
 
-        val prop = MyProperty("x")
-//        source1.set(PropertyKey("mine"), prop)
-//
-//        val x = properties.get(name, PropertyKey("mine"), MyProperty::class.java)
-//
-//        Assertions.assertEquals(prop, x)
+        val givenProp = properties.get(key)
+
+        assertThat(givenProp).isEqualTo(givenProp)
+    }
+
+    @Test
+    fun shouldGetListProperty() {
+        val expectedProp = listOf(MyProperty("x"), MyProperty("y"))
+        val key = ListPropertyKey("mine", MyProperty::class)
+        source1.set(key, expectedProp)
+
+        val givenProp = properties.get(key)
+
+        assertThat(givenProp).isEqualTo(givenProp)
     }
 }
