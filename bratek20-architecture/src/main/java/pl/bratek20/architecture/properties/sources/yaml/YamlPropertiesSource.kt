@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.type.TypeFactory
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import pl.bratek20.architecture.context.api.ContextBuilder
 import pl.bratek20.architecture.context.api.ContextModule
 import pl.bratek20.architecture.properties.api.ListPropertyKey
@@ -20,6 +21,7 @@ class YamlPropertiesSource(
 ) : PropertiesSource {
 
     private val mapper = ObjectMapper(YAMLFactory())
+        .registerKotlinModule()
 
     override fun getName(): PropertiesSourceName {
         return PropertiesSourceName("yaml")

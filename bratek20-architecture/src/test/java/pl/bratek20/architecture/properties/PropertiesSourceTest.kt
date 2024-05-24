@@ -9,7 +9,7 @@ import pl.bratek20.architecture.properties.api.PropertiesSource
 
 abstract class PropertiesSourceTest {
     data class SomeProperty(val value: String, val otherValue: String)
-    data class OtherProperty(val value: String, val otherValue: String)
+    data class OtherProperty(val differentValue: String, val otherValue: String)
 
     protected abstract fun createAndSetupSource(): PropertiesSource
 

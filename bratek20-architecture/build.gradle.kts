@@ -17,6 +17,7 @@ dependencies {
 
     //properties
     implementation(libs.jackson.dataformat.yaml)
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.0")
 
     testImplementation(project(":bratek20-tests"))
 
