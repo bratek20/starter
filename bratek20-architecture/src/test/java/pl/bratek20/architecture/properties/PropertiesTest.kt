@@ -1,11 +1,14 @@
 package pl.bratek20.architecture.properties
 
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import pl.bratek20.architecture.context.someContextBuilder
+import pl.bratek20.architecture.exceptions.assertApiExceptionThrown
 import pl.bratek20.architecture.properties.api.*
 import pl.bratek20.architecture.properties.context.PropertiesImpl
+import pl.bratek20.architecture.properties.impl.PropertyNotFoundException
 import pl.bratek20.architecture.properties.sources.inmemory.InMemoryPropertiesSource
 import pl.bratek20.architecture.properties.sources.inmemory.InMemoryPropertiesSourceImpl
 
@@ -55,5 +58,18 @@ class PropertiesTest {
         val givenProp = properties.get(key)
 
         assertThat(givenProp).isEqualTo(givenProp)
+    }
+
+    @Test
+    fun shouldThrowWhenKeyNotFound() {
+        val key = ObjectPropertyKey("mine", MyProperty::class)
+
+        assertApiExceptionThrown(
+            { properties.get(key) },
+            {
+                type = PropertyNotFoundException::class
+                message = "Property not found: mine"
+            }
+        )
     }
 }
