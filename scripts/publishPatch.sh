@@ -36,3 +36,7 @@ echo "Updated versions:"
 echo "catalogVersion: $new_catalog_version"
 echo "bratek20StarterVersion: $new_bratek20_starter_version"
 echo "versionAll: $new_version_all"
+
+./scripts/publishVersionCatalog.sh
+./scripts/publishArchitectureNoTests.sh
+./scripts/executeGradlewTasks.sh :bratek20-tests:publish
