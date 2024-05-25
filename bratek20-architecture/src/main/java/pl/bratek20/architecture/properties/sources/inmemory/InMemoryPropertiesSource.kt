@@ -28,7 +28,7 @@ class InMemoryPropertiesSource(
         return property != null && type.isInstance(properties[property])
     }
 
-    override fun <T : Any> isListWithWrappedType(keyName: String, type: KClass<T>): Boolean {
+    override fun <T : Any> isListWithElementType(keyName: String, type: KClass<T>): Boolean {
         val property = properties.keys.firstOrNull { it.name == keyName }
         return property != null && properties[property] is List<*> && (properties[property] as List<*>).all { type.isInstance(it) }
     }

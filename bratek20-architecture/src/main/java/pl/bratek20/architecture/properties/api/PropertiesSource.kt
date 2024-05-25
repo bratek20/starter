@@ -8,7 +8,7 @@ interface PropertiesSource {
     fun hasKey(keyName: String): Boolean
 
     fun <T: Any> isObjectOfType(keyName: String, type: KClass<T>): Boolean
-    fun <T: Any> isListWithWrappedType(keyName: String, type: KClass<T>): Boolean
+    fun <T: Any> isListWithElementType(keyName: String, type: KClass<T>): Boolean
 
     fun <T: Any> getList(key: ListPropertyKey<T>): List<T>
     fun <T: Any> getObject(key: ObjectPropertyKey<T>): T

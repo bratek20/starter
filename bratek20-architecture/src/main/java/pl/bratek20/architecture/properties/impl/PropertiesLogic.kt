@@ -1,6 +1,7 @@
 package pl.bratek20.architecture.properties.impl
 
 import pl.bratek20.architecture.exceptions.ApiException
+import pl.bratek20.architecture.exceptions.ShouldNeverHappenException
 import pl.bratek20.architecture.properties.api.*
 
 
@@ -15,8 +16,11 @@ class PropertiesLogic(
         }
 
         if (key is ObjectPropertyKey<T>) {
-            if (source.isListWithWrappedType(key.name, key.type)) {
+            if (source.isListWithElementType(key.name, key.type)) {
                 throw PropertyKeyTypeException("Property `${key.name}` is a list but was requested as object")
+            }
+            if (!source.isObjectOfType(key.name, key.type)) {
+                throw PropertyKeyTypeException("Property `${key.name}` is not object of type `${key.type.simpleName}`")
             }
             return source.getObject(key)
         }
@@ -24,8 +28,12 @@ class PropertiesLogic(
             if (source.isObjectOfType(key.name, key.elementType)) {
                 throw PropertyKeyTypeException("Property `${key.name}` is an object but was requested as list")
             }
+            if (!source.isListWithElementType(key.name, key.elementType)) {
+                throw PropertyKeyTypeException("Property `${key.name}` is not list with element type `${key.elementType.simpleName}`")
+            }
             return source.getList(key) as T
         }
-        throw ApiException("Unknown key type")
+
+        throw ShouldNeverHappenException()
     }
 }

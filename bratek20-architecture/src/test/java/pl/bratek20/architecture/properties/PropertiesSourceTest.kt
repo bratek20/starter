@@ -66,15 +66,15 @@ abstract class PropertiesSourceTest {
 
     @Test
     fun shouldSupportIsListWithWrappedType() {
-        assertThat(source.isListWithWrappedType(SOME_PROPERTY_LIST_KEY.name, SomeProperty::class))
+        assertThat(source.isListWithElementType(SOME_PROPERTY_LIST_KEY.name, SomeProperty::class))
             .isTrue()
 
         //different wrapped type
-        assertThat(source.isListWithWrappedType(SOME_PROPERTY_LIST_KEY.name, OtherProperty::class))
+        assertThat(source.isListWithElementType(SOME_PROPERTY_LIST_KEY.name, OtherProperty::class))
             .isFalse()
 
         //object key
-        assertThat(source.isListWithWrappedType(SOME_PROPERTY_OBJECT_KEY.name, SomeProperty::class))
+        assertThat(source.isListWithElementType(SOME_PROPERTY_OBJECT_KEY.name, SomeProperty::class))
             .isFalse()
     }
 

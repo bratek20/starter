@@ -35,7 +35,7 @@ class YamlPropertiesSource(
         return checkType(keyName, objectTypeRef(type.java))
     }
 
-    override fun <T : Any> isListWithWrappedType(keyName: String, type: KClass<T>): Boolean {
+    override fun <T : Any> isListWithElementType(keyName: String, type: KClass<T>): Boolean {
         return checkType(keyName, listTypeRef(type.java))
     }
 

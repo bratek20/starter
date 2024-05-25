@@ -11,7 +11,8 @@ import pl.bratek20.architecture.properties.sources.inmemory.InMemoryPropertiesSo
 import pl.bratek20.architecture.properties.sources.inmemory.InMemoryPropertiesSourceImpl
 
 class PropertiesTest {
-    data class MyProperty(val value: String)
+    data class SomeProperty(val value: String)
+    data class OtherProperty(val otherValue: String)
 
     private lateinit var properties: Properties
     private lateinit var source1: InMemoryPropertiesSource
@@ -38,8 +39,8 @@ class PropertiesTest {
     }
     @Test
     fun shouldGetObjectProperty() {
-        val expectedProp = MyProperty("x")
-        val key = ObjectPropertyKey("mine", MyProperty::class)
+        val expectedProp = SomeProperty("x")
+        val key = ObjectPropertyKey("mine", SomeProperty::class)
         source1.set(key, expectedProp)
 
         val givenProp = properties.get(key)
@@ -49,8 +50,8 @@ class PropertiesTest {
 
     @Test
     fun shouldGetListProperty() {
-        val expectedProp = listOf(MyProperty("x"), MyProperty("y"))
-        val key = ListPropertyKey("mine", MyProperty::class)
+        val expectedProp = listOf(SomeProperty("x"), SomeProperty("y"))
+        val key = ListPropertyKey("mine", SomeProperty::class)
         source1.set(key, expectedProp)
 
         val givenProp = properties.get(key)
@@ -60,24 +61,21 @@ class PropertiesTest {
 
     @Test
     fun shouldThrowWhenPropertyNotFound() {
-        val key = ObjectPropertyKey("mine", MyProperty::class)
+        val key = ObjectPropertyKey("mine", SomeProperty::class)
 
         assertApiExceptionThrown(
             { properties.get(key) },
             {
                 type = PropertyNotFoundException::class
-                message = "Property with key name `mine` not found"
+                message = "Property `mine` not found"
             }
         )
     }
 
     @Test
     fun shouldThrowWhenPropertyHasDifferentKeyType() {
-        val objectKey = ObjectPropertyKey("object", MyProperty::class)
-        source1.set(objectKey, listOf(MyProperty("x")))
-
-        val listKey = ListPropertyKey("list", MyProperty::class)
-        source1.set(listKey, MyProperty("x"))
+        val objectKey = ObjectPropertyKey("object", SomeProperty::class)
+        source1.set(objectKey, listOf(SomeProperty("x")))
 
         assertApiExceptionThrown(
             { properties.get(objectKey) },
@@ -86,11 +84,36 @@ class PropertiesTest {
                 message = "Property `object` is a list but was requested as object"
             }
         )
+
+        val listKey = ListPropertyKey("list", SomeProperty::class)
+        source1.set(listKey, SomeProperty("x"))
+
         assertApiExceptionThrown(
             { properties.get(listKey) },
             {
                 type = PropertyKeyTypeException::class
                 message = "Property `list` is an object but was requested as list"
+            }
+        )
+
+        val otherObjectKey = ObjectPropertyKey("otherObject", OtherProperty::class)
+        source1.set(otherObjectKey, SomeProperty("x"))
+
+        assertApiExceptionThrown(
+            { properties.get(otherObjectKey) },
+            {
+                type = PropertyKeyTypeException::class
+                message = "Property `otherObject` is not object of type `OtherProperty`"
+            }
+        )
+
+        val otherListKey = ListPropertyKey("otherList", OtherProperty::class)
+        source1.set(otherListKey, listOf(SomeProperty("x")))
+        assertApiExceptionThrown(
+            { properties.get(otherListKey) },
+            {
+                type = PropertyKeyTypeException::class
+                message = "Property `otherList` is not list with element type `OtherProperty`"
             }
         )
     }
