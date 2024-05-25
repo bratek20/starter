@@ -91,9 +91,6 @@ class YamlPropertiesSource(
         var targetNode = rootNode
         for (element in pathElements) {
             targetNode = targetNode[element]
-            if (targetNode == null) {
-                return null
-            }
         }
         return targetNode
     }

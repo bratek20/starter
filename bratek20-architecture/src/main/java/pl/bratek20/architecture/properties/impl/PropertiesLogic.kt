@@ -12,7 +12,7 @@ class PropertiesLogic(
     override fun <T : Any> get(key: TypedPropertyKey<T>): T {
         val source = sources.firstOrNull { it.hasKey(key.name) }
         if (source == null) {
-            throw PropertyNotFoundException("Property `${key.name}` not found")
+            throw PropertyNotFoundException("Property `${key.name}` not found, sources: ${sources.map { it.getName().value }}")
         }
 
         if (key is ObjectPropertyKey<T>) {

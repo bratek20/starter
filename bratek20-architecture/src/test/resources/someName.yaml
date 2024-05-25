@@ -7,3 +7,5 @@ somePropertyList:
     otherValue: "x"
   - value: "some value 2"
     otherValue: "x"
+
+someKey: "some value"

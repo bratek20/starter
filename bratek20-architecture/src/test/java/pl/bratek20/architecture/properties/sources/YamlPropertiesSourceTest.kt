@@ -1,5 +1,7 @@
 package pl.bratek20.architecture.properties.sources
 
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
 import pl.bratek20.architecture.context.stableContextBuilder
 import pl.bratek20.architecture.properties.PropertiesSourceTest
 import pl.bratek20.architecture.properties.api.PropertiesSource
@@ -21,5 +23,13 @@ internal class YamlPropertiesSourceTest : PropertiesSourceTest() {
 
     override fun expectedName(): String {
         return "yaml"
+    }
+
+    @Test
+    fun bugChasing() {
+        val source = createAndSetupSource()
+
+        assertThat(source.hasKey("someKey")).isTrue()
+        assertThat(source.hasKey("otherKey")).isFalse()
     }
 }

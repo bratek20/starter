@@ -67,7 +67,7 @@ class PropertiesTest {
             { properties.get(key) },
             {
                 type = PropertyNotFoundException::class
-                message = "Property `mine` not found"
+                message = "Property `mine` not found, sources: [source1, source2]"
             }
         )
     }
