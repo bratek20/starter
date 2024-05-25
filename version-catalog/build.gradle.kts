@@ -3,8 +3,8 @@ plugins {
     `maven-publish`
 }
 
-val catalogVersion = "1.0.5"
-val bratek20StarterVersion = "1.0.4"
+val catalogVersion = "1.0.8"
+val bratek20StarterVersion = "1.0.6"
 
 catalog {
     // declare the aliases, bundles and versions in this block
@@ -21,6 +21,8 @@ catalog {
         version("log4j", "2.21.0")
         version("rest-assured", "5.3.0")
         version("jackson", "2.17.0")
+        version("guice", "7.0.0")
+        version("guice-multibindings", "4.2.3")
 
         version("bratek20-starter", bratek20StarterVersion)
         version("bratek20-plugins", "1.0.0-SNAPSHOT")
@@ -38,6 +40,10 @@ catalog {
         library("guava", "com.google.guava", "guava").version("32.1.2-jre")
         library("jackson-dataformat-yaml", "com.fasterxml.jackson.dataformat", "jackson-dataformat-yaml").versionRef("jackson")
         library("jackson-databind", "com.fasterxml.jackson.core", "jackson-databind").versionRef("jackson")
+        library("jackson-module-kotlin", "com.fasterxml.jackson.module", "jackson-module-kotlin").versionRef("jackson")
+
+        library("guice", "com.google.inject", "guice").versionRef("guice")
+        library("guice-multibindings", "com.google.inject.extensions", "guice-multibindings").versionRef("guice-multibindings")
 
         library("protobuf-protoc", "com.google.protobuf", "protoc").versionRef("protobuf")
         library("protobuf-java", "com.google.protobuf", "protobuf-java").versionRef("protobuf")

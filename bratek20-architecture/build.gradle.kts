@@ -11,13 +11,12 @@ dependencies {
     implementation("org.springframework:spring-context")
 
     //guice
-    implementation("com.google.inject:guice:7.0.0")
-    implementation("com.google.inject.extensions:guice-multibindings:4.2.3")
-
+    implementation(libs.guice)
+    implementation(libs.guice.multibindings)
 
     //properties
     implementation(libs.jackson.dataformat.yaml)
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.0")
+    implementation(libs.jackson.module.kotlin)
 
     testImplementation(project(":bratek20-tests"))
 

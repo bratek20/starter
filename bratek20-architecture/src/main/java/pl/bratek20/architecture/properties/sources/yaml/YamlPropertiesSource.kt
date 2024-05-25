@@ -14,10 +14,11 @@ import pl.bratek20.architecture.properties.api.PropertiesSource
 import pl.bratek20.architecture.properties.api.PropertiesSourceName
 import java.io.File
 import java.lang.reflect.Type
+import java.nio.file.Paths
 import kotlin.reflect.KClass
 
 class YamlPropertiesSource(
-    private val propertiesPath: String
+    var propertiesPath: String
 ) : PropertiesSource {
 
     private val mapper = ObjectMapper(YAMLFactory())
@@ -76,7 +77,13 @@ class YamlPropertiesSource(
     }
 
     private fun getFile(path: String): File {
-        return File(javaClass.classLoader.getResource(path).file)
+        val nioPath = Paths.get(path)
+        val file = nioPath.toFile()
+
+        require(file.exists() && !file.isDirectory()) {
+            "File does not exist or is dir for path: ${nioPath.toAbsolutePath()}"
+        }
+        return file
     }
 
     private fun navigateToYamlNode(rootNode: JsonNode, path: String): JsonNode? {
