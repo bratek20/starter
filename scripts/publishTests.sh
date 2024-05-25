@@ -10,4 +10,4 @@ PROJECT_ROOT=$(realpath "$SCRIPT_DIR/..")
 cd "$PROJECT_ROOT"
 
 # Execute the gradle command
-./gradlew :bratek20-architecture:build :bratek20-architecture:publish -x test
+./gradlew :bratek20-tests:build :bratek20-tests:publish

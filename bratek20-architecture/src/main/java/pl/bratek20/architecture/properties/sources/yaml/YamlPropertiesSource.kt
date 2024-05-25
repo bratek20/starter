@@ -8,6 +8,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import pl.bratek20.architecture.context.api.ContextBuilder
 import pl.bratek20.architecture.context.api.ContextModule
+import pl.bratek20.architecture.exceptions.ApiException
 import pl.bratek20.architecture.properties.api.ListPropertyKey
 import pl.bratek20.architecture.properties.api.ObjectPropertyKey
 import pl.bratek20.architecture.properties.api.PropertiesSource
@@ -17,15 +18,24 @@ import java.lang.reflect.Type
 import java.nio.file.Paths
 import kotlin.reflect.KClass
 
-class YamlPropertiesSource(
-    var propertiesPath: String
-) : PropertiesSource {
+class YamlPropertiesSource: PropertiesSource {
+    constructor(propertiesPath: String) {
+        this.propertiesPath = propertiesPath
+    }
+
+    var propertiesPath: String = ""
+        set(value) {
+            if (!value.endsWith(".yaml")) {
+                throw ApiException("Yaml properties source path should end with .yaml extension")
+            }
+            field = value
+        }
 
     private val mapper = ObjectMapper(YAMLFactory())
         .registerKotlinModule()
 
     override fun getName(): PropertiesSourceName {
-        return PropertiesSourceName("yaml")
+        return PropertiesSourceName(Paths.get(propertiesPath).toAbsolutePath().toString())
     }
 
     override fun hasKey(keyName: String): Boolean {

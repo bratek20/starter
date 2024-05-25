@@ -39,4 +39,4 @@ echo "versionAll: $new_version_all"
 
 ./scripts/publishVersionCatalog.sh
 ./scripts/publishArchitectureNoTests.sh
-./scripts/executeGradlewTasks.sh :bratek20-tests:publish
+./scripts/publishTests.sh
