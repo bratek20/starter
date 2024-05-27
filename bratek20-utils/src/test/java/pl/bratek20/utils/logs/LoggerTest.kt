@@ -33,10 +33,20 @@ class LoggerTest {
     }
 
     @Test
-    fun shouldLogInfo() {
-        logger.info("info message")
+    fun shouldLog() {
+        logger.info("message")
+        logger.warn("message")
+        logger.error("message")
+        
+        assertThat(normalizedOutput())
+            .isEqualTo(
+                "INFO: message\n" +
+                "WARN: message\n" +
+                "ERROR: message\n"
+            )
+    }
 
-        val result = outputStream.toString()
-        assertThat(result).isEqualTo("INFO: info message")
+    private fun normalizedOutput(): String {
+        return outputStream.toString().replace("\r\n", "\n")
     }
 }

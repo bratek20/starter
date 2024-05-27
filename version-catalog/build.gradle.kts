@@ -3,7 +3,7 @@ plugins {
     `maven-publish`
 }
 
-val catalogVersion = "1.0.11"
+val catalogVersion = "1.0.12"
 val bratek20StarterVersion = "1.0.9"
 
 catalog {
@@ -71,6 +71,7 @@ catalog {
         //bratek20 dependencies
         library("bratek20-starter", "pl.bratek20", "bratek20-starter").versionRef("bratek20-starter")
         library("bratek20-architecture", "pl.bratek20", "bratek20-architecture").versionRef("bratek20-starter")
+        library("bratek20-utils", "pl.bratek20", "bratek20-utils").versionRef("bratek20-starter")
 
         //plugins
         plugin("protobuf", "com.google.protobuf").version("0.9.4")

@@ -4,14 +4,14 @@ import pl.bratek20.utils.logs.api.Logger
 
 class LoggerLogic: Logger {
     override fun info(message: String) {
-        TODO("Not yet implemented")
+        println("INFO: $message")
     }
 
     override fun warn(message: String) {
-        TODO("Not yet implemented")
+        println("WARN: $message")
     }
 
     override fun error(message: String) {
-        TODO("Not yet implemented")
+        println("ERROR: $message")
     }
 }
