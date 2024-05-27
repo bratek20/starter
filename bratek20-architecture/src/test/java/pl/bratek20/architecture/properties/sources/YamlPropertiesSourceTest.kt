@@ -1,6 +1,5 @@
 package pl.bratek20.architecture.properties.sources
 
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import pl.bratek20.architecture.context.stableContextBuilder
 import pl.bratek20.architecture.exceptions.assertApiExceptionThrown
