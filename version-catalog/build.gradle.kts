@@ -3,8 +3,8 @@ plugins {
     `maven-publish`
 }
 
-val catalogVersion = "1.0.12"
-val bratek20StarterVersion = "1.0.9"
+val catalogVersion = "1.0.0"
+val bratek20StarterVersion = "1.0.0"
 
 catalog {
     // declare the aliases, bundles and versions in this block
@@ -25,7 +25,7 @@ catalog {
         version("guice-multibindings", "4.2.3")
 
         version("bratek20-starter", bratek20StarterVersion)
-        version("bratek20-plugins", "1.0.0-SNAPSHOT")
+        version("bratek20-plugins", "1.0.0")
 
         //plugins
         library("kotlin-jvm-plugin", "org.jetbrains.kotlin.jvm", "org.jetbrains.kotlin.jvm.gradle.plugin").versionRef("kotlin")
@@ -69,19 +69,19 @@ catalog {
         library("rest-assured", "io.rest-assured", "rest-assured").version("5.3.0")
 
         //bratek20 dependencies
-        library("bratek20-starter", "pl.bratek20", "bratek20-starter").versionRef("bratek20-starter")
-        library("bratek20-architecture", "pl.bratek20", "bratek20-architecture").versionRef("bratek20-starter")
-        library("bratek20-utils", "pl.bratek20", "bratek20-utils").versionRef("bratek20-starter")
+        library("bratek20-starter", "com.github.bratek20", "bratek20-starter").versionRef("bratek20-starter")
+        library("bratek20-architecture", "com.github.bratek20", "bratek20-architecture").versionRef("bratek20-starter")
+        library("bratek20-utils", "com.github.bratek20", "bratek20-utils").versionRef("bratek20-starter")
 
         //plugins
         plugin("protobuf", "com.google.protobuf").version("0.9.4")
         plugin("jib", "com.google.cloud.tools.jib").version("3.3.1")
 
         //bratek20 plugins
-        plugin("bratek20-base-conventions", "pl.bratek20.base-conventions").versionRef("bratek20-plugins")
-        plugin("bratek20-spring-app-conventions", "pl.bratek20.spring-app-conventions").versionRef("bratek20-plugins")
-        plugin("bratek20-library-conventions", "pl.bratek20.library-conventions").versionRef("bratek20-plugins")
-        plugin("bratek20-simple-library-conventions", "pl.bratek20.simple-library-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-base-conventions", "com.github.bratek20.base-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-spring-app-conventions", "com.github.bratek20.spring-app-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-library-conventions", "com.github.bratek20.library-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-simple-library-conventions", "com.github.bratek20.simple-library-conventions").versionRef("bratek20-plugins")
     }
 }
 
@@ -90,7 +90,7 @@ publishing {
         create<MavenPublication>("maven") {
             from(components["versionCatalog"])
 
-            groupId = "pl.bratek20"
+            groupId = "com.github.bratek20"
             artifactId = "version-catalog"
             version = catalogVersion
         }

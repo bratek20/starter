@@ -1,9 +1,9 @@
 plugins {
-    id("pl.bratek20.library-conventions")
+    id("com.github.bratek20.library-conventions")
 }
 
-val groupAll = "pl.bratek20"
-val versionAll = "1.0.9"
+val groupAll = "com.github.bratek20"
+val versionAll = "1.0.0"
 
 group = groupAll
 version = versionAll
@@ -16,6 +16,9 @@ subprojects {
 dependencies {
     api(project(":bratek20-architecture"))
     testFixturesApi(testFixtures(project(":bratek20-architecture")))
+
+    api(project(":bratek20-utils"))
+    testFixturesApi(testFixtures(project(":bratek20-utils")))
 
     api(project(":bratek20-commons"))
     testFixturesApi(testFixtures(project(":bratek20-commons")))

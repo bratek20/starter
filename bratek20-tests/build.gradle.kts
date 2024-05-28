@@ -1,5 +1,5 @@
 plugins {
-    id("pl.bratek20.simple-library-conventions")
+    id("com.github.bratek20.simple-library-conventions")
 }
 
 dependencies {
