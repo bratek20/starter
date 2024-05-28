@@ -24,8 +24,10 @@ internal class YamlPropertiesSourceTest : PropertiesSourceTest() {
 
     override fun expectedName(): String {
         val prefix = Paths.get("").toAbsolutePath().toString()
-        return "$prefix\\src\\test\\resources\\someName.yaml"
+        val path = Paths.get(prefix, "src", "test", "resources", "someName.yaml").toString()
+        return path
     }
+
 
     @Test
     fun shouldThrowWhenFilePathDoesNotEndWithYamlExtension() {
