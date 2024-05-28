@@ -1,10 +1,10 @@
-package pl.bratek20.utils.logs.impl
+package pl.bratek20.utils.logs.log4j
 
-import pl.bratek20.utils.logs.api.Logger
 import org.apache.logging.log4j.LogManager
+import pl.bratek20.utils.logs.api.Logger
 
-class LoggerLogic : Logger {
-    private val logger = LogManager.getLogger(LoggerLogic::class.java)
+class Log4jLogger : Logger {
+    private val logger = LogManager.getLogger(Log4jLogger::class.java)
 
     override fun info(message: String) {
         logger.info(message)
