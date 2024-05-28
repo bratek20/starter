@@ -11,9 +11,15 @@ interface ContextBuilder {
     fun <I: Any, T: I> addImplObject(interfaceType: Class<I>, implementationObj: T): ContextBuilder
 
     fun withModule(module: ContextModule): ContextBuilder
+    fun withDefaultModule(module: ContextModule): ContextBuilder
 
     fun withModules(vararg modules: ContextModule): ContextBuilder {
         modules.forEach { withModule(it) }
+        return this
+    }
+
+    fun withDefaultModules(vararg modules: ContextModule): ContextBuilder {
+        modules.forEach { withDefaultModule(it) }
         return this
     }
 

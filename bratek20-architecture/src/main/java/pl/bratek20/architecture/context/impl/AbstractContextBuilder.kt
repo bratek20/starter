@@ -9,4 +9,8 @@ abstract class AbstractContextBuilder: ContextBuilder {
         module.apply(this)
         return this
     }
+
+    override fun withDefaultModule(module: ContextModule): ContextBuilder {
+        TODO("Not yet implemented")
+    }
 }
