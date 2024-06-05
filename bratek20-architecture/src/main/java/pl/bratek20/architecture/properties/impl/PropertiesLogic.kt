@@ -36,4 +36,9 @@ class PropertiesLogic(
 
         throw ShouldNeverHappenException()
     }
+
+    override fun <Id : Any, E : Any> findElement(key: MapPropertyKey<Id, E>, id: Id): E? {
+        val list = get(key)
+        return list.firstOrNull { key.idProvider(it) == id }
+    }
 }

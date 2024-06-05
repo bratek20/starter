@@ -60,6 +60,27 @@ class PropertiesTest {
     }
 
     @Test
+    fun shouldGetAndFindMapProperty() {
+        val expectedProp = listOf(SomeProperty("x"), SomeProperty("y"))
+        val key = MapPropertyKey(
+            "mine",
+            SomeProperty::class
+        ) { it.value }
+
+        source1.set(key, expectedProp)
+
+        val givenProp = properties.get(key)
+
+        assertThat(givenProp).isEqualTo(givenProp)
+
+        val foundProp = properties.findElement(key, "x")
+        assertThat(foundProp).isEqualTo(SomeProperty("x"))
+
+        val notFoundProp = properties.findElement(key, "z")
+        assertThat(notFoundProp).isNull()
+    }
+
+    @Test
     fun shouldThrowWhenPropertyNotFound() {
         val key = ObjectPropertyKey("mine", SomeProperty::class)
 
