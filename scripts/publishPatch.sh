@@ -11,8 +11,8 @@ increment_patch() {
 }
 
 # File paths
-catalog_file="version-catalog/build.gradle.kts"
-root_file="build.gradle.kts"
+catalog_file="../version-catalog/build.gradle.kts"
+root_file="../build.gradle.kts"
 
 # Extract current versions and increment them
 catalog_version=$(grep -oP '(?<=val catalogVersion = ")[0-9]+\.[0-9]+\.[0-9]+' $catalog_file)
@@ -37,6 +37,6 @@ echo "catalogVersion: $new_catalog_version"
 echo "bratek20StarterVersion: $new_bratek20_starter_version"
 echo "versionAll: $new_version_all"
 
-#./gradlew -p version-catalog publish
-#./gradlew :bratek20-architecture:publish
-#./gradlew :bratek20-utils:publish
+cd ..
+./gradlew -p version-catalog publish
+./gradlew :bratek20-architecture:publish :bratek20-utils:publish
