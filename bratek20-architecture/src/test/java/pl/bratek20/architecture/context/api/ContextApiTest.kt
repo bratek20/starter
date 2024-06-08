@@ -3,7 +3,6 @@ package pl.bratek20.architecture.context.api
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
-import pl.bratek20.tests.InterfaceTest
 
 class X
 interface A
@@ -25,7 +24,9 @@ class SomeModuleContextModule: ContextModule {
 
 class WithValue(val value: String)
 
-abstract class ContextApiTest: InterfaceTest<ContextBuilder>() {
+abstract class ContextApiTest {
+
+    abstract fun createInstance(): ContextBuilder
 
     @Test
     fun `should get class`() {

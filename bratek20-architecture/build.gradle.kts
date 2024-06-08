@@ -17,8 +17,4 @@ dependencies {
     //properties
     implementation(libs.jackson.dataformat.yaml)
     implementation(libs.jackson.module.kotlin)
-
-    testImplementation(project(":bratek20-tests"))
-
-    testFixturesApi(project(":bratek20-tests"))
 }

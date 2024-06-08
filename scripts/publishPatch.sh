@@ -37,6 +37,6 @@ echo "catalogVersion: $new_catalog_version"
 echo "bratek20StarterVersion: $new_bratek20_starter_version"
 echo "versionAll: $new_version_all"
 
-./scripts/publishVersionCatalog.sh
-./scripts/publishArchitectureNoTests.sh
-./scripts/publishTests.sh
+#./gradlew -p version-catalog publish
+#./gradlew :bratek20-architecture:publish
+#./gradlew :bratek20-utils:publish
