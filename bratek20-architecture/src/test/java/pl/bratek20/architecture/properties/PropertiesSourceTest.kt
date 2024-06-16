@@ -9,8 +9,7 @@ import pl.bratek20.architecture.properties.api.PropertiesSource
 
 abstract class PropertiesSourceTest {
     data class SomeProperty(val value: String, val otherValue: String)
-    data class OtherProperty(val differentValue: String, val otherValue: String)
-
+    
     protected abstract fun createAndSetupSource(): PropertiesSource
 
     protected abstract fun expectedName(): String
@@ -40,21 +39,6 @@ abstract class PropertiesSourceTest {
 
         assertThat(source.getValue(SOME_PROPERTY_LIST_KEY.name).getValue())
             .isEqualTo("[{\"value\":\"some value 1\",\"otherValue\":\"x\"},{\"value\":\"some value 2\",\"otherValue\":\"x\"}]")
-    }
-
-
-    //to be removed
-
-    @Test
-    fun shouldGetExpectedPropertyObject() {
-        assertThat(source.getObject(SOME_PROPERTY_OBJECT_KEY))
-            .isEqualTo(EXPECTED_SOME_PROPERTY)
-    }
-
-    @Test
-    fun shouldGetExpectedPropertyList() {
-        assertThat(source.getList(SOME_PROPERTY_LIST_KEY))
-            .isEqualTo(EXPECTED_SOME_PROPERTY_LIST)
     }
 
     companion object {

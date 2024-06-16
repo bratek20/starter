@@ -29,16 +29,6 @@ class InMemoryPropertiesSource(
         val property = properties.keys.first { it.name == keyName }
         return SerializerLogic().serialize(properties[property]!!)
     }
-
-    override fun <T : Any> getList(key: ListPropertyKey<T>): List<T> {
-        val property = properties.keys.firstOrNull { it.name == key.name }
-        return properties[property] as List<T>
-    }
-
-    override fun <T : Any> getObject(key: ObjectPropertyKey<T>): T {
-        val property = properties.keys.firstOrNull { it.name == key.name }
-        return properties[property] as T
-    }
 }
 
 class InMemoryPropertiesSourceImpl(
