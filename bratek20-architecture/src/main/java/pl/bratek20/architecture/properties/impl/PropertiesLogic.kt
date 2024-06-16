@@ -10,10 +10,8 @@ class PropertiesLogic(
 ) : Properties {
 
     override fun <T : Any> get(key: TypedPropertyKey<T>): T {
-        val source = sources.firstOrNull { it.hasKey(key.name) }
-        if (source == null) {
-            throw PropertyNotFoundException("Property `${key.name}` not found, sources: ${sources.map { it.getName().value }}")
-        }
+        val source = findSourceWithKeyName(key.name)
+            ?: throw PropertyNotFoundException("Property `${key.name}` not found, sources: ${sources.map { it.getName().value }}")
 
         if (key is ObjectPropertyKey<T>) {
             if (source.isListWithElementType(key.name, key.type)) {
@@ -40,5 +38,11 @@ class PropertiesLogic(
     override fun <Id : Any, E : Any> findElement(key: MapPropertyKey<Id, E>, id: Id): E? {
         val list = get(key)
         return list.firstOrNull { key.idProvider(it) == id }
+    }
+
+    private fun findSourceWithKeyName(keyName: String): PropertiesSource? {
+        return sources.firstOrNull {
+            it.getAllKeys().contains(keyName)
+        }
     }
 }

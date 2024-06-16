@@ -58,19 +58,6 @@ abstract class PropertiesSourceTest {
     }
 
     @Test
-    fun shouldSupportHasKey() {
-        assertThat(source.hasKey(SOME_PROPERTY_OBJECT_KEY.name))
-            .isTrue()
-        assertThat(source.hasKey(SOME_PROPERTY_LIST_KEY.name))
-            .isTrue()
-
-        assertThat(source.hasKey(("notExisting")))
-            .isFalse()
-    }
-
-
-
-    @Test
     fun shouldSupportIsObjectOfType() {
         assertThat(source.isObjectOfType(SOME_PROPERTY_OBJECT_KEY.name, SomeProperty::class))
             .isTrue()

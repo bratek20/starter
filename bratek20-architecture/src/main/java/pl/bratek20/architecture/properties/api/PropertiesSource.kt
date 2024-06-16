@@ -9,8 +9,6 @@ interface PropertiesSource {
     fun getValue(keyName: String): SerializedValue
 
     //to be removed
-    fun hasKey(keyName: String): Boolean
-
     fun <T: Any> isObjectOfType(keyName: String, type: KClass<T>): Boolean
     fun <T: Any> isListWithElementType(keyName: String, type: KClass<T>): Boolean
 

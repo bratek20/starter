@@ -65,10 +65,6 @@ class YamlPropertiesSource: PropertiesSource {
         }
     }
 
-    override fun hasKey(keyName: String): Boolean {
-        return checkYamlPathExists(keyName)
-    }
-
     override fun <T : Any> isObjectOfType(keyName: String, type: KClass<T>): Boolean {
         return checkType(keyName, objectTypeRef(type.java))
     }
