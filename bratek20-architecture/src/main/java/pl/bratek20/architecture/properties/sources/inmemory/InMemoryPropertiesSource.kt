@@ -35,11 +35,6 @@ class InMemoryPropertiesSource(
         return property != null && type.isInstance(properties[property])
     }
 
-    override fun <T : Any> isListWithElementType(keyName: String, type: KClass<T>): Boolean {
-        val property = properties.keys.firstOrNull { it.name == keyName }
-        return property != null && properties[property] is List<*> && (properties[property] as List<*>).all { type.isInstance(it) }
-    }
-
     override fun <T : Any> getList(key: ListPropertyKey<T>): List<T> {
         val property = properties.keys.firstOrNull { it.name == key.name }
         return properties[property] as List<T>

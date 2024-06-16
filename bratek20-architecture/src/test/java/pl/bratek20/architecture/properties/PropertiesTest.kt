@@ -45,7 +45,7 @@ class PropertiesTest {
 
         val givenProp = properties.get(key)
 
-        assertThat(givenProp).isEqualTo(givenProp)
+        assertThat(givenProp).isEqualTo(expectedProp)
     }
 
     @Test
@@ -56,7 +56,7 @@ class PropertiesTest {
 
         val givenProp = properties.get(key)
 
-        assertThat(givenProp).isEqualTo(givenProp)
+        assertThat(givenProp).isEqualTo(expectedProp)
     }
 
     @Test

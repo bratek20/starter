@@ -69,10 +69,6 @@ class YamlPropertiesSource: PropertiesSource {
         return checkType(keyName, objectTypeRef(type.java))
     }
 
-    override fun <T : Any> isListWithElementType(keyName: String, type: KClass<T>): Boolean {
-        return checkType(keyName, listTypeRef(type.java))
-    }
-
     override fun <T : Any> getList(key: ListPropertyKey<T>): List<T> {
         return parseYamlSection(key.name, listTypeRef(key.elementType.java))
     }

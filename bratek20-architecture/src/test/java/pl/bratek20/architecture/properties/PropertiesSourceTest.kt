@@ -71,20 +71,6 @@ abstract class PropertiesSourceTest {
             .isFalse()
     }
 
-    @Test
-    fun shouldSupportIsListWithWrappedType() {
-        assertThat(source.isListWithElementType(SOME_PROPERTY_LIST_KEY.name, SomeProperty::class))
-            .isTrue()
-
-        //different wrapped type
-        assertThat(source.isListWithElementType(SOME_PROPERTY_LIST_KEY.name, OtherProperty::class))
-            .isFalse()
-
-        //object key
-        assertThat(source.isListWithElementType(SOME_PROPERTY_OBJECT_KEY.name, SomeProperty::class))
-            .isFalse()
-    }
-
     companion object {
         val SOME_PROPERTY_OBJECT_KEY: ObjectPropertyKey<SomeProperty> =
             ObjectPropertyKey("someProperty", SomeProperty::class)
