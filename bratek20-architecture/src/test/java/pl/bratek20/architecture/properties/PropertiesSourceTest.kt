@@ -51,6 +51,12 @@ abstract class PropertiesSourceTest {
     }
 
     @Test
+    fun shouldReturnAllKeys() {
+        assertThat(source.getAllKeys())
+            .containsExactlyInAnyOrder(SOME_PROPERTY_OBJECT_KEY.name, SOME_PROPERTY_LIST_KEY.name)
+    }
+
+    @Test
     fun shouldSupportIsObjectOfType() {
         assertThat(source.isObjectOfType(SOME_PROPERTY_OBJECT_KEY.name, SomeProperty::class))
             .isTrue()

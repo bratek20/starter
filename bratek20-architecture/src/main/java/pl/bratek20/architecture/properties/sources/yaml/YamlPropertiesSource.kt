@@ -38,6 +38,16 @@ class YamlPropertiesSource: PropertiesSource {
         return PropertiesSourceName(Paths.get(propertiesPath).toAbsolutePath().toString())
     }
 
+    override fun getAllKeys(): Set<String> {
+        return try {
+            val file = getFile(propertiesPath)
+            val rootNode = mapper.readTree(file)
+            rootNode.fieldNames().asSequence().toSet()
+        } catch (e: Exception) {
+            emptySet()
+        }
+    }
+
     override fun hasKey(keyName: String): Boolean {
         return checkYamlPathExists(keyName)
     }

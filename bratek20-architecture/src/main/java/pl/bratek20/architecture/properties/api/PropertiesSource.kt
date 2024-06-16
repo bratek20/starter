@@ -4,7 +4,7 @@ import kotlin.reflect.KClass
 
 interface PropertiesSource {
     fun getName(): PropertiesSourceName
-
+    fun getAllKeys(): Set<String>
     fun hasKey(keyName: String): Boolean
 
     fun <T: Any> isObjectOfType(keyName: String, type: KClass<T>): Boolean

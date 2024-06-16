@@ -19,6 +19,10 @@ class InMemoryPropertiesSource(
         return PropertiesSourceName(name)
     }
 
+    override fun getAllKeys(): Set<String> {
+        return properties.keys.map { it.name }.toSet()
+    }
+
     override fun hasKey(keyName: String): Boolean {
         return properties.keys.any { it.name == keyName }
     }
