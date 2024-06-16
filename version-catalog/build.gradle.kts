@@ -3,11 +3,10 @@ plugins {
     `maven-publish`
 }
 
-val catalogVersion = "1.0.1"
-val bratek20StarterVersion = "1.0.1"
+val catalogVersion = "1.0.4"
+val bratek20StarterVersion = "1.0.2"
 
 catalog {
-    // declare the aliases, bundles and versions in this block
     versionCatalog {
         version("java", "17")
         version("kotlin", "1.9.23")
@@ -18,7 +17,11 @@ catalog {
         version("assertj", "3.24.2")
         version("protobuf", "3.25.2")
         version("testcontainers", "1.16.2")
+
+        version("slf4j", "2.0.13")
         version("log4j", "2.21.0")
+        version("logback", "1.5.6")
+
         version("rest-assured", "5.3.0")
         version("jackson", "2.17.0")
         version("guice", "7.0.0")
@@ -48,9 +51,13 @@ catalog {
         library("protobuf-protoc", "com.google.protobuf", "protoc").versionRef("protobuf")
         library("protobuf-java", "com.google.protobuf", "protobuf-java").versionRef("protobuf")
 
-        library("log4j-api", "org.apache.logging.log4j", "log4j-api").versionRef("log4j")
+        library("slf4j-api", "org.slf4j", "slf4j-api").versionRef("slf4j")
+        library("logback-classic", "ch.qos.logback", "logback-classic").version("logback")
+
         library("log4j-core", "org.apache.logging.log4j", "log4j-core").versionRef("log4j")
         library("log4j-slf4j-impl", "org.apache.logging.log4j", "log4j-slf4j-impl").versionRef("log4j")
+
+        library("logcaptor", "io.github.hakky54", "logcaptor").version("2.9.2")
 
         library("commons-cli", "commons-cli", "commons-cli").version("1.5.0")
 

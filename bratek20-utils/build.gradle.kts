@@ -7,8 +7,9 @@ dependencies {
     testImplementation(testFixtures(project(":bratek20-architecture")))
 
     // logs
-    implementation(libs.log4j.api)
-    implementation(libs.log4j.core)
-    testImplementation("io.github.hakky54:logcaptor:2.9.2")
+    implementation(libs.slf4j.api)
+    testImplementation(libs.logback.classic)
+
+    testImplementation(libs.logcaptor)
 }
 
