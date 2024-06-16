@@ -3,8 +3,8 @@ plugins {
     `maven-publish`
 }
 
-val catalogVersion = "1.0.5"
-val bratek20StarterVersion = "1.0.3"
+val catalogVersion = "1.0.6"
+val bratek20StarterVersion = "1.0.4"
 
 catalog {
     versionCatalog {
@@ -52,7 +52,7 @@ catalog {
         library("protobuf-java", "com.google.protobuf", "protobuf-java").versionRef("protobuf")
 
         library("slf4j-api", "org.slf4j", "slf4j-api").versionRef("slf4j")
-        library("logback-classic", "ch.qos.logback", "logback-classic").version("logback")
+        library("logback-classic", "ch.qos.logback", "logback-classic").versionRef("logback")
 
         library("log4j-core", "org.apache.logging.log4j", "log4j-core").versionRef("log4j")
         library("log4j-slf4j-impl", "org.apache.logging.log4j", "log4j-slf4j-impl").versionRef("log4j")
