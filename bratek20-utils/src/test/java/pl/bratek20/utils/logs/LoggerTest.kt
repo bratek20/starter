@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 import pl.bratek20.architecture.context.api.ContextModule
 import pl.bratek20.architecture.context.someContextBuilder
 import pl.bratek20.utils.logs.api.Logger
-import pl.bratek20.utils.logs.context.LoggerImpl
+import pl.bratek20.utils.logs.context.LogsImpl
 
 abstract class LoggerTest {
 
@@ -23,7 +23,7 @@ abstract class LoggerTest {
     fun beforeEach() {
         setUp()
         logger = someContextBuilder()
-            .withModule(LoggerImpl())
+            .withModule(LogsImpl())
             .withModule(getIntegrationImplModule())
             .get(Logger::class.java)
     }

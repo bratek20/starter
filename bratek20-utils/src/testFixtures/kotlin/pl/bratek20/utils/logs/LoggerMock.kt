@@ -35,7 +35,7 @@ class LoggerMock: Logger {
     }
 }
 
-class LoggerMocks: ContextModule {
+class LogsMocks: ContextModule {
     override fun apply(builder: ContextBuilder) {
         builder.setImpl(Logger::class.java, LoggerMock::class.java)
     }
