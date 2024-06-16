@@ -57,20 +57,6 @@ abstract class PropertiesSourceTest {
             .isEqualTo(EXPECTED_SOME_PROPERTY_LIST)
     }
 
-    @Test
-    fun shouldSupportIsObjectOfType() {
-        assertThat(source.isObjectOfType(SOME_PROPERTY_OBJECT_KEY.name, SomeProperty::class))
-            .isTrue()
-
-        //different type
-        assertThat(source.isObjectOfType(SOME_PROPERTY_OBJECT_KEY.name, OtherProperty::class))
-            .isFalse()
-
-        //list key
-        assertThat(source.isObjectOfType(SOME_PROPERTY_LIST_KEY.name, SomeProperty::class))
-            .isFalse()
-    }
-
     companion object {
         val SOME_PROPERTY_OBJECT_KEY: ObjectPropertyKey<SomeProperty> =
             ObjectPropertyKey("someProperty", SomeProperty::class)

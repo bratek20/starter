@@ -30,11 +30,6 @@ class InMemoryPropertiesSource(
         return SerializerLogic().serialize(properties[property]!!)
     }
 
-    override fun <T : Any> isObjectOfType(keyName: String, type: KClass<T>): Boolean {
-        val property = properties.keys.firstOrNull { it.name == keyName }
-        return property != null && type.isInstance(properties[property])
-    }
-
     override fun <T : Any> getList(key: ListPropertyKey<T>): List<T> {
         val property = properties.keys.firstOrNull { it.name == key.name }
         return properties[property] as List<T>

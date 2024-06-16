@@ -23,13 +23,13 @@ class PropertiesLogic(
             if (isListWithElementType(keyValue, key.type)) {
                 throw PropertyKeyTypeException("Property `${key.name}` is a list but was requested as object")
             }
-            if (!source.isObjectOfType(key.name, key.type)) {
+            if (!isObjectOfType(keyValue, key.type)) {
                 throw PropertyKeyTypeException("Property `${key.name}` is not object of type `${key.type.simpleName}`")
             }
             return source.getObject(key)
         }
         if (key is ListPropertyKey<*>) {
-            if (source.isObjectOfType(key.name, key.elementType)) {
+            if (isObjectOfType(keyValue, key.elementType)) {
                 throw PropertyKeyTypeException("Property `${key.name}` is an object but was requested as list")
             }
             if (!isListWithElementType(keyValue, key.elementType)) {
@@ -60,6 +60,17 @@ class PropertiesLogic(
         return try {
             val listType = objectMapper.typeFactory.constructCollectionType(List::class.java, type.java)
             val list: List<T> = objectMapper.readValue(jsonString, listType)
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    private fun <T: Any> isObjectOfType(value: SerializedValue, type: KClass<T>): Boolean {
+        val jsonString = value.getValue()
+        return try {
+            val objType = objectMapper.typeFactory.constructType(type.java)
+            val obj: T = objectMapper.readValue(jsonString, objType)
             true
         } catch (e: Exception) {
             false

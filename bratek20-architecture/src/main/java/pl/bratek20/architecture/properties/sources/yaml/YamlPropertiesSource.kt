@@ -65,37 +65,12 @@ class YamlPropertiesSource: PropertiesSource {
         }
     }
 
-    override fun <T : Any> isObjectOfType(keyName: String, type: KClass<T>): Boolean {
-        return checkType(keyName, objectTypeRef(type.java))
-    }
-
     override fun <T : Any> getList(key: ListPropertyKey<T>): List<T> {
         return parseYamlSection(key.name, listTypeRef(key.elementType.java))
     }
 
     override fun <T : Any> getObject(key: ObjectPropertyKey<T>): T {
         return parseYamlSection(key.name, objectTypeRef(key.type.java))
-    }
-
-    private fun checkYamlPathExists(keyName: String): Boolean {
-        return try {
-            val file = getFile(propertiesPath)
-            val rootNode = mapper.readTree(file)
-            navigateToYamlNode(rootNode, keyName) != null
-        } catch (e: Exception) {
-            false
-        }
-    }
-
-    private fun <T> checkType(keyName: String, typeReference: TypeReference<T>): Boolean {
-        return try {
-            val file = getFile(propertiesPath)
-            val rootNode = mapper.readTree(file)
-            val targetNode = navigateToYamlNode(rootNode, keyName)
-            targetNode != null && mapper.treeToValue(targetNode, typeReference) != null
-        } catch (e: Exception) {
-            false
-        }
     }
 
     private fun <T> parseYamlSection(yamlPath: String, typeReference: TypeReference<T>): T {
