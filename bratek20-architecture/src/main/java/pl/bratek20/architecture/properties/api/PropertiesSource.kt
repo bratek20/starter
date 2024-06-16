@@ -1,10 +1,14 @@
 package pl.bratek20.architecture.properties.api
 
+import pl.bratek20.architecture.serialization.api.SerializedValue
 import kotlin.reflect.KClass
 
 interface PropertiesSource {
     fun getName(): PropertiesSourceName
     fun getAllKeys(): Set<String>
+    fun getValue(keyName: String): SerializedValue
+
+    //to be removed
     fun hasKey(keyName: String): Boolean
 
     fun <T: Any> isObjectOfType(keyName: String, type: KClass<T>): Boolean

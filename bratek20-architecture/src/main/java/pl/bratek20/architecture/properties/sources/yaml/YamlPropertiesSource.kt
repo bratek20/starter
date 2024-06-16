@@ -13,6 +13,8 @@ import pl.bratek20.architecture.properties.api.ListPropertyKey
 import pl.bratek20.architecture.properties.api.ObjectPropertyKey
 import pl.bratek20.architecture.properties.api.PropertiesSource
 import pl.bratek20.architecture.properties.api.PropertiesSourceName
+import pl.bratek20.architecture.serialization.api.SerializationType
+import pl.bratek20.architecture.serialization.api.SerializedValue
 import java.io.File
 import java.lang.reflect.Type
 import java.nio.file.Paths
@@ -33,6 +35,7 @@ class YamlPropertiesSource: PropertiesSource {
 
     private val mapper = ObjectMapper(YAMLFactory())
         .registerKotlinModule()
+    private val jsonMapper = ObjectMapper()
 
     override fun getName(): PropertiesSourceName {
         return PropertiesSourceName(Paths.get(propertiesPath).toAbsolutePath().toString())
@@ -45,6 +48,20 @@ class YamlPropertiesSource: PropertiesSource {
             rootNode.fieldNames().asSequence().toSet()
         } catch (e: Exception) {
             emptySet()
+        }
+    }
+
+    override fun getValue(keyName: String): SerializedValue {
+        return try {
+            val file = getFile(propertiesPath)
+            val rootNode = mapper.readTree(file)
+            val targetNode = navigateToYamlNode(rootNode, keyName)
+            SerializedValue.create(
+                value = jsonMapper.writeValueAsString(targetNode),
+                type = SerializationType.JSON
+            )
+        } catch (e: Exception) {
+            throw ApiException("Error while getting value for key: $keyName")
         }
     }
 

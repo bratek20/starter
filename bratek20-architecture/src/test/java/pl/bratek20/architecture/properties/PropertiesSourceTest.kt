@@ -28,6 +28,24 @@ abstract class PropertiesSourceTest {
     }
 
     @Test
+    fun shouldReturnAllKeys() {
+        assertThat(source.getAllKeys())
+            .containsExactlyInAnyOrder(SOME_PROPERTY_OBJECT_KEY.name, SOME_PROPERTY_LIST_KEY.name)
+    }
+
+    @Test
+    fun shouldReturnCorrectSerializedValues() {
+        assertThat(source.getValue(SOME_PROPERTY_OBJECT_KEY.name).getValue())
+            .isEqualTo("{\"value\":\"some value\",\"otherValue\":\"other value\"}")
+
+        assertThat(source.getValue(SOME_PROPERTY_LIST_KEY.name).getValue())
+            .isEqualTo("[{\"value\":\"some value 1\",\"otherValue\":\"x\"},{\"value\":\"some value 2\",\"otherValue\":\"x\"}]")
+    }
+
+
+    //to be removed
+
+    @Test
     fun shouldGetExpectedPropertyObject() {
         assertThat(source.getObject(SOME_PROPERTY_OBJECT_KEY))
             .isEqualTo(EXPECTED_SOME_PROPERTY)
@@ -50,11 +68,7 @@ abstract class PropertiesSourceTest {
             .isFalse()
     }
 
-    @Test
-    fun shouldReturnAllKeys() {
-        assertThat(source.getAllKeys())
-            .containsExactlyInAnyOrder(SOME_PROPERTY_OBJECT_KEY.name, SOME_PROPERTY_LIST_KEY.name)
-    }
+
 
     @Test
     fun shouldSupportIsObjectOfType() {
