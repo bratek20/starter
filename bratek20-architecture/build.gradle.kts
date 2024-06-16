@@ -17,4 +17,7 @@ dependencies {
     //properties
     implementation(libs.jackson.dataformat.yaml)
     implementation(libs.jackson.module.kotlin)
+
+    //serialization
+    implementation(libs.jackson.databind)
 }
