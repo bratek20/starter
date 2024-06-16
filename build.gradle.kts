@@ -20,11 +20,12 @@ dependencies {
     api(project(":bratek20-utils"))
     testFixturesApi(testFixtures(project(":bratek20-utils")))
 
-    api(project(":bratek20-commons"))
-    testFixturesApi(testFixtures(project(":bratek20-commons")))
-
-    api(project(":bratek20-spring"))
-    testFixturesApi(testFixtures(project(":bratek20-spring")))
-
-    testFixturesApi(project(":bratek20-tests"))
+    // "Legacy" modules
+//    api(project(":bratek20-commons"))
+//    testFixturesApi(testFixtures(project(":bratek20-commons")))
+//
+//    api(project(":bratek20-spring"))
+//    testFixturesApi(testFixtures(project(":bratek20-spring")))
+//
+//    testFixturesApi(project(":bratek20-tests"))
 }

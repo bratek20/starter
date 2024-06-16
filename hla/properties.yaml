@@ -1,0 +1,10 @@
+profiles:
+  - name: "architecture"
+    language: "KOTLIN"
+    paths:
+      project: "../bratek20-architecture"
+      src:
+        main: "src/main/java/pl/bratek20/architecture"
+        test: "src/test/java/pl/bratek20/architecture"
+        fixtures: "src/testFixtures/java/pl/bratek20/architecture"
+    onlyPatterns: []
