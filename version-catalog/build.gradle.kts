@@ -3,8 +3,8 @@ plugins {
     `maven-publish`
 }
 
-val catalogVersion = "1.0.4"
-val bratek20StarterVersion = "1.0.2"
+val catalogVersion = "1.0.5"
+val bratek20StarterVersion = "1.0.3"
 
 catalog {
     versionCatalog {
