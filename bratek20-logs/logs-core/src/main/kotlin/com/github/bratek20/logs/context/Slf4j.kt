@@ -5,7 +5,7 @@ import com.github.bratek20.logs.slf4j.Slf4jLogger
 import pl.bratek20.architecture.context.api.ContextBuilder
 import pl.bratek20.architecture.context.api.ContextModule
 
-class Slf4jLogs: ContextModule {
+class Slf4jLogsImpl: ContextModule {
     override fun apply(builder: ContextBuilder) {
         builder.setImpl(Logger::class.java, Slf4jLogger::class.java)
     }

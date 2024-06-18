@@ -1,7 +1,7 @@
 package com.github.bratek20.logs
 
 import com.github.bratek20.logs.api.Logger
-import com.github.bratek20.logs.context.Slf4jLogs
+import com.github.bratek20.logs.context.Slf4jLogsImpl
 import com.github.bratek20.logs.slf4j.Slf4jLogger
 import nl.altindag.log.LogCaptor
 import org.assertj.core.api.Assertions.assertThat
@@ -13,7 +13,7 @@ class Slf4jLoggerTest {
     @Test
     fun `should log message`() {
         val logger = someContextBuilder()
-            .withModule(Slf4jLogs())
+            .withModule(Slf4jLogsImpl())
             .get(Logger::class.java)
 
         val logCaptor = LogCaptor.forClass(Slf4jLogger::class.java)
