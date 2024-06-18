@@ -34,4 +34,10 @@ include("bratek20-utils")
 //include("bratek20-spring")
 //include("bratek20-tests")
 //include("bratek20-commons")
-
+include("bratek20-logs")
+include("bratek20-logs:logs-core")
+findProject(":bratek20-logs:logs-core")?.name = "logs-core"
+include("bratek20-logs:logs-logback")
+findProject(":bratek20-logs:logs-logback")?.name = "logs-logback"
+include("bratek20-logs:logs-log4j2")
+findProject(":bratek20-logs:logs-log4j2")?.name = "logs-log4j2"
