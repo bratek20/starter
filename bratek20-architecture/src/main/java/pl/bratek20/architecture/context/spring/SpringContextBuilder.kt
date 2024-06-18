@@ -12,32 +12,32 @@ class SpringContextBuilder: AbstractContextBuilder() {
     private val classes = mutableListOf<Class<*>>()
     private val objects = mutableListOf<Any>()
 
-    override fun <T> setClass(type: Class<T>): ContextBuilder {
+    override fun <T> setClass(type: Class<T>): SpringContextBuilder {
         classes.add(type)
         return this
     }
 
-    override fun <T> addClass(type: Class<T>): ContextBuilder {
+    override fun <T> addClass(type: Class<T>): SpringContextBuilder {
         classes.add(type)
         return this
     }
 
-    override fun <I, T : I> setImpl(interfaceType: Class<I>, implementationType: Class<T>): ContextBuilder {
+    override fun <I, T : I> setImpl(interfaceType: Class<I>, implementationType: Class<T>): SpringContextBuilder {
         classes.add(implementationType)
         return this
     }
 
-    override fun <I, T : I> addImpl(interfaceType: Class<I>, implementationType: Class<T>): ContextBuilder {
+    override fun <I, T : I> addImpl(interfaceType: Class<I>, implementationType: Class<T>): SpringContextBuilder {
         classes.add(implementationType)
         return this
     }
 
-    override fun <I: Any, T : I> setImplObject(interfaceType: Class<I>, implementationObj: T): ContextBuilder {
+    override fun <I: Any, T : I> setImplObject(interfaceType: Class<I>, implementationObj: T): SpringContextBuilder {
         objects.add(implementationObj)
         return this
     }
 
-    override fun <I: Any, T : I> addImplObject(interfaceType: Class<I>, implementationObj: T): ContextBuilder {
+    override fun <I: Any, T : I> addImplObject(interfaceType: Class<I>, implementationObj: T): SpringContextBuilder {
         objects.add(implementationObj)
         return this
     }
