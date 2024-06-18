@@ -13,21 +13,21 @@ class GuiceContextImplTest: ContextApiTest() {
         return GuiceContextBuilder()
     }
 
-    class OutsideWorldModule(
-        private val mainModule: GuiceBuilderMainModule
+    class LegacyModule(
+        private val moduleForLegacy: GuiceBuilderMainModule
     ): AbstractModule() {
         override fun configure() {
-            install(mainModule)
+            install(moduleForLegacy)
         }
     }
 
     @Test
-    fun `should create main module that can be used by outside world`() {
-        val mainModule = GuiceContextBuilder()
+    fun `should build module that can be used by legacy`() {
+        val moduleForLegacy = GuiceContextBuilder()
             .setClass(X::class.java)
-            .buildMainModule()
+            .buildModuleForLegacy()
 
-        val injector = Guice.createInjector(OutsideWorldModule(mainModule))
+        val injector = Guice.createInjector(LegacyModule(moduleForLegacy))
 
         val x = injector.getInstance(X::class.java)
 

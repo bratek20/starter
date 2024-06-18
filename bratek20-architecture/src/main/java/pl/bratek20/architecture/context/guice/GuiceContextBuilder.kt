@@ -7,7 +7,6 @@ import com.google.inject.Scopes
 import com.google.inject.binder.LinkedBindingBuilder
 import com.google.inject.multibindings.Multibinder
 import pl.bratek20.architecture.context.api.Context
-import pl.bratek20.architecture.context.api.ContextBuilder
 import pl.bratek20.architecture.context.api.DependentClassNotFoundInContextException
 import pl.bratek20.architecture.context.impl.AbstractContextBuilder
 import java.lang.reflect.Constructor
@@ -131,7 +130,7 @@ class GuiceContextBuilder: AbstractContextBuilder() {
         }
     }
 
-    fun buildMainModule(): GuiceBuilderMainModule {
+    fun buildModuleForLegacy(): GuiceBuilderMainModule {
         return GuiceBuilderMainModule(modules)
     }
 }
