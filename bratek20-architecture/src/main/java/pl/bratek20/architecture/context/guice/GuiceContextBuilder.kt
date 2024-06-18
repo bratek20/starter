@@ -12,7 +12,7 @@ import pl.bratek20.architecture.context.api.DependentClassNotFoundInContextExcep
 import pl.bratek20.architecture.context.impl.AbstractContextBuilder
 import java.lang.reflect.Constructor
 
-class MainModule(
+class GuiceBuilderMainModule(
     private val modules: List<AbstractModule>
 ): AbstractModule() {
     override fun configure() {
@@ -35,7 +35,7 @@ private fun <T> constructorToBind(type: Class<T>): Constructor<T> {
 class GuiceContextBuilder: AbstractContextBuilder() {
     private val modules = mutableListOf<AbstractModule>()
 
-    override fun <T> setClass(type: Class<T>): ContextBuilder {
+    override fun <T> setClass(type: Class<T>): GuiceContextBuilder {
         modules.add(object: AbstractModule() {
             override fun configure() {
                 myBind(bind(type), type)
@@ -44,7 +44,7 @@ class GuiceContextBuilder: AbstractContextBuilder() {
         return this
     }
 
-    override fun <T> addClass(type: Class<T>): ContextBuilder {
+    override fun <T> addClass(type: Class<T>): GuiceContextBuilder {
         modules.add(object: AbstractModule() {
             override fun configure() {
                 val multibinder = Multibinder.newSetBinder(binder(), type)
@@ -54,7 +54,7 @@ class GuiceContextBuilder: AbstractContextBuilder() {
         return this
     }
 
-    override fun <I, T : I> setImpl(interfaceType: Class<I>, implementationType: Class<T>): ContextBuilder {
+    override fun <I, T : I> setImpl(interfaceType: Class<I>, implementationType: Class<T>): GuiceContextBuilder {
         modules.add(object: AbstractModule() {
             override fun configure() {
                 myBind(bind(implementationType), implementationType)
@@ -67,7 +67,7 @@ class GuiceContextBuilder: AbstractContextBuilder() {
         return this
     }
 
-    override fun <I, T : I> addImpl(interfaceType: Class<I>, implementationType: Class<T>): ContextBuilder {
+    override fun <I, T : I> addImpl(interfaceType: Class<I>, implementationType: Class<T>): GuiceContextBuilder {
         modules.add(object: AbstractModule() {
             override fun configure() {
                 val multibinder = Multibinder.newSetBinder(binder(), interfaceType)
@@ -88,7 +88,7 @@ class GuiceContextBuilder: AbstractContextBuilder() {
             .`in`(Scopes.SINGLETON)
     }
 
-    override fun <I: Any, T : I> setImplObject(interfaceType: Class<I>, implementationObj: T): ContextBuilder {
+    override fun <I: Any, T : I> setImplObject(interfaceType: Class<I>, implementationObj: T): GuiceContextBuilder {
         modules.add(object: AbstractModule() {
             override fun configure() {
                 bind(interfaceType).toInstance(implementationObj)
@@ -97,7 +97,7 @@ class GuiceContextBuilder: AbstractContextBuilder() {
         return this
     }
 
-    override fun <I: Any, T : I> addImplObject(interfaceType: Class<I>, implementationObj: T): ContextBuilder {
+    override fun <I: Any, T : I> addImplObject(interfaceType: Class<I>, implementationObj: T): GuiceContextBuilder {
         modules.add(object: AbstractModule() {
             override fun configure() {
                 val multibinder = Multibinder.newSetBinder(binder(), interfaceType)
@@ -110,7 +110,7 @@ class GuiceContextBuilder: AbstractContextBuilder() {
     override fun build(): Context {
         try {
             return GuiceContext(
-                Guice.createInjector(MainModule(modules))
+                Guice.createInjector(GuiceBuilderMainModule(modules))
             )
         } catch (e: CreationException) {
             val msg = e.message ?: ""
@@ -129,5 +129,9 @@ class GuiceContextBuilder: AbstractContextBuilder() {
 
             throw DependentClassNotFoundInContextException("Class $dependentClass needed by class $classWithError not found")
         }
+    }
+
+    fun buildMainModule(): GuiceBuilderMainModule {
+        return GuiceBuilderMainModule(modules)
     }
 }
