@@ -11,7 +11,12 @@ class PostProcessorForLegacy(
     private val builderProvider: SpringContextBuilderProvider
 ): BeanFactoryPostProcessor {
     override fun postProcessBeanFactory(beanFactory: ConfigurableListableBeanFactory) {
-        val builder = builderProvider.provide()
-        builder.applyTo(beanFactory)
+        val context = builderProvider.provide().build()
+        context.value.beanDefinitionNames.forEach {
+            val bean = context.value.getBean(it)
+            if (!beanFactory.containsSingleton(it)) {
+                beanFactory.registerSingleton(it, bean)
+            }
+        }
     }
 }

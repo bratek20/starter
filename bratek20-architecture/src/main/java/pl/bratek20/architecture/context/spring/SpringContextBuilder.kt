@@ -42,7 +42,7 @@ class SpringContextBuilder: AbstractContextBuilder() {
         return this
     }
 
-    override fun build(): Context {
+    override fun build(): SpringContext {
         val context = AnnotationConfigApplicationContext()
         classes.forEach { context.register(it) }
         objects.forEach {

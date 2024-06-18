@@ -7,7 +7,7 @@ import pl.bratek20.architecture.context.api.ClassNotFoundInContextException
 import pl.bratek20.architecture.context.api.Context
 import pl.bratek20.architecture.context.api.MultipleClassesFoundInContextException
 
-class SpringContext(private val value: AnnotationConfigApplicationContext): Context {
+class SpringContext(val value: AnnotationConfigApplicationContext): Context {
     override fun <T: Any> get(type: Class<T>): T {
         try {
             return value.getBean(type)
