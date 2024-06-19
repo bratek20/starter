@@ -26,6 +26,12 @@ class KotlinConventions: Plugin<Project> {
             }
 
             with(dependencies) {
+                // JUnit 5
+                add("testImplementation", versionCatalog().findLibrary("junit-jupiter-api").get())
+                add("testImplementation", versionCatalog().findLibrary("junit-jupiter-params").get())
+                add("testRuntimeOnly", versionCatalog().findLibrary("junit-jupiter-engine").get())
+
+                // Kotest
                 add("testImplementation", versionCatalog().findLibrary("kotest-runner-junit5").get())
                 add("testImplementation", versionCatalog().findLibrary("kotest-assertions-core").get())
             }
