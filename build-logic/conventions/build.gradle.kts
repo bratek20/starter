@@ -50,10 +50,18 @@ gradlePlugin {
             id = "com.github.bratek20.spring-app-conventions"
             implementationClass = "pl.bratek20.conventions.SpringAppConventions"
         }
+        register("kotlin-conventions") {
+            id = "com.github.bratek20.kotlin-conventions"
+            implementationClass = "pl.bratek20.conventions.KotlinConventions"
+        }
+        register("kotlin-library-conventions") {
+            id = "com.github.bratek20.kotlin-library-conventions"
+            implementationClass = "pl.bratek20.conventions.KotlinLibraryConventions"
+        }
     }
 }
 
-version = "1.0.0"
+version = "1.0.1"
 publishing {
     repositories {
         mavenLocal()

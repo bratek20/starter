@@ -3,20 +3,24 @@ plugins {
     `maven-publish`
 }
 
-val catalogVersion = "1.0.7"
+val catalogVersion = "1.0.8"
 val bratek20StarterVersion = "1.0.5"
+val bratek20PluginsVersion = "1.0.0"
 
 catalog {
     versionCatalog {
         version("java", "17")
         version("kotlin", "1.9.23")
 
-        version("lombok", "8.3")
         version("junit", "5.9.1")
-        version("spring-boot", "3.0.13")
         version("assertj", "3.24.2")
-        version("protobuf", "3.25.2")
+        version("kotest", "5.9.1")
+
         version("testcontainers", "1.16.2")
+
+        version("lombok", "8.3")
+        version("spring-boot", "3.0.13")
+        version("protobuf", "3.25.2")
 
         version("slf4j", "2.0.13")
         version("log4j", "2.21.0")
@@ -28,7 +32,7 @@ catalog {
         version("guice-multibindings", "4.2.3")
 
         version("bratek20-starter", bratek20StarterVersion)
-        version("bratek20-plugins", "1.0.0")
+        version("bratek20-plugins", bratek20PluginsVersion)
 
         //plugins
         library("kotlin-jvm-plugin", "org.jetbrains.kotlin.jvm", "org.jetbrains.kotlin.jvm.gradle.plugin").versionRef("kotlin")
@@ -62,6 +66,9 @@ catalog {
         library("commons-cli", "commons-cli", "commons-cli").version("1.5.0")
 
         //test dependencies
+        library("kotest-runner-junit5", "io.kotest", "kotest-runner-junit5").versionRef("kotest")
+        library("kotest-assertions-core", "io.kotest", "kotest-assertions-core").versionRef("kotest")
+
         library("junit-jupiter-api", "org.junit.jupiter", "junit-jupiter-api").versionRef("junit")
         library("junit-jupiter-params", "org.junit.jupiter", "junit-jupiter-params").versionRef("junit")
         library("junit-jupiter-engine", "org.junit.jupiter", "junit-jupiter-engine").versionRef("junit")
@@ -85,6 +92,9 @@ catalog {
         plugin("jib", "com.google.cloud.tools.jib").version("3.3.1")
 
         //bratek20 plugins
+        plugin("bratek20-kotlin-library-conventions", "com.github.bratek20.kotlin-library-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-kotlin-conventions", "com.github.bratek20.kotlin-conventions").versionRef("bratek20-plugins")
+
         plugin("bratek20-base-conventions", "com.github.bratek20.base-conventions").versionRef("bratek20-plugins")
         plugin("bratek20-spring-app-conventions", "com.github.bratek20.spring-app-conventions").versionRef("bratek20-plugins")
         plugin("bratek20-library-conventions", "com.github.bratek20.library-conventions").versionRef("bratek20-plugins")
