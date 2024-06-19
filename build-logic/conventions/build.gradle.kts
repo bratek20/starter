@@ -84,6 +84,17 @@ publishing {
                 }
             }
         }
+
+        if (project.hasProperty("centralUsername")) {
+            maven {
+                name = "central"
+                url = uri("https://artifactory.devs.tensquaregames.com/artifactory/libs-release-local")
+                credentials {
+                    username = project.findProperty("centralUsername") as String
+                    password = project.findProperty("centralPassword") as String
+                }
+            }
+        }
     }
 }
 
