@@ -20,7 +20,10 @@ class KotlinLibraryConventions: Plugin<Project> {
             }
 
             with(dependencies) {
-                // assertions
+                // AssertJ assertions
+                add("testFixturesImplementation", versionCatalog().findLibrary("assertj-core").get())
+
+                // Kotest assertions
                 add("testFixturesImplementation", versionCatalog().findLibrary("kotest-assertions-core").get())
             }
         }

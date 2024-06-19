@@ -1,6 +1,7 @@
 package pl.bratek20.architecture.exceptions
 
-import org.assertj.core.api.Assertions.assertThatThrownBy
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.matchers.shouldBe
 import kotlin.reflect.KClass
 
 data class ExpectedException(
@@ -10,11 +11,14 @@ data class ExpectedException(
 fun assertApiExceptionThrown(block: () -> Unit, init: ExpectedException.() -> Unit) {
     val expected = ExpectedException().apply(init)
 
-    val x = assertThatThrownBy(block)
+    val thrownException = shouldThrow<ApiException> {
+        block()
+    }
+
     if (expected.type != null) {
-        x.isInstanceOf(expected.type?.java)
+        thrownException::class shouldBe expected.type
     }
     if (expected.message != null) {
-        x.hasMessage(expected.message)
+        thrownException.message shouldBe expected.message
     }
 }
