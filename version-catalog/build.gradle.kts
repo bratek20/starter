@@ -3,9 +3,9 @@ plugins {
     `maven-publish`
 }
 
-val catalogVersion = "1.0.8"
-val bratek20StarterVersion = "1.0.5"
-val bratek20PluginsVersion = "1.0.0"
+val catalogVersion = "1.0.9"
+val bratek20StarterVersion = "1.0.6"
+val bratek20PluginsVersion = "1.0.1"
 
 catalog {
     versionCatalog {
@@ -85,6 +85,9 @@ catalog {
         //bratek20 dependencies
         library("bratek20-starter", "com.github.bratek20", "bratek20-starter").versionRef("bratek20-starter")
         library("bratek20-architecture", "com.github.bratek20", "bratek20-architecture").versionRef("bratek20-starter")
+        library("break20-logs-core", "com.github.bratek20.logs", "logs-core").versionRef("bratek20-starter")
+        library("bratek20-logs-logback", "com.github.bratek20.logs", "logs-logback").versionRef("bratek20-starter")
+        library("bratek20-logs-log4j2", "com.github.bratek20.logs", "logs-log4j2").versionRef("bratek20-starter")
         library("bratek20-utils", "com.github.bratek20", "bratek20-utils").versionRef("bratek20-starter")
 
         //plugins
@@ -94,6 +97,8 @@ catalog {
         //bratek20 plugins
         plugin("bratek20-kotlin-library-conventions", "com.github.bratek20.kotlin-library-conventions").versionRef("bratek20-plugins")
         plugin("bratek20-kotlin-conventions", "com.github.bratek20.kotlin-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-internal-kotlin-library-conventions", "com.github.bratek20.internal-kotlin-library-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-java-conventions", "com.github.bratek20.java-conventions").versionRef("bratek20-plugins")
 
         plugin("bratek20-base-conventions", "com.github.bratek20.base-conventions").versionRef("bratek20-plugins")
         plugin("bratek20-spring-app-conventions", "com.github.bratek20.spring-app-conventions").versionRef("bratek20-plugins")
