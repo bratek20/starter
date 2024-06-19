@@ -1,7 +1,7 @@
 package pl.bratek20.commons.user.api;
 
 import org.junit.jupiter.api.Test;
-import pl.bratek20.architecture.tests.ApiTest;
+import com.github.bratek20.architecture.tests.ApiTest;
 import pl.bratek20.commons.user.api.exceptions.UserAlreadyExistsException;
 import pl.bratek20.commons.user.api.exceptions.UserNotExistsException;
 import pl.bratek20.commons.user.api.exceptions.WrongUserPasswordException;

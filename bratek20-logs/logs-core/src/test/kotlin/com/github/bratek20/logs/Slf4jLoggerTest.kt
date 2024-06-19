@@ -8,7 +8,7 @@ import io.kotest.data.forAll
 import io.kotest.data.row
 import io.kotest.matchers.collections.shouldContainExactly
 import nl.altindag.log.LogCaptor
-import pl.bratek20.architecture.context.someContextBuilder
+import com.github.bratek20.architecture.context.someContextBuilder
 
 class Source1
 class Source2

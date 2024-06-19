@@ -3,7 +3,7 @@ package pl.bratek20.commons.http.api;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import org.junit.jupiter.api.Test;
-import pl.bratek20.architecture.tests.ApiTest;
+import com.github.bratek20.architecture.tests.ApiTest;
 import pl.bratek20.tests.InterfaceTest;
 
 import static org.assertj.core.api.Assertions.assertThat;

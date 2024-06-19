@@ -2,8 +2,8 @@ package com.github.bratek20.logs
 
 import com.github.bratek20.logs.api.Logger
 import io.kotest.matchers.collections.shouldContainExactly
-import pl.bratek20.architecture.context.api.ContextBuilder
-import pl.bratek20.architecture.context.api.ContextModule
+import com.github.bratek20.architecture.context.api.ContextBuilder
+import com.github.bratek20.architecture.context.api.ContextModule
 
 class LoggerMock: Logger {
     private val infos: MutableList<String> = mutableListOf()
