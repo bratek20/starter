@@ -7,4 +7,6 @@ dependencies {
     testFixturesApi(testFixtures(project(":bratek20-logs:logs-core")))
 
     api(libs.logback.classic)
+
+    testImplementation(testFixtures(project(":bratek20-architecture")))
 }
