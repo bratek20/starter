@@ -4,47 +4,51 @@ import com.github.bratek20.logs.api.Logger
 import com.github.bratek20.logs.context.Slf4jLogsImpl
 import com.github.bratek20.logs.slf4j.Slf4jLogger
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.data.forAll
+import io.kotest.data.row
 import io.kotest.matchers.collections.shouldContainExactly
 import nl.altindag.log.LogCaptor
 import pl.bratek20.architecture.context.someContextBuilder
 
+class Source1
+class Source2
+
 class Slf4jLoggerTest : StringSpec({
 
-    "should log message" {
-        val logger = someContextBuilder()
+    lateinit var logger: Logger
+
+    beforeTest {
+        logger = someContextBuilder()
             .withModule(Slf4jLogsImpl())
             .get(Logger::class.java)
-
-        val logCaptor = LogCaptor.forClass(Slf4jLogger::class.java)
-
-        logger.info("test info")
-        logger.warn("test warn")
-        logger.error("test error")
-
-        logCaptor.infoLogs shouldContainExactly listOf("test info")
-        logCaptor.warnLogs shouldContainExactly listOf("test warn")
-        logCaptor.errorLogs shouldContainExactly listOf("test error")
     }
 
-    "should log message for correct source" {
-        val logger = someContextBuilder()
-            .withModule(Slf4jLogsImpl())
-            .get(Logger::class.java)
+    "should log message for level and source if provided" {
+        forAll(
+            row("INFO log action",
+                { msg: String, source: Any? -> logger.info(msg, source) },
+                { captor: LogCaptor -> captor.infoLogs }
+            ),
+            row("WARN log action",
+                { msg: String, source: Any? -> logger.warn(msg, source) },
+                { captor: LogCaptor -> captor.warnLogs }
+            ),
+            row("ERROR log action",
+                { msg: String, source: Any? -> logger.error(msg, source) },
+                { captor: LogCaptor -> captor.errorLogs }
+            )
+        ) { _, logAction, messagesProvider ->
+            val defaultCaptor = LogCaptor.forClass(Slf4jLogger::class.java)
+            val source1Captor = LogCaptor.forClass(Source1::class.java)
+            val source2Captor = LogCaptor.forClass(Source2::class.java)
 
-        val defaultLogCaptor = LogCaptor.forClass(Slf4jLogger::class.java)
-        val source1LogCaptor = LogCaptor.forClass(Source1::class.java)
-        val source2LogCaptor = LogCaptor.forClass(Source2::class.java)
+            logAction("default", null)
+            logAction("source1", Source1())
+            logAction("source2", Source2())
 
-        logger.info("default")
-        logger.info("source1", Source1())
-        logger.info("source2", Source2())
-
-        defaultLogCaptor.infoLogs shouldContainExactly listOf("default")
-        source1LogCaptor.infoLogs shouldContainExactly listOf("source1")
-        source2LogCaptor.infoLogs shouldContainExactly listOf("source2")
+            messagesProvider(defaultCaptor) shouldContainExactly listOf("default")
+            messagesProvider(source1Captor) shouldContainExactly listOf("source1")
+            messagesProvider(source2Captor) shouldContainExactly listOf("source2")
+        }
     }
-
-}) {
-    class Source1
-    class Source2
-}
+})

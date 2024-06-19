@@ -8,20 +8,23 @@ class Slf4jLogger : Logger {
     private val sourceLoggers = mutableMapOf<Any, org.slf4j.Logger>()
 
     override fun info(message: String, source: Any?) {
-        if (source != null) {
-            sourceLoggers.getOrPut(source) {
-                LoggerFactory.getLogger(source::class.java)
-            }.info(message)
-            return
-        }
-        defaultLogger.info(message)
+        getSourceLogger(source).info(message)
     }
 
     override fun warn(message: String, source: Any?) {
-        defaultLogger.warn(message)
+        getSourceLogger(source).warn(message)
     }
 
     override fun error(message: String, source: Any?) {
-        defaultLogger.error(message)
+        getSourceLogger(source).error(message)
+    }
+
+    private fun getSourceLogger(source: Any?): org.slf4j.Logger {
+        if (source == null) {
+            return defaultLogger
+        }
+        return sourceLoggers.getOrPut(source) {
+            LoggerFactory.getLogger(source::class.java)
+        }
     }
 }
