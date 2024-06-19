@@ -1,7 +1,7 @@
 package com.github.bratek20.logs
 
 import com.github.bratek20.logs.api.Logger
-import org.assertj.core.api.Assertions.assertThat
+import io.kotest.matchers.collections.shouldContainExactly
 import pl.bratek20.architecture.context.api.ContextBuilder
 import pl.bratek20.architecture.context.api.ContextModule
 
@@ -23,15 +23,15 @@ class LoggerMock: Logger {
     }
 
     fun assertInfos(vararg messages: String) {
-        assertThat(infos).containsExactly(*messages)
+        infos.shouldContainExactly(*messages)
     }
 
     fun assertWarns(vararg messages: String) {
-        assertThat(warns).containsExactly(*messages)
+        warns.shouldContainExactly(*messages)
     }
 
     fun assertErrors(vararg messages: String) {
-        assertThat(errors).containsExactly(*messages)
+        errors.shouldContainExactly(*messages)
     }
 }
 

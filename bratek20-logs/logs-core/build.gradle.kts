@@ -1,5 +1,5 @@
 plugins {
-    id("com.github.bratek20.library-conventions")
+    id("com.github.bratek20.kotlin-library-conventions")
 }
 
 dependencies {

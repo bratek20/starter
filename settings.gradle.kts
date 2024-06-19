@@ -5,7 +5,7 @@ pluginManagement {
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
-            from("com.github.bratek20:version-catalog:1.0.7")
+            from("com.github.bratek20:version-catalog:1.0.8")
         }
     }
 
