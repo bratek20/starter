@@ -2,6 +2,7 @@ package com.github.bratek20.architecture.serialization.impl
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.github.bratek20.architecture.serialization.api.*
 
 class SerializerLogic: Serializer {
@@ -18,6 +19,7 @@ class SerializerLogic: Serializer {
                 .withSetterVisibility(JsonAutoDetect.Visibility.NONE)
                 .withCreatorVisibility(JsonAutoDetect.Visibility.NONE)
         )
+        objectMapper.registerKotlinModule()
     }
 
     override fun serialize(value: Any): SerializedValue {
@@ -26,5 +28,9 @@ class SerializerLogic: Serializer {
             value = jsonString,
             type = SerializationType.JSON,
         )
+    }
+
+    override fun <T> deserialize(serializedValue: SerializedValue, type: Class<T>): T {
+        return objectMapper.readValue(serializedValue.getValue(), type)
     }
 }

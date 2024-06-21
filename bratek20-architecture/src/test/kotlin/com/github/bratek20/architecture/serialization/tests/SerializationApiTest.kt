@@ -7,6 +7,7 @@ import com.github.bratek20.architecture.serialization.api.SerializationType
 import com.github.bratek20.architecture.serialization.api.Serializer
 import com.github.bratek20.architecture.serialization.context.SerializationImpl
 import com.github.bratek20.architecture.serialization.fixtures.assertSerializedValue
+import org.assertj.core.api.Assertions.assertThat
 
 class SerializationApiTest {
     data class TestObject(
@@ -32,6 +33,16 @@ class SerializationApiTest {
             value = "{\"value\":\"test\",\"number\":1}"
             type = SerializationType.JSON
         }
+    }
+
+    @Test
+    fun `should deserialize from JSON`() {
+        val obj = TestObject("test", 1)
+        val serializedValue = serializer.serialize(obj)
+
+        val deserializedObject = serializer.deserialize(serializedValue, TestObject::class.java)
+
+        assertThat(deserializedObject).isEqualTo(obj)
     }
 
     data class SomeId(
