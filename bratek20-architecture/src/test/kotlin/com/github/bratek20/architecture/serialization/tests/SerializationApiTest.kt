@@ -3,6 +3,7 @@ package com.github.bratek20.architecture.serialization.tests
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import com.github.bratek20.architecture.context.someContextBuilder
+import com.github.bratek20.architecture.serialization.api.Dictionary
 import com.github.bratek20.architecture.serialization.api.SerializationType
 import com.github.bratek20.architecture.serialization.api.Serializer
 import com.github.bratek20.architecture.serialization.context.SerializationImpl
@@ -43,6 +44,16 @@ class SerializationApiTest {
         val deserializedObject = serializer.deserialize(serializedValue, TestObject::class.java)
 
         assertThat(deserializedObject).isEqualTo(obj)
+    }
+
+    @Test
+    fun `should deserialize to Dictionary type`() {
+        val obj = TestObject("test", 1)
+        val serializedValue = serializer.serialize(obj)
+
+        val deserializedObject = serializer.deserialize(serializedValue, Dictionary::class.java)
+
+        assertThat(deserializedObject).isEqualTo(mapOf("value" to "test", "number" to 1))
     }
 
     data class SomeId(
