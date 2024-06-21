@@ -8,5 +8,5 @@ ValueObjects
         type: SerializationType
 
 Interfaces
-    Serializer
-        serialize(value: any): SerializedValue
+    //Serializer
+        //serialize(value: any): SerializedValue
