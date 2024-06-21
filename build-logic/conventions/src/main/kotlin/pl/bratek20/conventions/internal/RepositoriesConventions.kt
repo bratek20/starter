@@ -11,13 +11,16 @@ class RepositoriesConventions : Plugin<Project> {
 
             mavenLocal()
 
-            if (System.getenv("GITHUB_ACTOR") != null) {
+            val githubActor: String? = project.findProperty("githubActor") as String? ?: System.getenv("GITHUB_ACTOR")
+            val githubToken: String? = project.findProperty("githubToken") as String? ?: System.getenv("GITHUB_TOKEN")
+
+            if (githubActor != null && githubToken != null) {
                 maven {
                     name = "GitHubPackages"
                     url = URI.create("https://maven.pkg.github.com/bratek20/starter")
                     credentials {
-                        username = System.getenv("GITHUB_ACTOR")
-                        password = System.getenv("GITHUB_TOKEN")
+                        username = githubActor
+                        password = githubToken
                     }
                 }
             }
