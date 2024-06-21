@@ -3,12 +3,11 @@ package com.github.bratek20.architecture.serialization.tests
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import com.github.bratek20.architecture.context.someContextBuilder
-import com.github.bratek20.architecture.serialization.api.Dictionary
-import com.github.bratek20.architecture.serialization.api.DictionaryBuilder
-import com.github.bratek20.architecture.serialization.api.SerializationType
-import com.github.bratek20.architecture.serialization.api.Serializer
+import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
+import com.github.bratek20.architecture.serialization.api.*
 import com.github.bratek20.architecture.serialization.context.SerializationImpl
 import com.github.bratek20.architecture.serialization.fixtures.assertSerializedValue
+import com.github.bratek20.architecture.serialization.fixtures.serializedValue
 import org.assertj.core.api.Assertions.assertThat
 
 class SerializationApiTest {
@@ -45,6 +44,21 @@ class SerializationApiTest {
         val deserializedObject = serializer.deserialize(serializedValue, TestObject::class.java)
 
         assertThat(deserializedObject).isEqualTo(obj)
+    }
+
+    @Test
+    fun `should throw exception when deserializing from invalid JSON`() {
+        val serializedValue = serializedValue {
+            value = "{}"
+        }
+
+        assertApiExceptionThrown (
+            { serializer.deserialize(serializedValue, TestObject::class.java) },
+            {
+                type = DeserializationException::class
+                message = "Failed to deserialize value"
+            }
+        )
     }
 
     @Test

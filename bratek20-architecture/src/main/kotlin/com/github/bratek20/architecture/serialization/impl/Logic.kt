@@ -31,6 +31,10 @@ class SerializerLogic: Serializer {
     }
 
     override fun <T> deserialize(serializedValue: SerializedValue, type: Class<T>): T {
-        return objectMapper.readValue(serializedValue.getValue(), type)
+        try {
+            return objectMapper.readValue(serializedValue.getValue(), type)
+        } catch (e: Exception) {
+            throw DeserializationException("Failed to deserialize value")
+        }
     }
 }
