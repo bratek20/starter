@@ -67,8 +67,11 @@ class SerializationApiTest {
         val serializedValue = serializer.serialize(obj)
 
         val deserializedObject = serializer.deserialize(serializedValue, Dictionary::class.java)
+        val fromSerializedValue = DictionaryBuilder.from(serializedValue)
 
-        assertThat(deserializedObject).isEqualTo(mapOf("value" to "test", "number" to 1))
+        val expected = mapOf("value" to "test", "number" to 1)
+        assertThat(deserializedObject).isEqualTo(expected)
+        assertThat(fromSerializedValue).isEqualTo(expected)
     }
 
     @Test
@@ -84,6 +87,57 @@ class SerializationApiTest {
             value = "{\"number\":1,\"value\":\"test\"}"
             type = SerializationType.JSON
         }
+    }
+
+    @Test
+    fun `should serialize DictionaryList`() {
+        val dictionaryList = DictionaryListBuilder()
+            .add(DictionaryBuilder()
+                .add("value", "test")
+                .add("number", 1)
+                .build()
+            )
+            .add(DictionaryBuilder()
+                .add("value", "test2")
+                .add("number", 2)
+                .build()
+            )
+            .build()
+
+        val serializedValue = serializer.serialize(dictionaryList)
+
+        assertSerializedValue(serializedValue) {
+            value = "[{\"number\":1,\"value\":\"test\"},{\"number\":2,\"value\":\"test2\"}]"
+            type = SerializationType.JSON
+        }
+    }
+
+    @Test
+    fun `should deserialize from DictionaryList`() {
+        val dictionaryList = DictionaryListBuilder()
+            .add(DictionaryBuilder()
+                .add("value", "test")
+                .add("number", 1)
+                .build()
+            )
+            .add(DictionaryBuilder()
+                .add("value", "test2")
+                .add("number", 2)
+                .build()
+            )
+            .build()
+
+        val serializedValue = serializer.serialize(dictionaryList)
+
+        val deserializedObject = serializer.deserialize(serializedValue, DictionaryList::class.java)
+        val fromSerializedValue = DictionaryListBuilder.from(serializedValue)
+
+        val expected = listOf(
+            mapOf("value" to "test", "number" to 1),
+            mapOf("value" to "test2", "number" to 2)
+        )
+        assertThat(deserializedObject).isEqualTo(expected)
+        assertThat(fromSerializedValue).isEqualTo(expected)
     }
 
     data class SomeId(

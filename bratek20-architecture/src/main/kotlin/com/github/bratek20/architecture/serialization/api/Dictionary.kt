@@ -1,5 +1,7 @@
 package com.github.bratek20.architecture.serialization.api
 
+import com.github.bratek20.architecture.serialization.impl.SerializerLogic
+
 class Dictionary: HashMap<String, Any>()
 
 class DictionaryBuilder {
@@ -12,5 +14,11 @@ class DictionaryBuilder {
 
     fun build(): Dictionary {
         return dictionary
+    }
+
+    companion object {
+        fun from(value: SerializedValue): Dictionary {
+            return SerializerLogic().deserialize(value, Dictionary::class.java)
+        }
     }
 }

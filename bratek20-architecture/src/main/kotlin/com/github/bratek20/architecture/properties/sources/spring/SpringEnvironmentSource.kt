@@ -45,7 +45,7 @@ class SpringEnvironmentSource(
             .map { it.source as Map<String, Any> }
 
         val allForPrefix = all.map { it.filterKeys { it.startsWith(prefix) } }
-        val prefixRemoved = allForPrefix.map { it.mapKeys { it.key.removePrefix(prefix) } }
+        val prefixRemoved = allForPrefix.map { it.mapKeys { it.key.removePrefix("$prefix.") } }
         return prefixRemoved.reduce { acc, map -> acc + map }
     }
 

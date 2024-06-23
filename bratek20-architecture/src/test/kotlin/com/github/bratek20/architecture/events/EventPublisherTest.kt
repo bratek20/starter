@@ -3,6 +3,7 @@ package com.github.bratek20.architecture.events
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import com.github.bratek20.architecture.context.someContextBuilder
+import com.github.bratek20.architecture.context.stableContextBuilder
 import com.github.bratek20.architecture.events.api.Event
 import com.github.bratek20.architecture.events.api.EventListener
 import com.github.bratek20.architecture.events.api.EventPublisher
@@ -37,7 +38,7 @@ class EventPublisherTest {
     @Test
     fun shouldWork() {
         // given
-        val c = someContextBuilder()
+        val c = stableContextBuilder()
             .addImpl(EventListener::class.java, TestEventListener::class.java)
             .addImpl(EventListener::class.java, OtherEventListener::class.java)
             .withModule(EventsModule())
