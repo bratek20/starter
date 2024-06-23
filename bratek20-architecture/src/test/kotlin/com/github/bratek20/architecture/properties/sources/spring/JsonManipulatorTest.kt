@@ -17,4 +17,15 @@ class JsonManipulatorTest {
         assertThat(result)
             .isEqualTo("{\"a\":{\"b\":1,\"c\":2}}")
     }
+
+    @Test
+    fun shouldMergeLists() {
+        val json1 = "{\"a\":[1]}"
+        val json2 = "{\"a\":[null,2]}"
+
+        val result = manipulator.merge(json1, json2)
+
+        assertThat(result)
+            .isEqualTo("{\"a\":[1,2]}")
+    }
 }
