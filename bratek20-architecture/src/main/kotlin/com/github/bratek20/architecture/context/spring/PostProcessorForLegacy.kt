@@ -25,11 +25,8 @@ class PostProcessorForLegacy(
 
 @Configuration
 open class PostProcessorForLegacyConfig {
-    companion object {
-        @JvmStatic
-        @Bean
-        fun postProcessorForLegacy(builderProvider: SpringContextBuilderProvider): PostProcessorForLegacy {
-            return PostProcessorForLegacy(builderProvider)
-        }
+    @Bean
+    open fun postProcessorForLegacy(builderProvider: SpringContextBuilderProvider): PostProcessorForLegacy {
+        return PostProcessorForLegacy(builderProvider)
     }
 }

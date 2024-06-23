@@ -11,6 +11,7 @@ import com.github.bratek20.architecture.properties.api.PropertiesSourceName
 import com.github.bratek20.architecture.serialization.api.SerializationType
 import com.github.bratek20.architecture.serialization.api.SerializedValue
 import org.springframework.core.env.ConfigurableEnvironment
+import org.springframework.core.env.MapPropertySource
 
 class SpringEnvironmentPrefixProvider(
     val value: String
@@ -43,6 +44,15 @@ class SpringEnvironmentSource(
         val all = env.propertySources.asSequence()
             .filterIsInstance<org.springframework.core.env.MapPropertySource>()
             .map { it.source as Map<String, Any> }
+
+        env.propertySources.forEach { propertySource ->
+            if (propertySource is MapPropertySource) {
+                val map = propertySource.source
+                map.forEach { (key: String, value: Any) ->
+                    println("[ARCH] $key: $value")
+                }
+            }
+        }
 
         val allForPrefix = all.map { it.filterKeys { it.startsWith(prefix) } }
         val prefixRemoved = allForPrefix.map { it.mapKeys { it.key.removePrefix("$prefix.") } }
