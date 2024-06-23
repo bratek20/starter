@@ -1,0 +1,4 @@
+my.env.property: hello
+my.env.list:
+  - hello
+  - world

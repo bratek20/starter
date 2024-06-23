@@ -3,6 +3,9 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":bratek20-architecture"))
+    testImplementation(testFixtures(project(":bratek20-architecture")))
+
     api(platform(libs.spring.boot.dependencies))
 
     // context

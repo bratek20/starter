@@ -11,7 +11,11 @@ public class App {
     private final String[] args;
 
     SpringContext run() {
-        var context = new SpringApplicationBuilder(configuration, AppConfig.class)
+        var configs = new Class<?>[]{AppConfig.class};
+        if (configuration != null) {
+            configs = new Class<?>[]{configuration, AppConfig.class};
+        }
+        var context = new SpringApplicationBuilder(configs)
             .web(WebApplicationType.NONE)
             .run(args);
 
