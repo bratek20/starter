@@ -54,6 +54,10 @@ class DotRepresentation(private val map: Map<String, Any>) {
                 val arr = mergeArray(node1.get(fieldName) as ArrayNode, node2.get(fieldName) as ArrayNode)
                 result.put(fieldName, arr)
             }
+            else if (value.isObject && node2.has(fieldName)) {
+                val obj = merge(value, node2.get(fieldName))
+                result.put(fieldName, obj)
+            }
             else {
                 result.put(fieldName, value)
             }
