@@ -1,36 +1,53 @@
 package com.github.bratek20.architecture.properties.sources.spring
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
 class DotRepresentation(private val map: Map<String, Any>) {
+    private val mapper = jacksonObjectMapper()
     fun toJsonObject(): String {
-        val jsonMap = mutableMapOf<String, Any>()
+        var result: JsonNode = mapper.createObjectNode()
         map.forEach { (key, value) ->
-            insertIntoMap(jsonMap, key, value)
+            val keyNode = nodeFor(key, value)
+            result = merge(result, keyNode)
         }
-        return jacksonObjectMapper().writeValueAsString(jsonMap)
+        return mapper.writeValueAsString(result)
     }
 
-    private fun insertIntoMap(current: MutableMap<String, Any>, key: String, value: Any) {
-        val parts = key.split(".")
-        if (parts.size == 1) {
-            val listIndex = parts[0].indexOf("[")
-            if (listIndex != -1) {
-                val listKey = parts[0].substring(0, listIndex)
-                val listIndexValue = parts[0].substring(listIndex + 1, parts[0].length - 1).toInt()
-                val list = current.getOrPut(listKey) { mutableListOf<Any>() } as MutableList<Any>
-                if (list.size <= listIndexValue) {
-                    list.addAll(List(listIndexValue - list.size + 1) { "" })
-                }
-                list[listIndexValue] = value
-            } else {
-                current[key] = value
-            }
-        } else {
-            val nestedKey = parts[0]
-            val nestedMap = current.getOrPut(nestedKey) { mutableMapOf<String, Any>() } as MutableMap<String, Any>
-            insertIntoMap(nestedMap, parts.drop(1).joinToString("."), value)
+    private fun merge(node1: JsonNode, node2: JsonNode): JsonNode {
+        val result = mapper.createObjectNode()
+        node1.fieldNames().forEach { fieldName ->
+            result.put(fieldName, node1.get(fieldName))
         }
+        node2.fieldNames().forEach { fieldName ->
+            result.put(fieldName, node2.get(fieldName))
+        }
+        return result
+    }
+
+    private fun nodeFor(key: String, value: Any): JsonNode {
+        if (key.contains("[")) {
+            val (listKey, index) = key.split("[")
+            val indexValue = index.removeSuffix("]").toInt()
+            val list = List<Any?>(indexValue + 1) { null }.toMutableList()
+            list[indexValue] = value
+            return rootNodeFor(listKey, list)
+        }
+        return rootNodeFor(key, value)
+    }
+
+    private fun rootNodeFor(key: String, value: Any): JsonNode {
+        val node = mapper.createObjectNode()
+        when (value) {
+            is String -> node.put(key, value)
+            is Int -> node.put(key, value)
+            is Long -> node.put(key, value)
+            is Double -> node.put(key, value)
+            is Boolean -> node.put(key, value)
+            is Float -> node.put(key, value)
+            is JsonNode -> node.set<JsonNode>(key, value)
+            else -> node.putPOJO(key, value)
+        }
+        return node
     }
 }

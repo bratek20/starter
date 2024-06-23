@@ -1,5 +1,7 @@
 package com.github.bratek20.architecture.properties.sources.spring
 
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.bratek20.architecture.context.api.ContextBuilder
 import com.github.bratek20.architecture.context.api.ContextModule
 import com.github.bratek20.architecture.context.spring.SpringContextBuilder
@@ -27,38 +29,29 @@ class SpringEnvironmentSource(
     }
 
     override fun getAllKeys(): Set<String> {
-        return getAllValues()
+        val obj = getJsonObject()
+        return obj.fieldNames().asSequence().toSet()
     }
 
-    private fun getAllValues(): Set<String> {
-        val x = env.propertySources.asSequence()
+    private fun getJsonObject(): JsonNode {
+        val map = getMap()
+        val mapAsJsonObjectString = DotRepresentation(map).toJsonObject()
+        return jacksonObjectMapper().readTree(mapAsJsonObjectString)
+    }
+
+    private fun getMap(): Map<String, Any> {
+        val all = env.propertySources.asSequence()
             .filterIsInstance<org.springframework.core.env.MapPropertySource>()
             .map { it.source as Map<String, Any> }
-            .flatMap { it.keys.asSequence() }
-            .toSet()
 
-        return x.filter { it.startsWith(prefix) }.map { it.removePrefix("$prefix.") }.toSet()
+        val allForPrefix = all.map { it.filterKeys { it.startsWith(prefix) } }
+        val prefixRemoved = allForPrefix.map { it.mapKeys { it.key.removePrefix(prefix) } }
+        return prefixRemoved.reduce { acc, map -> acc + map }
     }
-
-    private fun allValuesToJsonObject(): String {
-        val allValues = getAllValues()
-        val json = allValues.joinToString(",") { "\"$it\":\"${getValue(it).getValue()}\"" }
-        return "{$json}"
-    }
-
-//    ["somePropertyList[0].otherValue",
-//    "someProperty.otherValue",
-//    "somePropertyList[1].value",
-//    "someProperty.value",
-//    "somePropertyList[1].otherValue",
-//    "somePropertyList[0].value"]
-    // json = {
-    //  "somePropertyList":[{"value":"some value 1","otherValue":"x"},{"value":"some value 2","otherValue":"x"}],
-    //  "someProperty":{"value":"some value","otherValue":"other value"}
-    //  }
 
     override fun getValue(keyName: String): SerializedValue {
-        return SerializedValue.create("", SerializationType.JSON)
+        val json = getJsonObject()
+        return SerializedValue.create(json.get(keyName).toString(), SerializationType.JSON)
     }
 }
 

@@ -16,12 +16,42 @@ class DotRepresentationTest {
     fun simpleCase() {
         val result = DotRepresentation(mapOf(
             "stringValue" to "abc",
+        )).toJsonObject()
+
+        assertThat(result)
+            .isEqualTo("{\"stringValue\":\"abc\"}")
+    }
+
+    @Test
+    fun baseTypesCase() {
+        val result = DotRepresentation(mapOf(
+            "stringValue" to "abc",
             "intValue" to 123,
             "booleanValue" to true
         )).toJsonObject()
 
         assertThat(result)
             .isEqualTo("{\"stringValue\":\"abc\",\"intValue\":123,\"booleanValue\":true}")
+    }
+
+    @Test
+    fun oneElementListCase() {
+        val result = DotRepresentation(mapOf(
+            "stringList[0]" to "abc",
+        )).toJsonObject()
+
+        assertThat(result)
+            .isEqualTo("{\"stringList\":[\"abc\"]}")
+    }
+
+    @Test
+    fun oneElementListCase_missingIndex() {
+        val result = DotRepresentation(mapOf(
+            "stringList[1]" to "abc",
+        )).toJsonObject()
+
+        assertThat(result)
+            .isEqualTo("{\"stringList\":[null,\"abc\"]}")
     }
 
     @Test
@@ -54,5 +84,18 @@ class DotRepresentationTest {
 
         assertThat(result)
             .isEqualTo("{\"nested\":{\"list\":[\"a\",\"b\"]}}")
+    }
+
+    @Test
+    fun objectListCase() {
+        val result = DotRepresentation(mapOf(
+            "list[0].str" to "a",
+            "list[0].int" to 1,
+            "list[1].str" to "b",
+            "list[1].int" to 2,
+        )).toJsonObject()
+
+        assertThat(result)
+            .isEqualTo("{\"list\":[{\"str\":\"a\",\"int\":1},{\"str\":\"b\",\"int\":2}]}")
     }
 }
