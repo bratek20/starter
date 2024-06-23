@@ -11,7 +11,7 @@ class DotRepresentation(private val map: Map<String, Any>) {
     fun toJsonObject(): String {
         var result: JsonNode = mapper.createObjectNode()
         map.forEach { (key, value) ->
-            val keyNode = nodeFor(key, value)
+            val keyNode = nodeFor(".$key", value)
             result = merge(result, keyNode)
         }
         return mapper.writeValueAsString(result)
@@ -61,20 +61,36 @@ class DotRepresentation(private val map: Map<String, Any>) {
     }
 
     private fun nodeFor(key: String, value: Any): JsonNode {
-        if (key.contains("[")) {
-            val (listKey, index) = key.split("[")
-            val indexValue = index.removeSuffix("]").toInt()
-            val list = List<Any?>(indexValue + 1) { null }.toMutableList()
-            list[indexValue] = value
-            return rootNodeFor(listKey, list)
+        if (key.isEmpty()) {
+            return valueFor(value)
         }
-        return rootNodeFor(key, value)
-    }
+        if (key.startsWith(".")) {
+            val noFirstDot = key.substringAfter(".")
+            val separatorIndex = noFirstDot.indexOfAny(charArrayOf('[', '.'))
+            if (separatorIndex == -1) {
+                val objectNode = mapper.createObjectNode()
+                objectNode.putIfAbsent(noFirstDot, valueFor(value))
+                return objectNode
+            }
+            val objectKey = noFirstDot.substring(0, separatorIndex)
+            val rest = noFirstDot.substring(separatorIndex)
+            val objectNode = mapper.createObjectNode()
+            objectNode.putIfAbsent(objectKey, nodeFor(rest, value))
+            return objectNode
+        }
+        if (key.startsWith("[")) {
+            val index = key.substringAfter("[").substringBefore("]").toInt()
+            val rest = key.substringAfter("]")
 
-    private fun rootNodeFor(key: String, value: Any): JsonNode {
-        val node = mapper.createObjectNode()
-        node.putIfAbsent(key, valueFor(value))
-        return node
+            val arrayNode = mapper.createArrayNode()
+            for (i in 0 until index + 1) {
+                arrayNode.addNull()
+            }
+            arrayNode.set(index, nodeFor(rest, value))
+
+            return arrayNode
+        }
+        throw IllegalArgumentException("Invalid key: $key")
     }
 
     private fun valueFor(value: Any): JsonNode {
