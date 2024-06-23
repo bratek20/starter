@@ -51,12 +51,18 @@ class JsonManipulator {
             val node1Element = node1.get(i)
             val node2Element = node2.get(i)
 
-            if (node1Element != null && !node1Element.isNull) {
+            if (isNull(node2Element)) {
                 result.set(i, node1Element)
-            } else if (node2Element != null && !node2Element.isNull) {
+            } else if (isNull(node1Element)) {
                 result.set(i, node2Element)
+            } else {
+                result.set(i, merge(node1Element, node2Element))
             }
         }
         return result
+    }
+
+    private fun isNull(node: JsonNode?): Boolean {
+        return node == null || node.isNull
     }
 }
