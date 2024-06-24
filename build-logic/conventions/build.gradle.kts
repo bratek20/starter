@@ -74,13 +74,13 @@ publishing {
     repositories {
         mavenLocal()
 
-        if (System.getenv("GITHUB_ACTOR") != null) {
+        if (project.hasProperty("githubActor") && project.hasProperty("githubToken")) {
             maven {
                 name = "GitHubPackages"
                 url = uri("https://maven.pkg.github.com/bratek20/starter")
                 credentials {
-                    username = System.getenv("GITHUB_ACTOR")
-                    password = System.getenv("GITHUB_TOKEN")
+                    username = project.findProperty("githubActor") as String
+                    password = project.findProperty("githubToken") as String
                 }
             }
         }
