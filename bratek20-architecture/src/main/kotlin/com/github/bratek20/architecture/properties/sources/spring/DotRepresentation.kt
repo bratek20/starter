@@ -51,6 +51,11 @@ class DotRepresentation(private val map: Map<String, Any>) {
     }
 
     private fun valueFor(value: Any): JsonNode {
-        return mapper.valueToTree(value)
+        try {
+            return mapper.valueToTree(value)
+        } catch (e: Exception) {
+            throw IllegalArgumentException("Cannot convert value to json: $value")
+        }
+
     }
 }

@@ -19,7 +19,7 @@ class SpringEnvironmentPrefixProvider(
 
 class SpringEnvironmentSource(
     private val prefixProvider: SpringEnvironmentPrefixProvider,
-    private val env: ConfigurableEnvironment
+    var env: ConfigurableEnvironment
 ) : PropertiesSource {
 
     private val prefix: String
