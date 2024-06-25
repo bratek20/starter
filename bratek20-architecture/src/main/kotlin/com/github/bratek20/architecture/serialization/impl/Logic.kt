@@ -34,7 +34,7 @@ class SerializerLogic: Serializer {
         try {
             return objectMapper.readValue(serializedValue.getValue(), type)
         } catch (e: Exception) {
-            throw DeserializationException("Failed to deserialize value")
+            throw DeserializationException("Failed to deserialize value, error message: ${e.message}")
         }
     }
 }

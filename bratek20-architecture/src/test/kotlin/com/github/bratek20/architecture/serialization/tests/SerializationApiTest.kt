@@ -56,7 +56,7 @@ class SerializationApiTest {
             { serializer.deserialize(serializedValue, TestObject::class.java) },
             {
                 type = DeserializationException::class
-                message = "Failed to deserialize value"
+                messagePrefix = "Failed to deserialize value"
             }
         )
     }
@@ -107,5 +107,20 @@ class SerializationApiTest {
         assertSerializedValue(serializedValue) {
             value = "{\"id\":\"test\"}"
         }
+    }
+
+    data class OnlyResultField(
+        val result: String,
+    )
+    @Test
+    fun `should not throw exception for missing fields`() {
+        val json = "{\"error\":null,\"result\":\"OK\"}" //error field not in the class
+
+        val deserializedObject = serializer.deserialize(serializedValue {
+            value = json
+            type = SerializationType.JSON
+        }, OnlyResultField::class.java)
+
+        assertThat(deserializedObject).isEqualTo(OnlyResultField("OK"))
     }
 }
