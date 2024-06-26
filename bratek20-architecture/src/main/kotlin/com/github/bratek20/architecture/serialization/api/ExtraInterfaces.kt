@@ -9,4 +9,9 @@ interface Serializer {
 
     @Throws(DeserializationException::class)
     fun <T> deserialize(serializedValue: SerializedValue, type: Class<T>): T
+
+    fun asDictionary(value: Any): Dictionary
+
+    @Throws(DeserializationException::class)
+    fun <T> fromDictionary(dictionary: Dictionary, type: Class<T>): T
 }
