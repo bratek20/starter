@@ -1,6 +1,7 @@
 package com.github.bratek20.architecture.serialization.impl
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.github.bratek20.architecture.serialization.api.*
@@ -20,6 +21,7 @@ class SerializerLogic: Serializer {
                 .withCreatorVisibility(JsonAutoDetect.Visibility.NONE)
         )
         objectMapper.registerKotlinModule()
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
     }
 
     override fun serialize(value: Any): SerializedValue {
