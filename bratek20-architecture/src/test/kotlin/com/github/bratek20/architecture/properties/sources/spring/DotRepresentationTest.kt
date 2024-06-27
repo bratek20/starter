@@ -25,13 +25,13 @@ class DotRepresentationTest {
     @Test
     fun baseTypesCase() {
         val result = DotRepresentation(mapOf(
-            "stringValue" to "abc",
             "intValue" to 123,
+            "stringValue" to "abc",
             "booleanValue" to true
         )).toJsonObject()
 
         assertThat(result)
-            .isEqualTo("{\"stringValue\":\"abc\",\"intValue\":123,\"booleanValue\":true}")
+            .isEqualTo("{\"intValue\":123,\"stringValue\":\"abc\",\"booleanValue\":true}")
     }
 
     @Test

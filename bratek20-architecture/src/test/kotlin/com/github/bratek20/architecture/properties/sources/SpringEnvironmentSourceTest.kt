@@ -14,6 +14,40 @@ import org.springframework.core.env.MapPropertySource
 
 class SpringEnvironmentSourceTest: PropertiesSourceTest() {
 
+    /*
+        * This class is simplified class from spring boot, that is wrapping values with OriginTrackedValue
+        * It is used for application.yaml properties
+        * it made deserialization problems as I forgot to unwrap values by using getProperty method
+     */
+    data class OriginTrackedValue(
+        private val value: Any,
+    ) {
+        fun getValue(): Any {
+            return value
+        }
+    }
+    class OriginTrackedMapPropertySource(
+        source: Map<String, Any>,
+    ) : MapPropertySource(
+        "test",
+        wrapWithOriginTrackedValues(source)
+    ) {
+        override fun getProperty(name: String): Any {
+            val value = super.getProperty(name)
+            return if (value is OriginTrackedValue) {
+                value.getValue()
+            } else {
+                value
+            }
+        }
+
+        companion object {
+            fun wrapWithOriginTrackedValues(map: Map<String, Any>): Map<String, Any> {
+                return map.mapValues { OriginTrackedValue(it.value) }
+            }
+        }
+    }
+
     override fun createAndSetupSource(): PropertiesSource {
         val context = SpringContextBuilder()
             .withModules(
@@ -33,7 +67,7 @@ class SpringEnvironmentSourceTest: PropertiesSourceTest() {
         customProperties["test.scope.somePropertyList[1].value"] = "some value 2"
         customProperties["test.scope.somePropertyList[1].otherValue"] = "x"
 
-        val propertySource = MapPropertySource("customPropertySource", customProperties)
+        val propertySource = OriginTrackedMapPropertySource(customProperties)
         springEnv.propertySources.addFirst(propertySource)
 
         return context.get(SpringEnvironmentSource::class.java)

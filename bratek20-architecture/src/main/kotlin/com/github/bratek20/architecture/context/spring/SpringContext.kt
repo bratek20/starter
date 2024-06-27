@@ -1,13 +1,13 @@
 package com.github.bratek20.architecture.context.spring
 
-import org.springframework.beans.factory.NoSuchBeanDefinitionException
-import org.springframework.beans.factory.NoUniqueBeanDefinitionException
-import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import com.github.bratek20.architecture.context.api.ClassNotFoundInContextException
 import com.github.bratek20.architecture.context.api.Context
 import com.github.bratek20.architecture.context.api.MultipleClassesFoundInContextException
+import org.springframework.beans.factory.NoSuchBeanDefinitionException
+import org.springframework.beans.factory.NoUniqueBeanDefinitionException
+import org.springframework.context.ConfigurableApplicationContext
 
-class SpringContext(val value: AnnotationConfigApplicationContext): Context {
+class SpringContext(val value: ConfigurableApplicationContext): Context {
     override fun <T: Any> get(type: Class<T>): T {
         try {
             return value.getBean(type)

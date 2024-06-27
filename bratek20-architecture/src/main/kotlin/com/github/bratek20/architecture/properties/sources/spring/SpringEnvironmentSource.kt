@@ -41,22 +41,19 @@ class SpringEnvironmentSource(
     }
 
     private fun getMap(): Map<String, Any> {
-        val all = env.propertySources.asSequence()
-            .filterIsInstance<org.springframework.core.env.MapPropertySource>()
-            .map { it.source as Map<String, Any> }
+        val all: Sequence<MapPropertySource> = env.propertySources.asSequence()
+            .filterIsInstance<MapPropertySource>()
 
-        env.propertySources.forEach { propertySource ->
-            if (propertySource is MapPropertySource) {
-                val map = propertySource.source
-                map.forEach { (key: String, value: Any) ->
-                    println("[ARCH] $key: $value")
+        val result: MutableMap<String, Any> = mutableMapOf()
+        all.forEach { map ->
+            val filtered = map.source.filterKeys { it.startsWith(prefix) }
+            result.putAll(
+                filtered.map {
+                    it.key.removePrefix("$prefix.") to map.getProperty(it.key)
                 }
-            }
+            )
         }
-
-        val allForPrefix = all.map { it.filterKeys { it.startsWith(prefix) } }
-        val prefixRemoved = allForPrefix.map { it.mapKeys { it.key.removePrefix("$prefix.") } }
-        return prefixRemoved.reduce { acc, map -> acc + map }
+        return result
     }
 
     override fun getValue(keyName: String): SerializedValue {

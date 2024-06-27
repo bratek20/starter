@@ -8,6 +8,6 @@ import pl.bratek20.spring.config.BaseConfig;
 @Import({
     BaseConfig.class
 })
-class AppConfig {
+class SpringAppConfig {
 
 }
