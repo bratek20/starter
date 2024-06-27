@@ -13,10 +13,4 @@ class DictionaryBuilder {
     fun build(): Dictionary {
         return dictionary
     }
-
-    companion object {
-        fun from(value: SerializedValue): Dictionary {
-            return SerializerLogic().deserialize(value, Dictionary::class.java)
-        }
-    }
 }

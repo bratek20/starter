@@ -15,10 +15,4 @@ class DictionaryListBuilder {
     fun build(): DictionaryList {
         return list
     }
-
-    companion object {
-        fun from(value: SerializedValue): DictionaryList {
-            return SerializerLogic().deserialize(value, DictionaryList::class.java)
-        }
-    }
 }

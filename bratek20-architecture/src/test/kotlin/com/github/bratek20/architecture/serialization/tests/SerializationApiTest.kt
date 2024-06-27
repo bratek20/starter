@@ -110,11 +110,9 @@ class SerializationApiTest {
         }
 
         val deserializedObject = serializer.deserialize(serializedValue, Dictionary::class.java)
-        val fromSerializedValue = DictionaryBuilder.from(serializedValue)
 
         val expected = mapOf("value" to "test", "number" to 1)
         assertThat(deserializedObject).isEqualTo(expected)
-        assertThat(fromSerializedValue).isEqualTo(expected)
     }
 
     @Test
@@ -173,14 +171,12 @@ class SerializationApiTest {
         val serializedValue = serializer.serialize(dictionaryList)
 
         val deserializedObject = serializer.deserialize(serializedValue, DictionaryList::class.java)
-        val fromSerializedValue = DictionaryListBuilder.from(serializedValue)
 
         val expected = listOf(
             mapOf("value" to "test", "number" to 1),
             mapOf("value" to "test2", "number" to 2)
         )
         assertThat(deserializedObject).isEqualTo(expected)
-        assertThat(fromSerializedValue).isEqualTo(expected)
     }
 
     data class SomeId(

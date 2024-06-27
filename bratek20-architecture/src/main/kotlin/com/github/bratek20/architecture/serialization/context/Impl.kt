@@ -12,3 +12,11 @@ class SerializationImpl: ContextModule {
             .setImpl(Serializer::class.java, SerializerLogic::class.java)
     }
 }
+
+class SerializationFactory {
+    companion object {
+        fun createSerializer(): Serializer {
+            return SerializerLogic()
+        }
+    }
+}
