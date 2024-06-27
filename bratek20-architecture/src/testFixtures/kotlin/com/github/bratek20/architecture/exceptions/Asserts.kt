@@ -2,11 +2,13 @@ package com.github.bratek20.architecture.exceptions
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldStartWith
 import kotlin.reflect.KClass
 
 data class ExpectedException(
     var type: KClass<out ApiException>? = null,
-    var message: String? = null
+    var message: String? = null,
+    var messagePrefix: String? = null,
 )
 fun assertApiExceptionThrown(block: () -> Unit, init: ExpectedException.() -> Unit) {
     val expected = ExpectedException().apply(init)
@@ -15,10 +17,13 @@ fun assertApiExceptionThrown(block: () -> Unit, init: ExpectedException.() -> Un
         block()
     }
 
-    if (expected.type != null) {
-        thrownException::class shouldBe expected.type
+    expected.type?.let {
+        thrownException::class shouldBe it
     }
-    if (expected.message != null) {
-        thrownException.message shouldBe expected.message
+    expected.message?.let {
+        thrownException.message shouldBe it
+    }
+    expected.messagePrefix?.let {
+        thrownException.message shouldStartWith it
     }
 }

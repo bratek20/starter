@@ -1,13 +1,11 @@
 package com.github.bratek20.architecture.serialization.api
 
-import com.github.bratek20.architecture.serialization.impl.SerializerLogic
-
-class Dictionary: HashMap<String, Any>()
+class Dictionary: HashMap<String, Any?>()
 
 class DictionaryBuilder {
     private val dictionary = Dictionary()
 
-    fun add(key: String, value: Any): DictionaryBuilder {
+    fun add(key: String, value: Any?): DictionaryBuilder {
         dictionary[key] = value
         return this
     }

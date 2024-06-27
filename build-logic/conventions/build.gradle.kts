@@ -14,7 +14,7 @@ dependencies {
 
 java {
     toolchain {
-        version = libs.versions.java.get()
+        languageVersion.set(JavaLanguageVersion.of(libs.versions.java.get()))
     }
 }
 
@@ -69,18 +69,18 @@ gradlePlugin {
     }
 }
 
-version = "1.0.1"
+version = "1.0.2"
 publishing {
     repositories {
         mavenLocal()
 
-        if (System.getenv("GITHUB_ACTOR") != null) {
+        if (project.hasProperty("githubActor") && project.hasProperty("githubToken")) {
             maven {
                 name = "GitHubPackages"
                 url = uri("https://maven.pkg.github.com/bratek20/starter")
                 credentials {
-                    username = System.getenv("GITHUB_ACTOR")
-                    password = System.getenv("GITHUB_TOKEN")
+                    username = project.findProperty("githubActor") as String
+                    password = project.findProperty("githubToken") as String
                 }
             }
         }

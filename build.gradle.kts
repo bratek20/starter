@@ -1,9 +1,9 @@
 plugins {
-    id("com.github.bratek20.library-conventions")
+    id("com.github.bratek20.kotlin-library-conventions")
 }
 
 val groupAll = "com.github.bratek20"
-val versionAll = "1.0.13"
+val versionAll = "1.0.20"
 
 group = groupAll
 version = versionAll
@@ -17,8 +17,8 @@ dependencies {
     api(project(":bratek20-architecture"))
     testFixturesApi(testFixtures(project(":bratek20-architecture")))
 
-    api(project(":bratek20-utils"))
-    testFixturesApi(testFixtures(project(":bratek20-utils")))
+//    api(project(":bratek20-utils"))
+//    testFixturesApi(testFixtures(project(":bratek20-utils")))
 
     // "Legacy" modules
 //    api(project(":bratek20-commons"))

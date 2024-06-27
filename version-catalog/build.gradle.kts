@@ -3,9 +3,9 @@ plugins {
     `maven-publish`
 }
 
-val catalogVersion = "1.0.16"
-val bratek20StarterVersion = "1.0.13"
-val bratek20PluginsVersion = "1.0.1"
+val catalogVersion = "1.0.20"
+val bratek20StarterVersion = "1.0.20"
+val bratek20PluginsVersion = "1.0.2"
 
 catalog {
     versionCatalog {
@@ -121,13 +121,13 @@ publishing {
     repositories {
         mavenLocal()
 
-        if (System.getenv("GITHUB_ACTOR") != null) {
+        if (project.hasProperty("githubActor") && project.hasProperty("githubToken")) {
             maven {
                 name = "GitHubPackages"
                 url = uri("https://maven.pkg.github.com/bratek20/starter")
                 credentials {
-                    username = System.getenv("GITHUB_ACTOR")
-                    password = System.getenv("GITHUB_TOKEN")
+                    username = project.findProperty("githubActor") as String
+                    password = project.findProperty("githubToken") as String
                 }
             }
         }

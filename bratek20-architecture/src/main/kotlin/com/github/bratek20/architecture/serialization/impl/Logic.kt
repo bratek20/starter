@@ -1,7 +1,10 @@
 package com.github.bratek20.architecture.serialization.impl
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect
+import com.fasterxml.jackson.core.JacksonException
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.github.bratek20.architecture.serialization.api.*
 
@@ -20,6 +23,7 @@ class SerializerLogic: Serializer {
                 .withCreatorVisibility(JsonAutoDetect.Visibility.NONE)
         )
         objectMapper.registerKotlinModule()
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
     }
 
     override fun serialize(value: Any): SerializedValue {
@@ -33,8 +37,25 @@ class SerializerLogic: Serializer {
     override fun <T> deserialize(serializedValue: SerializedValue, type: Class<T>): T {
         try {
             return objectMapper.readValue(serializedValue.getValue(), type)
-        } catch (e: Exception) {
-            throw DeserializationException("Failed to deserialize value")
+        } catch (e: JacksonException) {
+            val internalMsg = e.message ?: ""
+            val missingFieldName = extractMissingFieldName(internalMsg)
+            throw DeserializationException("Failed to deserialize value, missing value for field: $missingFieldName")
         }
+    }
+
+    private fun extractMissingFieldName(message: String): String {
+        val regex = "property ([a-zA-Z0-9]+) due to missing".toRegex()
+        val matchResult = regex.find(message)
+        return matchResult?.groups?.get(1)?.value ?: "unknown"
+    }
+
+    override fun asDictionary(value: Any): Dictionary {
+        val tmp = serialize(value)
+        return deserialize(tmp, Dictionary::class.java)
+    }
+
+    override fun <T> fromDictionary(dictionary: Dictionary, type: Class<T>): T {
+        return deserialize(serialize(dictionary), type)
     }
 }

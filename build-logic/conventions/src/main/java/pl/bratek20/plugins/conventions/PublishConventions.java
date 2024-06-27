@@ -35,13 +35,23 @@ public class PublishConventions implements Plugin<Project> {
                 var username = System.getenv("GITHUB_ACTOR");
                 var password = System.getenv("GITHUB_TOKEN");
 
+                if (username == null && project.hasProperty("githubActor")) {
+                    username = Objects.requireNonNull(project.property("githubActor")).toString();
+                }
+                if (password == null && project.hasProperty("githubToken")) {
+                    password = Objects.requireNonNull(project.property("githubToken")).toString();
+                }
+
                 if (username != null && password != null) {
+                    String finalUsername = username;
+                    String finalPassword = password;
+
                     repositories.maven(maven -> {
                         maven.setName("GitHubPackages");
                         maven.setUrl(project.uri("https://maven.pkg.github.com/bratek20/starter"));
                         maven.credentials(credentials -> {
-                            credentials.setUsername(username);
-                            credentials.setPassword(password);
+                            credentials.setUsername(finalUsername);
+                            credentials.setPassword(finalPassword);
                         });
                     });
                 }
@@ -59,5 +69,4 @@ public class PublishConventions implements Plugin<Project> {
             });
         });
     }
-
 }
