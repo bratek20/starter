@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 
-class AppTest {
+class SpringAppTest {
 
     @Configuration
     static class EmptyConfig {
@@ -13,9 +13,9 @@ class AppTest {
 
     @Test
     void shouldStartAppWithoutWebServlet() {
-        App.run(EmptyConfig.class, new String[]{});
+        SpringApp.run(EmptyConfig.class, new String[]{});
 
-        assertThatCode(() -> App.run(EmptyConfig.class, new String[]{}))
+        assertThatCode(() -> SpringApp.run(EmptyConfig.class, new String[]{}))
             .doesNotThrowAnyException();
     }
 }

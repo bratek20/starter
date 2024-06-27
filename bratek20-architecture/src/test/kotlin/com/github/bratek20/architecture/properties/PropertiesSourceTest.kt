@@ -6,6 +6,11 @@ import org.junit.jupiter.api.Test
 import com.github.bratek20.architecture.properties.api.ListPropertyKey
 import com.github.bratek20.architecture.properties.api.ObjectPropertyKey
 import com.github.bratek20.architecture.properties.api.PropertiesSource
+import com.github.bratek20.architecture.serialization.api.DictionaryBuilder
+import com.github.bratek20.architecture.serialization.api.DictionaryListBuilder
+import com.github.bratek20.architecture.serialization.fixtures.assertSerializedValue
+import com.github.bratek20.architecture.serialization.fixtures.assertSerializedValueAsDictionary
+import com.github.bratek20.architecture.serialization.fixtures.assertSerializedValueAsDictionaryList
 
 abstract class PropertiesSourceTest {
     data class SomeProperty(val value: String, val otherValue: String)
@@ -34,11 +39,26 @@ abstract class PropertiesSourceTest {
 
     @Test
     fun shouldReturnCorrectSerializedValues() {
-        assertThat(source.getValue(SOME_PROPERTY_OBJECT_KEY.name).getValue())
-            .isEqualTo("{\"value\":\"some value\",\"otherValue\":\"other value\"}")
+        assertSerializedValueAsDictionary(source.getValue(SOME_PROPERTY_OBJECT_KEY.name),
+            mapOf(
+                "value" to "some value",
+                "otherValue" to "other value"
+            )
+        )
 
-        assertThat(source.getValue(SOME_PROPERTY_LIST_KEY.name).getValue())
-            .isEqualTo("[{\"value\":\"some value 1\",\"otherValue\":\"x\"},{\"value\":\"some value 2\",\"otherValue\":\"x\"}]")
+
+        assertSerializedValueAsDictionaryList(source.getValue(SOME_PROPERTY_LIST_KEY.name),
+            listOf(
+                mapOf(
+                    "value" to "some value 1",
+                    "otherValue" to "x"
+                ),
+                mapOf(
+                    "value" to "some value 2",
+                    "otherValue" to "x"
+                )
+            )
+        )
     }
 
     companion object {

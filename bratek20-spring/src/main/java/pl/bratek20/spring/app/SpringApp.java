@@ -1,17 +1,22 @@
 package pl.bratek20.spring.app;
 
+import com.github.bratek20.architecture.context.spring.SpringContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import pl.bratek20.spring.context.SpringContext;
 
 @RequiredArgsConstructor
-public class App {
+public class SpringApp {
+
     private final Class<?> configuration;
     private final String[] args;
 
     SpringContext run() {
-        var context = new SpringApplicationBuilder(configuration, AppConfig.class)
+        var configs = new Class<?>[]{SpringAppConfig.class};
+        if (configuration != null) {
+            configs = new Class<?>[]{configuration, SpringAppConfig.class};
+        }
+        var context = new SpringApplicationBuilder(configs)
             .web(WebApplicationType.NONE)
             .run(args);
 
@@ -19,7 +24,7 @@ public class App {
     }
 
     public static SpringContext run(Class<?> config, String[] args) {
-        var app = new App(config, args);
+        var app = new SpringApp(config, args);
         return app.run();
     }
 }
