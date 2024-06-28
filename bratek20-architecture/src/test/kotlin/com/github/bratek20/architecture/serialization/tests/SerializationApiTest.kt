@@ -64,14 +64,37 @@ class SerializationApiTest {
 
     @Test
     fun `should make object from dictionary`() {
-        val dict = DictionaryBuilder()
-            .add("value", "test")
-            .add("number", 1)
-            .build()
+        val dict = dictionary {
+            "value" to "test"
+            "number" to 1
+        }
 
         val obj = serializer.fromDictionary(dict, TestObject::class.java)
 
         assertThat(obj).isEqualTo(TestObject("test", 1, null))
+    }
+
+    data class NestedObject(
+        val nested: TestObject,
+        val value: String
+    )
+    @Test
+    fun `should make nested object from dictionary`() {
+        val dict = dictionary {
+            "nested" to dictionary {
+                "value" to "test"
+                "number" to 1
+            }
+            "value" to "xd"
+        }
+
+        val obj = serializer.fromDictionary(dict, NestedObject::class.java)
+
+        assertThat(obj)
+            .isEqualTo(NestedObject(
+                TestObject("test", 1, null),
+                "xd"
+            ))
     }
 
     @Test
@@ -117,12 +140,12 @@ class SerializationApiTest {
 
     @Test
     fun `should serialize Dictionary`() {
-        val dictionary = DictionaryBuilder()
-            .add("value", "test")
-            .add("number", 1)
-            .build()
+        val dict = dictionary {
+            "value" to "test"
+            "number" to 1
+        }
 
-        val serializedValue = serializer.serialize(dictionary)
+        val serializedValue = serializer.serialize(dict)
 
         assertSerializedValue(serializedValue) {
             value = "{\"number\":1,\"value\":\"test\"}"
@@ -132,20 +155,18 @@ class SerializationApiTest {
 
     @Test
     fun `should serialize DictionaryList`() {
-        val dictionaryList = DictionaryListBuilder()
-            .add(DictionaryBuilder()
-                .add("value", "test")
-                .add("number", 1)
-                .build()
-            )
-            .add(DictionaryBuilder()
-                .add("value", "test2")
-                .add("number", 2)
-                .build()
-            )
-            .build()
+        val dictList = dictionaryList {
+            dictionary {
+                "value" to "test"
+                "number" to 1
+            }
+            dictionary {
+                "value" to "test2"
+                "number" to 2
+            }
+        }
 
-        val serializedValue = serializer.serialize(dictionaryList)
+        val serializedValue = serializer.serialize(dictList)
 
         assertSerializedValue(serializedValue) {
             value = "[{\"number\":1,\"value\":\"test\"},{\"number\":2,\"value\":\"test2\"}]"
@@ -155,20 +176,17 @@ class SerializationApiTest {
 
     @Test
     fun `should deserialize from DictionaryList`() {
-        val dictionaryList = DictionaryListBuilder()
-            .add(DictionaryBuilder()
-                .add("value", "test")
-                .add("number", 1)
-                .build()
-            )
-            .add(DictionaryBuilder()
-                .add("value", "test2")
-                .add("number", 2)
-                .build()
-            )
-            .build()
-
-        val serializedValue = serializer.serialize(dictionaryList)
+        val dictList = dictionaryList {
+            dictionary {
+                "value" to "test"
+                "number" to 1
+            }
+            dictionary {
+                "value" to "test2"
+                "number" to 2
+            }
+        }
+        val serializedValue = serializer.serialize(dictList)
 
         val deserializedObject = serializer.deserialize(serializedValue, DictionaryList::class.java)
 
@@ -219,10 +237,10 @@ class SerializationApiTest {
 
     @Test
     fun `should not throw exception for missing fields in dictionary`() {
-        val dict = DictionaryBuilder()
-            .add("error", null)
-            .add("result", "OK")
-            .build()
+        val dict = dictionary {
+            "error" to null
+            "result" to "OK"
+        }
 
         val deserializedObject = serializer.fromDictionary(dict, OnlyResultField::class.java)
 
