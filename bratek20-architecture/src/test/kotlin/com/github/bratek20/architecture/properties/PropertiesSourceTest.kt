@@ -39,24 +39,23 @@ abstract class PropertiesSourceTest {
 
     @Test
     fun shouldReturnCorrectSerializedValues() {
-        assertSerializedValueAsDictionary(source.getValue(SOME_PROPERTY_OBJECT_KEY.name),
-            mapOf(
-                "value" to "some value",
-                "otherValue" to "other value"
-            )
-        )
+        assertSerializedValueAsDictionary(source.getValue(SOME_PROPERTY_OBJECT_KEY.name)
+        ) {
+            "value" to "some value"
+            "otherValue" to "other value"
+        }
 
 
         assertSerializedValueAsDictionaryList(source.getValue(SOME_PROPERTY_LIST_KEY.name),
             listOf(
-                mapOf(
-                    "value" to "some value 1",
+                {
+                    "value" to "some value 1"
                     "otherValue" to "x"
-                ),
-                mapOf(
-                    "value" to "some value 2",
+                },
+                {
+                    "value" to "some value 2"
                     "otherValue" to "x"
-                )
+                }
             )
         )
     }

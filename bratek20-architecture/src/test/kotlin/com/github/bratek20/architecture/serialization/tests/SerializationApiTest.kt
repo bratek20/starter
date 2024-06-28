@@ -6,7 +6,7 @@ import com.github.bratek20.architecture.context.someContextBuilder
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.architecture.serialization.api.*
 import com.github.bratek20.architecture.serialization.context.SerializationImpl
-import com.github.bratek20.architecture.serialization.fixtures.assertDictionary
+import com.github.bratek20.architecture.serialization.fixtures.assertDictionaryEquals
 import com.github.bratek20.architecture.serialization.fixtures.assertSerializedValue
 import com.github.bratek20.architecture.serialization.fixtures.serializedValue
 import org.assertj.core.api.Assertions.assertThat
@@ -55,11 +55,11 @@ class SerializationApiTest {
 
         val dict = serializer.asDictionary(testObject)
 
-        assertDictionary(dict, mapOf(
-            "value" to "test",
-            "number" to 1,
+        assertDictionaryEquals(dict) {
+            "value" to "test"
+            "number" to 1
             "nullable" to null
-        ))
+        }
     }
 
     @Test
