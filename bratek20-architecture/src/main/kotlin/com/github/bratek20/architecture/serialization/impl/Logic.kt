@@ -37,10 +37,23 @@ class SerializerLogic: Serializer {
         try {
             return objectMapper.readValue(serializedValue.getValue(), type)
         } catch (e: JacksonException) {
-            val internalMsg = e.message ?: ""
-            val missingFieldName = extractMissingFieldName(internalMsg)
-            throw DeserializationException("Failed to deserialize value, missing value for field: $missingFieldName")
+            throw handleJacksonException(e)
         }
+    }
+
+    override fun <T> deserializeList(serializedValue: SerializedValue, elementType: Class<T>): List<T> {
+        try {
+            val collectionType = objectMapper.typeFactory.constructCollectionType(List::class.java, elementType)
+            return objectMapper.readValue(serializedValue.getValue(), collectionType)
+        } catch (e: JacksonException) {
+            throw handleJacksonException(e)
+        }
+    }
+
+    private fun handleJacksonException(e: JacksonException): DeserializationException {
+        val internalMsg = e.message ?: ""
+        val missingFieldName = extractMissingFieldName(internalMsg)
+        return DeserializationException("Failed to deserialize value, missing value for field: $missingFieldName")
     }
 
     private fun extractMissingFieldName(message: String): String {

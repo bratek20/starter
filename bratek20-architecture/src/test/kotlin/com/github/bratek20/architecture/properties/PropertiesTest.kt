@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Nested
 
 class PropertiesTest {
     data class SomeProperty(val value: String)
+    data class SomePropertyWithAmount(val value: String, val amount: Int)
     data class OtherProperty(val otherValue: String)
 
     private lateinit var properties: Properties
@@ -54,6 +55,16 @@ class PropertiesTest {
         }
 
         @Test
+        fun shouldGetPartialObjectProperty() {
+            val key = ObjectPropertyKey("mine", SomeProperty::class)
+            source1.set(key, SomePropertyWithAmount("x", 5))
+
+            val givenProp = properties.get(key)
+
+            assertThat(givenProp).isEqualTo(SomeProperty("x"))
+        }
+
+        @Test
         fun shouldGetListProperty() {
             val expectedProp = listOf(SomeProperty("x"), SomeProperty("y"))
             val key = ListPropertyKey("mine", SomeProperty::class)
@@ -62,6 +73,16 @@ class PropertiesTest {
             val givenProp = properties.get(key)
 
             assertThat(givenProp).isEqualTo(expectedProp)
+        }
+
+        @Test
+        fun shouldGetPartialListProperty() {
+            val key = ListPropertyKey("mine", SomeProperty::class)
+            source1.set(key, listOf(SomePropertyWithAmount("x", 5), SomePropertyWithAmount("y", 10)))
+
+            val givenProp = properties.get(key)
+
+            assertThat(givenProp).isEqualTo(listOf(SomeProperty("x"), SomeProperty("y")))
         }
 
         @Test

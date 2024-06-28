@@ -10,6 +10,9 @@ interface Serializer {
     @Throws(DeserializationException::class)
     fun <T> deserialize(serializedValue: SerializedValue, type: Class<T>): T
 
+    @Throws(DeserializationException::class)
+    fun <T> deserializeList(serializedValue: SerializedValue, elementType: Class<T>): List<T>
+
     fun asStruct(value: Any): Struct
 
     @Throws(DeserializationException::class)

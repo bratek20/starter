@@ -39,7 +39,7 @@ class SerializationApiTest {
     }
 
     @Test
-    fun `should deserialize from JSON`() {
+    fun `should deserialize object from JSON`() {
         val serializedValue = serializedValue {
             value = "{\"value\":\"test\",\"number\":1}"
         }
@@ -47,6 +47,17 @@ class SerializationApiTest {
         val deserializedObject = serializer.deserialize(serializedValue, TestObject::class.java)
 
         assertThat(deserializedObject).isEqualTo(TestObject("test", 1, null))
+    }
+
+    @Test
+    fun `should deserialize list from JSON`() {
+        val serializedValue = serializedValue {
+            value = "[{\"value\":\"test\",\"number\":1}]"
+        }
+
+        val deserializedObject = serializer.deserializeList(serializedValue, TestObject::class.java)
+
+        assertThat(deserializedObject).isEqualTo(listOf(TestObject("test", 1, null)))
     }
 
     @Test
@@ -113,6 +124,21 @@ class SerializationApiTest {
     }
 
     @Test
+    fun `should throw exception when deserializing list from invalid JSON`() {
+        val serializedValue = serializedValue {
+            value = "[{}]"
+        }
+
+        assertApiExceptionThrown (
+            { serializer.deserializeList(serializedValue, TestObject::class.java) },
+            {
+                type = DeserializationException::class
+                message = "Failed to deserialize value, missing value for field: value"
+            }
+        )
+    }
+
+    @Test
     fun `should throw exception when deserializing from invalid struct`() {
         val struct = StructBuilder()
             .build()
@@ -154,7 +180,7 @@ class SerializationApiTest {
     }
 
     @Test
-    fun `should serialize StrucList`() {
+    fun `should serialize StructList`() {
         val structList = structList {
             struct {
                 "value" to "test"
@@ -175,7 +201,7 @@ class SerializationApiTest {
     }
 
     @Test
-    fun `should deserialize from StrucList`() {
+    fun `should deserialize from StructList`() {
         val structList = structList {
             struct {
                 "value" to "test"

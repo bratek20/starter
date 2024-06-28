@@ -5,6 +5,7 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.github.bratek20.architecture.exceptions.ShouldNeverHappenException
 import com.github.bratek20.architecture.properties.api.*
 import com.github.bratek20.architecture.serialization.api.SerializedValue
+import com.github.bratek20.architecture.serialization.impl.SerializerLogic
 import kotlin.reflect.KClass
 
 
@@ -61,22 +62,22 @@ class PropertiesLogic(
     private val objectMapper = ObjectMapper()
         .registerKotlinModule()
 
+    private val serializer = SerializerLogic()
+
     private fun <T: Any> isListWithElementType(value: SerializedValue, type: KClass<T>): Boolean {
-        val jsonString = value.getValue()
         return try {
-            val listType = objectMapper.typeFactory.constructCollectionType(List::class.java, type.java)
-            val list: List<T> = objectMapper.readValue(jsonString, listType)
+            getListWithElementType(value, type)
             true
         } catch (e: Exception) {
             false
         }
     }
 
+
+
     private fun <T: Any> isObjectOfType(value: SerializedValue, type: KClass<T>): Boolean {
-        val jsonString = value.getValue()
         return try {
-            val objType = objectMapper.typeFactory.constructType(type.java)
-            val obj: T = objectMapper.readValue(jsonString, objType)
+            getObjectWithType(value, type)
             true
         } catch (e: Exception) {
             false
@@ -84,14 +85,10 @@ class PropertiesLogic(
     }
 
     private fun <T: Any> getListWithElementType(value: SerializedValue, type: KClass<T>): List<T> {
-        val jsonString = value.getValue()
-        val listType = objectMapper.typeFactory.constructCollectionType(List::class.java, type.java)
-        return objectMapper.readValue(jsonString, listType)
+        return serializer.deserializeList(value, type.java)
     }
 
     private fun <T: Any> getObjectWithType(value: SerializedValue, type: KClass<T>): T {
-        val jsonString = value.getValue()
-        val objType = objectMapper.typeFactory.constructType(type.java)
-        return objectMapper.readValue(jsonString, objType)
+        return serializer.deserialize(value, type.java)
     }
 }
