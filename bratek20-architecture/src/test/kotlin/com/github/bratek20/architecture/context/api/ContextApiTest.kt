@@ -163,8 +163,7 @@ abstract class ContextApiTest {
         .isInstanceOf(DependentClassNotFoundInContextException::class.java)
         .hasMessage("Class X needed by class WithXClass not found")
     }
-
-    @Disabled //TODO fix guice
+    
     @Test
     fun `should inject empty set`() {
         val obj = createInstance()
