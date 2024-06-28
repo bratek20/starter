@@ -6,7 +6,7 @@ import com.github.bratek20.architecture.context.someContextBuilder
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.architecture.serialization.api.*
 import com.github.bratek20.architecture.serialization.context.SerializationImpl
-import com.github.bratek20.architecture.serialization.fixtures.assertDictionaryEquals
+import com.github.bratek20.architecture.serialization.fixtures.assertStructEquals
 import com.github.bratek20.architecture.serialization.fixtures.assertSerializedValue
 import com.github.bratek20.architecture.serialization.fixtures.serializedValue
 import org.assertj.core.api.Assertions.assertThat
@@ -50,12 +50,12 @@ class SerializationApiTest {
     }
 
     @Test
-    fun `should make dictionary from object`() {
+    fun `should make struct from object`() {
         val testObject = TestObject("test", 1, null)
 
-        val dict = serializer.asDictionary(testObject)
+        val struct = serializer.asStruct(testObject)
 
-        assertDictionaryEquals(dict) {
+        assertStructEquals(struct) {
             "value" to "test"
             "number" to 1
             "nullable" to null
@@ -63,13 +63,13 @@ class SerializationApiTest {
     }
 
     @Test
-    fun `should make object from dictionary`() {
-        val dict = dictionary {
+    fun `should make object from struct`() {
+        val struct = struct {
             "value" to "test"
             "number" to 1
         }
 
-        val obj = serializer.fromDictionary(dict, TestObject::class.java)
+        val obj = serializer.fromStruct(struct, TestObject::class.java)
 
         assertThat(obj).isEqualTo(TestObject("test", 1, null))
     }
@@ -79,16 +79,16 @@ class SerializationApiTest {
         val value: String
     )
     @Test
-    fun `should make nested object from dictionary`() {
-        val dict = dictionary {
-            "nested" to dictionary {
+    fun `should make nested object from struct`() {
+        val struct = struct {
+            "nested" to struct {
                 "value" to "test"
                 "number" to 1
             }
             "value" to "xd"
         }
 
-        val obj = serializer.fromDictionary(dict, NestedObject::class.java)
+        val obj = serializer.fromStruct(struct, NestedObject::class.java)
 
         assertThat(obj)
             .isEqualTo(NestedObject(
@@ -113,12 +113,12 @@ class SerializationApiTest {
     }
 
     @Test
-    fun `should throw exception when deserializing from invalid dictionary`() {
-        val dict = DictionaryBuilder()
+    fun `should throw exception when deserializing from invalid struct`() {
+        val struct = StructBuilder()
             .build()
 
         assertApiExceptionThrown (
-            { serializer.fromDictionary(dict, TestObject::class.java) },
+            { serializer.fromStruct(struct, TestObject::class.java) },
             {
                 type = DeserializationException::class
                 message = "Failed to deserialize value, missing value for field: value"
@@ -127,25 +127,25 @@ class SerializationApiTest {
     }
 
     @Test
-    fun `should deserialize to Dictionary type`() {
+    fun `should deserialize to Struct type`() {
         val serializedValue = serializedValue {
             value = "{\"value\":\"test\",\"number\":1}"
         }
 
-        val deserializedObject = serializer.deserialize(serializedValue, Dictionary::class.java)
+        val deserializedObject = serializer.deserialize(serializedValue, Struct::class.java)
 
         val expected = mapOf("value" to "test", "number" to 1)
         assertThat(deserializedObject).isEqualTo(expected)
     }
 
     @Test
-    fun `should serialize Dictionary`() {
-        val dict = dictionary {
+    fun `should serialize Struct`() {
+        val struct = struct {
             "value" to "test"
             "number" to 1
         }
 
-        val serializedValue = serializer.serialize(dict)
+        val serializedValue = serializer.serialize(struct)
 
         assertSerializedValue(serializedValue) {
             value = "{\"number\":1,\"value\":\"test\"}"
@@ -154,19 +154,19 @@ class SerializationApiTest {
     }
 
     @Test
-    fun `should serialize DictionaryList`() {
-        val dictList = dictionaryList {
-            dictionary {
+    fun `should serialize StrucList`() {
+        val structList = structList {
+            struct {
                 "value" to "test"
                 "number" to 1
             }
-            dictionary {
+            struct {
                 "value" to "test2"
                 "number" to 2
             }
         }
 
-        val serializedValue = serializer.serialize(dictList)
+        val serializedValue = serializer.serialize(structList)
 
         assertSerializedValue(serializedValue) {
             value = "[{\"number\":1,\"value\":\"test\"},{\"number\":2,\"value\":\"test2\"}]"
@@ -175,20 +175,20 @@ class SerializationApiTest {
     }
 
     @Test
-    fun `should deserialize from DictionaryList`() {
-        val dictList = dictionaryList {
-            dictionary {
+    fun `should deserialize from StrucList`() {
+        val structList = structList {
+            struct {
                 "value" to "test"
                 "number" to 1
             }
-            dictionary {
+            struct {
                 "value" to "test2"
                 "number" to 2
             }
         }
-        val serializedValue = serializer.serialize(dictList)
+        val serializedValue = serializer.serialize(structList)
 
-        val deserializedObject = serializer.deserialize(serializedValue, DictionaryList::class.java)
+        val deserializedObject = serializer.deserialize(serializedValue, StructList::class.java)
 
         val expected = listOf(
             mapOf("value" to "test", "number" to 1),
@@ -236,13 +236,13 @@ class SerializationApiTest {
     }
 
     @Test
-    fun `should not throw exception for missing fields in dictionary`() {
-        val dict = dictionary {
+    fun `should not throw exception for missing fields in struct`() {
+        val struct = struct {
             "error" to null
             "result" to "OK"
         }
 
-        val deserializedObject = serializer.fromDictionary(dict, OnlyResultField::class.java)
+        val deserializedObject = serializer.fromStruct(struct, OnlyResultField::class.java)
 
         assertThat(deserializedObject).isEqualTo(OnlyResultField("OK"))
     }

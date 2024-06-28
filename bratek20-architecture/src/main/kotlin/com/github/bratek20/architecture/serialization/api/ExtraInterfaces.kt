@@ -10,8 +10,8 @@ interface Serializer {
     @Throws(DeserializationException::class)
     fun <T> deserialize(serializedValue: SerializedValue, type: Class<T>): T
 
-    fun asDictionary(value: Any): Dictionary
+    fun asStruct(value: Any): Struct
 
     @Throws(DeserializationException::class)
-    fun <T> fromDictionary(dictionary: Dictionary, type: Class<T>): T
+    fun <T> fromStruct(struct: Struct, type: Class<T>): T
 }

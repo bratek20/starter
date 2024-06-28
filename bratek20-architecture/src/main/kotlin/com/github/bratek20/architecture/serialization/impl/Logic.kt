@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.core.JacksonException
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.github.bratek20.architecture.serialization.api.*
 
@@ -50,12 +49,12 @@ class SerializerLogic: Serializer {
         return matchResult?.groups?.get(1)?.value ?: "unknown"
     }
 
-    override fun asDictionary(value: Any): Dictionary {
+    override fun asStruct(value: Any): Struct {
         val tmp = serialize(value)
-        return deserialize(tmp, Dictionary::class.java)
+        return deserialize(tmp, Struct::class.java)
     }
 
-    override fun <T> fromDictionary(dictionary: Dictionary, type: Class<T>): T {
-        return deserialize(serialize(dictionary), type)
+    override fun <T> fromStruct(struct: Struct, type: Class<T>): T {
+        return deserialize(serialize(struct), type)
     }
 }

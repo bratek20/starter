@@ -4,42 +4,42 @@ import com.github.bratek20.architecture.serialization.api.*
 import com.github.bratek20.architecture.serialization.context.SerializationFactory
 import org.assertj.core.api.Assertions.assertThat
 
-typealias ExpectedDictionary = DictionaryBuilder.() -> Unit
+typealias ExpectedStruct = StructBuilder.() -> Unit
 
-fun assertDictionaryContains(given: Dictionary, expectedInit: DictionaryBuilder.() -> Unit) {
-    val expected = dictionary(expectedInit)
-    assertDictionaryContains(given, expected)
+fun assertStructContains(given: Struct, expectedInit: StructBuilder.() -> Unit) {
+    val expected = struct(expectedInit)
+    assertStructContains(given, expected)
 }
 
-fun assertDictionaryContains(given: Dictionary, expected: Dictionary) {
+fun assertStructContains(given: Struct, expected: Struct) {
     expected.forEach { (key, value) ->
-        if (value is Dictionary) {
-            assertDictionaryContains(given[key] as Dictionary, value)
+        if (value is Struct) {
+            assertStructContains(given[key] as Struct, value)
         } else {
             assertThat(given[key]).isEqualTo(value)
         }
     }
 }
 
-fun assertDictionaryEquals(given: Dictionary, expectedInit: DictionaryBuilder.() -> Unit) {
-    val expected = dictionary(expectedInit)
-    assertDictionaryEquals(given, expected)
+fun assertStructEquals(given: Struct, expectedInit: StructBuilder.() -> Unit) {
+    val expected = struct(expectedInit)
+    assertStructEquals(given, expected)
 }
 
-fun assertDictionaryEquals(given: Dictionary, expected: Dictionary) {
+fun assertStructEquals(given: Struct, expected: Struct) {
     assertThat(given).isEqualTo(expected)
 }
 
-fun assertSerializedValueAsDictionary(given: SerializedValue, expected: ExpectedDictionary) {
+fun assertSerializedValueAsStruct(given: SerializedValue, expected: ExpectedStruct) {
     val serializer = SerializationFactory.createSerializer()
-    assertDictionaryEquals(serializer.deserialize(given, Dictionary::class.java), expected)
+    assertStructEquals(serializer.deserialize(given, Struct::class.java), expected)
 }
 
-fun assertSerializedValueAsDictionaryList(given: SerializedValue, expected: List<ExpectedDictionary>) {
+fun assertSerializedValueAsStructList(given: SerializedValue, expected: List<ExpectedStruct>) {
     val serializer = SerializationFactory.createSerializer()
-    val actual = serializer.deserialize(given, DictionaryList::class.java)
+    val actual = serializer.deserialize(given, StructList::class.java)
     assertThat(actual).hasSize(expected.size)
-    actual.forEachIndexed { index, dictionary ->
-        assertDictionaryEquals(dictionary, expected[index])
+    actual.forEachIndexed { index, struct ->
+        assertStructEquals(struct, expected[index])
     }
 }
