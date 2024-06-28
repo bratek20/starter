@@ -15,12 +15,15 @@ class WithXClass(
     val x: X
 )
 
+class WithXClassSet(
+    val x: Set<X>
+)
+
 class SomeModuleContextModule: ContextModule {
     override fun apply(builder: ContextBuilder) {
         builder.setClass(SomeClass::class.java)
     }
 }
-
 
 class WithValue(val value: String)
 
@@ -158,5 +161,15 @@ abstract class ContextApiTest {
         }
         .isInstanceOf(DependentClassNotFoundInContextException::class.java)
         .hasMessage("Class X needed by class WithXClass not found")
+    }
+
+    @Test
+    fun `should inject empty set`() {
+        val obj = createInstance()
+            .setClass(WithXClassSet::class.java)
+            .build()
+            .get(WithXClassSet::class.java)
+
+        assertThat(obj.x).isEmpty()
     }
 }

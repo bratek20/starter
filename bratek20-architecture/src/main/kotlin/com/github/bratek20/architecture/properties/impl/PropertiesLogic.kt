@@ -46,6 +46,10 @@ class PropertiesLogic(
         return list.firstOrNull { key.idProvider(it) == id }
     }
 
+    override fun addSource(source: PropertiesSource) {
+        //TODO("Not yet implemented")
+    }
+
     private fun findSourceWithKeyName(keyName: String): PropertiesSource? {
         return sources.firstOrNull {
             it.getAllKeys().contains(keyName)
