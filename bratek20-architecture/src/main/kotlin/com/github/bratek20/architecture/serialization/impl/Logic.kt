@@ -53,7 +53,7 @@ class SerializerLogic: Serializer {
     private fun handleJacksonException(e: JacksonException): DeserializationException {
         val internalMsg = e.message ?: ""
         val missingFieldName = extractMissingFieldName(internalMsg)
-        return DeserializationException("Failed to deserialize value, missing value for field: $missingFieldName")
+        return DeserializationException("Deserialization failed: missing value for field `$missingFieldName`")
     }
 
     private fun extractMissingFieldName(message: String): String {

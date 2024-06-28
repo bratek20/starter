@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.github.bratek20.architecture.exceptions.ShouldNeverHappenException
 import com.github.bratek20.architecture.properties.api.*
+import com.github.bratek20.architecture.serialization.api.DeserializationException
 import com.github.bratek20.architecture.serialization.api.SerializedValue
 import com.github.bratek20.architecture.serialization.impl.SerializerLogic
 import kotlin.reflect.KClass
@@ -23,20 +24,20 @@ class PropertiesLogic(
 
         val keyValue = source.getValue(key.name)
         if (key is ObjectPropertyKey<T>) {
-            if (isListWithElementType(keyValue, key.type)) {
+            if (isListWithElementType(keyValue, key.type) == null) {
                 throw PropertyKeyTypeException("Property `${key.name}` is a list but was requested as object")
             }
-            if (!isObjectOfType(keyValue, key.type)) {
-                throw PropertyKeyTypeException("Property `${key.name}` is not object of type `${key.type.simpleName}`")
+            isObjectOfType(keyValue, key.type)?.let {
+                throw PropertyKeyTypeException("Property `${key.name}` is not object of type `${key.type.simpleName}`: $it")
             }
             return getObjectWithType(keyValue, key.type)
         }
         if (key is ListPropertyKey<*>) {
-            if (isObjectOfType(keyValue, key.elementType)) {
+            if (isObjectOfType(keyValue, key.elementType) == null) {
                 throw PropertyKeyTypeException("Property `${key.name}` is an object but was requested as list")
             }
-            if (!isListWithElementType(keyValue, key.elementType)) {
-                throw PropertyKeyTypeException("Property `${key.name}` is not list with element type `${key.elementType.simpleName}`")
+            isListWithElementType(keyValue, key.elementType)?.let {
+                throw PropertyKeyTypeException("Property `${key.name}` is not list with element type `${key.elementType.simpleName}`: $it")
             }
             return getListWithElementType(keyValue, key.elementType) as T
         }
@@ -59,29 +60,29 @@ class PropertiesLogic(
         }
     }
 
-    private val objectMapper = ObjectMapper()
-        .registerKotlinModule()
-
     private val serializer = SerializerLogic()
 
-    private fun <T: Any> isListWithElementType(value: SerializedValue, type: KClass<T>): Boolean {
+    private fun <T: Any> isListWithElementType(value: SerializedValue, type: KClass<T>): String? {
         return try {
             getListWithElementType(value, type)
-            true
-        } catch (e: Exception) {
-            false
+            null
+        } catch (e: DeserializationException) {
+            extractCause(e)
         }
     }
 
-
-
-    private fun <T: Any> isObjectOfType(value: SerializedValue, type: KClass<T>): Boolean {
+    private fun <T: Any> isObjectOfType(value: SerializedValue, type: KClass<T>): String? {
         return try {
             getObjectWithType(value, type)
-            true
-        } catch (e: Exception) {
-            false
+            null
+        } catch (e: DeserializationException) {
+            extractCause(e)
         }
+    }
+
+    private fun extractCause(e: DeserializationException): String {
+        val cause = e.message!!.replace("Deserialization failed: ", "")
+        return cause
     }
 
     private fun <T: Any> getListWithElementType(value: SerializedValue, type: KClass<T>): List<T> {

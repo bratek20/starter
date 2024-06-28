@@ -118,7 +118,7 @@ class SerializationApiTest {
             { serializer.deserialize(serializedValue, TestObject::class.java) },
             {
                 type = DeserializationException::class
-                message = "Failed to deserialize value, missing value for field: value"
+                message = "Deserialization failed: missing value for field `value`"
             }
         )
     }
@@ -133,7 +133,7 @@ class SerializationApiTest {
             { serializer.deserializeList(serializedValue, TestObject::class.java) },
             {
                 type = DeserializationException::class
-                message = "Failed to deserialize value, missing value for field: value"
+                message = "Deserialization failed: missing value for field `value`"
             }
         )
     }
@@ -147,7 +147,7 @@ class SerializationApiTest {
             { serializer.fromStruct(struct, TestObject::class.java) },
             {
                 type = DeserializationException::class
-                message = "Failed to deserialize value, missing value for field: value"
+                message = "Deserialization failed: missing value for field `value`"
             }
         )
     }

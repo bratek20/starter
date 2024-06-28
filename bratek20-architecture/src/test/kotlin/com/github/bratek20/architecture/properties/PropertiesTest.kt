@@ -150,7 +150,7 @@ class PropertiesTest {
                 { properties.get(otherObjectKey) },
                 {
                     type = PropertyKeyTypeException::class
-                    message = "Property `otherObject` is not object of type `OtherProperty`"
+                    message = "Property `otherObject` is not object of type `OtherProperty`: missing value for field `otherValue`"
                 }
             )
 
@@ -160,7 +160,7 @@ class PropertiesTest {
                 { properties.get(otherListKey) },
                 {
                     type = PropertyKeyTypeException::class
-                    message = "Property `otherList` is not list with element type `OtherProperty`"
+                    message = "Property `otherList` is not list with element type `OtherProperty`: missing value for field `otherValue`"
                 }
             )
         }
