@@ -170,5 +170,16 @@ class PropertiesTest {
 
             assertThat(givenProp).isEqualTo(SomeProperty("x"))
         }
+
+        @Test
+        fun shouldDetectSource() {
+            val source = InMemoryPropertiesSource("source")
+            source.set(ObjectPropertyKey("key", SomeProperty::class), SomeProperty("x"))
+            properties.addSource(source)
+
+            val givenProp = properties.get(ObjectPropertyKey("key", SomeProperty::class))
+
+            assertThat(givenProp).isEqualTo(SomeProperty("x"))
+        }
     }
 }

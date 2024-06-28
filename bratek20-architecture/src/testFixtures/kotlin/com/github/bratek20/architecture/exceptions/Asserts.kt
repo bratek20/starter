@@ -4,6 +4,7 @@ import io.kotest.assertions.asClue
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldStartWith
+import io.kotest.matchers.types.instanceOf
 import kotlin.reflect.KClass
 
 data class ExpectedException(
@@ -19,7 +20,7 @@ fun assertApiExceptionThrown(block: () -> Unit, init: ExpectedException.() -> Un
     }
 
     "Checking exception ${thrownException.javaClass} with message: ${thrownException.message}".asClue {
-        thrownException::class shouldBe ApiException::class
+        thrownException shouldBe instanceOf(ApiException::class)
     }
 
     expected.type?.let {

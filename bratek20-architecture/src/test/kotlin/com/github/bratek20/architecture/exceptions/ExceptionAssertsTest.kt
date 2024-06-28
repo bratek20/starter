@@ -4,6 +4,18 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 class ExceptionAssertsTest {
+    class MyApiException: ApiException()
+
+    @Test
+    fun `should assert exception with type`() {
+        assertApiExceptionThrown(
+            { throw MyApiException() },
+            {
+                type = MyApiException::class
+            }
+        )
+    }
+
     @Test
     fun `should assert exception with message`() {
         assertApiExceptionThrown(
@@ -13,6 +25,7 @@ class ExceptionAssertsTest {
             }
         )
     }
+
 
     @Disabled("Only for manual testing of assertion message")
     @Test

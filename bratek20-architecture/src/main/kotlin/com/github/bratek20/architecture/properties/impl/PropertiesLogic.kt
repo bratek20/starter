@@ -1,9 +1,7 @@
 package com.github.bratek20.architecture.properties.impl
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import com.github.bratek20.architecture.exceptions.ApiException
 import com.github.bratek20.architecture.exceptions.ShouldNeverHappenException
 import com.github.bratek20.architecture.properties.api.*
 import com.github.bratek20.architecture.serialization.api.SerializedValue
@@ -11,12 +9,16 @@ import kotlin.reflect.KClass
 
 
 class PropertiesLogic(
-    private val sources: Set<PropertiesSource>
+    private val initialSources: Set<PropertiesSource>
 ) : Properties {
+    private val addedSources = mutableListOf<PropertiesSource>()
+
+    private val allSources: Set<PropertiesSource>
+        get() = initialSources + addedSources
 
     override fun <T : Any> get(key: TypedPropertyKey<T>): T {
         val source = findSourceWithKeyName(key.name)
-            ?: throw PropertyNotFoundException("Property `${key.name}` not found, sources: ${sources.map { it.getName().value }}")
+            ?: throw PropertyNotFoundException("Property `${key.name}` not found, sources: ${allSources.map { it.getName().value }}")
 
         val keyValue = source.getValue(key.name)
         if (key is ObjectPropertyKey<T>) {
@@ -47,11 +49,11 @@ class PropertiesLogic(
     }
 
     override fun addSource(source: PropertiesSource) {
-        //TODO("Not yet implemented")
+        addedSources.add(source)
     }
 
     private fun findSourceWithKeyName(keyName: String): PropertiesSource? {
-        return sources.firstOrNull {
+        return allSources.firstOrNull {
             it.getAllKeys().contains(keyName)
         }
     }
