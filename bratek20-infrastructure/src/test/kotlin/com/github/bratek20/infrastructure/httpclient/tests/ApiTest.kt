@@ -13,13 +13,13 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class HttpClientApiTest {
-    private var server: WireMockServer? = null
-    private var client: HttpClient? = null
+    private lateinit var server: WireMockServer
+    private lateinit var client: HttpClient
 
     @BeforeEach
     fun setup() {
         server = WireMockServer(8080)
-        server!!.start()
+        server.start()
 
         client = someContextBuilder()
             .withModules(HttpClientImpl())
@@ -29,17 +29,14 @@ class HttpClientApiTest {
 
     @AfterEach
     fun clean() {
-        if (server != null) {
-            server!!.stop()
-        }
+        server.stop()
     }
 
-    @JvmRecord
-    internal data class ExampleBody(val message: String)
+    data class ExampleBody(val message: String)
 
     @Test
     fun shouldSupportGet() {
-        server!!.stubFor(
+        server.stubFor(
             WireMock.get(WireMock.urlEqualTo("/get"))
                 .willReturn(
                     WireMock.aResponse()
@@ -49,16 +46,16 @@ class HttpClientApiTest {
                 )
         )
 
-        val response = client!!.get("/get")
+        val response = client.get("/get")
 
-        Assertions.assertThat(response!!.statusCode).isEqualTo(200)
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(200)
         Assertions.assertThat(response.getBody(ExampleBody::class.java))
             .isEqualTo(ExampleBody("Hello World"))
     }
 
     @Test
     fun shouldSupportPost() {
-        server!!.stubFor(
+        server.stubFor(
             WireMock.post(WireMock.urlEqualTo("/post"))
                 .withRequestBody(WireMock.equalToJson("{\"message\": \"Request\"}"))
                 .willReturn(
@@ -69,9 +66,9 @@ class HttpClientApiTest {
                 )
         )
 
-        val response = client!!.post("/post", ExampleBody("Request"))
+        val response = client.post("/post", ExampleBody("Request"))
 
-        Assertions.assertThat(response!!.statusCode).isEqualTo(200)
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(200)
         Assertions.assertThat(response.getBody(ExampleBody::class.java))
             .isEqualTo(ExampleBody("Response"))
     }

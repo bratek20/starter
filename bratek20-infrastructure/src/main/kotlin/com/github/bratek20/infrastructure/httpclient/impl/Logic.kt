@@ -1,62 +1,71 @@
 package com.github.bratek20.infrastructure.httpclient.impl
 
+import com.github.bratek20.architecture.serialization.api.SerializationType
+import com.github.bratek20.architecture.serialization.api.SerializedValue
+import com.github.bratek20.architecture.serialization.api.Serializer
+import com.github.bratek20.architecture.serialization.context.SerializationFactory
 import com.github.bratek20.infrastructure.httpclient.api.*
+import org.springframework.http.HttpEntity
+import org.springframework.http.HttpMethod
+import org.springframework.http.ResponseEntity
+import org.springframework.web.client.RestTemplate
 
 class HttpClientFactoryLogic: HttpClientFactory {
     override fun create(baseUrl: String): HttpClient {
-        TODO("Not yet implemented")
+        return HttpClientLogic(baseUrl)
     }
 }
 
-//@RequiredArgsConstructor
-//public class HttpClientImpl implements HttpClient {
-//    private final String baseUrl;
-//    private final RestTemplate restTemplate = new RestTemplate();
-//
-//    @Override
-//    public HttpResponse get(String path) {
-//        ResponseEntity<String> responseEntity = restTemplate.exchange(
-//                getFullUrl(path),
-//        HttpMethod.GET,
-//        null,
-//        String.class
-//        );
-//
-//        return new HttpResponseImpl(responseEntity.getStatusCode().value(), responseEntity.getBody());
-//    }
-//
-//    @Override
-//    public <T> HttpResponse post(String path, T body) {
-//        ResponseEntity<String> responseEntity = restTemplate.exchange(
-//                getFullUrl(path),
-//        HttpMethod.POST,
-//        new HttpEntity<>(body),
-//        String.class
-//        );
-//
-//        return new HttpResponseImpl(responseEntity.getStatusCode().value(), responseEntity.getBody());
-//    }
-//
-//    private String getFullUrl(String path) {
-//        return baseUrl + path;
-//    }
-//}
-//
-//@RequiredArgsConstructor
-//public class HttpResponseImpl implements HttpResponse {
-//    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-//
-//    private final int statusCode;
-//    private final String body;
-//
-//    @Override
-//    public int getStatusCode() {
-//        return statusCode;
-//    }
-//
-//    @Override
-//    @SneakyThrows
-//    public <T> T getBody(Class<T> clazz) {
-//        return OBJECT_MAPPER.readValue(body, clazz);
-//    }
-//}
+class HttpClientLogic(
+    private val baseUrl: String,
+) : HttpClient {
+    private val restTemplate: RestTemplate = RestTemplate()
+
+    override fun get(path: String): HttpResponse {
+        val responseEntity: ResponseEntity<String> = restTemplate.exchange(
+            getFullUrl(path),
+            HttpMethod.GET,
+            null,
+            String::class.java
+        )
+
+        return HttpResponseLogic(responseEntity.statusCode.value(), responseEntity.body)
+    }
+
+    override fun <T> post(path: String, body: T): HttpResponse {
+        val responseEntity: ResponseEntity<String> = restTemplate.exchange(
+            getFullUrl(path),
+            HttpMethod.POST,
+            HttpEntity(body),
+            String::class.java
+        )
+
+        return HttpResponseLogic(responseEntity.statusCode.value(), responseEntity.body)
+    }
+
+    private fun getFullUrl(path: String): String {
+        return baseUrl + path
+    }
+}
+
+class HttpResponseLogic(
+    private val statusCode: Int,
+    private val body: String?,
+) : HttpResponse {
+    override fun getStatusCode(): Int {
+        return statusCode
+    }
+
+    override fun <T> getBody(clazz: Class<T>): T? {
+        return body?.let {
+            SERIALIZER.deserialize(
+                SerializedValue.create(it, SerializationType.JSON),
+                clazz
+            )
+        }
+    }
+
+    companion object {
+        private val SERIALIZER: Serializer = SerializationFactory.createSerializer()
+    }
+}
