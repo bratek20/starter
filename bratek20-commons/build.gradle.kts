@@ -16,9 +16,9 @@ dependencies {
     api(libs.commons.cli)
 
     // logging
-    implementation(libs.log4j.api)
-    implementation(libs.log4j.core)
-    implementation(libs.log4j.slf4j.impl)
+//    implementation(libs.log4j.api)
+//    implementation(libs.log4j.core)
+//    implementation(libs.log4j.slf4j.impl)
 
     testImplementation(libs.rest.assured)
 

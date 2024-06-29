@@ -1,30 +1,30 @@
 package pl.bratek20.commons.http.api;
 
+import com.github.bratek20.infrastructure.httpclient.api.HttpClient;
+import com.github.bratek20.infrastructure.httpclient.impl.HttpClientFactoryLogic;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import com.github.bratek20.architecture.tests.ApiTest;
-import pl.bratek20.tests.InterfaceTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public abstract class HttpApiTest extends InterfaceTest<HttpClientFactory> {
+class HttpApiTest {
 
     private WireMockServer server;
     private HttpClient client;
 
-    @Override
-    protected void setup() {
-        super.setup();
+    @BeforeEach
+    void setup() {
         server = new WireMockServer(8080);
         server.start();
 
-        client = instance.create("http://localhost:8080");
+        client = new HttpClientFactoryLogic().create("http://localhost:8080");
     }
 
-    @Override
-    protected void clean() {
-        super.clean();
+    @AfterEach
+    void clean() {
         if (server != null) {
             server.stop();
         }

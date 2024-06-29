@@ -2,10 +2,6 @@
 
 package com.github.bratek20.infrastructure.httpclient.api
 
-interface HttpClient {
-    fun get(url: String): String
-}
-
 interface HttpClientFactory {
-    fun create(): HttpClient
+    fun create(baseUrl: String): HttpClient
 }

@@ -1,6 +1,6 @@
-Interfaces
-    HttpClient
-        get(url: string): string
+ExternalTypes
+    HttpClient // TODO-REF hla missing generic types support
 
+Interfaces
     HttpClientFactory
-        create(): HttpClient
+        create(baseUrl: string): HttpClient

@@ -9,7 +9,6 @@ import com.github.bratek20.infrastructure.httpclient.impl.*
 class HttpClientImpl: ContextModule {
     override fun apply(builder: ContextBuilder) {
         builder
-            .setImpl(HttpClient::class.java, HttpClientLogic::class.java)
             .setImpl(HttpClientFactory::class.java, HttpClientFactoryLogic::class.java)
     }
 }
