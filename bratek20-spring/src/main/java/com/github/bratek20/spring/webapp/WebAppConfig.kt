@@ -9,9 +9,4 @@ import org.springframework.context.annotation.Import
 @Import(
     BaseConfig::class
 )
-internal open class WebAppConfig {
-    @Bean
-    open fun healthController(): HealthController {
-        return HealthController()
-    }
-}
+internal open class WebAppConfig

@@ -1,31 +1,34 @@
 package com.github.bratek20.spring.webapp
 
 import com.github.bratek20.architecture.context.spring.SpringContext
-import org.springframework.boot.SpringApplication
+import com.github.bratek20.architecture.context.spring.SpringContextBuilder
+import org.springframework.boot.builder.SpringApplicationBuilder
 
 class SpringWebApp(
-    private val configuration: Class<*>? = null,
+    private val contextBuilder: SpringContextBuilder = SpringContextBuilder(),
     private val args: Array<String> = emptyArray(),
     private val port: Int = 8080
 ) {
 
     fun run(): SpringContext {
-        val configs = mutableListOf<Class<*>>(WebAppConfig::class.java)
-        configuration?.let { configs.add(it) }
+        val parentContext = contextBuilder
+            .setClass(HealthController::class.java)
+            .build().value
 
-        val app = SpringApplication(*configs.toTypedArray())
-        val context = app.run(*args, "--server.port=$port")
+        val context = SpringApplicationBuilder(WebAppConfig::class.java)
+            .parent(parentContext)
+            .run(*args, "--server.port=$port")
 
         return SpringContext(context)
     }
 
     companion object {
         fun run(
-            config: Class<*>? = null,
+            contextBuilder: SpringContextBuilder = SpringContextBuilder(),
             args: Array<String> = emptyArray(),
             port: Int = 8080
         ): SpringContext {
-            val app = SpringWebApp(config, args, port)
+            val app = SpringWebApp(contextBuilder, args, port)
             return app.run()
         }
     }
