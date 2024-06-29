@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 
 typealias ExpectedStruct = StructBuilder.() -> Unit
 
-fun assertStructContains(given: Struct, expectedInit: StructBuilder.() -> Unit) {
+fun assertStructContains(given: Struct, expectedInit: ExpectedStruct) {
     val expected = struct(expectedInit)
     assertStructContains(given, expected)
 }
