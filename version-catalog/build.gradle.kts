@@ -3,12 +3,43 @@ plugins {
     `maven-publish`
 }
 
+//changed by script
 val catalogVersion = "1.0.24"
 val bratek20StarterVersion = "1.0.24"
+
+//changed manually
+val bratek20LogsVersion = "1.0.0"
 val bratek20PluginsVersion = "1.0.2"
 
 catalog {
     versionCatalog {
+        //bratek20 versions
+        version("bratek20-starter", bratek20StarterVersion)
+        version("bratek20-logs", bratek20LogsVersion)
+        version("bratek20-plugins", bratek20PluginsVersion)
+
+        //bratek20 dependencies
+        library("bratek20-starter", "com.github.bratek20", "bratek20-starter").versionRef("bratek20-starter")
+        library("bratek20-architecture", "com.github.bratek20", "bratek20-architecture").versionRef("bratek20-starter")
+        library("bratek20-infrastructure", "com.github.bratek20", "bratek20-infrastructure").versionRef("bratek20-starter")
+        library("bratek20-spring", "com.github.bratek20", "bratek20-spring").versionRef("bratek20-starter")
+
+        library("break20-logs-core", "com.github.bratek20.logs", "logs-core").versionRef("bratek20-logs")
+        library("bratek20-logs-logback", "com.github.bratek20.logs", "logs-logback").versionRef("bratek20-logs")
+        library("bratek20-logs-log4j2", "com.github.bratek20.logs", "logs-log4j2").versionRef("bratek20-logs")
+
+        //bratek20 plugins
+        plugin("bratek20-kotlin-library-conventions", "com.github.bratek20.kotlin-library-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-kotlin-conventions", "com.github.bratek20.kotlin-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-internal-kotlin-library-conventions", "com.github.bratek20.internal-kotlin-library-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-java-conventions", "com.github.bratek20.java-conventions").versionRef("bratek20-plugins")
+
+        plugin("bratek20-base-conventions", "com.github.bratek20.base-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-spring-app-conventions", "com.github.bratek20.spring-app-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-library-conventions", "com.github.bratek20.library-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-simple-library-conventions", "com.github.bratek20.simple-library-conventions").versionRef("bratek20-plugins")
+
+        //versions
         version("java", "17")
         version("kotlin", "1.9.23")
 
@@ -30,9 +61,6 @@ catalog {
         version("jackson", "2.17.0")
         version("guice", "7.0.0")
         version("guice-multibindings", "4.2.3")
-
-        version("bratek20-starter", bratek20StarterVersion)
-        version("bratek20-plugins", bratek20PluginsVersion)
 
         //plugins
         library("kotlin-jvm-plugin", "org.jetbrains.kotlin.jvm", "org.jetbrains.kotlin.jvm.gradle.plugin").versionRef("kotlin")
@@ -82,31 +110,10 @@ catalog {
         library("wiremock", "com.github.tomakehurst", "wiremock").version("3.0.0")
         library("rest-assured", "io.rest-assured", "rest-assured").version("5.3.0")
 
-        //bratek20 dependencies
-        library("bratek20-starter", "com.github.bratek20", "bratek20-starter").versionRef("bratek20-starter")
-        library("bratek20-architecture", "com.github.bratek20", "bratek20-architecture").versionRef("bratek20-starter")
-        library("bratek20-infrastructure", "com.github.bratek20", "bratek20-infrastructure").versionRef("bratek20-starter")
-        library("bratek20-spring", "com.github.bratek20", "bratek20-spring").versionRef("bratek20-starter")
-
-        library("break20-logs-core", "com.github.bratek20.logs", "logs-core").versionRef("bratek20-starter")
-        library("bratek20-logs-logback", "com.github.bratek20.logs", "logs-logback").versionRef("bratek20-starter")
-        library("bratek20-logs-log4j2", "com.github.bratek20.logs", "logs-log4j2").versionRef("bratek20-starter")
-        library("bratek20-utils", "com.github.bratek20", "bratek20-utils").versionRef("bratek20-starter")
 
         //plugins
         plugin("protobuf", "com.google.protobuf").version("0.9.4")
         plugin("jib", "com.google.cloud.tools.jib").version("3.3.1")
-
-        //bratek20 plugins
-        plugin("bratek20-kotlin-library-conventions", "com.github.bratek20.kotlin-library-conventions").versionRef("bratek20-plugins")
-        plugin("bratek20-kotlin-conventions", "com.github.bratek20.kotlin-conventions").versionRef("bratek20-plugins")
-        plugin("bratek20-internal-kotlin-library-conventions", "com.github.bratek20.internal-kotlin-library-conventions").versionRef("bratek20-plugins")
-        plugin("bratek20-java-conventions", "com.github.bratek20.java-conventions").versionRef("bratek20-plugins")
-
-        plugin("bratek20-base-conventions", "com.github.bratek20.base-conventions").versionRef("bratek20-plugins")
-        plugin("bratek20-spring-app-conventions", "com.github.bratek20.spring-app-conventions").versionRef("bratek20-plugins")
-        plugin("bratek20-library-conventions", "com.github.bratek20.library-conventions").versionRef("bratek20-plugins")
-        plugin("bratek20-simple-library-conventions", "com.github.bratek20.simple-library-conventions").versionRef("bratek20-plugins")
     }
 }
 
