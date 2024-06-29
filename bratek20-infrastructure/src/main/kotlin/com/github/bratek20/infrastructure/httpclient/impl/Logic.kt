@@ -56,8 +56,8 @@ class HttpResponseLogic(
         return statusCode
     }
 
-    override fun <T> getBody(clazz: Class<T>): T? {
-        return body?.let {
+    override fun <T> getBody(clazz: Class<T>): T {
+        return body!!.let {
             SERIALIZER.deserialize(
                 SerializedValue.create(it, SerializationType.JSON),
                 clazz

@@ -1,39 +1,22 @@
 package com.github.bratek20.spring.webapp
 
-import com.github.bratek20.architecture.context.api.Context
-import com.github.bratek20.architecture.context.api.ContextModule
 import com.github.bratek20.architecture.context.spring.SpringContext
 import com.github.bratek20.architecture.context.spring.SpringContextBuilder
+import com.github.bratek20.infrastructure.httpserver.api.WebApp
+import com.github.bratek20.infrastructure.httpserver.api.WebAppContext
+import com.github.bratek20.infrastructure.httpserver.api.WebServerModule
 import org.springframework.boot.builder.SpringApplicationBuilder
 
-data class SpringWebServerModule(
-    val impl: ContextModule,
-    val controllers: List<Class<*>>,
-)
-
-class SpringWebAppContext(
-    private val context: SpringContext,
-    val port: Int,
-): Context {
-    override fun <T : Any> get(type: Class<T>): T {
-        return context.get(type)
-    }
-
-    override fun <T : Any> getMany(type: Class<T>): Set<T> {
-        return context.getMany(type)
-    }
-}
-
 class SpringWebApp(
-    private val modules: List<SpringWebServerModule>,
+    private val modules: List<WebServerModule>,
     private val args: Array<String> = emptyArray(),
     private val port: Int = 8080,
     private val useRandomPort: Boolean = false
-) {
+): WebApp {
 
-    fun run(): SpringWebAppContext {
-        val allImpls = modules.map { it.impl }.toTypedArray()
-        val allControllers = modules.flatMap { it.controllers }.toTypedArray()
+    override fun run(): WebAppContext {
+        val allImpls = modules.map { it.getImpl() }.toTypedArray()
+        val allControllers = modules.flatMap { it.getControllers() }.toTypedArray()
 
         val parentContext = SpringContextBuilder()
             .withModules(*allImpls)
@@ -45,7 +28,7 @@ class SpringWebApp(
             .parent(parentContext.value)
             .run(*args, "--server.port=$finalPort")
 
-        return SpringWebAppContext(
+        return WebAppContext(
             context = SpringContext(context),
             port = finalPort,
         )
@@ -61,11 +44,11 @@ class SpringWebApp(
 
     companion object {
         fun run(
-            modules: List<SpringWebServerModule> = emptyList(),
+            modules: List<WebServerModule> = emptyList(),
             args: Array<String> = emptyArray(),
             port: Int = 8080,
             useRandomPort: Boolean = false
-        ): SpringWebAppContext {
+        ): WebAppContext {
             val app = SpringWebApp(modules, args, port, useRandomPort)
             return app.run()
         }

@@ -6,6 +6,8 @@ dependencies {
     implementation(project(":bratek20-architecture"))
     testImplementation(testFixtures(project(":bratek20-architecture")))
 
+    implementation(project(":bratek20-infrastructure"))
+
     implementation(platform(libs.spring.boot.dependencies))
 
     implementation("org.springframework.boot:spring-boot-starter-web")

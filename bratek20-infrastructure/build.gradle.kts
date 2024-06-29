@@ -11,4 +11,7 @@ dependencies {
     implementation("org.springframework:spring-web")
 
     testImplementation(libs.wiremock)
+
+    //http server
+    testFixturesImplementation(project(":bratek20-spring"))
 }

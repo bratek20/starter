@@ -2,6 +2,7 @@ package com.github.bratek20.spring.webapp
 
 import com.github.bratek20.architecture.context.api.ContextBuilder
 import com.github.bratek20.architecture.context.api.ContextModule
+import com.github.bratek20.infrastructure.httpserver.api.WebServerModule
 import io.restassured.RestAssured
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.jupiter.api.Test
@@ -34,19 +35,24 @@ class SomeModuleImpl: ContextModule {
     }
 }
 
-val SOME_MODULE_WEB_SERVER = SpringWebServerModule(
-    SomeModuleImpl(),
-    listOf(
-        SomeController::class.java
-    )
-)
+class SomeModuleWebServer: WebServerModule {
+    override fun getImpl(): ContextModule {
+        return SomeModuleImpl()
+    }
+
+    override fun getControllers(): List<Class<*>> {
+        return listOf(
+            SomeController::class.java
+        )
+    }
+}
 
 class ControllerIntegrationTest {
     @Test
     fun `should use controller added as class in arch context`() {
         val context = SpringWebApp.run(
             modules = listOf(
-                SOME_MODULE_WEB_SERVER
+                SomeModuleWebServer()
             ),
             useRandomPort = true
         )
