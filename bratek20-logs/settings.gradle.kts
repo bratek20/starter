@@ -1,6 +1,5 @@
 pluginManagement {
-    includeBuild("build-logic")
-    includeBuild("bratek20-logs")
+    includeBuild("../build-logic")
 }
 
 dependencyResolutionManagement {
@@ -29,16 +28,8 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "bratek20-starter"
+rootProject.name = "bratek20-logs"
 
-include("bratek20-architecture")
-include("bratek20-infrastructure")
-include("bratek20-spring")
-
-//include("bratek20-utils")
-
-// "Legacy" modules
-
-//include("bratek20-tests")
-//include("bratek20-commons")
-//include("spring-disabled")
+include(":logs-core")
+include(":logs-logback")
+include(":logs-log4j2")

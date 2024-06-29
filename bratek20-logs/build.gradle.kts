@@ -1,4 +1,4 @@
 subprojects {
     group = "com.github.bratek20.logs"
-    version = project.version
+    version = "1.0.25"
 }

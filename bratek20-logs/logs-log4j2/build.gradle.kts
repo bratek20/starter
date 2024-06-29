@@ -3,8 +3,8 @@ plugins {
 }
 
 dependencies {
-    api(project(":bratek20-logs:logs-core"))
-    testFixturesApi(testFixtures(project(":bratek20-logs:logs-core")))
+    api(project(":logs-core"))
+    testFixturesApi(testFixtures(project(":logs-core")))
 
     api(libs.logback.classic)
 }
