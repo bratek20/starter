@@ -1,4 +1,4 @@
-package pl.bratek20.spring.web;
+package pl.bratek20.spring.webapp;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

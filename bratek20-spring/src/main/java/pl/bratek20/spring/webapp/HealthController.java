@@ -1,4 +1,4 @@
-package pl.bratek20.spring.web;
+package pl.bratek20.spring.webapp;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

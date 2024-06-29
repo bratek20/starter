@@ -1,4 +1,4 @@
-package pl.bratek20.spring.integrations
+package pl.bratek20.spring.app
 
 import com.github.bratek20.architecture.context.spring.PostProcessorForLegacyConfig
 import com.github.bratek20.architecture.context.spring.SpringContextBuilder
@@ -15,8 +15,6 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import org.springframework.core.env.ConfigurableEnvironment
 import org.springframework.core.env.MapPropertySource
-import pl.bratek20.spring.app.SpringApp
-
 
 class TestBuilderProvider: SpringContextBuilderProvider {
     override fun provide(): SpringContextBuilder {
@@ -40,10 +38,10 @@ data class MyProperty(
     val someString: String
 )
 
-class SpringEnvironmentSourceTest {
+class SpringEnvironmentSourceIntegrationTest {
     @Test
     fun shouldReadPropertiesFromApplicationYaml() {
-        val context = SpringApp.run(TestConfig::class.java, emptyArray())
+        val context = SpringApp.run(TestConfig::class.java)
 
         val properties = context.get(Properties::class.java)
         val env = context.get(ConfigurableEnvironment::class.java)
