@@ -1,0 +1,6 @@
+Interfaces
+    HttpClient
+        get(url: string): string
+
+    HttpClientFactory
+        create(): HttpClient

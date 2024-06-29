@@ -1,0 +1,12 @@
+Enums
+    SerializationType
+        JSON
+
+ValueObjects
+    SerializedValue
+        value: string
+        type: SerializationType
+
+Interfaces
+    //Serializer
+        //serialize(value: any): SerializedValue

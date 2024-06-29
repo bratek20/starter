@@ -47,3 +47,4 @@ findProject(":bratek20-logs:logs-log4j2")?.name = "logs-log4j2"
 //include("bratek20-tests")
 //include("bratek20-commons")
 //include("spring-disabled")
+include("bratek20-infrastructure")
