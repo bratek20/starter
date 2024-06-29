@@ -1,6 +1,6 @@
 #!/bin/bash
 
-hlaFolderPath=../../hla/arch
+hlaFolderPath=../../hla/infra
 profileName=main
 moduleName=$1
 
