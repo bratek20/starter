@@ -8,9 +8,6 @@ dependencies {
 
     implementation(platform(libs.spring.boot.dependencies))
 
-    // to define config
-    api("org.springframework:spring-context")
-
     implementation("org.springframework.boot:spring-boot-starter-web")
     testFixturesImplementation("org.springframework.boot:spring-boot-starter-web")
 

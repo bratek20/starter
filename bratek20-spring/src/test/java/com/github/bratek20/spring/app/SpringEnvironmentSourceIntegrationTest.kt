@@ -1,8 +1,5 @@
 package com.github.bratek20.spring.app
 
-import com.github.bratek20.architecture.context.spring.PostProcessorForLegacyConfig
-import com.github.bratek20.architecture.context.spring.SpringContextBuilder
-import com.github.bratek20.architecture.context.spring.SpringContextBuilderProvider
 import com.github.bratek20.architecture.properties.api.ListPropertyKey
 import com.github.bratek20.architecture.properties.api.ObjectPropertyKey
 import com.github.bratek20.architecture.properties.api.Properties
@@ -11,27 +8,8 @@ import com.github.bratek20.architecture.properties.sources.spring.SpringEnvironm
 import com.github.bratek20.architecture.properties.sources.spring.SpringEnvironmentSourceImpl
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Import
 import org.springframework.core.env.ConfigurableEnvironment
 import org.springframework.core.env.MapPropertySource
-
-class TestBuilderProvider: SpringContextBuilderProvider {
-    override fun provide(): SpringContextBuilder {
-        return SpringContextBuilder()
-            .withModules(
-                PropertiesImpl(),
-                SpringEnvironmentSourceImpl("my.properties")
-            ) as SpringContextBuilder
-    }
-}
-
-@Configuration
-@Import(
-    TestBuilderProvider::class,
-    PostProcessorForLegacyConfig::class
-)
-open class TestConfig
 
 data class MyProperty(
     val someInt: Int,
@@ -41,7 +19,12 @@ data class MyProperty(
 class SpringEnvironmentSourceIntegrationTest {
     @Test
     fun shouldReadPropertiesFromApplicationYaml() {
-        val context = SpringApp.run(TestConfig::class.java)
+        val context = SpringApp.run(
+            modules = listOf(
+                PropertiesImpl(),
+                SpringEnvironmentSourceImpl("my.properties")
+            )
+        )
 
         val properties = context.get(Properties::class.java)
         val env = context.get(ConfigurableEnvironment::class.java)
