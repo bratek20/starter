@@ -1,4 +1,4 @@
-package pl.bratek20.spring.config
+package com.github.bratek20.spring.config
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration

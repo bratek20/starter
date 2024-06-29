@@ -1,7 +1,6 @@
-package pl.bratek20.spring.app
+package com.github.bratek20.spring.app
 
 import com.github.bratek20.architecture.context.spring.SpringContext
-import lombok.RequiredArgsConstructor
 import org.springframework.boot.WebApplicationType
 import org.springframework.boot.builder.SpringApplicationBuilder
 
@@ -11,7 +10,7 @@ class SpringApp(
 ) {
 
     fun run(): SpringContext {
-        val configs = mutableListOf<Class<*>>(SpringAppConfig::class.java)
+        val configs = mutableListOf<Class<*>>(AppConfig::class.java)
         configuration?.let { configs.add(it) }
 
         val context = SpringApplicationBuilder(*configs.toTypedArray())

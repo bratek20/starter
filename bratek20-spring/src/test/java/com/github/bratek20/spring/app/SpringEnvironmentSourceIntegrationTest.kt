@@ -1,4 +1,4 @@
-package pl.bratek20.spring.app
+package com.github.bratek20.spring.app
 
 import com.github.bratek20.architecture.context.spring.PostProcessorForLegacyConfig
 import com.github.bratek20.architecture.context.spring.SpringContextBuilder

@@ -1,4 +1,4 @@
-package pl.bratek20.spring.app
+package com.github.bratek20.spring.app
 
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
