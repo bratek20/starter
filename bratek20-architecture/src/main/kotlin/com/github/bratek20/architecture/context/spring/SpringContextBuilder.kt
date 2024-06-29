@@ -44,7 +44,9 @@ class SpringContextBuilder: AbstractContextBuilder() {
 
     override fun build(): SpringContext {
         val context = AnnotationConfigApplicationContext()
-        classes.forEach { context.register(it) }
+        classes.forEach {
+            context.register(it)
+        }
         objects.forEach {
             val suffix = UUID.randomUUID().toString()
             context.beanFactory.registerSingleton(it::class.java.name + suffix, it)
