@@ -85,6 +85,9 @@ catalog {
         //bratek20 dependencies
         library("bratek20-starter", "com.github.bratek20", "bratek20-starter").versionRef("bratek20-starter")
         library("bratek20-architecture", "com.github.bratek20", "bratek20-architecture").versionRef("bratek20-starter")
+        library("bratek20-infrastructure", "com.github.bratek20", "bratek20-infrastructure").versionRef("bratek20-starter")
+        library("bratek20-spring", "com.github.bratek20", "bratek20-spring").versionRef("bratek20-starter")
+
         library("break20-logs-core", "com.github.bratek20.logs", "logs-core").versionRef("bratek20-starter")
         library("bratek20-logs-logback", "com.github.bratek20.logs", "logs-logback").versionRef("bratek20-starter")
         library("bratek20-logs-log4j2", "com.github.bratek20.logs", "logs-log4j2").versionRef("bratek20-starter")
