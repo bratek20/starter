@@ -4,14 +4,23 @@ import io.restassured.RestAssured
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.boot.WebApplicationType
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.context.annotation.AnnotationConfigApplicationContext
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 class MyConfig
 
-
 class EmptyConfig
+
+
 
 class SpringWebAppTest {
 
@@ -43,6 +52,9 @@ class SpringWebAppTest {
         }
     }
 
+
+
+
     fun assertBeanRegistered(context: ConfigurableApplicationContext, beanName: String) {
         assertThat(context.containsBean(beanName)).isTrue()
 
@@ -58,6 +70,8 @@ class SpringWebAppTest {
 
         assertBeanRegistered(context.value, "healthController")
     }
+
+
 
     @Test
     fun `should run on different ports`() {
