@@ -32,11 +32,11 @@ class HttpClientLogic(
         return HttpResponseLogic(responseEntity.statusCode.value(), responseEntity.body)
     }
 
-    override fun <T> post(path: String, body: T): HttpResponse {
+    override fun <T> post(path: String, body: T?): HttpResponse {
         val responseEntity: ResponseEntity<String> = restTemplate.exchange(
             getFullUrl(path),
             HttpMethod.POST,
-            HttpEntity(body),
+            body?.let {  HttpEntity(body) },
             String::class.java
         )
 

@@ -72,4 +72,24 @@ class HttpClientApiTest {
         Assertions.assertThat(response.getBody(ExampleBody::class.java))
             .isEqualTo(ExampleBody("Response"))
     }
+
+    @Test
+    fun shouldSupportPostNullBody() {
+        server.stubFor(
+            WireMock.post(WireMock.urlEqualTo("/post"))
+                //.withRequestBody(WireMock.equalToJson("{\"message\": \"Request\"}"))
+                .willReturn(
+                    WireMock.aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withStatus(200)
+                        .withBody("{\"message\": \"Response\"}")
+                )
+        )
+
+        val response = client.post("/post", null)
+
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(200)
+        Assertions.assertThat(response.getBody(ExampleBody::class.java))
+            .isEqualTo(ExampleBody("Response"))
+    }
 }
