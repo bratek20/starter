@@ -17,12 +17,23 @@ import org.springframework.web.bind.annotation.RestController
 class HttpIntegrationTest {
     data class SomeValue(val value: String)
 
+    data class SomeClass(
+        private val value: String
+    ) {
+        fun getValue(): SomeValue {
+            return SomeValue(this.value)
+        }
+    }
+
+    data class SomeApiMirrorRequest(val x: SomeClass)
+    data class SomeApiMirrorResponse(val value: SomeClass)
+
     interface SomeApi {
-        fun mirror(x: SomeValue): SomeValue
+        fun mirror(x: SomeClass): SomeClass
     }
 
     class SomeApiLogic: SomeApi {
-        override fun mirror(x: SomeValue): SomeValue {
+        override fun mirror(x: SomeClass): SomeClass {
             return x
         }
     }
@@ -34,8 +45,8 @@ class HttpIntegrationTest {
         private val url: SomeWebServerUrl,
         private val factory: HttpClientFactory,
     ): SomeApi {
-        override fun mirror(x: SomeValue): SomeValue {
-            return factory.create(url.value).post("/mirror", x).getBody(SomeValue::class.java)
+        override fun mirror(x: SomeClass): SomeClass {
+            return factory.create(url.value).post("/mirror", SomeApiMirrorRequest(x)).getBody(SomeApiMirrorResponse::class.java).value
         }
     }
 
@@ -44,8 +55,8 @@ class HttpIntegrationTest {
         private val someApi: SomeApi,
     ) {
         @PostMapping("/mirror")
-        fun mirror(@RequestBody x: SomeValue): SomeValue {
-            return someApi.mirror(x)
+        fun mirror(@RequestBody request: SomeApiMirrorRequest): SomeApiMirrorResponse {
+            return SomeApiMirrorResponse(someApi.mirror(request.x))
         }
     }
 
@@ -97,9 +108,9 @@ class HttpIntegrationTest {
             .get(SomeApi::class.java)
 
         //when
-        val result = api.mirror(SomeValue("test"))
+        val result = api.mirror(SomeClass("test"))
 
         //then
-        assertThat(result).isEqualTo(SomeValue("test"))
+        assertThat(result).isEqualTo(SomeClass("test"))
     }
 }

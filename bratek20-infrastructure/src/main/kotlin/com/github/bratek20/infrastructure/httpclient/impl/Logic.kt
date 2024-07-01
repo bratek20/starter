@@ -3,6 +3,7 @@ package com.github.bratek20.infrastructure.httpclient.impl
 import com.github.bratek20.architecture.serialization.api.SerializationType
 import com.github.bratek20.architecture.serialization.api.SerializedValue
 import com.github.bratek20.architecture.serialization.api.Serializer
+import com.github.bratek20.architecture.serialization.api.Struct
 import com.github.bratek20.architecture.serialization.context.SerializationFactory
 import com.github.bratek20.infrastructure.httpclient.api.*
 import org.springframework.http.HttpEntity
@@ -32,19 +33,27 @@ class HttpClientLogic(
         return HttpResponseLogic(responseEntity.statusCode.value(), responseEntity.body)
     }
 
-    override fun <T> post(path: String, body: T?): HttpResponse {
+    override fun post(path: String, body: Any?): HttpResponse {
         val responseEntity: ResponseEntity<String> = restTemplate.exchange(
             getFullUrl(path),
             HttpMethod.POST,
-            body?.let {  HttpEntity(body) },
+            body?.let {  getHttpBody(body) },
             String::class.java
         )
 
         return HttpResponseLogic(responseEntity.statusCode.value(), responseEntity.body)
     }
 
+    private fun getHttpBody(body: Any): HttpEntity<Struct> {
+        return HttpEntity(SERIALIZER.asStruct(body))
+    }
+
     private fun getFullUrl(path: String): String {
         return baseUrl + path
+    }
+
+    companion object {
+        private val SERIALIZER: Serializer = SerializationFactory.createSerializer()
     }
 }
 

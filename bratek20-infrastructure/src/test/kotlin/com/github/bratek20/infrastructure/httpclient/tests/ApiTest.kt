@@ -3,11 +3,12 @@ package com.github.bratek20.infrastructure.httpclient.tests
 import com.github.bratek20.architecture.context.someContextBuilder
 import com.github.bratek20.infrastructure.httpclient.api.HttpClient
 import com.github.bratek20.infrastructure.httpclient.api.HttpClientFactory
+import com.github.bratek20.infrastructure.httpclient.api.HttpResponse
 import com.github.bratek20.infrastructure.httpclient.context.HttpClientImpl
-import com.github.bratek20.infrastructure.httpclient.impl.HttpClientFactoryLogic
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -32,64 +33,111 @@ class HttpClientApiTest {
         server.stop()
     }
 
-    data class ExampleBody(val message: String)
+    data class SomeValue(val value: String)
 
-    @Test
-    fun shouldSupportGet() {
+    data class SomeClass(
+        private val value: String,
+        private val amount: Int
+    ) {
+        fun getValue(): SomeValue {
+            return SomeValue(this.value)
+        }
+
+        fun getAmount(): Int {
+            return this.amount
+        }
+
+        companion object {
+            fun create(
+                value: SomeValue,
+                amount: Int
+            ): SomeClass {
+                return SomeClass(
+                    value = value.value,
+                    amount = amount
+                )
+            }
+        }
+    }
+
+    private fun stub(
+        testUrl: String,
+        post: Boolean = false,
+        withPostRequestBody: Boolean = true
+    ) {
+        var mapping = WireMock.get(WireMock.urlEqualTo(testUrl));
+        if (post) {
+            mapping = WireMock.post(WireMock.urlEqualTo("/post"))
+
+            if (withPostRequestBody) {
+                mapping.withRequestBody(WireMock.equalToJson("{\"value\": \"Some request\", \"amount\": 1}"))
+            }
+        }
+
         server.stubFor(
-            WireMock.get(WireMock.urlEqualTo("/get"))
+            mapping
                 .willReturn(
                     WireMock.aResponse()
                         .withHeader("Content-Type", "application/json")
                         .withStatus(200)
-                        .withBody("{\"message\": \"Hello World\"}")
+                        .withBody("{\"value\": \"Some response\", \"amount\": 2}")
                 )
+        )
+    }
+
+    private fun requestBody(): SomeClass {
+        return SomeClass.create(
+            value = SomeValue("Some request"),
+            amount = 1
+        )
+    }
+
+    private fun responseBody(): SomeClass {
+        return SomeClass.create(
+            value = SomeValue("Some response"),
+            amount = 2
+        )
+    }
+
+    private fun assertResponse(response: HttpResponse) {
+        assertThat(response.getStatusCode()).isEqualTo(200)
+        assertThat(response.getBody(SomeClass::class.java))
+            .isEqualTo(responseBody())
+    }
+
+    @Test
+    fun shouldSupportGet() {
+        stub(
+            testUrl = "/get",
         )
 
         val response = client.get("/get")
 
-        Assertions.assertThat(response.getStatusCode()).isEqualTo(200)
-        Assertions.assertThat(response.getBody(ExampleBody::class.java))
-            .isEqualTo(ExampleBody("Hello World"))
+        assertResponse(response)
     }
 
     @Test
     fun shouldSupportPost() {
-        server.stubFor(
-            WireMock.post(WireMock.urlEqualTo("/post"))
-                .withRequestBody(WireMock.equalToJson("{\"message\": \"Request\"}"))
-                .willReturn(
-                    WireMock.aResponse()
-                        .withHeader("Content-Type", "application/json")
-                        .withStatus(200)
-                        .withBody("{\"message\": \"Response\"}")
-                )
+        stub(
+            testUrl = "/post",
+            post = true,
         )
 
-        val response = client.post("/post", ExampleBody("Request"))
+        val response = client.post("/post", requestBody())
 
-        Assertions.assertThat(response.getStatusCode()).isEqualTo(200)
-        Assertions.assertThat(response.getBody(ExampleBody::class.java))
-            .isEqualTo(ExampleBody("Response"))
+        assertResponse(response)
     }
 
     @Test
     fun shouldSupportPostNullBody() {
-        server.stubFor(
-            WireMock.post(WireMock.urlEqualTo("/post"))
-                //.withRequestBody(WireMock.equalToJson("{\"message\": \"Request\"}"))
-                .willReturn(
-                    WireMock.aResponse()
-                        .withHeader("Content-Type", "application/json")
-                        .withStatus(200)
-                        .withBody("{\"message\": \"Response\"}")
-                )
+        stub(
+            testUrl = "/post",
+            post = true,
+            withPostRequestBody = false
         )
 
         val response = client.post("/post", null)
 
-        Assertions.assertThat(response.getStatusCode()).isEqualTo(200)
-        Assertions.assertThat(response.getBody(ExampleBody::class.java))
-            .isEqualTo(ExampleBody("Response"))
+        assertResponse(response)
     }
 }

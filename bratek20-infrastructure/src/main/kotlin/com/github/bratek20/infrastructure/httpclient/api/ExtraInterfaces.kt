@@ -7,5 +7,5 @@ interface HttpResponse {
 
 interface HttpClient {
     fun get(path: String): HttpResponse
-    fun <T> post(path: String, body: T?): HttpResponse
+    fun post(path: String, body: Any?): HttpResponse
 }
