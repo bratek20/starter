@@ -12,11 +12,41 @@ import com.github.bratek20.architecture.serialization.fixtures.serializedValue
 import org.assertj.core.api.Assertions.assertThat
 
 class SerializationApiTest {
-    data class TestObject(
-        val value: String,
-        val number: Int,
-        val nullable: String?
+    data class SomeValue(
+        val value: String
     )
+
+    data class TestObject(
+        private val value: String,
+        private val number: Int,
+        private val nullable: String?
+    ) {
+        fun getValue(): SomeValue {
+            return SomeValue(this.value)
+        }
+
+        fun getNumber(): Int {
+            return this.number
+        }
+
+        fun getNullable(): String? {
+            return this.nullable
+        }
+
+        companion object {
+            fun create(
+                value: SomeValue,
+                number: Int,
+                nullable: String?
+            ): TestObject {
+                return TestObject(
+                    value = value.value,
+                    number = number,
+                    nullable = nullable
+                )
+            }
+        }
+    }
 
     private lateinit var serializer: Serializer
     @BeforeEach

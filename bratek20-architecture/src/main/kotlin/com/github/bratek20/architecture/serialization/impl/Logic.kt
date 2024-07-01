@@ -52,14 +52,16 @@ class SerializerLogic: Serializer {
 
     private fun handleJacksonException(e: JacksonException): DeserializationException {
         val internalMsg = e.message ?: ""
-        val missingFieldName = extractMissingFieldName(internalMsg)
-        return DeserializationException("Deserialization failed: missing value for field `$missingFieldName`")
+        extractMissingFieldName(internalMsg)?.let { missingFieldName ->
+            return DeserializationException("Deserialization failed: missing value for field `$missingFieldName`")
+        }
+        return DeserializationException("Deserialization failed: unmapped message: $internalMsg")
     }
 
-    private fun extractMissingFieldName(message: String): String {
+    private fun extractMissingFieldName(message: String): String? {
         val regex = "property ([a-zA-Z0-9]+) due to missing".toRegex()
         val matchResult = regex.find(message)
-        return matchResult?.groups?.get(1)?.value ?: "unknown"
+        return matchResult?.groups?.get(1)?.value
     }
 
     override fun asStruct(value: Any): Struct {
