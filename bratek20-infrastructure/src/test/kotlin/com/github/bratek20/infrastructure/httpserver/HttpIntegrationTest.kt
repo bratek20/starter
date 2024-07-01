@@ -3,6 +3,9 @@ package com.github.bratek20.infrastructure.httpserver
 import com.github.bratek20.architecture.context.api.ContextBuilder
 import com.github.bratek20.architecture.context.api.ContextModule
 import com.github.bratek20.architecture.context.someContextBuilder
+import com.github.bratek20.architecture.serialization.api.Serializer
+import com.github.bratek20.architecture.serialization.api.Struct
+import com.github.bratek20.architecture.serialization.context.SerializationFactory
 import com.github.bratek20.infrastructure.httpclient.api.HttpClient
 import com.github.bratek20.infrastructure.httpclient.api.HttpClientFactory
 import com.github.bratek20.infrastructure.httpclient.context.HttpClientImpl
@@ -52,11 +55,14 @@ class HttpIntegrationTest {
 
     @RestController
     class SomeApiController(
-        private val someApi: SomeApi,
+        private val someApi: SomeApi
     ) {
+        private val serializer: Serializer = SerializationFactory.createSerializer()
+
         @PostMapping("/mirror")
-        fun mirror(@RequestBody request: SomeApiMirrorRequest): SomeApiMirrorResponse {
-            return SomeApiMirrorResponse(someApi.mirror(request.x))
+        fun mirror(@RequestBody rawRequest: Struct): Struct {
+            val request = serializer.fromStruct(rawRequest, SomeApiMirrorRequest::class.java)
+            return serializer.asStruct(SomeApiMirrorResponse(someApi.mirror(request.x)))
         }
     }
 
