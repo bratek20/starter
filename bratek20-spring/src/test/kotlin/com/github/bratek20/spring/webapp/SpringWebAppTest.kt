@@ -5,6 +5,7 @@ import com.github.bratek20.architecture.context.api.ContextModule
 import com.github.bratek20.architecture.exceptions.ApiException
 import com.github.bratek20.infrastructure.httpserver.api.WebServerModule
 import io.restassured.RestAssured
+import org.hamcrest.CoreMatchers.equalTo
 import org.junit.jupiter.api.Test
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
@@ -73,5 +74,12 @@ class SpringWebAppTest {
             .post("/throw")
             .then()
             .statusCode(200)
+            .body(equalTo("""
+                {
+                    "passedException": {
+                        "type": "MyException",
+                    }
+                }
+            """.trimIndent()))
     }
 }

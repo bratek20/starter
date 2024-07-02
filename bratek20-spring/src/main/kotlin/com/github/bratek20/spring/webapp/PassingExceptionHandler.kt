@@ -20,7 +20,7 @@ class PassingExceptionHandler {
                     "type": "$exceptionType",
                 }
             }
-            """
+            """.trimIndent()
         return ResponseEntity(message, HttpStatus.OK)
     }
 
