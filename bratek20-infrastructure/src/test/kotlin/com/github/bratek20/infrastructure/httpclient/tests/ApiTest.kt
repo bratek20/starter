@@ -15,6 +15,8 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
+class MyException(message: String): ApiException(message)
+
 class HttpClientApiTest {
     private lateinit var server: WireMockServer
     private lateinit var client: HttpClient
@@ -143,7 +145,7 @@ class HttpClientApiTest {
         assertResponse(response)
     }
 
-    class MyException(message: String): ApiException(message)
+
 
     @Test
     fun shouldThrowPassedException() {
@@ -153,13 +155,22 @@ class HttpClientApiTest {
                     WireMock.aResponse()
                         .withHeader("Content-Type", "application/json")
                         .withStatus(200)
-                        .withBody("{\"passedException\": {\"message\": \"Some message\"}}")
+                        .withBody("""
+                            {
+                                "passedException": {
+                                    "type": "MyException",
+                                    "package": "com.github.bratek20.infrastructure.httpclient.tests",
+                                    "message": "Some message"
+                                }
+                            }
+                        """)
                 )
         )
 
         assertApiExceptionThrown(
             {client.post("/throw", requestBody())},
             {
+                type = MyException::class
                 message = "Some message"
             }
         )
