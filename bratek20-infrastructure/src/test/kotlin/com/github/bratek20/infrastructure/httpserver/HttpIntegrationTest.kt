@@ -3,6 +3,8 @@ package com.github.bratek20.infrastructure.httpserver
 import com.github.bratek20.architecture.context.api.ContextBuilder
 import com.github.bratek20.architecture.context.api.ContextModule
 import com.github.bratek20.architecture.context.someContextBuilder
+import com.github.bratek20.architecture.exceptions.ApiException
+import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.architecture.serialization.api.Serializer
 import com.github.bratek20.architecture.serialization.api.Struct
 import com.github.bratek20.architecture.serialization.context.SerializationFactory
@@ -16,6 +18,9 @@ import org.junit.jupiter.api.Test
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
+
+//TODO move to inner class when test are passing to check if it's still working
+class SomeException(message: String): ApiException(message)
 
 class HttpIntegrationTest {
     data class SomeValue(val value: String)
@@ -33,11 +38,18 @@ class HttpIntegrationTest {
 
     interface SomeApi {
         fun mirror(x: SomeClass): SomeClass
+
+        @Throws(SomeException::class)
+        fun throwException()
     }
 
     class SomeApiLogic: SomeApi {
         override fun mirror(x: SomeClass): SomeClass {
             return x
+        }
+
+        override fun throwException() {
+            throw SomeException("Some message")
         }
     }
 
@@ -51,6 +63,10 @@ class HttpIntegrationTest {
         override fun mirror(x: SomeClass): SomeClass {
             return factory.create(url.value).post("/mirror", SomeApiMirrorRequest(x)).getBody(SomeApiMirrorResponse::class.java).value
         }
+
+        override fun throwException() {
+            factory.create(url.value).post("/throw", null)
+        }
     }
 
     @RestController
@@ -63,6 +79,11 @@ class HttpIntegrationTest {
         fun mirror(@RequestBody rawRequest: Struct): Struct {
             val request = serializer.fromStruct(rawRequest, SomeApiMirrorRequest::class.java)
             return serializer.asStruct(SomeApiMirrorResponse(someApi.mirror(request.x)))
+        }
+
+        @PostMapping("/throw")
+        fun throwException() {
+            someApi.throwException()
         }
     }
 
@@ -113,10 +134,16 @@ class HttpIntegrationTest {
             )
             .get(SomeApi::class.java)
 
-        //when
-        val result = api.mirror(SomeClass("test"))
+        //when & then
+        assertThat(api.mirror(SomeClass("test")))
+            .isEqualTo(SomeClass("test"))
 
-        //then
-        assertThat(result).isEqualTo(SomeClass("test"))
+        assertApiExceptionThrown(
+            { api.throwException() },
+            {
+                type = SomeException::class
+                message = "Some message"
+            }
+        )
     }
 }
