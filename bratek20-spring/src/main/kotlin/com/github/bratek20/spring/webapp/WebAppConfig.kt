@@ -14,4 +14,9 @@ internal open class WebAppConfig {
     open fun healthController(): HealthController {
         return HealthController()
     }
+
+    @Bean
+    open fun passingExceptionHandler(): PassingExceptionHandler {
+        return PassingExceptionHandler()
+    }
 }
