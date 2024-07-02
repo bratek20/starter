@@ -145,8 +145,6 @@ class HttpClientApiTest {
         assertResponse(response)
     }
 
-
-
     @Test
     fun shouldThrowPassedException() {
         server.stubFor(

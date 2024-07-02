@@ -43,13 +43,16 @@ class HttpClientLogic(
         )
 
         extractPassedException(responseEntity)?.let {
-            throw ApiException(it.message)
+            val type = Class.forName(it.`package` + "." + it.type)
+            throw type.getConstructor(String::class.java).newInstance(it.message) as Throwable
         }
 
         return HttpResponseLogic(responseEntity.statusCode.value(), responseEntity.body)
     }
 
     data class PassedException(
+        val type: String,
+        val `package`: String,
         val message: String
     )
     data class PassedExceptionResponse(
