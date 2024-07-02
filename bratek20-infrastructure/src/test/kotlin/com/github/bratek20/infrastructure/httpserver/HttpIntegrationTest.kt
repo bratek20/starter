@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
-//TODO move to inner class when test are passing to check if it's still working
 class SomeException(message: String): ApiException(message)
 
 class HttpIntegrationTest {
