@@ -1,6 +1,8 @@
 package com.github.bratek20.infrastructure.httpclient.tests
 
 import com.github.bratek20.architecture.context.someContextBuilder
+import com.github.bratek20.architecture.exceptions.ApiException
+import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.infrastructure.httpclient.api.HttpClient
 import com.github.bratek20.infrastructure.httpclient.api.HttpClientFactory
 import com.github.bratek20.infrastructure.httpclient.api.HttpResponse
@@ -139,5 +141,27 @@ class HttpClientApiTest {
         val response = client.post("/post", null)
 
         assertResponse(response)
+    }
+
+    class MyException(message: String): ApiException(message)
+
+    @Test
+    fun shouldThrowPassedException() {
+        server.stubFor(
+            WireMock.post(WireMock.urlEqualTo("/throw"))
+                .willReturn(
+                    WireMock.aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withStatus(200)
+                        .withBody("{\"passedException\": {\"message\": \"Some message\"}}")
+                )
+        )
+
+        assertApiExceptionThrown(
+            {client.post("/throw", requestBody())},
+            {
+                message = "Some message"
+            }
+        )
     }
 }
