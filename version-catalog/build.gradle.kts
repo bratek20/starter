@@ -4,8 +4,8 @@ plugins {
 }
 
 //changed by script
-val catalogVersion = "1.0.28"
-val bratek20StarterVersion = "1.0.28"
+val catalogVersion = "1.0.30"
+val bratek20StarterVersion = "1.0.30"
 
 //changed manually
 val bratek20LogsVersion = "1.0.25"
@@ -142,13 +142,13 @@ publishing {
             }
         }
 
-        if (project.hasProperty("centralUsername")) {
+        if (project.hasProperty("artifactoryUsername") && project.hasProperty("artifactoryPassword")) {
             maven {
                 name = "central"
                 url = uri("https://artifactory.devs.tensquaregames.com/artifactory/libs-release-local")
                 credentials {
-                    username = project.findProperty("centralUsername") as String
-                    password = project.findProperty("centralPassword") as String
+                    username = project.findProperty("artifactoryUsername") as String
+                    password = project.findProperty("artifactoryPassword") as String
                 }
             }
         }

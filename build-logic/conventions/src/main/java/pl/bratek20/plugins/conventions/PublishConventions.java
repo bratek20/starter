@@ -56,13 +56,13 @@ public class PublishConventions implements Plugin<Project> {
                     });
                 }
 
-                if (project.hasProperty("centralUsername")) {
+                if (project.hasProperty("artifactoryUsername")) {
                     repositories.maven(maven -> {
                         maven.setName("central");
                         maven.setUrl(project.uri("https://artifactory.devs.tensquaregames.com/artifactory/libs-release-local"));
                         maven.credentials(PasswordCredentials.class, credentials -> {
-                            credentials.setUsername(Objects.requireNonNull(project.property("centralUsername")).toString());
-                            credentials.setPassword(Objects.requireNonNull(project.property("centralPassword")).toString());
+                            credentials.setUsername(Objects.requireNonNull(project.property("artifactoryUsername")).toString());
+                            credentials.setPassword(Objects.requireNonNull(project.property("artifactoryPassword")).toString());
                         });
                     });
                 }
