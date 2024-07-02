@@ -1,5 +1,6 @@
 package com.github.bratek20.infrastructure.httpclient.impl
 
+import com.github.bratek20.architecture.exceptions.ApiException
 import com.github.bratek20.architecture.serialization.api.SerializationType
 import com.github.bratek20.architecture.serialization.api.SerializedValue
 import com.github.bratek20.architecture.serialization.api.Serializer
@@ -41,7 +42,28 @@ class HttpClientLogic(
             String::class.java
         )
 
+        extractPassedException(responseEntity)?.let {
+            throw ApiException(it.message)
+        }
+
         return HttpResponseLogic(responseEntity.statusCode.value(), responseEntity.body)
+    }
+
+    data class PassedException(
+        val message: String
+    )
+    data class PassedExceptionResponse(
+        val passedException: PassedException
+    )
+    private fun extractPassedException(responseEntity: ResponseEntity<String>): PassedException? {
+        return try {
+            SERIALIZER.deserialize(
+                SerializedValue.create(responseEntity.body!!, SerializationType.JSON),
+                PassedExceptionResponse::class.java
+            ).passedException
+        } catch (e: Exception) {
+            null
+        }
     }
 
     private fun getHttpBody(body: Any): HttpEntity<Struct> {
