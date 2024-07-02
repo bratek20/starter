@@ -78,6 +78,8 @@ class SpringWebAppTest {
                 {
                     "passedException": {
                         "type": "MyException",
+                        "package": "com.github.bratek20.spring.webapp",
+                        "message": "test"
                     }
                 }
             """.trimIndent()))

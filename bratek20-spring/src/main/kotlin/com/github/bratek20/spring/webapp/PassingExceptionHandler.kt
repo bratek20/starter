@@ -11,22 +11,17 @@ import org.springframework.web.context.request.WebRequest
 class PassingExceptionHandler {
     @ExceptionHandler(ApiException::class)
     fun handleException(ex: ApiException, request: WebRequest?): ResponseEntity<String> {
-        val exceptionType = getExceptionType(ex)
         //log.warn("Passing exception of type: {}, message: {}", exceptionType, ex.message)
 
         val message = """
             {
                 "passedException": {
-                    "type": "$exceptionType",
+                    "type": "${ex.javaClass.simpleName}",
+                    "package": "${ex.javaClass.`package`.name}",
+                    "message": "${ex.message}"
                 }
             }
             """.trimIndent()
         return ResponseEntity(message, HttpStatus.OK)
-    }
-
-    companion object {
-        fun getExceptionType(ex: RuntimeException): String {
-            return ex.javaClass.simpleName
-        }
     }
 }
