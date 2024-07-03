@@ -33,6 +33,24 @@ class LoggerMock: Logger {
     fun assertErrors(vararg messages: String) {
         errors.shouldContainExactly(*messages)
     }
+
+    fun assertNoInfos() {
+        infos.shouldContainExactly()
+    }
+
+    fun assertNoWarns() {
+        warns.shouldContainExactly()
+    }
+
+    fun assertNoErrors() {
+        errors.shouldContainExactly()
+    }
+
+    fun reset() {
+        infos.clear()
+        warns.clear()
+        errors.clear()
+    }
 }
 
 class LogsMocks: ContextModule {
