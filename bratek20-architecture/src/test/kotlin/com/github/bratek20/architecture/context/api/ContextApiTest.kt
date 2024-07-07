@@ -5,19 +5,21 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
-class X
-interface A
-class AImpl1: A
-class AImpl2: A
-
 class SomeClass
+interface SomeInterface
+class SomeInterfaceImpl1: SomeInterface
+class SomeInterfaceImpl2: SomeInterface
 
-class WithXClass(
-    val x: X
+class WithSomeInterfaces(
+    val someInterfaces: Set<SomeInterface>
 )
 
-class WithXClassSet(
-    val x: Set<X>
+class WithSomeClass(
+    val someClass: SomeClass
+)
+
+class WithSomeClasses(
+    val someClasses: Set<SomeClass>
 )
 
 class SomeModuleContextModule: ContextModule {
@@ -26,7 +28,8 @@ class SomeModuleContextModule: ContextModule {
     }
 }
 
-class WithValue(val value: String)
+class ValueObject(val value: String)
+data class WithValueObjects(val vos: Set<ValueObject>)
 
 abstract class ContextApiTest {
 
@@ -35,38 +38,36 @@ abstract class ContextApiTest {
     @Test
     fun `should get class`() {
         val x = createInstance()
-            .setClass(X::class.java)
+            .setClass(SomeClass::class.java)
             .build()
-            .get(X::class.java)
+            .get(SomeClass::class.java)
 
-        assertThat(x).isInstanceOf(X::class.java)
+        assertThat(x).isInstanceOf(SomeClass::class.java)
     }
 
     @Test
     fun `should get class that needs other class`() {
         val withX = createInstance()
-            .setClass(X::class.java)
-            .setClass(WithXClass::class.java)
+            .setClass(SomeClass::class.java)
+            .setClass(WithSomeClass::class.java)
             .build()
-            .get(WithXClass::class.java)
+            .get(WithSomeClass::class.java)
 
-        assertThat(withX).isInstanceOf(WithXClass::class.java)
-        assertThat(withX.x).isNotNull()
+        assertThat(withX).isInstanceOf(WithSomeClass::class.java)
+        assertThat(withX.someClass).isNotNull()
     }
 
-    class As(
-        val value: Set<A>
-    )
+
 
 
     @Test
     fun `should get the same object for interface and impl (setImpl)`() {
         val c = createInstance()
-            .setImpl(A::class.java, AImpl1::class.java)
+            .setImpl(SomeInterface::class.java, SomeInterfaceImpl1::class.java)
             .build()
 
-        val a = c.get(A::class.java)
-        val aImpl = c.get(AImpl1::class.java)
+        val a = c.get(SomeInterface::class.java)
+        val aImpl = c.get(SomeInterfaceImpl1::class.java)
 
         assertThat(a).isEqualTo(aImpl)
     }
@@ -74,11 +75,11 @@ abstract class ContextApiTest {
     @Test
     fun `should get the same object for interface and impl (addImpl)`() {
         val c = createInstance()
-            .addImpl(A::class.java, AImpl1::class.java)
+            .addImpl(SomeInterface::class.java, SomeInterfaceImpl1::class.java)
             .build()
 
-        val a = c.getMany(A::class.java).first()
-        val aImpl = c.get(AImpl1::class.java)
+        val a = c.getMany(SomeInterface::class.java).first()
+        val aImpl = c.get(SomeInterfaceImpl1::class.java)
 
         assertThat(a).isEqualTo(aImpl)
     }
@@ -86,37 +87,36 @@ abstract class ContextApiTest {
     @Test
     fun `should inject classes set and get the same instances`() {
         val c = createInstance()
-            .addImpl(A::class.java, AImpl1::class.java)
-            .addImpl(A::class.java, AImpl2::class.java)
-            .setClass(As::class.java)
+            .addImpl(SomeInterface::class.java, SomeInterfaceImpl1::class.java)
+            .addImpl(SomeInterface::class.java, SomeInterfaceImpl2::class.java)
+            .setClass(WithSomeInterfaces::class.java)
             .build()
 
-        val asValues = c.get(As::class.java).value.toList();
+        val asValues = c.get(WithSomeInterfaces::class.java).someInterfaces.toList();
 
         assertThat(asValues).hasSize(2)
-        assertThat(asValues[0]).isInstanceOf(AImpl1::class.java)
-        assertThat(asValues[1]).isInstanceOf(AImpl2::class.java)
+        assertThat(asValues[0]).isInstanceOf(SomeInterfaceImpl1::class.java)
+        assertThat(asValues[1]).isInstanceOf(SomeInterfaceImpl2::class.java)
 
-        val aInstances = c.getMany(A::class.java).toList()
+        val aInstances = c.getMany(SomeInterface::class.java).toList()
 
         assertThat(aInstances).hasSize(2)
-        assertThat(aInstances[0]).isInstanceOf(AImpl1::class.java)
+        assertThat(aInstances[0]).isInstanceOf(SomeInterfaceImpl1::class.java)
         assertThat(aInstances[0]).isEqualTo(asValues[0])
 
-        assertThat(aInstances[1]).isInstanceOf(AImpl2::class.java)
+        assertThat(aInstances[1]).isInstanceOf(SomeInterfaceImpl2::class.java)
         assertThat(aInstances[1]).isEqualTo(asValues[1])
     }
 
-    data class Values(val value: Set<WithValue>)
 
     @Test
     fun `should get many objects`() {
         val result = createInstance()
-            .addImplObject(WithValue::class.java, WithValue("value"))
-            .addImplObject(WithValue::class.java, WithValue("value2"))
-            .setClass(Values::class.java)
+            .addObject(ValueObject("value"))
+            .addObject(ValueObject("value2"))
+            .setClass(WithValueObjects::class.java)
             .build()
-            .get(Values::class.java).value.toList()
+            .get(WithValueObjects::class.java).vos.toList()
 
         assertThat(result).hasSize(2)
         assertThat(result[0].value).isEqualTo("value")
@@ -144,34 +144,34 @@ abstract class ContextApiTest {
     fun `should throw exception when multiple classes found`() {
         assertThatThrownBy {
             createInstance()
-                .addImpl(A::class.java, AImpl1::class.java)
-                .addImpl(A::class.java, AImpl2::class.java)
+                .addImpl(SomeInterface::class.java, SomeInterfaceImpl1::class.java)
+                .addImpl(SomeInterface::class.java, SomeInterfaceImpl2::class.java)
                 .build()
-                .get(A::class.java)
+                .get(SomeInterface::class.java)
         }
         .isInstanceOf(MultipleClassesFoundInContextException::class.java)
-        .hasMessage("Multiple classes found for A in context")
+        .hasMessage("Multiple classes found for SomeInterface in context")
     }
 
     @Test
     fun `should throw exception if class to inject not found`() {
         assertThatThrownBy {
             createInstance()
-                .setClass(WithXClass::class.java)
+                .setClass(WithSomeClass::class.java)
                 .build()
         }
         .isInstanceOf(DependentClassNotFoundInContextException::class.java)
-        .hasMessage("Class X needed by class WithXClass not found")
+        .hasMessage("Class SomeClass needed by class WithSomeClass not found")
     }
 
     @Disabled //TODO fix guice
     @Test
     fun `should inject empty set`() {
         val obj = createInstance()
-            .setClass(WithXClassSet::class.java)
+            .setClass(WithSomeClasses::class.java)
             .build()
-            .get(WithXClassSet::class.java)
+            .get(WithSomeClasses::class.java)
 
-        assertThat(obj.x).isEmpty()
+        assertThat(obj.someClasses).isEmpty()
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import com.github.bratek20.architecture.context.api.ContextApiTest
 import com.github.bratek20.architecture.context.api.ContextBuilder
-import com.github.bratek20.architecture.context.api.X
+import com.github.bratek20.architecture.context.api.SomeClass
 
 class SpringContextImplTest: ContextApiTest() {
     override fun createInstance(): ContextBuilder {
@@ -17,7 +17,7 @@ class SpringContextImplTest: ContextApiTest() {
     class MyBuilderProvider: SpringContextBuilderProvider {
         override fun provide(): SpringContextBuilder {
             return SpringContextBuilder()
-                .setClass(X::class.java);
+                .setClass(SomeClass::class.java);
         }
     }
 
@@ -32,8 +32,8 @@ class SpringContextImplTest: ContextApiTest() {
     fun `should support connecting with legacy systems`() {
         val legacyContext = AnnotationConfigApplicationContext(OutsideWorldConfig::class.java)
 
-        val x = legacyContext.getBean(X::class.java)
+        val x = legacyContext.getBean(SomeClass::class.java)
 
-        assertThat(x).isInstanceOf(X::class.java)
+        assertThat(x).isInstanceOf(SomeClass::class.java)
     }
 }

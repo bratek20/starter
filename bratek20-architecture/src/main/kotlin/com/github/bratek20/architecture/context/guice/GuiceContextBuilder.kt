@@ -7,6 +7,7 @@ import com.google.inject.Scopes
 import com.google.inject.binder.LinkedBindingBuilder
 import com.google.inject.multibindings.Multibinder
 import com.github.bratek20.architecture.context.api.Context
+import com.github.bratek20.architecture.context.api.ContextBuilder
 import com.github.bratek20.architecture.context.api.DependentClassNotFoundInContextException
 import com.github.bratek20.architecture.context.impl.AbstractContextBuilder
 import java.lang.reflect.Constructor
@@ -75,6 +76,25 @@ class GuiceContextBuilder: AbstractContextBuilder() {
                 multibinder.addBinding()
                     .to(implementationType)
                     .`in`(Scopes.SINGLETON)
+            }
+        })
+        return this
+    }
+
+    override fun <T: Any> setObject(obj: T): ContextBuilder {
+        modules.add(object: AbstractModule() {
+            override fun configure() {
+                bind(obj.javaClass).toInstance(obj)
+            }
+        })
+        return this
+    }
+
+    override fun <T: Any> addObject(obj: T): ContextBuilder {
+        modules.add(object: AbstractModule() {
+            override fun configure() {
+                val multibinder = Multibinder.newSetBinder(binder(), obj.javaClass)
+                multibinder.addBinding().toInstance(obj)
             }
         })
         return this

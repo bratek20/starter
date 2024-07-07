@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import com.github.bratek20.architecture.context.api.ContextApiTest
 import com.github.bratek20.architecture.context.api.ContextBuilder
-import com.github.bratek20.architecture.context.api.X
+import com.github.bratek20.architecture.context.api.SomeClass
 
 class GuiceContextImplTest: ContextApiTest() {
     override fun createInstance(): ContextBuilder {
@@ -24,13 +24,13 @@ class GuiceContextImplTest: ContextApiTest() {
     @Test
     fun `should build module that can be used by legacy`() {
         val moduleForLegacy = GuiceContextBuilder()
-            .setClass(X::class.java)
+            .setClass(SomeClass::class.java)
             .buildModuleForLegacy()
 
         val injector = Guice.createInjector(LegacyModule(moduleForLegacy))
 
-        val x = injector.getInstance(X::class.java)
+        val x = injector.getInstance(SomeClass::class.java)
 
-        assertThat(x).isInstanceOf(X::class.java)
+        assertThat(x).isInstanceOf(SomeClass::class.java)
     }
 }
