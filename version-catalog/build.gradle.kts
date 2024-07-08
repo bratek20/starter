@@ -4,7 +4,7 @@ plugins {
 }
 
 //changed by script
-val catalogVersion = "1.0.30"
+val catalogVersion = "1.0.31"
 val bratek20StarterVersion = "1.0.30"
 
 //changed manually
@@ -50,7 +50,7 @@ catalog {
         version("testcontainers", "1.16.2")
 
         version("lombok", "8.3")
-        version("spring-boot", "3.0.13")
+        version("spring-boot", "2.7.18")
         version("protobuf", "3.25.2")
 
         version("slf4j", "2.0.13")
