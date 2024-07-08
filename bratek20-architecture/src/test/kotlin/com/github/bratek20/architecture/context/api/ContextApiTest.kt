@@ -6,9 +6,15 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 class SomeClass
+
 interface SomeInterface
 class SomeInterfaceImpl1: SomeInterface
 class SomeInterfaceImpl2: SomeInterface
+
+interface OtherInterface
+class OtherInterfaceImpl(
+    val value: String
+): OtherInterface
 
 class WithSomeInterfaces(
     val someInterfaces: Set<SomeInterface>
@@ -35,14 +41,42 @@ abstract class ContextApiTest {
 
     abstract fun createInstance(): ContextBuilder
 
+    class AllSetObjects(
+        val someClass: SomeClass,
+        val someInterface: SomeInterface,
+        val valueObject: ValueObject,
+        val otherInterface: OtherInterface,
+        //impls
+        val someInterfaceImpl1: SomeInterfaceImpl1,
+        val otherInterfaceImpl: OtherInterfaceImpl,
+    )
     @Test
-    fun `should get class`() {
-        val x = createInstance()
+    fun `should support set operations, inject singletons and inject also impls`() {
+        val context = createInstance()
             .setClass(SomeClass::class.java)
+            .setImpl(SomeInterface::class.java, SomeInterfaceImpl1::class.java)
+            .setObject(ValueObject("valueObject"))
+            .setImplObject(OtherInterface::class.java, OtherInterfaceImpl("otherInterfaceImpl"))
+            .setClass(AllSetObjects::class.java)
             .build()
-            .get(SomeClass::class.java)
 
-        assertThat(x).isInstanceOf(SomeClass::class.java)
+        val allSetObjects = context.get(AllSetObjects::class.java)
+
+        //checking singletons
+        assertThat(allSetObjects.someClass).isSameAs(context.get(SomeClass::class.java))
+        assertThat(allSetObjects.someInterface).isSameAs(context.get(SomeInterface::class.java))
+        assertThat(allSetObjects.valueObject).isSameAs(context.get(ValueObject::class.java))
+        assertThat(allSetObjects.otherInterface).isSameAs(context.get(OtherInterface::class.java))
+        assertThat(allSetObjects.someInterfaceImpl1).isSameAs(context.get(SomeInterfaceImpl1::class.java))
+        assertThat(allSetObjects.otherInterfaceImpl).isSameAs(context.get(OtherInterfaceImpl::class.java))
+
+        //checking values just to be sure
+        assertThat(allSetObjects.valueObject.value).isEqualTo("valueObject")
+        assertThat(allSetObjects.otherInterfaceImpl.value).isEqualTo("otherInterfaceImpl")
+
+        //checking impls
+        assertThat(allSetObjects.someInterface).isSameAs(allSetObjects.someInterfaceImpl1)
+        assertThat(allSetObjects.otherInterface).isSameAs(allSetObjects.otherInterfaceImpl)
     }
 
     @Test
@@ -56,9 +90,6 @@ abstract class ContextApiTest {
         assertThat(withX).isInstanceOf(WithSomeClass::class.java)
         assertThat(withX.someClass).isNotNull()
     }
-
-
-
 
     @Test
     fun `should get the same object for interface and impl (setImpl)`() {
