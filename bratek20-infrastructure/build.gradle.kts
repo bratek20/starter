@@ -7,8 +7,7 @@ dependencies {
     testImplementation(testFixtures(project(":bratek20-architecture")))
 
     //http client
-    implementation(platform(libs.spring.boot.dependencies))
-    implementation("org.springframework:spring-web")
+    implementation(libs.spring.web)
 
     testImplementation(libs.wiremock)
 

@@ -4,8 +4,8 @@ plugins {
 }
 
 //changed by script
-val catalogVersion = "1.0.32"
-val bratek20StarterVersion = "1.0.32"
+val catalogVersion = "1.0.34"
+val bratek20StarterVersion = "1.0.34"
 
 //changed manually
 val bratek20LogsVersion = "1.0.25"
@@ -47,10 +47,11 @@ catalog {
         version("assertj", "3.24.2")
         version("kotest", "5.9.1")
 
-        version("testcontainers", "1.16.2")
-
-        version("lombok", "8.3")
         version("spring-boot", "2.7.18")
+        version("spring", "5.3.31")
+
+        version("testcontainers", "1.16.2")
+        version("lombok", "8.3")
         version("protobuf", "3.25.2")
 
         version("slf4j", "2.0.13")
@@ -69,6 +70,9 @@ catalog {
         library("spring-boot-plugin", "org.springframework.boot", "spring-boot-gradle-plugin").versionRef("spring-boot")
 
         //impl dependencies
+        library("spring-context", "org.springframework", "spring-context").versionRef("spring")
+        library("spring-web", "org.springframework", "spring-web").versionRef("spring")
+
         library("spring-boot-dependencies", "org.springframework.boot", "spring-boot-dependencies").versionRef("spring-boot")
         library("spring-boot-swagger", "org.springdoc", "springdoc-openapi-starter-webmvc-ui").version("2.2.0")
 

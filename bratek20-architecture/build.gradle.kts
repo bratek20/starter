@@ -7,10 +7,9 @@ dependencies {
     implementation(libs.guava)
 
     //spring context
-    implementation(platform(libs.spring.boot.dependencies))
-    implementation("org.springframework:spring-context")
+    implementation(libs.spring.context)
 
-    //guice
+    //guice context
     implementation(libs.guice)
     implementation(libs.guice.multibindings)
 
