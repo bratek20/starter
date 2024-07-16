@@ -7,8 +7,10 @@ import com.github.bratek20.infrastructure.httpclient.api.HttpClient
 import com.github.bratek20.infrastructure.httpclient.api.HttpClientFactory
 import com.github.bratek20.infrastructure.httpclient.api.HttpResponse
 import com.github.bratek20.infrastructure.httpclient.context.HttpClientImpl
+import com.github.bratek20.infrastructure.httpclient.fixtures.httpClientAuth
 import com.github.bratek20.infrastructure.httpclient.fixtures.httpClientConfig
 import com.github.tomakehurst.wiremock.WireMockServer
+import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder
 import com.github.tomakehurst.wiremock.client.WireMock
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
@@ -85,10 +87,7 @@ class HttpClientImplTest {
         server.stubFor(
             mapping
                 .willReturn(
-                    WireMock.aResponse()
-                        .withHeader("Content-Type", "application/json")
-                        .withStatus(200)
-                        .withBody("{\"value\": \"Some response\", \"amount\": 2}")
+                    wireMockResponse()
                 )
         )
     }
@@ -98,6 +97,13 @@ class HttpClientImplTest {
             value = SomeValue("Some request"),
             amount = 1
         )
+    }
+
+    private fun wireMockResponse(): ResponseDefinitionBuilder {
+        return WireMock.aResponse()
+            .withHeader("Content-Type", "application/json")
+            .withStatus(200)
+            .withBody("{\"value\": \"Some response\", \"amount\": 2}")
     }
 
     private fun responseBody(): SomeClass {
@@ -176,5 +182,26 @@ class HttpClientImplTest {
                 message = "Some message"
             }
         )
+    }
+
+    @Test
+    fun shouldSendAuthHeaderIfAuthInConfigPresent() {
+        WireMock.get(WireMock.urlEqualTo("/getAuth"))
+            .withHeader("Authorization", WireMock.equalTo("Basic dXNlc")) // "user:password" base64 encoded
+            .willReturn(
+                wireMockResponse()
+            )
+
+        client = factory.create(httpClientConfig {
+            baseUrl = "http://localhost:8080"
+            auth = {
+                username = "user"
+                password = "password"
+            }
+        })
+
+        val response = client.get("/getAuth")
+
+        assertResponse(response)
     }
 }
