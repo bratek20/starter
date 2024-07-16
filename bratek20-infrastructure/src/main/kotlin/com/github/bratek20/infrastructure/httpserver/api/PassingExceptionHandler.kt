@@ -1,4 +1,4 @@
-package com.github.bratek20.spring.webapp
+package com.github.bratek20.infrastructure.httpserver.api
 
 import com.github.bratek20.architecture.exceptions.ApiException
 import org.springframework.http.HttpStatus
