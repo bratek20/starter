@@ -1,5 +1,5 @@
 val groupAll = "com.github.bratek20"
-val versionAll = "1.0.34"
+val versionAll = "1.0.35"
 
 group = groupAll
 version = versionAll
