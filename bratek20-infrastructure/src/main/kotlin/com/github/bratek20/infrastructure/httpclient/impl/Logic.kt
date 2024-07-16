@@ -1,6 +1,5 @@
 package com.github.bratek20.infrastructure.httpclient.impl
 
-import com.github.bratek20.architecture.exceptions.ApiException
 import com.github.bratek20.architecture.serialization.api.SerializationType
 import com.github.bratek20.architecture.serialization.api.SerializedValue
 import com.github.bratek20.architecture.serialization.api.Serializer
@@ -8,26 +7,33 @@ import com.github.bratek20.architecture.serialization.api.Struct
 import com.github.bratek20.architecture.serialization.context.SerializationFactory
 import com.github.bratek20.infrastructure.httpclient.api.*
 import org.springframework.http.HttpEntity
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
 import org.springframework.web.client.RestTemplate
+import org.springframework.web.util.UriComponentsBuilder
+import java.util.*
 
-class HttpClientFactoryLogic: HttpClientFactory {
-    override fun create(baseUrl: String): HttpClient {
-        return HttpClientLogic(baseUrl)
+class HttpClientFactoryLogic : HttpClientFactory {
+    override fun create(config: HttpClientConfig): HttpClient {
+        return HttpClientLogic(config)
     }
 }
 
 class HttpClientLogic(
-    private val baseUrl: String,
+    private val config: HttpClientConfig
 ) : HttpClient {
     private val restTemplate: RestTemplate = RestTemplate()
 
     override fun get(path: String): HttpResponse {
+        val headers = HttpHeaders().apply {
+            addAuthHeaderIfPresent(this)
+        }
+        val entity = HttpEntity<String>(headers)
         val responseEntity: ResponseEntity<String> = restTemplate.exchange(
             getFullUrl(path),
             HttpMethod.GET,
-            null,
+            entity,
             String::class.java
         )
 
@@ -35,10 +41,14 @@ class HttpClientLogic(
     }
 
     override fun post(path: String, body: Any?): HttpResponse {
+        val headers = HttpHeaders().apply {
+            addAuthHeaderIfPresent(this)
+        }
+        val entity = HttpEntity(body?.let { getHttpBody(body) }, headers)
         val responseEntity: ResponseEntity<String> = restTemplate.exchange(
             getFullUrl(path),
             HttpMethod.POST,
-            body?.let {  getHttpBody(body) },
+            entity,
             String::class.java
         )
 
@@ -50,14 +60,24 @@ class HttpClientLogic(
         return HttpResponseLogic(responseEntity.statusCode.value(), responseEntity.body)
     }
 
+    private fun addAuthHeaderIfPresent(headers: HttpHeaders) {
+        config.getAuth()?.let {
+            val auth = "${it.getUsername()}:${it.getPassword()}"
+            val encodedAuth = Base64.getEncoder().encodeToString(auth.toByteArray())
+            headers["Authorization"] = "Basic $encodedAuth"
+        }
+    }
+
     data class PassedException(
         val type: String,
         val `package`: String,
         val message: String
     )
+
     data class PassedExceptionResponse(
         val passedException: PassedException
     )
+
     private fun extractPassedException(responseEntity: ResponseEntity<String>): PassedException? {
         return try {
             SERIALIZER.deserialize(
@@ -69,12 +89,12 @@ class HttpClientLogic(
         }
     }
 
-    private fun getHttpBody(body: Any): HttpEntity<Struct> {
-        return HttpEntity(SERIALIZER.asStruct(body))
+    private fun getHttpBody(body: Any): Struct {
+        return SERIALIZER.asStruct(body)
     }
 
     private fun getFullUrl(path: String): String {
-        return baseUrl + path
+        return UriComponentsBuilder.fromHttpUrl(config.getBaseUrl()).path(path).toUriString()
     }
 
     companion object {
