@@ -8,7 +8,7 @@ import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.architecture.serialization.api.Serializer
 import com.github.bratek20.architecture.serialization.api.Struct
 import com.github.bratek20.architecture.serialization.context.SerializationFactory
-import com.github.bratek20.infrastructure.httpclient.api.HttpClient
+import com.github.bratek20.infrastructure.httpclient.api.FactoryCreateArgs
 import com.github.bratek20.infrastructure.httpclient.api.HttpClientFactory
 import com.github.bratek20.infrastructure.httpclient.context.HttpClientImpl
 import com.github.bratek20.infrastructure.httpserver.api.WebServerModule
@@ -56,15 +56,17 @@ class HttpIntegrationTest {
         val value: String
     )
     class SomeApiWebClient(
-        private val url: SomeWebServerUrl,
-        private val factory: HttpClientFactory,
+        url: SomeWebServerUrl,
+        factory: HttpClientFactory,
     ): SomeApi {
+        private val client = factory.create(FactoryCreateArgs.create(url.value))
+
         override fun mirror(x: SomeClass): SomeClass {
-            return factory.create(url.value).post("/mirror", SomeApiMirrorRequest(x)).getBody(SomeApiMirrorResponse::class.java).value
+            return client.post("/mirror", SomeApiMirrorRequest(x)).getBody(SomeApiMirrorResponse::class.java).value
         }
 
         override fun throwException() {
-            factory.create(url.value).post("/throw", null)
+            client.post("/throw", null)
         }
     }
 

@@ -1,6 +1,14 @@
 ExternalTypes
     HttpClient // TODO-REF hla missing generic types support
 
+ValueObjects
+    HttpClientAuth
+        username: string
+        password: string
+
 Interfaces
     HttpClientFactory
-        create(baseUrl: string): HttpClient
+        FactoryCreateArgs
+                baseUrl: string
+                auth: HttpClientAuth? = empty
+        create(args: FactoryCreateArgs): HttpClient

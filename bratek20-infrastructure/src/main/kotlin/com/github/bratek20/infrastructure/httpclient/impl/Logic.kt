@@ -1,20 +1,22 @@
 package com.github.bratek20.infrastructure.httpclient.impl
 
-import com.github.bratek20.architecture.exceptions.ApiException
 import com.github.bratek20.architecture.serialization.api.SerializationType
 import com.github.bratek20.architecture.serialization.api.SerializedValue
 import com.github.bratek20.architecture.serialization.api.Serializer
 import com.github.bratek20.architecture.serialization.api.Struct
 import com.github.bratek20.architecture.serialization.context.SerializationFactory
-import com.github.bratek20.infrastructure.httpclient.api.*
+import com.github.bratek20.infrastructure.httpclient.api.FactoryCreateArgs
+import com.github.bratek20.infrastructure.httpclient.api.HttpClient
+import com.github.bratek20.infrastructure.httpclient.api.HttpClientFactory
+import com.github.bratek20.infrastructure.httpclient.api.HttpResponse
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
 import org.springframework.web.client.RestTemplate
 
 class HttpClientFactoryLogic: HttpClientFactory {
-    override fun create(baseUrl: String): HttpClient {
-        return HttpClientLogic(baseUrl)
+    override fun create(args: FactoryCreateArgs): HttpClient {
+        return HttpClientLogic(args.getBaseUrl())
     }
 }
 
