@@ -7,7 +7,6 @@ import com.github.bratek20.infrastructure.httpclient.api.HttpClient
 import com.github.bratek20.infrastructure.httpclient.api.HttpClientFactory
 import com.github.bratek20.infrastructure.httpclient.api.HttpResponse
 import com.github.bratek20.infrastructure.httpclient.context.HttpClientImpl
-import com.github.bratek20.infrastructure.httpclient.fixtures.httpClientAuth
 import com.github.bratek20.infrastructure.httpclient.fixtures.httpClientConfig
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder
@@ -186,11 +185,12 @@ class HttpClientImplTest {
 
     @Test
     fun shouldSendAuthHeaderIfAuthInConfigPresent() {
-        WireMock.get(WireMock.urlEqualTo("/getAuth"))
-            .withHeader("Authorization", WireMock.equalTo("Basic dXNlc")) // "user:password" base64 encoded
+        server.stubFor(WireMock.get(WireMock.urlEqualTo("/getAuth"))
+            .withHeader("Authorization", WireMock.equalTo("Basic dXNlcjpwYXNzd29yZA==")) // "user:password" base64 encoded
             .willReturn(
                 wireMockResponse()
             )
+        )
 
         client = factory.create(httpClientConfig {
             baseUrl = "http://localhost:8080"
