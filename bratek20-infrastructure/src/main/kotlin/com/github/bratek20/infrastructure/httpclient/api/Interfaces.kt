@@ -3,5 +3,5 @@
 package com.github.bratek20.infrastructure.httpclient.api
 
 interface HttpClientFactory {
-    fun create(args: FactoryCreateArgs): HttpClient
+    fun create(config: HttpClientConfig): HttpClient
 }

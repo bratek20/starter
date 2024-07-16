@@ -27,7 +27,7 @@ data class HttpClientAuth(
     }
 }
 
-data class FactoryCreateArgs(
+data class HttpClientConfig(
     private val baseUrl: String,
     private val auth: HttpClientAuth? = null,
 ) {
@@ -43,8 +43,8 @@ data class FactoryCreateArgs(
         fun create(
             baseUrl: String,
             auth: HttpClientAuth? = null,
-        ): FactoryCreateArgs {
-            return FactoryCreateArgs(
+        ): HttpClientConfig {
+            return HttpClientConfig(
                 baseUrl = baseUrl,
                 auth = auth,
             )

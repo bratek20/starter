@@ -16,13 +16,13 @@ fun httpClientAuth(init: HttpClientAuthDef.() -> Unit = {}): HttpClientAuth {
     )
 }
 
-data class FactoryCreateArgsDef(
+data class HttpClientConfigDef(
     var baseUrl: String = "someValue",
     var auth: (HttpClientAuthDef.() -> Unit)? = null,
 )
-fun factoryCreateArgs(init: FactoryCreateArgsDef.() -> Unit = {}): FactoryCreateArgs {
-    val def = FactoryCreateArgsDef().apply(init)
-    return FactoryCreateArgs.create(
+fun httpClientConfig(init: HttpClientConfigDef.() -> Unit = {}): HttpClientConfig {
+    val def = HttpClientConfigDef().apply(init)
+    return HttpClientConfig.create(
         baseUrl = def.baseUrl,
         auth = def.auth?.let { it -> httpClientAuth(it) },
     )

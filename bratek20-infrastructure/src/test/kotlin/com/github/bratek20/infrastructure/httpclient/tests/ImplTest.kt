@@ -7,7 +7,7 @@ import com.github.bratek20.infrastructure.httpclient.api.HttpClient
 import com.github.bratek20.infrastructure.httpclient.api.HttpClientFactory
 import com.github.bratek20.infrastructure.httpclient.api.HttpResponse
 import com.github.bratek20.infrastructure.httpclient.context.HttpClientImpl
-import com.github.bratek20.infrastructure.httpclient.fixtures.factoryCreateArgs
+import com.github.bratek20.infrastructure.httpclient.fixtures.httpClientConfig
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import org.assertj.core.api.Assertions.assertThat
@@ -19,6 +19,7 @@ class MyException(message: String): ApiException(message)
 
 class HttpClientImplTest {
     private lateinit var server: WireMockServer
+    private lateinit var factory: HttpClientFactory
     private lateinit var client: HttpClient
 
     @BeforeEach
@@ -26,12 +27,13 @@ class HttpClientImplTest {
         server = WireMockServer(8080)
         server.start()
 
-        client = someContextBuilder()
+        factory = someContextBuilder()
             .withModules(HttpClientImpl())
             .get(HttpClientFactory::class.java)
-            .create(factoryCreateArgs {
-                baseUrl = "http://localhost:8080"
-            })
+
+        client = factory.create(httpClientConfig {
+            baseUrl = "http://localhost:8080"
+        })
     }
 
     @AfterEach

@@ -5,10 +5,10 @@ ValueObjects
     HttpClientAuth
         username: string
         password: string
+    HttpClientConfig
+       baseUrl: string
+       auth: HttpClientAuth? = empty
 
 Interfaces
     HttpClientFactory
-        FactoryCreateArgs
-                baseUrl: string
-                auth: HttpClientAuth? = empty
-        create(args: FactoryCreateArgs): HttpClient
+        create(config: HttpClientConfig): HttpClient

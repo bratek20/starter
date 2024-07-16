@@ -23,13 +23,13 @@ fun diffHttpClientAuth(given: HttpClientAuth, expectedInit: ExpectedHttpClientAu
     return result.joinToString("\n")
 }
 
-data class ExpectedFactoryCreateArgs(
+data class ExpectedHttpClientConfig(
     var baseUrl: String? = null,
     var authEmpty: Boolean? = null,
     var auth: (ExpectedHttpClientAuth.() -> Unit)? = null,
 )
-fun diffFactoryCreateArgs(given: FactoryCreateArgs, expectedInit: ExpectedFactoryCreateArgs.() -> Unit, path: String = ""): String {
-    val expected = ExpectedFactoryCreateArgs().apply(expectedInit)
+fun diffHttpClientConfig(given: HttpClientConfig, expectedInit: ExpectedHttpClientConfig.() -> Unit, path: String = ""): String {
+    val expected = ExpectedHttpClientConfig().apply(expectedInit)
     val result: MutableList<String> = mutableListOf()
 
     expected.baseUrl?.let {

@@ -11,7 +11,7 @@ fun assertHttpClientAuth(given: HttpClientAuth, expectedInit: ExpectedHttpClient
     assertThat(diff).withFailMessage(diff).isEqualTo("")
 }
 
-fun assertFactoryCreateArgs(given: FactoryCreateArgs, expectedInit: ExpectedFactoryCreateArgs.() -> Unit) {
-    val diff = diffFactoryCreateArgs(given, expectedInit)
+fun assertHttpClientConfig(given: HttpClientConfig, expectedInit: ExpectedHttpClientConfig.() -> Unit) {
+    val diff = diffHttpClientConfig(given, expectedInit)
     assertThat(diff).withFailMessage(diff).isEqualTo("")
 }
