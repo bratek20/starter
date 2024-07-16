@@ -4,7 +4,7 @@ plugins {
 }
 
 //changed by script
-val catalogVersion = "1.0.34"
+val catalogVersion = "1.0.35"
 val bratek20StarterVersion = "1.0.34"
 
 //changed manually
@@ -59,7 +59,7 @@ catalog {
         version("logback", "1.5.6")
 
         version("rest-assured", "5.3.0")
-        version("jackson", "2.17.0")
+        version("jackson", "2.13.0")
         version("guice", "7.0.0")
         version("guice-multibindings", "4.2.3")
 
