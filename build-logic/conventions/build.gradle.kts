@@ -73,7 +73,7 @@ gradlePlugin {
     }
 }
 
-version = "1.0.2"
+version = "1.0.4"
 publishing {
     repositories {
         mavenLocal()
@@ -92,7 +92,7 @@ publishing {
         if (project.hasProperty("artifactoryUsername") && project.hasProperty("artifactoryPassword")) {
             maven {
                 name = "central"
-                url = uri("https://artifactory.devs.tensquaregames.com/artifactory/libs-release-local")
+                url = uri("https://artifactory.devs.tensquaregames.com/artifactory/plugins-release-local")
                 credentials {
                     username = project.findProperty("artifactoryUsername") as String
                     password = project.findProperty("artifactoryPassword") as String
