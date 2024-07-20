@@ -12,7 +12,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Run Tests
+      - name: Testing starter modules
         uses: bratek20/github-actions/run-tests-action@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Testing logs modules
+        uses: bratek20/github-actions/run-tests-action@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          project: bratek20-logs
