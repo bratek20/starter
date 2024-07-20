@@ -26,33 +26,13 @@ tasks.withType(KotlinCompile::class.java) {
 
 gradlePlugin {
     plugins {
-        register("repositories-conventions") {
-            id = "com.github.bratek20.internal.repositories-conventions"
-            implementationClass = "pl.bratek20.conventions.internal.RepositoriesConventions"
-        }
-        register("base-conventions") {
-            id = "com.github.bratek20.base-conventions"
-            implementationClass = "pl.bratek20.conventions.BaseConventions"
-        }
-        register("simple-library-conventions") {
-            id = "com.github.bratek20.simple-library-conventions"
-            implementationClass = "pl.bratek20.conventions.SimpleLibraryConventions"
-        }
-        register("library-conventions") {
-            id = "com.github.bratek20.library-conventions"
-            implementationClass = "pl.bratek20.conventions.LibraryConventions"
-        }
-        register("publish-conventions") {
-            id = "com.github.bratek20.publish-conventions"
-            implementationClass = "pl.bratek20.conventions.PublishConventions"
-        }
-        register("spring-app-conventions") {
-            id = "com.github.bratek20.spring-app-conventions"
-            implementationClass = "pl.bratek20.conventions.SpringAppConventions"
-        }
         register("kotlin-conventions") {
             id = "com.github.bratek20.kotlin-conventions"
             implementationClass = "pl.bratek20.conventions.KotlinConventions"
+        }
+        register("java-conventions") {
+            id = "com.github.bratek20.java-conventions"
+            implementationClass = "pl.bratek20.conventions.JavaConventions"
         }
         register("kotlin-library-conventions") {
             id = "com.github.bratek20.kotlin-library-conventions"
@@ -61,10 +41,6 @@ gradlePlugin {
         register("internal-kotlin-library-conventions") {
             id = "com.github.bratek20.internal-kotlin-library-conventions"
             implementationClass = "pl.bratek20.conventions.InternalKotlinLibraryConventions"
-        }
-        register("java-conventions") {
-            id = "com.github.bratek20.java-conventions"
-            implementationClass = "pl.bratek20.conventions.JavaConventions"
         }
         register("kotest-conventions") {
             id = "com.github.bratek20.kotest-conventions"

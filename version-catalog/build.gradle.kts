@@ -9,7 +9,7 @@ val bratek20StarterVersion = "1.0.39"
 
 //changed manually
 val bratek20LogsVersion = "1.0.25"
-val bratek20PluginsVersion = "1.0.3"
+val bratek20PluginsVersion = "1.0.4"
 
 catalog {
     versionCatalog {
@@ -29,15 +29,11 @@ catalog {
         library("bratek20-logs-log4j2", "com.github.bratek20.logs", "logs-log4j2").versionRef("bratek20-logs")
 
         //bratek20 plugins
-        plugin("bratek20-kotlin-library-conventions", "com.github.bratek20.kotlin-library-conventions").versionRef("bratek20-plugins")
         plugin("bratek20-kotlin-conventions", "com.github.bratek20.kotlin-conventions").versionRef("bratek20-plugins")
-        plugin("bratek20-internal-kotlin-library-conventions", "com.github.bratek20.internal-kotlin-library-conventions").versionRef("bratek20-plugins")
         plugin("bratek20-java-conventions", "com.github.bratek20.java-conventions").versionRef("bratek20-plugins")
-
-        plugin("bratek20-base-conventions", "com.github.bratek20.base-conventions").versionRef("bratek20-plugins")
-        plugin("bratek20-spring-app-conventions", "com.github.bratek20.spring-app-conventions").versionRef("bratek20-plugins")
-        plugin("bratek20-library-conventions", "com.github.bratek20.library-conventions").versionRef("bratek20-plugins")
-        plugin("bratek20-simple-library-conventions", "com.github.bratek20.simple-library-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-kotlin-library-conventions", "com.github.bratek20.kotlin-library-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-internal-kotlin-library-conventions", "com.github.bratek20.internal-kotlin-library-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-kotest-conventions", "com.github.bratek20.kotlin-conventions").versionRef("bratek20-plugins")
 
         //versions
         version("java", "17")
