@@ -9,7 +9,7 @@ val bratek20StarterVersion = "1.0.39"
 
 //changed manually
 val bratek20LogsVersion = "1.0.25"
-val bratek20PluginsVersion = "1.0.2"
+val bratek20PluginsVersion = "1.0.3"
 
 catalog {
     versionCatalog {

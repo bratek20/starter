@@ -89,19 +89,15 @@ publishing {
             }
         }
 
-        if (project.hasProperty("centralUsername")) {
+        if (project.hasProperty("artifactoryUsername") && project.hasProperty("artifactoryPassword")) {
             maven {
                 name = "central"
-                url = uri("https://artifactory.devs.tensquaregames.com/artifactory/plugins-release-local")
+                url = uri("https://artifactory.devs.tensquaregames.com/artifactory/libs-release-local")
                 credentials {
-                    username = project.findProperty("centralUsername") as String
-                    password = project.findProperty("centralPassword") as String
+                    username = project.findProperty("artifactoryUsername") as String
+                    password = project.findProperty("artifactoryPassword") as String
                 }
             }
         }
     }
-}
-
-repositories {
-    mavenCentral()
 }
