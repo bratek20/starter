@@ -66,6 +66,10 @@ gradlePlugin {
             id = "com.github.bratek20.java-conventions"
             implementationClass = "pl.bratek20.conventions.JavaConventions"
         }
+        register("kotest-conventions") {
+            id = "com.github.bratek20.kotest-conventions"
+            implementationClass = "pl.bratek20.conventions.KotestConventions"
+        }
     }
 }
 

@@ -8,17 +8,13 @@ import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.testing.Test
 import org.gradle.jvm.toolchain.JavaLanguageVersion
-import org.gradle.platform.base.ToolChain
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import pl.bratek20.conventions.internal.RepositoriesConventions
 import pl.bratek20.extensions.versionCatalog
 
 class BaseConventions : Plugin<Project> {
     override fun apply(project: Project) {
         with(project) {
             with(plugins) {
-                apply(RepositoriesConventions::class.java)
-
                 apply(JavaPlugin::class.java)
                 apply("org.jetbrains.kotlin.jvm")
 

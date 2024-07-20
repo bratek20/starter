@@ -12,6 +12,7 @@ dependencyResolutionManagement {
 
     repositories {
         mavenLocal()
+        mavenCentral()
 
         val githubActor: String? = if (extra.has("githubActor")) extra["githubActor"] as String else System.getenv("GITHUB_ACTOR")
         val githubToken: String? = if (extra.has("githubToken")) extra["githubToken"] as String else System.getenv("GITHUB_TOKEN")
