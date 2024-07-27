@@ -1,6 +1,7 @@
+includeBuild("bratek20-logs")
+
 pluginManagement {
     includeBuild("build-logic")
-    includeBuild("bratek20-logs")
 }
 
 dependencyResolutionManagement {
