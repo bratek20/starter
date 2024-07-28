@@ -1,10 +1,7 @@
 package com.github.bratek20.architecture.exceptions
 
-import io.kotest.assertions.asClue
-import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldStartWith
-import io.kotest.matchers.types.instanceOf
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import kotlin.reflect.KClass
 
 data class ExpectedException(
@@ -12,24 +9,21 @@ data class ExpectedException(
     var message: String? = null,
     var messagePrefix: String? = null,
 )
+
 fun assertApiExceptionThrown(block: () -> Unit, init: ExpectedException.() -> Unit) {
     val expected = ExpectedException().apply(init)
 
-    val thrownException = shouldThrow<Exception> {
+    val thrownException = assertThatThrownBy {
         block()
-    }
-
-    "Checking exception ${thrownException.javaClass} with message: ${thrownException.message}".asClue {
-        thrownException shouldBe instanceOf(ApiException::class)
-    }
+    }.isInstanceOf(ApiException::class.java)
 
     expected.type?.let {
-        thrownException::class shouldBe it
+        thrownException.isInstanceOf(it.java)
     }
     expected.message?.let {
-        thrownException.message shouldBe it
+        thrownException.hasMessage(it)
     }
     expected.messagePrefix?.let {
-        thrownException.message shouldStartWith it
+        thrownException.hasMessageStartingWith(it)
     }
 }

@@ -1,4 +1,5 @@
 includeBuild("bratek20-logs")
+includeBuild("examples")
 
 pluginManagement {
     includeBuild("build-logic")
