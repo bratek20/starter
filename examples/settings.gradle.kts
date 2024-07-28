@@ -2,6 +2,8 @@ rootProject.name = "examples"
 
 include("spring-web-app")
 
+val catalogVersion = "1.0.55"
+
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -27,7 +29,7 @@ pluginManagement {
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
-            from("com.github.bratek20:version-catalog:1.0.47")
+            from("com.github.bratek20:version-catalog:$catalogVersion")
         }
     }
 

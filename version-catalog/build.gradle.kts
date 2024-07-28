@@ -4,11 +4,11 @@ plugins {
 }
 
 //changed by script
-val catalogVersion = "1.0.51"
+val catalogVersion = "1.0.55"
 val bratek20StarterVersion = "1.0.43"
 
 //changed manually
-val bratek20LogsVersion = "1.0.27"
+val bratek20LogsVersion = "1.0.28"
 val bratek20PluginsVersion = "1.0.5"
 
 catalog {
@@ -35,6 +35,7 @@ catalog {
         plugin("bratek20-kotlin-library-conventions", "com.github.bratek20.kotlin-library-conventions").versionRef("bratek20-plugins")
         plugin("bratek20-internal-kotlin-library-conventions", "com.github.bratek20.internal-kotlin-library-conventions").versionRef("bratek20-plugins")
         plugin("bratek20-kotest-conventions", "com.github.bratek20.kotlin-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-spring-web-app-conventions", "com.github.bratek20.spring-web-app-conventions").versionRef("bratek20-plugins")
 
         //versions
         version("java", "17")
@@ -52,9 +53,9 @@ catalog {
         version("lombok", "8.3")
         version("protobuf", "3.25.2")
 
-        version("slf4j", "2.0.13")
+        version("slf4j", "1.7.36")
         version("log4j", "2.21.0")
-        version("logback", "1.5.6")
+        version("logback", "1.2.12")
 
         version("rest-assured", "5.3.0")
         version("jackson", "2.13.0")
@@ -72,7 +73,7 @@ catalog {
         library("spring-web", "org.springframework", "spring-web").versionRef("spring")
 
         library("spring-boot-dependencies", "org.springframework.boot", "spring-boot-dependencies").versionRef("spring-boot")
-        library("spring-boot-swagger", "org.springdoc", "springdoc-openapi-starter-webmvc-ui").versionRef("spring-boot-swagger")
+        library("spring-boot-swagger", "org.springdoc", "springdoc-openapi-ui").versionRef("spring-boot-swagger")
 
         library("guava", "com.google.guava", "guava").version("32.1.2-jre")
         library("jackson-dataformat-yaml", "com.fasterxml.jackson.dataformat", "jackson-dataformat-yaml").versionRef("jackson")
