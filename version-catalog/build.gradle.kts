@@ -4,12 +4,12 @@ plugins {
 }
 
 //changed by script
-val catalogVersion = "1.0.47"
-val bratek20StarterVersion = "1.0.39"
+val catalogVersion = "1.0.49"
+val bratek20StarterVersion = "1.0.41"
 
 //changed manually
 val bratek20LogsVersion = "1.0.27"
-val bratek20PluginsVersion = "1.0.4"
+val bratek20PluginsVersion = "1.0.5"
 
 catalog {
     versionCatalog {
