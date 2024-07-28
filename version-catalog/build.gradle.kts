@@ -45,6 +45,7 @@ catalog {
         version("kotest", "5.9.1")
 
         version("spring-boot", "2.7.18")
+        version("spring-boot-swagger", "1.6.9")
         version("spring", "5.3.31")
 
         version("testcontainers", "1.16.2")
@@ -71,7 +72,7 @@ catalog {
         library("spring-web", "org.springframework", "spring-web").versionRef("spring")
 
         library("spring-boot-dependencies", "org.springframework.boot", "spring-boot-dependencies").versionRef("spring-boot")
-        library("spring-boot-swagger", "org.springdoc", "springdoc-openapi-starter-webmvc-ui").version("2.2.0")
+        library("spring-boot-swagger", "org.springdoc", "springdoc-openapi-starter-webmvc-ui").versionRef("spring-boot-swagger")
 
         library("guava", "com.google.guava", "guava").version("32.1.2-jre")
         library("jackson-dataformat-yaml", "com.fasterxml.jackson.dataformat", "jackson-dataformat-yaml").versionRef("jackson")
