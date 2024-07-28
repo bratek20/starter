@@ -15,7 +15,7 @@ cd ..
 
 # Run the first Gradle task with detailed logging
 echo "Running ./gradlew -p version-catalog publish $extraGradlewArgs"
-./gradlew -p version-catalog clean publish $extraGradlewArgs --info
+./gradlew -p version-catalog publish $extraGradlewArgs --info
 if [ $? -ne 0 ]; then
     echo "First Gradle task failed. Exiting."
     exit 1

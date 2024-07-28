@@ -24,4 +24,4 @@ sed -i -E "s/(val catalogVersion = \")[0-9]+\.[0-9]+\.[0-9]+(\")/val catalogVers
 echo "catalogVersion: $new_catalog_version"
 
 cd ..
-./gradlew -p version-catalog clean publish
+./gradlew -p version-catalog publish
