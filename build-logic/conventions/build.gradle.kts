@@ -46,6 +46,10 @@ gradlePlugin {
             id = "com.github.bratek20.kotest-conventions"
             implementationClass = "pl.bratek20.conventions.KotestConventions"
         }
+        register("spring-web-app-conventions") {
+            id = "com.github.bratek20.spring-web-app-conventions"
+            implementationClass = "pl.bratek20.conventions.SpringWebAppConventions"
+        }
     }
 }
 

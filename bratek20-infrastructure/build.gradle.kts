@@ -3,8 +3,8 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":bratek20-architecture"))
-    testImplementation(testFixtures(project(":bratek20-architecture")))
+    api(project(":bratek20-architecture"))
+    testApi(testFixtures(project(":bratek20-architecture")))
 
     //http client
     implementation(libs.spring.web)
