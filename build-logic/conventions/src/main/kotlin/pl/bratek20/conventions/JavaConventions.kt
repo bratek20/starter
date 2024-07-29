@@ -14,6 +14,8 @@ class JavaConventions : Plugin<Project> {
         with(project) {
             with(plugins) {
                 apply(JavaPlugin::class.java)
+
+                apply(TestingConventions::class.java)
             }
 
             val javaVersion = JavaVersion.toVersion(versionCatalog().findVersion("java").get())
@@ -21,18 +23,6 @@ class JavaConventions : Plugin<Project> {
             project.extensions.getByType(JavaPluginExtension::class.java)
                 .toolchain.languageVersion
                     .set(JavaLanguageVersion.of(javaVersion.majorVersion))
-
-            with(dependencies) {
-                add("testImplementation", versionCatalog().findLibrary("junit-jupiter-api").get())
-                add("testImplementation", versionCatalog().findLibrary("junit-jupiter-params").get())
-                add("testRuntimeOnly", versionCatalog().findLibrary("junit-jupiter-engine").get())
-
-                add("testImplementation", versionCatalog().findLibrary("assertj-core").get())
-            }
-
-            tasks.withType(Test::class.java).configureEach {
-                useJUnitPlatform()
-            }
         }
     }
 }

@@ -12,6 +12,8 @@ class KotlinConventions: Plugin<Project> {
         with(project) {
             with(plugins) {
                 apply("org.jetbrains.kotlin.jvm")
+                
+                apply(TestingConventions::class.java)
             }
 
             val javaVersion = JavaVersion.toVersion(versionCatalog().findVersion("java").get())
@@ -20,16 +22,6 @@ class KotlinConventions: Plugin<Project> {
                 kotlinOptions {
                     jvmTarget = javaVersion.majorVersion
                 }
-            }
-
-            with(dependencies) {
-                add("testImplementation", versionCatalog().findLibrary("junit-jupiter-api").get())
-                add("testImplementation", versionCatalog().findLibrary("junit-jupiter-params").get())
-                add("testRuntimeOnly", versionCatalog().findLibrary("junit-jupiter-engine").get())
-            }
-
-            tasks.withType(Test::class.java).configureEach {
-                useJUnitPlatform()
             }
         }
     }
