@@ -50,6 +50,10 @@ gradlePlugin {
             id = "com.github.bratek20.spring-web-app-conventions"
             implementationClass = "pl.bratek20.conventions.SpringWebAppConventions"
         }
+        register("tests-in-test-fixtures-conventions") {
+            id = "com.github.bratek20.tests-in-test-fixtures-conventions"
+            implementationClass = "pl.bratek20.conventions.TestsInTestFixturesConventions"
+        }
     }
 }
 

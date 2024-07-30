@@ -1,3 +1,3 @@
 plugins {
-    alias(libs.plugins.bratek20.spring.web.app.conventions)
+    id("com.github.bratek20.spring-web-app-conventions")
 }
