@@ -1,5 +1,7 @@
 rootProject.name = "examples"
 
+include("simple-app")
+include("spring-app")
 include("spring-web-app")
 include("tests-in-test-fixtures")
 

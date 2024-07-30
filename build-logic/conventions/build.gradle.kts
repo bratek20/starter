@@ -12,6 +12,8 @@ dependencies {
 
     implementation(libs.lombok.plugin)
     implementation(libs.spring.boot.plugin)
+
+    implementation("gradle.plugin.com.github.johnrengelman:shadow:7.1.2")
 }
 
 java {
