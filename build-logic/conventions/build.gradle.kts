@@ -1,5 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+version = "1.0.6"
+
 plugins {
     `kotlin-dsl`
     `maven-publish`
@@ -57,7 +59,7 @@ gradlePlugin {
     }
 }
 
-version = "1.0.5"
+
 publishing {
     repositories {
         mavenLocal()
