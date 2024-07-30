@@ -4,7 +4,7 @@ plugins {
 }
 
 //changed by script
-val catalogVersion = "1.0.57"
+val catalogVersion = "1.0.58"
 val bratek20StarterVersion = "1.0.43"
 
 //changed manually
@@ -36,6 +36,7 @@ catalog {
         plugin("bratek20-internal-kotlin-library-conventions", "com.github.bratek20.internal-kotlin-library-conventions").versionRef("bratek20-plugins")
         plugin("bratek20-kotest-conventions", "com.github.bratek20.kotlin-conventions").versionRef("bratek20-plugins")
         plugin("bratek20-spring-web-app-conventions", "com.github.bratek20.spring-web-app-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-tests-in-test-fixtures-conventions", "com.github.bratek20.tests-in-test-fixtures-conventions").versionRef("bratek20-plugins")
 
         //versions
         version("java", "17")
