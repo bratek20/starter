@@ -1,6 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-version = "1.0.7"
+version = "1.0.8"
 
 plugins {
     `kotlin-dsl`
@@ -70,6 +70,10 @@ gradlePlugin {
         register("simple-app-conventions") {
             id = "com.github.bratek20.simple-app-conventions"
             implementationClass = "pl.bratek20.conventions.SimpleAppConventions"
+        }
+        register("spring-app-conventions") {
+            id = "com.github.bratek20.spring-app-conventions"
+            implementationClass = "pl.bratek20.conventions.SpringAppConventions"
         }
     }
 }

@@ -8,17 +8,16 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin
 import pl.bratek20.extensions.applyJavaPlugin
 import pl.bratek20.extensions.versionCatalog
 
-class SpringWebAppConventions : Plugin<Project> {
+class SpringAppConventions : Plugin<Project> {
     override fun apply(project: Project) {
         with(project) {
             with(plugins) {
-                apply(SpringAppConventions::class.java)
+                apply(KotlinConventions::class.java)
+                apply(SpringBootPlugin::class.java)
             }
 
             with(dependencies) {
-                add("implementation", versionCatalog().findLibrary("spring-boot-swagger").get())
-                // needed for swagger to not complain about missing loggers
-                add("implementation", versionCatalog().findLibrary("bratek20-logs").get())
+                add("implementation", versionCatalog().findLibrary("bratek20-spring").get())
             }
         }
     }

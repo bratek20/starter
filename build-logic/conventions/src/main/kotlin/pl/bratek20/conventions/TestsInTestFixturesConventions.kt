@@ -7,6 +7,7 @@ import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.named
+import pl.bratek20.extensions.sourceSets
 import pl.bratek20.extensions.versionCatalog
 
 class TestsInTestFixturesConventions : Plugin<Project> {
@@ -20,7 +21,7 @@ class TestsInTestFixturesConventions : Plugin<Project> {
                 dependsOn("testFixturesClasses")
             }
 
-            val sourceSets = project.extensions.getByName("sourceSets") as SourceSetContainer
+            val sourceSets = project.sourceSets()
 
             tasks.named<Test>("test").configure {
                 dependsOn("testFixturesClasses")
