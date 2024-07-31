@@ -1,6 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-version = "1.0.7"
+version = "1.0.8"
 
 plugins {
     `kotlin-dsl`
@@ -12,6 +12,17 @@ dependencies {
 
     implementation(libs.lombok.plugin)
     implementation(libs.spring.boot.plugin)
+
+    implementation("com.github.johnrengelman:shadow:8.1.1")
+
+    testImplementation(gradleTestKit())
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.junit.jupiter.engine)
+    testImplementation(libs.assertj.core)
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 java {
@@ -55,6 +66,14 @@ gradlePlugin {
         register("tests-in-test-fixtures-conventions") {
             id = "com.github.bratek20.tests-in-test-fixtures-conventions"
             implementationClass = "pl.bratek20.conventions.TestsInTestFixturesConventions"
+        }
+        register("simple-app-conventions") {
+            id = "com.github.bratek20.simple-app-conventions"
+            implementationClass = "pl.bratek20.conventions.SimpleAppConventions"
+        }
+        register("spring-app-conventions") {
+            id = "com.github.bratek20.spring-app-conventions"
+            implementationClass = "pl.bratek20.conventions.SpringAppConventions"
         }
     }
 }
