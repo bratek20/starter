@@ -32,7 +32,7 @@ class InMemoryPropertiesSource(
 }
 
 class InMemoryPropertiesSourceImpl(
-    private val name: String
+    private val name: String = "in-memory-properties-source"
 ): ContextModule {
     override fun apply(builder: ContextBuilder) {
         builder.addImplObject(PropertiesSource::class.java, InMemoryPropertiesSource(name))
