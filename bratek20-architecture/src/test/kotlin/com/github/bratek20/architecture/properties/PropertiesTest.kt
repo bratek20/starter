@@ -57,7 +57,8 @@ class PropertiesTest {
         @Test
         fun shouldGetPartialObjectProperty() {
             val key = ObjectPropertyKey("mine", SomeProperty::class)
-            source1.set(key, SomePropertyWithAmount("x", 5))
+            val keyForTypeWithAmount = ObjectPropertyKey("mine", SomePropertyWithAmount::class)
+            source1.set(keyForTypeWithAmount, SomePropertyWithAmount("x", 5))
 
             val givenProp = properties.get(key)
 
@@ -78,7 +79,8 @@ class PropertiesTest {
         @Test
         fun shouldGetPartialListProperty() {
             val key = ListPropertyKey("mine", SomeProperty::class)
-            source1.set(key, listOf(SomePropertyWithAmount("x", 5), SomePropertyWithAmount("y", 10)))
+            val keyForTypeWithAmount = ListPropertyKey("mine", SomePropertyWithAmount::class)
+            source1.set(keyForTypeWithAmount, listOf(SomePropertyWithAmount("x", 5), SomePropertyWithAmount("y", 10)))
 
             val givenProp = properties.get(key)
 
@@ -122,7 +124,7 @@ class PropertiesTest {
         @Test
         fun shouldThrowWhenPropertyHasDifferentKeyType() {
             val objectKey = ObjectPropertyKey("object", SomeProperty::class)
-            source1.set(objectKey, listOf(SomeProperty("x")))
+            source1.setAny(objectKey, listOf(SomeProperty("x")))
 
             assertApiExceptionThrown(
                 { properties.get(objectKey) },
@@ -133,7 +135,7 @@ class PropertiesTest {
             )
 
             val listKey = ListPropertyKey("list", SomeProperty::class)
-            source1.set(listKey, SomeProperty("x"))
+            source1.setAny(listKey, SomeProperty("x"))
 
             assertApiExceptionThrown(
                 { properties.get(listKey) },
@@ -144,7 +146,7 @@ class PropertiesTest {
             )
 
             val otherObjectKey = ObjectPropertyKey("otherObject", OtherProperty::class)
-            source1.set(otherObjectKey, SomeProperty("x"))
+            source1.setAny(otherObjectKey, SomeProperty("x"))
 
             assertApiExceptionThrown(
                 { properties.get(otherObjectKey) },
@@ -155,7 +157,7 @@ class PropertiesTest {
             )
 
             val otherListKey = ListPropertyKey("otherList", OtherProperty::class)
-            source1.set(otherListKey, listOf(SomeProperty("x")))
+            source1.setAny(otherListKey, listOf(SomeProperty("x")))
             assertApiExceptionThrown(
                 { properties.get(otherListKey) },
                 {

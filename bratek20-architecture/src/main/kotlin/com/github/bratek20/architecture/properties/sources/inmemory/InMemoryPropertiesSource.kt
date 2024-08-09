@@ -13,7 +13,11 @@ class InMemoryPropertiesSource(
 
     private val properties: MutableMap<TypedPropertyKey<*>, Any> = HashMap()
 
-    fun set(key: TypedPropertyKey<*>, property: Any) {
+    fun <T: Any> set(key: TypedPropertyKey<T>, property: T) {
+        properties[key] = property
+    }
+
+    fun setAny(key: TypedPropertyKey<*>, property: Any) {
         properties[key] = property
     }
 

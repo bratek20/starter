@@ -4,7 +4,7 @@ import kotlin.reflect.KClass
 
 data class PropertiesSourceName(val value: String)
 
-open class TypedPropertyKey<T>(val name: String)
+abstract class TypedPropertyKey<T>(val name: String)
 
 open class ListPropertyKey<T: Any>(name: String, val elementType: KClass<T>)
     : TypedPropertyKey<List<T>>(name)
