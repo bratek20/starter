@@ -2,7 +2,7 @@ val groupAll = "com.github.bratek20"
 
 // This variable is changed by publish script
 // Do not change it manually or its name!
-val versionAll = "1.0.43"
+val versionAll = "1.0.44"
 
 group = groupAll
 version = versionAll
