@@ -10,3 +10,6 @@ class MultipleClassesFoundInContextException(message: String)
 
 class DependentClassNotFoundInContextException(message: String)
     : ApiException(message)
+
+class SetCalledForExpectedManyTypeException(message: String)
+    : ApiException(message)

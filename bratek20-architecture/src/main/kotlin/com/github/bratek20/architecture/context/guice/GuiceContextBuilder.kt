@@ -117,6 +117,10 @@ class GuiceContextBuilder: AbstractContextBuilder() {
         return this
     }
 
+    override fun <T> expectMany(type: Class<T>): ContextBuilder {
+        return this
+    }
+
     override fun <I: Any, T : I> addImplObject(interfaceType: Class<I>, implementationObj: T): GuiceContextBuilder {
         modules.add(object: AbstractModule() {
             override fun configure() {

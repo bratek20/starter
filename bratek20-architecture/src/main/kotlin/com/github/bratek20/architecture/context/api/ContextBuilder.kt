@@ -6,7 +6,7 @@ interface ContextBuilder {
     fun <T: Any> setObject(obj: T): ContextBuilder
     fun <I: Any, T: I> setImplObject(interfaceType: Class<I>, implementationObj: T): ContextBuilder
 
-    //fun <T> expectMany(type: Class<T>): ContextBuilder
+    fun <T> expectMany(type: Class<T>): ContextBuilder
     fun <T> addClass(type: Class<T>): ContextBuilder
     fun <I, T: I> addImpl(interfaceType: Class<I>, implementationType: Class<T>): ContextBuilder
     fun <T: Any> addObject(obj: T): ContextBuilder

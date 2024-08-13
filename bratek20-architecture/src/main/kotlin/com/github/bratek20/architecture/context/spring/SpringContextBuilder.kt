@@ -47,6 +47,10 @@ class SpringContextBuilder: AbstractContextBuilder() {
         return this
     }
 
+    override fun <T> expectMany(type: Class<T>): ContextBuilder {
+        return this
+    }
+
     override fun <I: Any, T : I> addImplObject(interfaceType: Class<I>, implementationObj: T): SpringContextBuilder {
         objects.add(implementationObj)
         return this

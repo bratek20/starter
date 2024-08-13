@@ -1,5 +1,6 @@
 package com.github.bratek20.architecture.context.api
 
+import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Disabled
@@ -39,7 +40,7 @@ data class WithValueObjects(val vos: Set<ValueObject>)
 
 abstract class ContextApiTest {
 
-    abstract fun createInstance(): ContextBuilder
+    abstract fun createBuilder(): ContextBuilder
 
     class AllSetObjects(
         val someClass: SomeClass,
@@ -50,9 +51,10 @@ abstract class ContextApiTest {
         val someInterfaceImpl1: SomeInterfaceImpl1,
         val otherInterfaceImpl: OtherInterfaceImpl,
     )
+
     @Test
     fun `should support set operations, inject singletons and inject also impls`() {
-        val context = createInstance()
+        val context = createBuilder()
             .setClass(SomeClass::class.java)
             .setImpl(SomeInterface::class.java, SomeInterfaceImpl1::class.java)
             .setObject(ValueObject("valueObject"))
@@ -80,32 +82,24 @@ abstract class ContextApiTest {
     }
 
     @Test
-    fun `should get class that needs other class`() {
-        val withX = createInstance()
-            .setClass(SomeClass::class.java)
-            .setClass(WithSomeClass::class.java)
-            .build()
-            .get(WithSomeClass::class.java)
-
-        assertThat(withX).isInstanceOf(WithSomeClass::class.java)
-        assertThat(withX.someClass).isNotNull()
+    fun `should throw when set operation called for expected many type`() {
+        assertApiExceptionThrown(
+            {
+                createBuilder()
+                    .expectMany(SomeClass::class.java)
+                    .setClass(SomeClass::class.java)
+            },
+            {
+                type = SetCalledForExpectedManyTypeException::class
+                message = "Set operation called on type SomeClass that was marked as expected many type"
+            }
+        )
     }
 
-    @Test
-    fun `should get the same object for interface and impl (setImpl)`() {
-        val c = createInstance()
-            .setImpl(SomeInterface::class.java, SomeInterfaceImpl1::class.java)
-            .build()
-
-        val a = c.get(SomeInterface::class.java)
-        val aImpl = c.get(SomeInterfaceImpl1::class.java)
-
-        assertThat(a).isEqualTo(aImpl)
-    }
 
     @Test
     fun `should get the same object for interface and impl (addImpl)`() {
-        val c = createInstance()
+        val c = createBuilder()
             .addImpl(SomeInterface::class.java, SomeInterfaceImpl1::class.java)
             .build()
 
@@ -117,7 +111,7 @@ abstract class ContextApiTest {
 
     @Test
     fun `should inject classes set and get the same instances`() {
-        val c = createInstance()
+        val c = createBuilder()
             .addImpl(SomeInterface::class.java, SomeInterfaceImpl1::class.java)
             .addImpl(SomeInterface::class.java, SomeInterfaceImpl2::class.java)
             .setClass(WithSomeInterfaces::class.java)
@@ -142,7 +136,7 @@ abstract class ContextApiTest {
 
     @Test
     fun `should get many objects`() {
-        val result = createInstance()
+        val result = createBuilder()
             .addObject(ValueObject("value"))
             .addObject(ValueObject("value2"))
             .setClass(WithValueObjects::class.java)
@@ -156,7 +150,7 @@ abstract class ContextApiTest {
 
     @Test
     fun `should get class from module`() {
-        val someClass = createInstance()
+        val someClass = createBuilder()
             .withModule(SomeModuleContextModule())
             .build()
             .get(SomeClass::class.java)
@@ -166,7 +160,7 @@ abstract class ContextApiTest {
 
     @Test
     fun `should throw exception when class not found`() {
-        assertThatThrownBy { createInstance().build().get(String::class.java) }
+        assertThatThrownBy { createBuilder().build().get(String::class.java) }
             .isInstanceOf(ClassNotFoundInContextException::class.java)
             .hasMessage("Class String not found in context")
     }
@@ -174,7 +168,7 @@ abstract class ContextApiTest {
     @Test
     fun `should throw exception when multiple classes found`() {
         assertThatThrownBy {
-            createInstance()
+            createBuilder()
                 .addImpl(SomeInterface::class.java, SomeInterfaceImpl1::class.java)
                 .addImpl(SomeInterface::class.java, SomeInterfaceImpl2::class.java)
                 .build()
@@ -187,7 +181,7 @@ abstract class ContextApiTest {
     @Test
     fun `should throw exception if class to inject not found`() {
         assertThatThrownBy {
-            createInstance()
+            createBuilder()
                 .setClass(WithSomeClass::class.java)
                 .build()
         }
@@ -198,7 +192,7 @@ abstract class ContextApiTest {
     @Disabled //TODO fix guice
     @Test
     fun `should inject empty set`() {
-        val obj = createInstance()
+        val obj = createBuilder()
             .setClass(WithSomeClasses::class.java)
             .build()
             .get(WithSomeClasses::class.java)

@@ -10,7 +10,7 @@ import com.github.bratek20.architecture.context.api.ContextBuilder
 import com.github.bratek20.architecture.context.api.SomeClass
 
 class SpringContextImplTest: ContextApiTest() {
-    override fun createInstance(): ContextBuilder {
+    override fun createBuilder(): ContextBuilder {
         return SpringContextBuilder()
     }
 
