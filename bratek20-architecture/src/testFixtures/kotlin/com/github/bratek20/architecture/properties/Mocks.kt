@@ -23,7 +23,7 @@ class PropertiesMock : Properties {
         TODO("Not yet implemented")
     }
 
-    fun setProperty(key: TypedPropertyKey<*>, value: Any) {
+    fun <T: Any> set(key: TypedPropertyKey<T>, value: T) {
         values.computeIfAbsent(key) { value }
     }
 }

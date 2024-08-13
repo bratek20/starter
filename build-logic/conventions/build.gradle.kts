@@ -1,5 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+version = "1.0.8"
+
 plugins {
     `kotlin-dsl`
     `maven-publish`
@@ -10,6 +12,17 @@ dependencies {
 
     implementation(libs.lombok.plugin)
     implementation(libs.spring.boot.plugin)
+
+    implementation("com.github.johnrengelman:shadow:8.1.1")
+
+    testImplementation(gradleTestKit())
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.junit.jupiter.engine)
+    testImplementation(libs.assertj.core)
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 java {
@@ -26,33 +39,13 @@ tasks.withType(KotlinCompile::class.java) {
 
 gradlePlugin {
     plugins {
-        register("repositories-conventions") {
-            id = "com.github.bratek20.internal.repositories-conventions"
-            implementationClass = "pl.bratek20.conventions.internal.RepositoriesConventions"
-        }
-        register("base-conventions") {
-            id = "com.github.bratek20.base-conventions"
-            implementationClass = "pl.bratek20.conventions.BaseConventions"
-        }
-        register("simple-library-conventions") {
-            id = "com.github.bratek20.simple-library-conventions"
-            implementationClass = "pl.bratek20.conventions.SimpleLibraryConventions"
-        }
-        register("library-conventions") {
-            id = "com.github.bratek20.library-conventions"
-            implementationClass = "pl.bratek20.conventions.LibraryConventions"
-        }
-        register("publish-conventions") {
-            id = "com.github.bratek20.publish-conventions"
-            implementationClass = "pl.bratek20.conventions.PublishConventions"
-        }
-        register("spring-app-conventions") {
-            id = "com.github.bratek20.spring-app-conventions"
-            implementationClass = "pl.bratek20.conventions.SpringAppConventions"
-        }
         register("kotlin-conventions") {
             id = "com.github.bratek20.kotlin-conventions"
             implementationClass = "pl.bratek20.conventions.KotlinConventions"
+        }
+        register("java-conventions") {
+            id = "com.github.bratek20.java-conventions"
+            implementationClass = "pl.bratek20.conventions.JavaConventions"
         }
         register("kotlin-library-conventions") {
             id = "com.github.bratek20.kotlin-library-conventions"
@@ -62,14 +55,30 @@ gradlePlugin {
             id = "com.github.bratek20.internal-kotlin-library-conventions"
             implementationClass = "pl.bratek20.conventions.InternalKotlinLibraryConventions"
         }
-        register("java-conventions") {
-            id = "com.github.bratek20.java-conventions"
-            implementationClass = "pl.bratek20.conventions.JavaConventions"
+        register("kotest-conventions") {
+            id = "com.github.bratek20.kotest-conventions"
+            implementationClass = "pl.bratek20.conventions.KotestConventions"
+        }
+        register("spring-web-app-conventions") {
+            id = "com.github.bratek20.spring-web-app-conventions"
+            implementationClass = "pl.bratek20.conventions.SpringWebAppConventions"
+        }
+        register("tests-in-test-fixtures-conventions") {
+            id = "com.github.bratek20.tests-in-test-fixtures-conventions"
+            implementationClass = "pl.bratek20.conventions.TestsInTestFixturesConventions"
+        }
+        register("simple-app-conventions") {
+            id = "com.github.bratek20.simple-app-conventions"
+            implementationClass = "pl.bratek20.conventions.SimpleAppConventions"
+        }
+        register("spring-app-conventions") {
+            id = "com.github.bratek20.spring-app-conventions"
+            implementationClass = "pl.bratek20.conventions.SpringAppConventions"
         }
     }
 }
 
-version = "1.0.2"
+
 publishing {
     repositories {
         mavenLocal()
@@ -85,19 +94,15 @@ publishing {
             }
         }
 
-        if (project.hasProperty("centralUsername")) {
+        if (project.hasProperty("artifactoryUsername") && project.hasProperty("artifactoryPassword")) {
             maven {
                 name = "central"
                 url = uri("https://artifactory.devs.tensquaregames.com/artifactory/plugins-release-local")
                 credentials {
-                    username = project.findProperty("centralUsername") as String
-                    password = project.findProperty("centralPassword") as String
+                    username = project.findProperty("artifactoryUsername") as String
+                    password = project.findProperty("artifactoryPassword") as String
                 }
             }
         }
     }
-}
-
-repositories {
-    mavenCentral()
 }

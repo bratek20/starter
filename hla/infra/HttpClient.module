@@ -1,6 +1,19 @@
 ExternalTypes
-    HttpClient // TODO-REF hla missing generic types support
+    HttpResponse // TODO-REF hla missing generic types support
+        //getStatusCode(): Int
+        //getBody<T>(type: Class<T>): T
+ValueObjects
+    HttpClientAuth
+        username: string
+        password: string
+    HttpClientConfig
+       baseUrl: string
+       auth: HttpClientAuth? = empty
 
 Interfaces
+    HttpClient
+        get(path: String): HttpResponse
+        post(path: String, body: any?): HttpResponse
+
     HttpClientFactory
-        create(baseUrl: string): HttpClient
+        create(config: HttpClientConfig): HttpClient

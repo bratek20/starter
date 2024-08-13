@@ -7,9 +7,10 @@ import com.github.bratek20.infrastructure.httpclient.api.HttpClient
 import com.github.bratek20.infrastructure.httpclient.api.HttpClientFactory
 import com.github.bratek20.infrastructure.httpclient.api.HttpResponse
 import com.github.bratek20.infrastructure.httpclient.context.HttpClientImpl
+import com.github.bratek20.infrastructure.httpclient.fixtures.httpClientConfig
 import com.github.tomakehurst.wiremock.WireMockServer
+import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder
 import com.github.tomakehurst.wiremock.client.WireMock
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -17,8 +18,9 @@ import org.junit.jupiter.api.Test
 
 class MyException(message: String): ApiException(message)
 
-class HttpClientApiTest {
+class HttpClientImplTest {
     private lateinit var server: WireMockServer
+    private lateinit var factory: HttpClientFactory
     private lateinit var client: HttpClient
 
     @BeforeEach
@@ -26,10 +28,13 @@ class HttpClientApiTest {
         server = WireMockServer(8080)
         server.start()
 
-        client = someContextBuilder()
+        factory = someContextBuilder()
             .withModules(HttpClientImpl())
             .get(HttpClientFactory::class.java)
-            .create("http://localhost:8080")
+
+        client = factory.create(httpClientConfig {
+            baseUrl = "http://localhost:8080"
+        })
     }
 
     @AfterEach
@@ -81,10 +86,7 @@ class HttpClientApiTest {
         server.stubFor(
             mapping
                 .willReturn(
-                    WireMock.aResponse()
-                        .withHeader("Content-Type", "application/json")
-                        .withStatus(200)
-                        .withBody("{\"value\": \"Some response\", \"amount\": 2}")
+                    wireMockResponse()
                 )
         )
     }
@@ -94,6 +96,13 @@ class HttpClientApiTest {
             value = SomeValue("Some request"),
             amount = 1
         )
+    }
+
+    private fun wireMockResponse(): ResponseDefinitionBuilder {
+        return WireMock.aResponse()
+            .withHeader("Content-Type", "application/json")
+            .withStatus(200)
+            .withBody("{\"value\": \"Some response\", \"amount\": 2}")
     }
 
     private fun responseBody(): SomeClass {
@@ -172,5 +181,27 @@ class HttpClientApiTest {
                 message = "Some message"
             }
         )
+    }
+
+    @Test
+    fun shouldSendAuthHeaderIfAuthInConfigPresent() {
+        server.stubFor(WireMock.get(WireMock.urlEqualTo("/getAuth"))
+            .withHeader("Authorization", WireMock.equalTo("Basic dXNlcjpwYXNzd29yZA==")) // "user:password" base64 encoded
+            .willReturn(
+                wireMockResponse()
+            )
+        )
+
+        client = factory.create(httpClientConfig {
+            baseUrl = "http://localhost:8080"
+            auth = {
+                username = "user"
+                password = "password"
+            }
+        })
+
+        val response = client.get("/getAuth")
+
+        assertResponse(response)
     }
 }

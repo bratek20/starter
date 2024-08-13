@@ -13,7 +13,11 @@ class InMemoryPropertiesSource(
 
     private val properties: MutableMap<TypedPropertyKey<*>, Any> = HashMap()
 
-    fun set(key: TypedPropertyKey<*>, property: Any) {
+    fun <T: Any> set(key: TypedPropertyKey<T>, property: T) {
+        properties[key] = property
+    }
+
+    fun setAny(key: TypedPropertyKey<*>, property: Any) {
         properties[key] = property
     }
 
@@ -32,7 +36,7 @@ class InMemoryPropertiesSource(
 }
 
 class InMemoryPropertiesSourceImpl(
-    private val name: String
+    private val name: String = "in-memory-properties-source"
 ): ContextModule {
     override fun apply(builder: ContextBuilder) {
         builder.addImplObject(PropertiesSource::class.java, InMemoryPropertiesSource(name))

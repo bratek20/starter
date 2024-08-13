@@ -4,12 +4,12 @@ plugins {
 }
 
 //changed by script
-val catalogVersion = "1.0.30"
-val bratek20StarterVersion = "1.0.30"
+val catalogVersion = "1.0.60"
+val bratek20StarterVersion = "1.0.44"
 
 //changed manually
-val bratek20LogsVersion = "1.0.25"
-val bratek20PluginsVersion = "1.0.2"
+val bratek20LogsVersion = "1.0.28"
+val bratek20PluginsVersion = "1.0.8"
 
 catalog {
     versionCatalog {
@@ -24,20 +24,23 @@ catalog {
         library("bratek20-infrastructure", "com.github.bratek20", "bratek20-infrastructure").versionRef("bratek20-starter")
         library("bratek20-spring", "com.github.bratek20", "bratek20-spring").versionRef("bratek20-starter")
 
-        library("break20-logs-core", "com.github.bratek20.logs", "logs-core").versionRef("bratek20-logs")
+        library("bratek20-logs", "com.github.bratek20.logs", "bratek20-logs").versionRef("bratek20-logs")
+        library("bratek20-logs-core", "com.github.bratek20.logs", "logs-core").versionRef("bratek20-logs")
         library("bratek20-logs-logback", "com.github.bratek20.logs", "logs-logback").versionRef("bratek20-logs")
         library("bratek20-logs-log4j2", "com.github.bratek20.logs", "logs-log4j2").versionRef("bratek20-logs")
 
         //bratek20 plugins
-        plugin("bratek20-kotlin-library-conventions", "com.github.bratek20.kotlin-library-conventions").versionRef("bratek20-plugins")
         plugin("bratek20-kotlin-conventions", "com.github.bratek20.kotlin-conventions").versionRef("bratek20-plugins")
-        plugin("bratek20-internal-kotlin-library-conventions", "com.github.bratek20.internal-kotlin-library-conventions").versionRef("bratek20-plugins")
         plugin("bratek20-java-conventions", "com.github.bratek20.java-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-kotlin-library-conventions", "com.github.bratek20.kotlin-library-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-internal-kotlin-library-conventions", "com.github.bratek20.internal-kotlin-library-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-kotest-conventions", "com.github.bratek20.kotlin-conventions").versionRef("bratek20-plugins")
 
-        plugin("bratek20-base-conventions", "com.github.bratek20.base-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-tests-in-test-fixtures-conventions", "com.github.bratek20.tests-in-test-fixtures-conventions").versionRef("bratek20-plugins")
+
+        plugin("bratek20-simple-app-conventions", "com.github.bratek20.simple-app-conventions").versionRef("bratek20-plugins")
         plugin("bratek20-spring-app-conventions", "com.github.bratek20.spring-app-conventions").versionRef("bratek20-plugins")
-        plugin("bratek20-library-conventions", "com.github.bratek20.library-conventions").versionRef("bratek20-plugins")
-        plugin("bratek20-simple-library-conventions", "com.github.bratek20.simple-library-conventions").versionRef("bratek20-plugins")
+        plugin("bratek20-spring-web-app-conventions", "com.github.bratek20.spring-web-app-conventions").versionRef("bratek20-plugins")
 
         //versions
         version("java", "17")
@@ -47,18 +50,20 @@ catalog {
         version("assertj", "3.24.2")
         version("kotest", "5.9.1")
 
-        version("testcontainers", "1.16.2")
+        version("spring-boot", "2.7.18")
+        version("spring-boot-swagger", "1.6.9")
+        version("spring", "5.3.31")
 
+        version("testcontainers", "1.16.2")
         version("lombok", "8.3")
-        version("spring-boot", "3.0.13")
         version("protobuf", "3.25.2")
 
-        version("slf4j", "2.0.13")
+        version("slf4j", "1.7.36")
         version("log4j", "2.21.0")
-        version("logback", "1.5.6")
+        version("logback", "1.2.12")
 
         version("rest-assured", "5.3.0")
-        version("jackson", "2.17.0")
+        version("jackson", "2.13.0")
         version("guice", "7.0.0")
         version("guice-multibindings", "4.2.3")
 
@@ -69,8 +74,11 @@ catalog {
         library("spring-boot-plugin", "org.springframework.boot", "spring-boot-gradle-plugin").versionRef("spring-boot")
 
         //impl dependencies
+        library("spring-context", "org.springframework", "spring-context").versionRef("spring")
+        library("spring-web", "org.springframework", "spring-web").versionRef("spring")
+
         library("spring-boot-dependencies", "org.springframework.boot", "spring-boot-dependencies").versionRef("spring-boot")
-        library("spring-boot-swagger", "org.springdoc", "springdoc-openapi-starter-webmvc-ui").version("2.2.0")
+        library("spring-boot-swagger", "org.springdoc", "springdoc-openapi-ui").versionRef("spring-boot-swagger")
 
         library("guava", "com.google.guava", "guava").version("32.1.2-jre")
         library("jackson-dataformat-yaml", "com.fasterxml.jackson.dataformat", "jackson-dataformat-yaml").versionRef("jackson")

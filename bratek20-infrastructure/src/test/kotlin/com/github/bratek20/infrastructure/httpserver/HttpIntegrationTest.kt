@@ -8,9 +8,10 @@ import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.architecture.serialization.api.Serializer
 import com.github.bratek20.architecture.serialization.api.Struct
 import com.github.bratek20.architecture.serialization.context.SerializationFactory
-import com.github.bratek20.infrastructure.httpclient.api.HttpClient
+import com.github.bratek20.infrastructure.httpclient.api.HttpClientConfig
 import com.github.bratek20.infrastructure.httpclient.api.HttpClientFactory
 import com.github.bratek20.infrastructure.httpclient.context.HttpClientImpl
+import com.github.bratek20.infrastructure.httpclient.fixtures.httpClientConfig
 import com.github.bratek20.infrastructure.httpserver.api.WebServerModule
 import com.github.bratek20.infrastructure.httpserver.fixtures.TestWebApp
 import org.assertj.core.api.Assertions.assertThat
@@ -52,19 +53,21 @@ class HttpIntegrationTest {
         }
     }
 
-    data class SomeWebServerUrl(
-        val value: String
+    data class SomeApiWebClientConfig(
+        val value: HttpClientConfig
     )
     class SomeApiWebClient(
-        private val url: SomeWebServerUrl,
-        private val factory: HttpClientFactory,
+        config: SomeApiWebClientConfig,
+        factory: HttpClientFactory,
     ): SomeApi {
+        private val client = factory.create(config.value)
+
         override fun mirror(x: SomeClass): SomeClass {
-            return factory.create(url.value).post("/mirror", SomeApiMirrorRequest(x)).getBody(SomeApiMirrorResponse::class.java).value
+            return client.post("/mirror", SomeApiMirrorRequest(x)).getBody(SomeApiMirrorResponse::class.java).value
         }
 
         override fun throwException() {
-            factory.create(url.value).post("/throw", null)
+            client.post("/throw", null)
         }
     }
 
@@ -105,11 +108,11 @@ class HttpIntegrationTest {
     }
 
     class SomeWebClient(
-        private val serverUrl: String = "SOME_WEB_SERVER_URL"
+        private val config: SomeApiWebClientConfig
     ): ContextModule {
         override fun apply(builder: ContextBuilder) {
             builder
-                .setImplObject(SomeWebServerUrl::class.java, SomeWebServerUrl(serverUrl))
+                .setImplObject(SomeApiWebClientConfig::class.java, config)
                 .setImpl(SomeApi::class.java, SomeApiWebClient::class.java)
         }
     }
@@ -128,7 +131,11 @@ class HttpIntegrationTest {
             .withModules(
                 HttpClientImpl(),
                 SomeWebClient(
-                    serverUrl = "http://localhost:$serverPort"
+                    config = SomeApiWebClientConfig(
+                        httpClientConfig {
+                            baseUrl = "http://localhost:$serverPort"
+                        }
+                    )
                 )
             )
             .get(SomeApi::class.java)
