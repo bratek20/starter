@@ -24,7 +24,7 @@ class PropertiesMock : Properties {
     }
 
     fun <T: Any> set(key: TypedPropertyKey<T>, value: T) {
-        values.computeIfAbsent(key) { value }
+        values[key] = value
     }
 }
 
