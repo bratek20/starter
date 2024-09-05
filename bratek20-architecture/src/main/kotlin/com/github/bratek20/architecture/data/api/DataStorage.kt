@@ -7,7 +7,7 @@ import com.github.bratek20.architecture.properties.api.TypedPropertyKey
 import kotlin.jvm.Throws
 
 interface DataStorage {
-    fun <T: Any> set(key: TypedPropertyKey<T>, value: T): Unit
+    fun <T: Any> set(key: TypedPropertyKey<T>, value: T)
     fun <Id: Any, E: Any> addElement(key: MapPropertyKey<Id, E>, id: Id, value: E): Boolean
 
     fun <T: Any> get(key: TypedPropertyKey<T>): T
