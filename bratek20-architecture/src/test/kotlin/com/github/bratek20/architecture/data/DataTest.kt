@@ -2,6 +2,9 @@ package com.github.bratek20.architecture.data
 
 import com.github.bratek20.architecture.context.someContextBuilder
 import com.github.bratek20.architecture.data.api.DataStorage
+import com.github.bratek20.architecture.data.api.ListDataKey
+import com.github.bratek20.architecture.data.api.MapDataKey
+import com.github.bratek20.architecture.data.api.ObjectDataKey
 import com.github.bratek20.architecture.data.context.DataInMemoryImpl
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.architecture.properties.api.*
@@ -34,7 +37,7 @@ class DataTest {
         @Test
         fun shouldGetObjectProperty() {
             val expectedProp = SomeProperty("x")
-            val key = ObjectPropertyKey("mine", SomeProperty::class)
+            val key = ObjectDataKey("mine", SomeProperty::class)
             storage.set(key, expectedProp)
 
             val givenProp = storage.get(key)
@@ -44,8 +47,8 @@ class DataTest {
 
         @Test
         fun shouldGetPartialObjectProperty() {
-            val key = ObjectPropertyKey("mine", SomeProperty::class)
-            val keyForTypeWithAmount = ObjectPropertyKey("mine", SomePropertyWithAmount::class)
+            val key = ObjectDataKey("mine", SomeProperty::class)
+            val keyForTypeWithAmount = ObjectDataKey("mine", SomePropertyWithAmount::class)
             storage.set(keyForTypeWithAmount, SomePropertyWithAmount("x", 5))
 
             val givenProp = storage.get(key)
@@ -56,7 +59,7 @@ class DataTest {
         @Test
         fun shouldGetListProperty() {
             val expectedProp = listOf(SomeProperty("x"), SomeProperty("y"))
-            val key = ListPropertyKey("mine", SomeProperty::class)
+            val key = ListDataKey("mine", SomeProperty::class)
             storage.set(key, expectedProp)
 
             val givenProp = storage.get(key)
@@ -66,8 +69,8 @@ class DataTest {
 
         @Test
         fun shouldGetPartialListProperty() {
-            val key = ListPropertyKey("mine", SomeProperty::class)
-            val keyForTypeWithAmount = ListPropertyKey("mine", SomePropertyWithAmount::class)
+            val key = ListDataKey("mine", SomeProperty::class)
+            val keyForTypeWithAmount = ListDataKey("mine", SomePropertyWithAmount::class)
             storage.set(keyForTypeWithAmount, listOf(SomePropertyWithAmount("x", 5), SomePropertyWithAmount("y", 10)))
 
             val givenProp = storage.get(key)
@@ -78,7 +81,7 @@ class DataTest {
         @Test
         fun shouldGetAndFindMapProperty() {
             val expectedProp = listOf(SomeProperty("x"), SomeProperty("y"))
-            val key = MapPropertyKey(
+            val key = MapDataKey(
                 "mine",
                 SomeProperty::class
             ) { it.value }
@@ -98,7 +101,7 @@ class DataTest {
 
         @Test
         fun shouldThrowWhenPropertyNotFound() {
-            val key = ObjectPropertyKey("mine", SomeProperty::class)
+            val key = ObjectDataKey("mine", SomeProperty::class)
 
             assertApiExceptionThrown(
                 { storage.get(key) },
@@ -111,8 +114,8 @@ class DataTest {
 
         @Test
         fun shouldThrowWhenPropertyHasDifferentKeyType() {
-            val objectKey = ObjectPropertyKey("object", SomeProperty::class)
-            val objectKeyListType = ListPropertyKey("object", SomeProperty::class)
+            val objectKey = ObjectDataKey("object", SomeProperty::class)
+            val objectKeyListType = ListDataKey("object", SomeProperty::class)
             storage.set(objectKeyListType, listOf(SomeProperty("x")))
 
             assertApiExceptionThrown(
@@ -123,8 +126,8 @@ class DataTest {
                 }
             )
 
-            val listKey = ListPropertyKey("list", SomeProperty::class)
-            val listKeyObjectType = ObjectPropertyKey("list", SomeProperty::class)
+            val listKey = ListDataKey("list", SomeProperty::class)
+            val listKeyObjectType = ObjectDataKey("list", SomeProperty::class)
 
             storage.set(listKeyObjectType, SomeProperty("x"))
             assertApiExceptionThrown(
@@ -135,8 +138,8 @@ class DataTest {
                 }
             )
 
-            val otherObjectKeyForSomeProperty = ObjectPropertyKey("otherObject", SomeProperty::class)
-            val otherObjectKey = ObjectPropertyKey("otherObject", OtherProperty::class)
+            val otherObjectKeyForSomeProperty = ObjectDataKey("otherObject", SomeProperty::class)
+            val otherObjectKey = ObjectDataKey("otherObject", OtherProperty::class)
             storage.set(otherObjectKeyForSomeProperty, SomeProperty("x"))
 
             assertApiExceptionThrown(
@@ -147,8 +150,8 @@ class DataTest {
                 }
             )
 
-            val otherListKeyForSomeProperty = ListPropertyKey("otherList", SomeProperty::class)
-            val otherListKey = ListPropertyKey("otherList", OtherProperty::class)
+            val otherListKeyForSomeProperty = ListDataKey("otherList", SomeProperty::class)
+            val otherListKey = ListDataKey("otherList", OtherProperty::class)
             storage.set(otherListKeyForSomeProperty, listOf(SomeProperty("x")))
             assertApiExceptionThrown(
                 { storage.get(otherListKey) },

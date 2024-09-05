@@ -1,7 +1,5 @@
 package com.github.bratek20.architecture.properties.impl
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.github.bratek20.architecture.exceptions.ShouldNeverHappenException
 import com.github.bratek20.architecture.properties.api.*
 import com.github.bratek20.architecture.serialization.api.DeserializationException
@@ -18,7 +16,7 @@ class PropertiesLogic(
     private val allSources: Set<PropertiesSource>
         get() = initialSources + addedSources
 
-    override fun <T : Any> get(key: TypedPropertyKey<T>): T {
+    override fun <T : Any> get(key: PropertyKey<T>): T {
         val source = findSourceWithKeyName(key.name)
             ?: throw PropertyNotFoundException("Property `${key.name}` not found, sources: ${allSources.map { it.getName().value }}")
 

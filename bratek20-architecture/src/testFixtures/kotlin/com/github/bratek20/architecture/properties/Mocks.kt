@@ -5,12 +5,12 @@ import com.github.bratek20.architecture.context.api.ContextModule
 import com.github.bratek20.architecture.properties.api.MapPropertyKey
 import com.github.bratek20.architecture.properties.api.Properties
 import com.github.bratek20.architecture.properties.api.PropertiesSource
-import com.github.bratek20.architecture.properties.api.TypedPropertyKey
+import com.github.bratek20.architecture.properties.api.PropertyKey
 
 class PropertiesMock : Properties {
-    private val values: MutableMap<TypedPropertyKey<*>, Any> = mutableMapOf()
+    private val values: MutableMap<PropertyKey<*>, Any> = mutableMapOf()
 
-    override fun <T : Any> get(key: TypedPropertyKey<T>): T {
+    override fun <T : Any> get(key: PropertyKey<T>): T {
         return values[key] as T
     }
 
@@ -23,7 +23,7 @@ class PropertiesMock : Properties {
         TODO("Not yet implemented")
     }
 
-    fun <T: Any> set(key: TypedPropertyKey<T>, value: T) {
+    fun <T: Any> set(key: PropertyKey<T>, value: T) {
         values[key] = value
     }
 }

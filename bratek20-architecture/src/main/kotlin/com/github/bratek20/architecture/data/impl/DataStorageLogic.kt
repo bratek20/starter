@@ -1,7 +1,6 @@
 package com.github.bratek20.architecture.data.impl
 
-import com.github.bratek20.architecture.data.api.DataStorage
-import com.github.bratek20.architecture.data.api.DataStorageIntegration
+import com.github.bratek20.architecture.data.api.*
 import com.github.bratek20.architecture.exceptions.ShouldNeverHappenException
 import com.github.bratek20.architecture.properties.api.*
 import com.github.bratek20.architecture.serialization.api.DeserializationException
@@ -12,21 +11,21 @@ import kotlin.reflect.KClass
 class DataStorageLogic(
     private val integration: DataStorageIntegration
 ) : DataStorage {
-    override fun <T : Any> set(key: TypedPropertyKey<T>, value: T) {
+    override fun <T : Any> set(key: DataKey<T>, value: T) {
         integration.setValue(key.name, SerializerLogic().serialize(value))
     }
 
-    override fun <Id : Any, E : Any> addElement(key: MapPropertyKey<Id, E>, id: Id, value: E): Boolean {
+    override fun <T : Any> find(key: DataKey<T>): T? {
         TODO("Not yet implemented")
     }
 
-    override fun <T : Any> get(key: TypedPropertyKey<T>): T {
+    override fun <T : Any> get(key: DataKey<T>): T {
         val keyValue = integration.findValue(key.name)
         if (keyValue == null) {
             throw PropertyNotFoundException("Property `${key.name}` not found")
         }
 
-        if (key is ObjectPropertyKey<T>) {
+        if (key is ObjectDataKey<T>) {
             if (isListWithElementType(keyValue, key.type) == null) {
                 throw PropertyKeyTypeException("Property `${key.name}` is a list but was requested as object")
             }
@@ -48,9 +47,17 @@ class DataStorageLogic(
         throw ShouldNeverHappenException()
     }
 
-    override fun <Id : Any, E : Any> findElement(key: MapPropertyKey<Id, E>, id: Id): E? {
+    override fun <Id : Any, E : Any> addElement(key: MapDataKey<Id, E>, id: Id, value: E): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun <Id : Any, E : Any> findElement(key: MapDataKey<Id, E>, id: Id): E? {
         val list = get(key)
         return list.firstOrNull { key.idProvider(it) == id }
+    }
+
+    override fun <Id : Any, E : Any> getElement(key: MapDataKey<Id, E>): E {
+        TODO("Not yet implemented")
     }
 
     private val serializer = SerializerLogic()
