@@ -1,6 +1,5 @@
 package com.github.bratek20.architecture.storage.impl
 
-import com.github.bratek20.architecture.data.api.DataKey
 import com.github.bratek20.architecture.exceptions.ShouldNeverHappenException
 import com.github.bratek20.architecture.serialization.api.DeserializationException
 import com.github.bratek20.architecture.serialization.api.SerializedValue
@@ -12,10 +11,12 @@ abstract class StorageLogic {
     private val serializer = SerializerLogic()
 
     abstract fun findValue(keyName: String): SerializedValue?
+    abstract fun setValue(keyName: String, value: SerializedValue)
 
-    abstract fun storageElementName(): String
+    abstract fun storageEntityName(): String
 
-    abstract fun notFoundException(message: String): NotFoundInStorageException
+    abstract fun notFoundInStorageException(message: String): NotFoundInStorageException
+    abstract fun elementNotFoundException(message: String): StorageElementNotFoundException
     abstract fun keyTypeException(message: String): StorageKeyTypeException
 
     fun <T : Any> find(key: TypedKey<T>): T? {
@@ -24,23 +25,23 @@ abstract class StorageLogic {
     }
 
     fun <T : Any> get(key: TypedKey<T>): T {
-        val keyValue = findValue(key.name) ?: throw notFoundException("${storageElementName()} `${key.name}` not found")
+        val keyValue = findValue(key.name) ?: throw notFoundInStorageException("${storageEntityName()} `${key.name}` not found")
 
         if (key is ObjectTypedKey<T>) {
             if (isListWithElementType(keyValue, key.type) == null) {
-                throw keyTypeException("${storageElementName()} `${key.name}` is a list but was requested as object")
+                throw keyTypeException("${storageEntityName()} `${key.name}` is a list but was requested as object")
             }
             isObjectOfType(keyValue, key.type)?.let {
-                throw keyTypeException("${storageElementName()} `${key.name}` is not object of type `${key.type.simpleName}`: $it")
+                throw keyTypeException("${storageEntityName()} `${key.name}` is not object of type `${key.type.simpleName}`: $it")
             }
             return getObjectWithType(keyValue, key.type)
         }
         if (key is ListTypedKey<*>) {
             if (isObjectOfType(keyValue, key.elementType) == null) {
-                throw keyTypeException("${storageElementName()} `${key.name}` is an object but was requested as list")
+                throw keyTypeException("${storageEntityName()} `${key.name}` is an object but was requested as list")
             }
             isListWithElementType(keyValue, key.elementType)?.let {
-                throw keyTypeException("${storageElementName()} `${key.name}` is not list with element type `${key.elementType.simpleName}`: $it")
+                throw keyTypeException("${storageEntityName()} `${key.name}` is not list with element type `${key.elementType.simpleName}`: $it")
             }
             return getListWithElementType(keyValue, key.elementType) as T
         }
@@ -51,6 +52,24 @@ abstract class StorageLogic {
     fun <Id : Any, E : Any> findElement(key: MapTypedKey<Id, E>, id: Id): E? {
         val list = get(key)
         return list.firstOrNull { key.idProvider(it) == id }
+    }
+
+    fun <Id : Any, E : Any> getElement(key: MapTypedKey<Id, E>, id: Id): E {
+        return findElement(key, id)
+            ?: throw elementNotFoundException(
+                "${storageEntityName()} element with id `$id` for key `${key.name}` not found"
+            )
+    }
+
+    fun <Id : Any, E : Any> addElement(key: MapTypedKey<Id, E>, id: Id, value: E): Boolean {
+        val list = get(key).toMutableList()
+        if (list.any { key.idProvider(it) == id }) {
+            return false
+        }
+
+        list.add(value)
+        setValue(key.name, serializer.serialize(list))
+        return true
     }
 
     private fun <T: Any> isListWithElementType(value: SerializedValue, type: KClass<T>): String? {
@@ -76,11 +95,11 @@ abstract class StorageLogic {
         return cause
     }
 
-    fun <T: Any> getListWithElementType(value: SerializedValue, type: KClass<T>): List<T> {
+    private fun <T: Any> getListWithElementType(value: SerializedValue, type: KClass<T>): List<T> {
         return serializer.deserializeList(value, type.java)
     }
 
-    fun <T: Any> getObjectWithType(value: SerializedValue, type: KClass<T>): T {
+    private fun <T: Any> getObjectWithType(value: SerializedValue, type: KClass<T>): T {
         return serializer.deserialize(value, type.java)
     }
 }

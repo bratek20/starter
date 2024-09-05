@@ -3,6 +3,7 @@ package com.github.bratek20.architecture.properties.impl
 import com.github.bratek20.architecture.properties.api.*
 import com.github.bratek20.architecture.serialization.api.SerializedValue
 import com.github.bratek20.architecture.storage.api.NotFoundInStorageException
+import com.github.bratek20.architecture.storage.api.StorageElementNotFoundException
 import com.github.bratek20.architecture.storage.api.StorageKeyTypeException
 import com.github.bratek20.architecture.storage.impl.StorageLogic
 
@@ -41,12 +42,20 @@ class PropertiesLogic(
         return source?.getValue(keyName)
     }
 
-    override fun storageElementName(): String {
+    override fun setValue(keyName: String, value: SerializedValue) {
+        throw UnsupportedOperationException("Setting value is not supported for properties")
+    }
+
+    override fun storageEntityName(): String {
         return "Property"
     }
 
-    override fun notFoundException(message: String): NotFoundInStorageException {
+    override fun notFoundInStorageException(message: String): NotFoundInStorageException {
         return PropertyNotFoundException(message)
+    }
+
+    override fun elementNotFoundException(message: String): StorageElementNotFoundException {
+        return PropertyElementNotFoundException(message)
     }
 
     override fun keyTypeException(message: String): StorageKeyTypeException {

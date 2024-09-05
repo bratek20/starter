@@ -165,19 +165,42 @@ class DataTest {
     inner class ExtraCases {
         @Test
         fun allOperations() {
-            val listKey = ListDataKey("list", SomeProperty::class)
+            val key = MapDataKey(
+                "list",
+                SomeProperty::class
+            ) { it.value }
 
-            assertThat(storage.find(listKey)).isNull()
+            assertThat(storage.find(key)).isNull()
             assertApiExceptionThrown(
-                { storage.get(listKey) },
+                { storage.get(key) },
                 {
                     type = DataNotFoundException::class
                     message = "Data `list` not found"
                 }
             )
 
-            storage.set(listKey, listOf(SomeProperty("x")))
-            assertThat(storage.get(listKey)).isEqualTo(listOf(SomeProperty("x")))
+            storage.set(key, listOf(SomeProperty("x")))
+            assertThat(storage.get(key)).isEqualTo(listOf(SomeProperty("x")))
+
+            // elements
+            assertThat(storage.findElement(key, "x")).isEqualTo(SomeProperty("x"))
+            assertThat(storage.findElement(key, "y")).isNull()
+
+            assertThat(storage.getElement(key, "x")).isEqualTo(SomeProperty("x"))
+            assertApiExceptionThrown(
+                { storage.getElement(key, "y") },
+                {
+                    type = DataElementNotFoundException::class
+                    message = "Data element with id `y` for key `list` not found"
+                }
+            )
+
+            assertThat(storage.addElement(key, "y", SomeProperty("y"))).isTrue()
+            assertThat(storage.addElement(key, "y", SomeProperty("y"))).isFalse()
+            assertThat(storage.get(key)).isEqualTo(listOf(SomeProperty("x"), SomeProperty("y")))
+
+            assertThat(storage.findElement(key, "y")).isEqualTo(SomeProperty("y"))
+            assertThat(storage.getElement(key, "y")).isEqualTo(SomeProperty("y"))
         }
     }
 }
