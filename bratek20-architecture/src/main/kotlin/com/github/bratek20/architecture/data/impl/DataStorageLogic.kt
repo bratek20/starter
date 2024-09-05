@@ -8,9 +8,45 @@ import com.github.bratek20.architecture.serialization.api.SerializedValue
 import com.github.bratek20.architecture.serialization.impl.SerializerLogic
 import kotlin.reflect.KClass
 
+class StorageLogic {
+    private val serializer = SerializerLogic()
+
+    fun <T: Any> isListWithElementType(value: SerializedValue, type: KClass<T>): String? {
+        return try {
+            getListWithElementType(value, type)
+            null
+        } catch (e: DeserializationException) {
+            extractCause(e)
+        }
+    }
+
+    fun <T: Any> isObjectOfType(value: SerializedValue, type: KClass<T>): String? {
+        return try {
+            getObjectWithType(value, type)
+            null
+        } catch (e: DeserializationException) {
+            extractCause(e)
+        }
+    }
+
+    private fun extractCause(e: DeserializationException): String {
+        val cause = e.message!!.replace("Deserialization failed: ", "")
+        return cause
+    }
+
+    fun <T: Any> getListWithElementType(value: SerializedValue, type: KClass<T>): List<T> {
+        return serializer.deserializeList(value, type.java)
+    }
+
+    fun <T: Any> getObjectWithType(value: SerializedValue, type: KClass<T>): T {
+        return serializer.deserialize(value, type.java)
+    }
+}
 class DataStorageLogic(
     private val integration: DataStorageIntegration
 ) : DataStorage {
+    private val s = StorageLogic()
+
     override fun <T : Any> set(key: DataKey<T>, value: T) {
         integration.setValue(key.name, SerializerLogic().serialize(value))
     }
@@ -26,22 +62,22 @@ class DataStorageLogic(
         }
 
         if (key is ObjectDataKey<T>) {
-            if (isListWithElementType(keyValue, key.type) == null) {
+            if (s.isListWithElementType(keyValue, key.type) == null) {
                 throw DataKeyTypeException("Data `${key.name}` is a list but was requested as object")
             }
-            isObjectOfType(keyValue, key.type)?.let {
+            s.isObjectOfType(keyValue, key.type)?.let {
                 throw DataKeyTypeException("Data `${key.name}` is not object of type `${key.type.simpleName}`: $it")
             }
-            return getObjectWithType(keyValue, key.type)
+            return s.getObjectWithType(keyValue, key.type)
         }
         if (key is ListDataKey<*>) {
-            if (isObjectOfType(keyValue, key.elementType) == null) {
+            if (s.isObjectOfType(keyValue, key.elementType) == null) {
                 throw DataKeyTypeException("Data `${key.name}` is an object but was requested as list")
             }
-            isListWithElementType(keyValue, key.elementType)?.let {
+            s.isListWithElementType(keyValue, key.elementType)?.let {
                 throw DataKeyTypeException("Data `${key.name}` is not list with element type `${key.elementType.simpleName}`: $it")
             }
-            return getListWithElementType(keyValue, key.elementType) as T
+            return s.getListWithElementType(keyValue, key.elementType) as T
         }
 
         throw ShouldNeverHappenException()
@@ -58,38 +94,5 @@ class DataStorageLogic(
 
     override fun <Id : Any, E : Any> getElement(key: MapDataKey<Id, E>): E {
         TODO("Not yet implemented")
-    }
-
-    private val serializer = SerializerLogic()
-
-    private fun <T: Any> isListWithElementType(value: SerializedValue, type: KClass<T>): String? {
-        return try {
-            getListWithElementType(value, type)
-            null
-        } catch (e: DeserializationException) {
-            extractCause(e)
-        }
-    }
-
-    private fun <T: Any> isObjectOfType(value: SerializedValue, type: KClass<T>): String? {
-        return try {
-            getObjectWithType(value, type)
-            null
-        } catch (e: DeserializationException) {
-            extractCause(e)
-        }
-    }
-
-    private fun extractCause(e: DeserializationException): String {
-        val cause = e.message!!.replace("Deserialization failed: ", "")
-        return cause
-    }
-
-    private fun <T: Any> getListWithElementType(value: SerializedValue, type: KClass<T>): List<T> {
-        return serializer.deserializeList(value, type.java)
-    }
-
-    private fun <T: Any> getObjectWithType(value: SerializedValue, type: KClass<T>): T {
-        return serializer.deserialize(value, type.java)
     }
 }
