@@ -1,5 +1,6 @@
 package com.github.bratek20.architecture.storage.impl
 
+import com.github.bratek20.architecture.data.api.DataKey
 import com.github.bratek20.architecture.exceptions.ShouldNeverHappenException
 import com.github.bratek20.architecture.serialization.api.DeserializationException
 import com.github.bratek20.architecture.serialization.api.SerializedValue
@@ -16,6 +17,11 @@ abstract class StorageLogic {
 
     abstract fun notFoundException(message: String): NotFoundInStorageException
     abstract fun keyTypeException(message: String): StorageKeyTypeException
+
+    fun <T : Any> find(key: TypedKey<T>): T? {
+        findValue(key.name) ?: return null
+        return get(key)
+    }
 
     fun <T : Any> get(key: TypedKey<T>): T {
         val keyValue = findValue(key.name) ?: throw notFoundException("${storageElementName()} `${key.name}` not found")

@@ -16,20 +16,22 @@ class DataTest {
 
     private lateinit var storage: DataStorage
 
+    @BeforeEach
+    fun setup() {
+        val c = someContextBuilder()
+            .withModules(
+                DataInMemoryImpl(),
+            )
+            .build()
+
+        storage = c.get(
+            DataStorage::class.java
+        )
+    }
+
     @Nested
     inner class NormalUseCase {
-        @BeforeEach
-        fun setup() {
-            val c = someContextBuilder()
-                .withModules(
-                    DataInMemoryImpl(),
-                )
-                .build()
 
-            storage = c.get(
-                DataStorage::class.java
-            )
-        }
         @Test
         fun shouldGetObjectProperty() {
             val expectedProp = SomeProperty("x")
@@ -156,6 +158,26 @@ class DataTest {
                     message = "Data `otherList` is not list with element type `OtherProperty`: missing value for field `otherValue`"
                 }
             )
+        }
+    }
+
+    @Nested
+    inner class ExtraCases {
+        @Test
+        fun allOperations() {
+            val listKey = ListDataKey("list", SomeProperty::class)
+
+            assertThat(storage.find(listKey)).isNull()
+            assertApiExceptionThrown(
+                { storage.get(listKey) },
+                {
+                    type = DataNotFoundException::class
+                    message = "Data `list` not found"
+                }
+            )
+
+            storage.set(listKey, listOf(SomeProperty("x")))
+            assertThat(storage.get(listKey)).isEqualTo(listOf(SomeProperty("x")))
         }
     }
 }

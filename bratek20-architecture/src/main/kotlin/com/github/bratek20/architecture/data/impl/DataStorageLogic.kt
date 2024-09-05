@@ -16,7 +16,7 @@ class DataStorageLogic(
     }
 
     override fun <T : Any> find(key: DataKey<T>): T? {
-        TODO("Not yet implemented")
+        return super.find(key)
     }
 
     override fun <T : Any> get(key: DataKey<T>): T {
