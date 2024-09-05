@@ -13,7 +13,7 @@ class DataStorageLogic(
     private val integration: DataStorageIntegration
 ) : DataStorage {
     override fun <T : Any> set(key: TypedPropertyKey<T>, value: T) {
-        TODO("Not yet implemented")
+        integration.setValue(key.name, SerializerLogic().serialize(value))
     }
 
     override fun <Id : Any, E : Any> addElement(key: MapPropertyKey<Id, E>, id: Id, value: E): Boolean {

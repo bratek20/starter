@@ -104,7 +104,7 @@ class DataTest {
                 { storage.get(key) },
                 {
                     type = PropertyNotFoundException::class
-                    message = "Property `mine` not found, sources: [source1, source2]"
+                    message = "Property `mine` not found"
                 }
             )
         }
@@ -112,8 +112,8 @@ class DataTest {
         @Test
         fun shouldThrowWhenPropertyHasDifferentKeyType() {
             val objectKey = ObjectPropertyKey("object", SomeProperty::class)
-            val listKey = ListPropertyKey("list", SomeProperty::class)
-            storage.set(listKey, listOf(SomeProperty("x")))
+            val objectKeyListType = ListPropertyKey("object", SomeProperty::class)
+            storage.set(objectKeyListType, listOf(SomeProperty("x")))
 
             assertApiExceptionThrown(
                 { storage.get(objectKey) },
@@ -123,8 +123,10 @@ class DataTest {
                 }
             )
 
-            storage.set(objectKey, SomeProperty("x"))
+            val listKey = ListPropertyKey("list", SomeProperty::class)
+            val listKeyObjectType = ObjectPropertyKey("list", SomeProperty::class)
 
+            storage.set(listKeyObjectType, SomeProperty("x"))
             assertApiExceptionThrown(
                 { storage.get(listKey) },
                 {
