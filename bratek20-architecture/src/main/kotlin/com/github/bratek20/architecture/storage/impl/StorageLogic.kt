@@ -1,16 +1,10 @@
 package com.github.bratek20.architecture.storage.impl
 
-import com.github.bratek20.architecture.data.api.ListDataKey
-import com.github.bratek20.architecture.data.api.MapDataKey
-import com.github.bratek20.architecture.data.api.ObjectDataKey
 import com.github.bratek20.architecture.exceptions.ShouldNeverHappenException
 import com.github.bratek20.architecture.serialization.api.DeserializationException
 import com.github.bratek20.architecture.serialization.api.SerializedValue
 import com.github.bratek20.architecture.serialization.impl.SerializerLogic
-import com.github.bratek20.architecture.storage.api.MapTypedKey
-import com.github.bratek20.architecture.storage.api.NotFoundInStorageException
-import com.github.bratek20.architecture.storage.api.StorageKeyTypeException
-import com.github.bratek20.architecture.storage.api.TypedKey
+import com.github.bratek20.architecture.storage.api.*
 import kotlin.reflect.KClass
 
 abstract class StorageLogic {
@@ -18,29 +12,29 @@ abstract class StorageLogic {
 
     abstract fun findValue(keyName: String): SerializedValue?
 
-    abstract fun storageName(): String
+    abstract fun storageElementName(): String
 
     abstract fun notFoundException(message: String): NotFoundInStorageException
     abstract fun keyTypeException(message: String): StorageKeyTypeException
 
     fun <T : Any> get(key: TypedKey<T>): T {
-        val keyValue = findValue(key.name) ?: throw notFoundException("${storageName()} `${key.name}` not found")
+        val keyValue = findValue(key.name) ?: throw notFoundException("${storageElementName()} `${key.name}` not found")
 
-        if (key is ObjectDataKey<T>) {
+        if (key is ObjectTypedKey<T>) {
             if (isListWithElementType(keyValue, key.type) == null) {
-                throw keyTypeException("${storageName()} `${key.name}` is a list but was requested as object")
+                throw keyTypeException("${storageElementName()} `${key.name}` is a list but was requested as object")
             }
             isObjectOfType(keyValue, key.type)?.let {
-                throw keyTypeException("${storageName()} `${key.name}` is not object of type `${key.type.simpleName}`: $it")
+                throw keyTypeException("${storageElementName()} `${key.name}` is not object of type `${key.type.simpleName}`: $it")
             }
             return getObjectWithType(keyValue, key.type)
         }
-        if (key is ListDataKey<*>) {
+        if (key is ListTypedKey<*>) {
             if (isObjectOfType(keyValue, key.elementType) == null) {
-                throw keyTypeException("${storageName()} `${key.name}` is an object but was requested as list")
+                throw keyTypeException("${storageElementName()} `${key.name}` is an object but was requested as list")
             }
             isListWithElementType(keyValue, key.elementType)?.let {
-                throw keyTypeException("${storageName()} `${key.name}` is not list with element type `${key.elementType.simpleName}`: $it")
+                throw keyTypeException("${storageElementName()} `${key.name}` is not list with element type `${key.elementType.simpleName}`: $it")
             }
             return getListWithElementType(keyValue, key.elementType) as T
         }

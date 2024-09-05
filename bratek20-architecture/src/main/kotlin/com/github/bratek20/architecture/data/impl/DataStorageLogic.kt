@@ -39,7 +39,7 @@ class DataStorageLogic(
         return integration.findValue(keyName)
     }
 
-    override fun storageName(): String {
+    override fun storageElementName(): String {
         return "Data"
     }
 
