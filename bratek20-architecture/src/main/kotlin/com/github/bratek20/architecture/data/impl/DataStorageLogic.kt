@@ -22,24 +22,24 @@ class DataStorageLogic(
     override fun <T : Any> get(key: DataKey<T>): T {
         val keyValue = integration.findValue(key.name)
         if (keyValue == null) {
-            throw PropertyNotFoundException("Property `${key.name}` not found")
+            throw DataNotFoundException("Data `${key.name}` not found")
         }
 
         if (key is ObjectDataKey<T>) {
             if (isListWithElementType(keyValue, key.type) == null) {
-                throw PropertyKeyTypeException("Property `${key.name}` is a list but was requested as object")
+                throw DataKeyTypeException("Data `${key.name}` is a list but was requested as object")
             }
             isObjectOfType(keyValue, key.type)?.let {
-                throw PropertyKeyTypeException("Property `${key.name}` is not object of type `${key.type.simpleName}`: $it")
+                throw DataKeyTypeException("Data `${key.name}` is not object of type `${key.type.simpleName}`: $it")
             }
             return getObjectWithType(keyValue, key.type)
         }
-        if (key is ListPropertyKey<*>) {
+        if (key is ListDataKey<*>) {
             if (isObjectOfType(keyValue, key.elementType) == null) {
-                throw PropertyKeyTypeException("Property `${key.name}` is an object but was requested as list")
+                throw DataKeyTypeException("Data `${key.name}` is an object but was requested as list")
             }
             isListWithElementType(keyValue, key.elementType)?.let {
-                throw PropertyKeyTypeException("Property `${key.name}` is not list with element type `${key.elementType.simpleName}`: $it")
+                throw DataKeyTypeException("Data `${key.name}` is not list with element type `${key.elementType.simpleName}`: $it")
             }
             return getListWithElementType(keyValue, key.elementType) as T
         }

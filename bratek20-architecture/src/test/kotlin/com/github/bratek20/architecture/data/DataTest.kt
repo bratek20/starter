@@ -1,13 +1,9 @@
 package com.github.bratek20.architecture.data
 
 import com.github.bratek20.architecture.context.someContextBuilder
-import com.github.bratek20.architecture.data.api.DataStorage
-import com.github.bratek20.architecture.data.api.ListDataKey
-import com.github.bratek20.architecture.data.api.MapDataKey
-import com.github.bratek20.architecture.data.api.ObjectDataKey
+import com.github.bratek20.architecture.data.api.*
 import com.github.bratek20.architecture.data.context.DataInMemoryImpl
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
-import com.github.bratek20.architecture.properties.api.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -106,8 +102,8 @@ class DataTest {
             assertApiExceptionThrown(
                 { storage.get(key) },
                 {
-                    type = PropertyNotFoundException::class
-                    message = "Property `mine` not found"
+                    type = DataNotFoundException::class
+                    message = "Data `mine` not found"
                 }
             )
         }
@@ -121,8 +117,8 @@ class DataTest {
             assertApiExceptionThrown(
                 { storage.get(objectKey) },
                 {
-                    type = PropertyKeyTypeException::class
-                    message = "Property `object` is a list but was requested as object"
+                    type = DataKeyTypeException::class
+                    message = "Data `object` is a list but was requested as object"
                 }
             )
 
@@ -133,8 +129,8 @@ class DataTest {
             assertApiExceptionThrown(
                 { storage.get(listKey) },
                 {
-                    type = PropertyKeyTypeException::class
-                    message = "Property `list` is an object but was requested as list"
+                    type = DataKeyTypeException::class
+                    message = "Data `list` is an object but was requested as list"
                 }
             )
 
@@ -145,8 +141,8 @@ class DataTest {
             assertApiExceptionThrown(
                 { storage.get(otherObjectKey) },
                 {
-                    type = PropertyKeyTypeException::class
-                    message = "Property `otherObject` is not object of type `OtherProperty`: missing value for field `otherValue`"
+                    type = DataKeyTypeException::class
+                    message = "Data `otherObject` is not object of type `OtherProperty`: missing value for field `otherValue`"
                 }
             )
 
@@ -156,8 +152,8 @@ class DataTest {
             assertApiExceptionThrown(
                 { storage.get(otherListKey) },
                 {
-                    type = PropertyKeyTypeException::class
-                    message = "Property `otherList` is not list with element type `OtherProperty`: missing value for field `otherValue`"
+                    type = DataKeyTypeException::class
+                    message = "Data `otherList` is not list with element type `OtherProperty`: missing value for field `otherValue`"
                 }
             )
         }
