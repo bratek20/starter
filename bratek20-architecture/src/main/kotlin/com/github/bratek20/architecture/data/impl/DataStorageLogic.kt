@@ -9,7 +9,7 @@ import com.github.bratek20.architecture.storage.api.StorageKeyTypeException
 import com.github.bratek20.architecture.storage.impl.StorageLogic
 
 class DataStorageLogic(
-    private val integration: DataStorageIntegration
+    private val integration: DataManipulator
 ) : DataStorage, StorageLogic() {
 
     override fun <T : Any> set(key: DataKey<T>, value: T) {
@@ -22,6 +22,10 @@ class DataStorageLogic(
 
     override fun <T : Any> get(key: DataKey<T>): T {
         return super.get(key)
+    }
+
+    override fun <T : Any> delete(key: DataKey<T>) {
+        integration.setValue(key.name, null)
     }
 
     override fun <Id : Any, E : Any> addElement(key: MapDataKey<Id, E>, id: Id, value: E): Boolean {

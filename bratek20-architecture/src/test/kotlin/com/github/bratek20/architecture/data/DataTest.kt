@@ -179,6 +179,10 @@ class DataTest {
                 }
             )
 
+            storage.set(key, listOf())
+            assertThat(storage.find(key)).isEqualTo(emptyList<SomeProperty>())
+            assertThat(storage.get(key)).isEqualTo(emptyList<SomeProperty>())
+
             storage.set(key, listOf(SomeProperty("x")))
             assertThat(storage.get(key)).isEqualTo(listOf(SomeProperty("x")))
 
@@ -201,6 +205,10 @@ class DataTest {
 
             assertThat(storage.findElement(key, "y")).isEqualTo(SomeProperty("y"))
             assertThat(storage.getElement(key, "y")).isEqualTo(SomeProperty("y"))
+
+            // delete
+            storage.delete(key)
+            assertThat(storage.find(key)).isNull()
         }
     }
 }
