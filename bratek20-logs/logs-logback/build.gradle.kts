@@ -3,8 +3,8 @@ plugins {
 }
 
 dependencies {
-    api(project(":logs-core"))
-    testFixturesApi(testFixtures(project(":logs-core")))
+    api(project(":logs-slf4j"))
+    testFixturesApi(testFixtures(project(":logs-slf4j")))
 
     api(libs.logback.classic)
 

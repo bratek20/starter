@@ -32,5 +32,6 @@ dependencyResolutionManagement {
 rootProject.name = "bratek20-logs"
 
 include(":logs-core")
+include(":logs-slf4j")
 include(":logs-logback")
 include(":logs-log4j2")
