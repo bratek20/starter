@@ -14,6 +14,7 @@ import com.github.bratek20.infrastructure.httpclient.context.HttpClientImpl
 import com.github.bratek20.infrastructure.httpclient.fixtures.httpClientConfig
 import com.github.bratek20.infrastructure.httpserver.api.WebServerModule
 import com.github.bratek20.infrastructure.httpserver.fixtures.TestWebApp
+import com.github.bratek20.infrastructure.httpserver.fixtures.runTestWebApp
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.web.bind.annotation.PostMapping
@@ -96,14 +97,14 @@ class HttpIntegrationTest {
     }
 
     class SomeWebServer: WebServerModule {
-        override fun getImpl(): ContextModule {
-            return SomeImpl()
-        }
-
         override fun getControllers(): List<Class<*>> {
             return listOf(
                 SomeApiController::class.java
             )
+        }
+
+        override fun apply(builder: ContextBuilder) {
+            builder.withModule(SomeImpl())
         }
     }
 
@@ -120,11 +121,11 @@ class HttpIntegrationTest {
     @Test
     fun `should handle web layer hiding`() {
         //server
-        val serverPort = TestWebApp(
+        val app = runTestWebApp(
             modules = listOf(
                 SomeWebServer()
             )
-        ).run().port
+        )
 
         //client
         val api = someContextBuilder()
@@ -133,7 +134,7 @@ class HttpIntegrationTest {
                 SomeWebClient(
                     config = SomeApiWebClientConfig(
                         httpClientConfig {
-                            baseUrl = "http://localhost:$serverPort"
+                            baseUrl = "http://localhost:${app.port}"
                         }
                     )
                 )
@@ -150,6 +151,9 @@ class HttpIntegrationTest {
                 type = SomeException::class
                 message = "Some message"
             }
+        )
+        app.loggerMock.assertWarns(
+            "Passing exception `SomeException` with message `Some message`"
         )
     }
 }

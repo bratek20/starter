@@ -9,6 +9,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     testFixturesImplementation("org.springframework.boot:spring-boot-starter-web")
 
+    implementation(libs.bratek20.logs.core)
+
     // web testing
     testImplementation(libs.rest.assured)
 

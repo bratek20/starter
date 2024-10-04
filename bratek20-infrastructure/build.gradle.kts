@@ -6,6 +6,9 @@ dependencies {
     api(project(":bratek20-architecture"))
     testApi(testFixtures(project(":bratek20-architecture")))
 
+    implementation(libs.bratek20.logs.core)
+    testFixturesImplementation(testFixtures(libs.bratek20.logs))
+
     //http client
     implementation(libs.spring.web)
 
