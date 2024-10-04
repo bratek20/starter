@@ -6,6 +6,7 @@ import com.github.bratek20.architecture.context.spring.SpringContextBuilder
 import com.github.bratek20.infrastructure.httpserver.api.WebApp
 import com.github.bratek20.infrastructure.httpserver.api.WebAppContext
 import com.github.bratek20.infrastructure.httpserver.api.WebServerModule
+import com.github.bratek20.logs.context.SystemLogsImpl
 import org.springframework.boot.builder.SpringApplicationBuilder
 
 class SpringWebApp(
@@ -46,7 +47,7 @@ class SpringWebApp(
 
     companion object {
         fun run(
-            modules: List<ContextModule> = emptyList(),
+            modules: List<ContextModule> = listOf(SystemLogsImpl()),
             args: Array<String> = emptyArray(),
             port: Int = 8080,
             useRandomPort: Boolean = false
