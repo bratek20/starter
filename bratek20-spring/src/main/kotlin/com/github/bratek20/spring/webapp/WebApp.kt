@@ -1,25 +1,28 @@
 package com.github.bratek20.spring.webapp
 
+import com.github.bratek20.architecture.context.api.ContextModule
 import com.github.bratek20.architecture.context.spring.SpringContext
 import com.github.bratek20.architecture.context.spring.SpringContextBuilder
 import com.github.bratek20.infrastructure.httpserver.api.WebApp
 import com.github.bratek20.infrastructure.httpserver.api.WebAppContext
 import com.github.bratek20.infrastructure.httpserver.api.WebServerModule
+import com.github.bratek20.logs.context.SystemLogsImpl
 import org.springframework.boot.builder.SpringApplicationBuilder
 
 class SpringWebApp(
-    private val modules: List<WebServerModule>,
+    private val modules: List<ContextModule>,
     private val args: Array<String> = emptyArray(),
     private val port: Int = 8080,
     private val useRandomPort: Boolean = false
 ): WebApp {
 
     override fun run(): WebAppContext {
-        val allImpls = modules.map { it.getImpl() }.toTypedArray()
-        val allControllers = modules.flatMap { it.getControllers() }.toTypedArray()
+        val allControllers = modules.filterIsInstance<WebServerModule>()
+            .flatMap { it.getControllers() }
+            .toTypedArray()
 
         val parentContext = SpringContextBuilder()
-            .withModules(*allImpls)
+            .withModules(*modules.toTypedArray())
             .build() as SpringContext
 
         val finalPort = calculatePort()
@@ -44,7 +47,7 @@ class SpringWebApp(
 
     companion object {
         fun run(
-            modules: List<WebServerModule> = emptyList(),
+            modules: List<ContextModule> = listOf(SystemLogsImpl()),
             args: Array<String> = emptyArray(),
             port: Int = 8080,
             useRandomPort: Boolean = false

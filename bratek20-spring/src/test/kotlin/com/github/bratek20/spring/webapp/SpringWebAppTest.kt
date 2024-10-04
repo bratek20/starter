@@ -4,6 +4,7 @@ import com.github.bratek20.architecture.context.api.ContextBuilder
 import com.github.bratek20.architecture.context.api.ContextModule
 import com.github.bratek20.architecture.exceptions.ApiException
 import com.github.bratek20.infrastructure.httpserver.api.WebServerModule
+import com.github.bratek20.logs.context.SystemLogsImpl
 import io.restassured.RestAssured
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.jupiter.api.Test
@@ -34,11 +35,6 @@ class SpringWebAppTest {
             .statusCode(200)
     }
 
-    class EmptyImpl: ContextModule {
-        override fun apply(builder: ContextBuilder) {
-        }
-    }
-
     @RestController
     class ThrowingController {
         @PostMapping("/throw")
@@ -48,14 +44,14 @@ class SpringWebAppTest {
     }
 
     class ThrowingModule: WebServerModule {
-        override fun getImpl(): ContextModule  {
-            return EmptyImpl()
-        }
-
         override fun getControllers(): List<Class<*>> {
             return listOf(
                 ThrowingController::class.java
             )
+        }
+
+        override fun apply(builder: ContextBuilder) {
+            // no-op
         }
     }
 
@@ -63,6 +59,7 @@ class SpringWebAppTest {
     fun shouldPassApiExceptions() {
         RestAssured.port= SpringWebApp.run(
             modules = listOf(
+                SystemLogsImpl(),
                 ThrowingModule()
             ),
             useRandomPort = true,
