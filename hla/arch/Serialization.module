@@ -7,6 +7,9 @@ ValueObjects
         value: string
         type: SerializationType
 
+    SerializerConfig
+        readable: bool = false
+
 Interfaces
     //Serializer
         //serialize(value: any): SerializedValue

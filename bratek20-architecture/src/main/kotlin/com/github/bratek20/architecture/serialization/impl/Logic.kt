@@ -7,7 +7,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.github.bratek20.architecture.serialization.api.*
 
-class SerializerLogic: Serializer {
+class SerializerLogic(
+    private val config: SerializerConfig
+): Serializer {
     private val objectMapper: ObjectMapper = ObjectMapper()
 
     init {

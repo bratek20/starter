@@ -5,13 +5,15 @@ import org.junit.jupiter.api.Test
 import com.github.bratek20.architecture.context.someContextBuilder
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.architecture.serialization.api.*
+import com.github.bratek20.architecture.serialization.context.SerializationFactory
 import com.github.bratek20.architecture.serialization.context.SerializationImpl
 import com.github.bratek20.architecture.serialization.fixtures.assertStructEquals
 import com.github.bratek20.architecture.serialization.fixtures.assertSerializedValue
 import com.github.bratek20.architecture.serialization.fixtures.serializedValue
+import com.github.bratek20.architecture.serialization.fixtures.serializerConfig
 import org.assertj.core.api.Assertions.assertThat
 
-class SerializationApiTest {
+class SerializationImplTest {
     data class SomeValue(
         val value: String
     )
@@ -64,6 +66,30 @@ class SerializationApiTest {
 
         assertSerializedValue(serializedValue) {
             value = "{\"value\":\"test\",\"number\":1,\"nullable\":null}"
+            type = "JSON"
+        }
+    }
+
+    @Test
+    fun `should serialize as formatted JSON`() {
+        val configuredSerializer = SerializationFactory.createSerializer(
+            serializerConfig {
+                readable = true
+            }
+        )
+
+        val testObject = TestObject("test", 1, null)
+
+        val serializedValue = serializer.serialize(testObject)
+
+        assertSerializedValue(serializedValue) {
+            value = """
+                {
+                  "value": "test",
+                  "number": 1,
+                  "nullable": null
+                }
+            """.trimIndent()
             type = SerializationType.JSON
         }
     }

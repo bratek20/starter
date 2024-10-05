@@ -15,7 +15,7 @@ class SerializationImpl: ContextModule {
 
 class SerializationFactory {
     companion object {
-        fun createSerializer(): Serializer {
+        fun createSerializer(config: SerializerConfig = SerializerConfig()): Serializer {
             return SerializerLogic()
         }
     }

@@ -6,12 +6,22 @@ import com.github.bratek20.architecture.serialization.api.*
 
 data class SerializedValueDef(
     var value: String = "someValue",
-    var type: SerializationType = SerializationType.JSON,
+    var type: String = SerializationType.JSON.name,
 )
 fun serializedValue(init: SerializedValueDef.() -> Unit = {}): SerializedValue {
     val def = SerializedValueDef().apply(init)
     return SerializedValue.create(
         value = def.value,
-        type = def.type,
+        type = SerializationType.valueOf(def.type),
+    )
+}
+
+data class SerializerConfigDef(
+    var readable: Boolean = false,
+)
+fun serializerConfig(init: SerializerConfigDef.() -> Unit = {}): SerializerConfig {
+    val def = SerializerConfigDef().apply(init)
+    return SerializerConfig.create(
+        readable = def.readable,
     )
 }
