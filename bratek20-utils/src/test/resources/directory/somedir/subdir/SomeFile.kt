@@ -1,0 +1,4 @@
+package directory
+
+class SomeFile {
+}
