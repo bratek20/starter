@@ -4,8 +4,8 @@ plugins {
 }
 
 //changed by script
-val catalogVersion = "1.0.66"
-val bratek20StarterVersion = "1.0.48"
+val catalogVersion = "1.0.68"
+val bratek20StarterVersion = "1.0.49"
 
 //changed manually
 val bratek20LogsVersion = "1.0.30"
@@ -23,9 +23,11 @@ catalog {
         library("bratek20-architecture", "com.github.bratek20", "bratek20-architecture").versionRef("bratek20-starter")
         library("bratek20-infrastructure", "com.github.bratek20", "bratek20-infrastructure").versionRef("bratek20-starter")
         library("bratek20-spring", "com.github.bratek20", "bratek20-spring").versionRef("bratek20-starter")
+        library("bratek20-utils", "com.github.bratek20", "bratek20-utils").versionRef("bratek20-starter")
 
         library("bratek20-logs", "com.github.bratek20.logs", "bratek20-logs").versionRef("bratek20-logs")
         library("bratek20-logs-core", "com.github.bratek20.logs", "logs-core").versionRef("bratek20-logs")
+        library("bratek20-logs-slf4j", "com.github.bratek20.logs", "logs-slf4j").versionRef("bratek20-logs")
         library("bratek20-logs-logback", "com.github.bratek20.logs", "logs-logback").versionRef("bratek20-logs")
         library("bratek20-logs-log4j2", "com.github.bratek20.logs", "logs-log4j2").versionRef("bratek20-logs")
 
