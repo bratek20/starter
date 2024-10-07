@@ -4,26 +4,28 @@ plugins {
 }
 
 //changed by script
-val catalogVersion = "1.0.68"
-val bratek20StarterVersion = "1.0.49"
+val catalogVersion = "1.0.70"
 
 //changed manually
-val bratek20LogsVersion = "1.0.30"
-val bratek20PluginsVersion = "1.0.8"
+val b20ArchVersion = "1.0.51"
+val b20InfraVersion = "1.0.50"
+val b20SpringVersion = "1.0.50"
+val b20UtilsVersion = "1.0.50"
+
+val b20LogsVersion = "1.0.30"
+val b20PluginsVersion = "1.0.8"
 
 catalog {
     versionCatalog {
         //bratek20 versions
-        version("bratek20-starter", bratek20StarterVersion)
-        version("bratek20-logs", bratek20LogsVersion)
-        version("bratek20-plugins", bratek20PluginsVersion)
+        version("bratek20-logs", b20LogsVersion)
+        version("bratek20-plugins", b20PluginsVersion)
 
         //bratek20 dependencies
-        library("bratek20-starter", "com.github.bratek20", "bratek20-starter").versionRef("bratek20-starter")
-        library("bratek20-architecture", "com.github.bratek20", "bratek20-architecture").versionRef("bratek20-starter")
-        library("bratek20-infrastructure", "com.github.bratek20", "bratek20-infrastructure").versionRef("bratek20-starter")
-        library("bratek20-spring", "com.github.bratek20", "bratek20-spring").versionRef("bratek20-starter")
-        library("bratek20-utils", "com.github.bratek20", "bratek20-utils").versionRef("bratek20-starter")
+        library("bratek20-architecture", "com.github.bratek20", "bratek20-architecture").version(b20ArchVersion)
+        library("bratek20-infrastructure", "com.github.bratek20", "bratek20-infrastructure").version(b20InfraVersion)
+        library("bratek20-spring", "com.github.bratek20", "bratek20-spring").version(b20SpringVersion)
+        library("bratek20-utils", "com.github.bratek20", "bratek20-utils").version(b20UtilsVersion)
 
         library("bratek20-logs", "com.github.bratek20.logs", "bratek20-logs").versionRef("bratek20-logs")
         library("bratek20-logs-core", "com.github.bratek20.logs", "logs-core").versionRef("bratek20-logs")
