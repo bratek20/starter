@@ -2,7 +2,6 @@ package com.github.bratek20.architecture.serialization.tests
 
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import com.github.bratek20.architecture.context.someContextBuilder
 import com.github.bratek20.architecture.context.stableContextBuilder
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.architecture.serialization.api.*
@@ -81,18 +80,41 @@ class SerializationImplTest {
 
         val testObject = TestObject("test", 1, null)
 
-        val serializedValue = serializer.serialize(testObject)
+        val serializedObject = configuredSerializer.serialize(testObject)
 
-        assertSerializedValue(serializedValue) {
-            value = """
+        assertThat(serializedObject.getValue()).isEqualTo(
+            """
                 {
                   "value": "test",
                   "number": 1,
                   "nullable": null
                 }
             """.trimIndent()
-            type = "JSON"
-        }
+        )
+
+        val testObjectList = listOf(
+            TestObject("test", 1, null),
+            TestObject("test2", 2, "test")
+        )
+
+        val serializedList = configuredSerializer.serialize(testObjectList)
+
+        assertThat(serializedList.getValue()).isEqualTo(
+            """
+                [
+                  {
+                    "value": "test",
+                    "number": 1,
+                    "nullable": null
+                  },
+                  {
+                    "value": "test2",
+                    "number": 2,
+                    "nullable": "test"
+                  }
+                ]
+            """.trimIndent()
+        )
     }
 
     @Test
