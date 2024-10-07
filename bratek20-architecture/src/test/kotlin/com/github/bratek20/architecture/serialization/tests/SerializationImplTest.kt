@@ -3,6 +3,7 @@ package com.github.bratek20.architecture.serialization.tests
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import com.github.bratek20.architecture.context.someContextBuilder
+import com.github.bratek20.architecture.context.stableContextBuilder
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.architecture.serialization.api.*
 import com.github.bratek20.architecture.serialization.context.SerializationFactory
@@ -53,7 +54,7 @@ class SerializationImplTest {
     private lateinit var serializer: Serializer
     @BeforeEach
     fun setUp() {
-        serializer = someContextBuilder()
+        serializer = stableContextBuilder()
             .withModules(SerializationImpl())
             .get(Serializer::class.java)
     }
@@ -90,7 +91,7 @@ class SerializationImplTest {
                   "nullable": null
                 }
             """.trimIndent()
-            type = SerializationType.JSON
+            type = "JSON"
         }
     }
 
@@ -231,7 +232,7 @@ class SerializationImplTest {
 
         assertSerializedValue(serializedValue) {
             value = "{\"number\":1,\"value\":\"test\"}"
-            type = SerializationType.JSON
+            type = "JSON"
         }
     }
 
@@ -252,7 +253,7 @@ class SerializationImplTest {
 
         assertSerializedValue(serializedValue) {
             value = "[{\"number\":1,\"value\":\"test\"},{\"number\":2,\"value\":\"test2\"}]"
-            type = SerializationType.JSON
+            type = "JSON"
         }
     }
 
@@ -311,7 +312,7 @@ class SerializationImplTest {
 
         val deserializedObject = serializer.deserialize(serializedValue {
             value = json
-            type = SerializationType.JSON
+            type = "JSON"
         }, OnlyResultField::class.java)
 
         assertThat(deserializedObject).isEqualTo(OnlyResultField("OK"))
