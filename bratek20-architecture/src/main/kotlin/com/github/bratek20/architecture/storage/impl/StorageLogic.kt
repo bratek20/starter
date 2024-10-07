@@ -3,13 +3,12 @@ package com.github.bratek20.architecture.storage.impl
 import com.github.bratek20.architecture.exceptions.ShouldNeverHappenException
 import com.github.bratek20.architecture.serialization.api.DeserializationException
 import com.github.bratek20.architecture.serialization.api.SerializedValue
+import com.github.bratek20.architecture.serialization.context.SerializationFactory
 import com.github.bratek20.architecture.serialization.impl.SerializerLogic
 import com.github.bratek20.architecture.storage.api.*
 import kotlin.reflect.KClass
 
 abstract class StorageLogic {
-    private val serializer = SerializerLogic()
-
     abstract fun findValue(keyName: String): SerializedValue?
     abstract fun setValue(keyName: String, value: SerializedValue)
 
@@ -101,5 +100,9 @@ abstract class StorageLogic {
 
     private fun <T: Any> getObjectWithType(value: SerializedValue, type: KClass<T>): T {
         return serializer.deserialize(value, type.java)
+    }
+
+    companion object {
+        val serializer = SerializationFactory.createSerializer()
     }
 }

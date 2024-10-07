@@ -2,16 +2,18 @@ package com.github.bratek20.architecture.serialization.tests
 
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import com.github.bratek20.architecture.context.someContextBuilder
+import com.github.bratek20.architecture.context.stableContextBuilder
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.architecture.serialization.api.*
+import com.github.bratek20.architecture.serialization.context.SerializationFactory
 import com.github.bratek20.architecture.serialization.context.SerializationImpl
 import com.github.bratek20.architecture.serialization.fixtures.assertStructEquals
 import com.github.bratek20.architecture.serialization.fixtures.assertSerializedValue
 import com.github.bratek20.architecture.serialization.fixtures.serializedValue
+import com.github.bratek20.architecture.serialization.fixtures.serializerConfig
 import org.assertj.core.api.Assertions.assertThat
 
-class SerializationApiTest {
+class SerializationImplTest {
     data class SomeValue(
         val value: String
     )
@@ -51,7 +53,7 @@ class SerializationApiTest {
     private lateinit var serializer: Serializer
     @BeforeEach
     fun setUp() {
-        serializer = someContextBuilder()
+        serializer = stableContextBuilder()
             .withModules(SerializationImpl())
             .get(Serializer::class.java)
     }
@@ -64,8 +66,55 @@ class SerializationApiTest {
 
         assertSerializedValue(serializedValue) {
             value = "{\"value\":\"test\",\"number\":1,\"nullable\":null}"
-            type = SerializationType.JSON
+            type = "JSON"
         }
+    }
+
+    @Test
+    fun `should serialize as formatted JSON`() {
+        val configuredSerializer = SerializationFactory.createSerializer(
+            serializerConfig {
+                readable = true
+            }
+        )
+
+        val testObject = TestObject("test", 1, null)
+
+        val serializedObject = configuredSerializer.serialize(testObject)
+
+        assertThat(serializedObject.getValue()).isEqualTo(
+            """
+                {
+                  "value": "test",
+                  "number": 1,
+                  "nullable": null
+                }
+            """.trimIndent()
+        )
+
+        val testObjectList = listOf(
+            TestObject("test", 1, null),
+            TestObject("test2", 2, "test")
+        )
+
+        val serializedList = configuredSerializer.serialize(testObjectList)
+
+        assertThat(serializedList.getValue()).isEqualTo(
+            """
+                [
+                  {
+                    "value": "test",
+                    "number": 1,
+                    "nullable": null
+                  },
+                  {
+                    "value": "test2",
+                    "number": 2,
+                    "nullable": "test"
+                  }
+                ]
+            """.trimIndent()
+        )
     }
 
     @Test
@@ -205,7 +254,7 @@ class SerializationApiTest {
 
         assertSerializedValue(serializedValue) {
             value = "{\"number\":1,\"value\":\"test\"}"
-            type = SerializationType.JSON
+            type = "JSON"
         }
     }
 
@@ -226,7 +275,7 @@ class SerializationApiTest {
 
         assertSerializedValue(serializedValue) {
             value = "[{\"number\":1,\"value\":\"test\"},{\"number\":2,\"value\":\"test2\"}]"
-            type = SerializationType.JSON
+            type = "JSON"
         }
     }
 
@@ -285,7 +334,7 @@ class SerializationApiTest {
 
         val deserializedObject = serializer.deserialize(serializedValue {
             value = json
-            type = SerializationType.JSON
+            type = "JSON"
         }, OnlyResultField::class.java)
 
         assertThat(deserializedObject).isEqualTo(OnlyResultField("OK"))

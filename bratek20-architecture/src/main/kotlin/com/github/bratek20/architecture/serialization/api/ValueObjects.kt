@@ -26,3 +26,21 @@ data class SerializedValue(
         }
     }
 }
+
+data class SerializerConfig(
+    private val readable: Boolean = false,
+) {
+    fun getReadable(): Boolean {
+        return this.readable
+    }
+
+    companion object {
+        fun create(
+            readable: Boolean = false,
+        ): SerializerConfig {
+            return SerializerConfig(
+                readable = readable,
+            )
+        }
+    }
+}

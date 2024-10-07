@@ -10,3 +10,8 @@ fun assertSerializedValue(given: SerializedValue, expectedInit: ExpectedSerializ
     val diff = diffSerializedValue(given, expectedInit)
     assertThat(diff).withFailMessage(diff).isEqualTo("")
 }
+
+fun assertSerializerConfig(given: SerializerConfig, expectedInit: ExpectedSerializerConfig.() -> Unit) {
+    val diff = diffSerializerConfig(given, expectedInit)
+    assertThat(diff).withFailMessage(diff).isEqualTo("")
+}

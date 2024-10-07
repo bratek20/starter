@@ -2,18 +2,22 @@ package com.github.bratek20.architecture.serialization.impl
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.core.JacksonException
+import com.fasterxml.jackson.core.util.DefaultIndenter
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.github.bratek20.architecture.serialization.api.*
 
-class SerializerLogic: Serializer {
-    private val objectMapper: ObjectMapper = ObjectMapper()
+class SerializerLogic(
+    private val config: SerializerConfig
+): Serializer {
+    private val mapper: ObjectMapper = ObjectMapper()
 
     init {
         // Configure Jackson to include all fields and ignore getters
-        objectMapper.setVisibility(
-            objectMapper.serializationConfig
+        mapper.setVisibility(
+            mapper.serializationConfig
                 .defaultVisibilityChecker
                 .withFieldVisibility(JsonAutoDetect.Visibility.ANY)
                 .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
@@ -21,21 +25,45 @@ class SerializerLogic: Serializer {
                 .withSetterVisibility(JsonAutoDetect.Visibility.NONE)
                 .withCreatorVisibility(JsonAutoDetect.Visibility.NONE)
         )
-        objectMapper.registerKotlinModule()
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        mapper.registerKotlinModule()
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
     }
 
+
+
     override fun serialize(value: Any): SerializedValue {
-        val jsonString = objectMapper.writeValueAsString(value)
+        val jsonString = if (config.getReadable()) {
+            asReadableJson(value)
+        } else {
+            mapper.writeValueAsString(value)
+        }
+
         return SerializedValue.create(
             value = jsonString,
             type = SerializationType.JSON,
         )
     }
 
+    class CustomPrettyPrinter : DefaultPrettyPrinter() {
+        init {
+            _objectFieldValueSeparatorWithSpaces = ": "  // No space before colon
+            val indenter = DefaultIndenter("  ", "\n")  // Two spaces for indentation, LF as newline
+            indentArraysWith(indenter)
+            indentObjectsWith(indenter)
+        }
+
+        override fun createInstance(): CustomPrettyPrinter {
+            return CustomPrettyPrinter()
+        }
+    }
+    private fun asReadableJson(value: Any): String {
+        val prettyPrinter = CustomPrettyPrinter()
+        return mapper.writer(prettyPrinter).writeValueAsString(value)
+    }
+
     override fun <T> deserialize(serializedValue: SerializedValue, type: Class<T>): T {
         try {
-            return objectMapper.readValue(serializedValue.getValue(), type)
+            return mapper.readValue(serializedValue.getValue(), type)
         } catch (e: JacksonException) {
             throw handleJacksonException(e)
         }
@@ -43,8 +71,8 @@ class SerializerLogic: Serializer {
 
     override fun <T> deserializeList(serializedValue: SerializedValue, elementType: Class<T>): List<T> {
         try {
-            val collectionType = objectMapper.typeFactory.constructCollectionType(List::class.java, elementType)
-            return objectMapper.readValue(serializedValue.getValue(), collectionType)
+            val collectionType = mapper.typeFactory.constructCollectionType(List::class.java, elementType)
+            return mapper.readValue(serializedValue.getValue(), collectionType)
         } catch (e: JacksonException) {
             throw handleJacksonException(e)
         }

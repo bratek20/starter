@@ -4,9 +4,14 @@ package com.github.bratek20.architecture.serialization.fixtures
 
 import com.github.bratek20.architecture.serialization.api.*
 
+fun diffSerializationType(given: SerializationType, expected: String, path: String = ""): String {
+    if (given != SerializationType.valueOf(expected)) { return "${path}value ${given.name} != ${expected}" }
+    return ""
+}
+
 data class ExpectedSerializedValue(
     var value: String? = null,
-    var type: SerializationType? = null,
+    var type: String? = null,
 )
 fun diffSerializedValue(given: SerializedValue, expectedInit: ExpectedSerializedValue.() -> Unit, path: String = ""): String {
     val expected = ExpectedSerializedValue().apply(expectedInit)
@@ -17,7 +22,21 @@ fun diffSerializedValue(given: SerializedValue, expectedInit: ExpectedSerialized
     }
 
     expected.type?.let {
-        if (given.getType() != it) { result.add("${path}type ${given.getType()} != ${it}") }
+        if (diffSerializationType(given.getType(), it) != "") { result.add(diffSerializationType(given.getType(), it, "${path}type.")) }
+    }
+
+    return result.joinToString("\n")
+}
+
+data class ExpectedSerializerConfig(
+    var readable: Boolean? = null,
+)
+fun diffSerializerConfig(given: SerializerConfig, expectedInit: ExpectedSerializerConfig.() -> Unit, path: String = ""): String {
+    val expected = ExpectedSerializerConfig().apply(expectedInit)
+    val result: MutableList<String> = mutableListOf()
+
+    expected.readable?.let {
+        if (given.getReadable() != it) { result.add("${path}readable ${given.getReadable()} != ${it}") }
     }
 
     return result.joinToString("\n")

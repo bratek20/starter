@@ -2,6 +2,7 @@ package com.github.bratek20.architecture.data.impl
 
 import com.github.bratek20.architecture.data.api.*
 import com.github.bratek20.architecture.serialization.api.SerializedValue
+import com.github.bratek20.architecture.serialization.context.SerializationFactory
 import com.github.bratek20.architecture.serialization.impl.SerializerLogic
 import com.github.bratek20.architecture.storage.api.NotFoundInStorageException
 import com.github.bratek20.architecture.storage.api.StorageElementNotFoundException
@@ -13,7 +14,7 @@ class DataStorageLogic(
 ) : DataStorage, StorageLogic() {
 
     override fun <T : Any> set(key: DataKey<T>, value: T) {
-        integration.setValue(key.name, SerializerLogic().serialize(value))
+        integration.setValue(key.name, serializer.serialize(value))
     }
 
     override fun <T : Any> find(key: DataKey<T>): T? {
@@ -62,5 +63,9 @@ class DataStorageLogic(
 
     override fun keyTypeException(message: String): StorageKeyTypeException {
         return DataKeyTypeException(message)
+    }
+
+    companion object {
+        val serializer = SerializationFactory.createSerializer();
     }
 }
