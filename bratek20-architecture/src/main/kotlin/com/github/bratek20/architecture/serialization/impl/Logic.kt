@@ -44,26 +44,20 @@ class SerializerLogic(
         )
     }
 
-    // Custom PrettyPrinter to avoid space before colons
-    class NoSpaceBeforeColonPrettyPrinter : DefaultPrettyPrinter() {
+    class CustomPrettyPrinter : DefaultPrettyPrinter() {
         init {
-            _objectFieldValueSeparatorWithSpaces = ": "
-        }
-
-        // Override createInstance to ensure correct behavior
-        override fun createInstance(): NoSpaceBeforeColonPrettyPrinter {
-            return NoSpaceBeforeColonPrettyPrinter().apply {
-                indentArraysWith(this@NoSpaceBeforeColonPrettyPrinter._arrayIndenter)
-                indentObjectsWith(this@NoSpaceBeforeColonPrettyPrinter._objectIndenter)
-            }
-        }
-    }
-    private fun asReadableJson(value: Any): String {
-        val indenter = DefaultIndenter("  ", "\n")  // Two spaces for indentation and newline
-        val prettyPrinter = NoSpaceBeforeColonPrettyPrinter().apply {
+            _objectFieldValueSeparatorWithSpaces = ": "  // No space before colon
+            val indenter = DefaultIndenter("  ", "\n")  // Two spaces for indentation, LF as newline
             indentArraysWith(indenter)
             indentObjectsWith(indenter)
         }
+
+        override fun createInstance(): CustomPrettyPrinter {
+            return CustomPrettyPrinter()
+        }
+    }
+    private fun asReadableJson(value: Any): String {
+        val prettyPrinter = CustomPrettyPrinter()
         return mapper.writer(prettyPrinter).writeValueAsString(value)
     }
 
