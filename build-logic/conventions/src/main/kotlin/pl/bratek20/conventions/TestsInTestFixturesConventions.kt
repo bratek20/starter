@@ -15,6 +15,7 @@ class TestsInTestFixturesConventions : Plugin<Project> {
         with(project) {
             dependencies {
                 add("testFixturesImplementation", versionCatalog().findLibrary("junit-jupiter-api").get())
+                add("testFixturesImplementation", versionCatalog().findLibrary("junit-jupiter-params").get())
             }
 
             tasks.named("check").configure {
