@@ -8,19 +8,19 @@ import com.google.common.eventbus.Subscribe
 import java.lang.reflect.ParameterizedType
 import java.util.function.Consumer
 
-class EventsLogic(listeners: Set<EventListener<*>>) : EventPublisher {
+class EventPublisherLogic(listeners: Set<EventListener<*>>) : EventPublisher {
     private val eventBus = EventBus()
 
     init {
         listeners.forEach(Consumer { listener: EventListener<*> -> this.subscribe(listener) })
     }
 
-    override fun publish(event: Event?) {
+    override fun publish(event: Event) {
         eventBus.post(event)
     }
 
 
-    private fun <T : Event?> subscribe(listener: EventListener<T>) {
+    private fun <T : Event> subscribe(listener: EventListener<T>) {
         // Reflection to find the actual event type handled by the listener
         val type = listener.javaClass.genericInterfaces[0] as ParameterizedType
         val eventType = type.actualTypeArguments[0] as Class<T>

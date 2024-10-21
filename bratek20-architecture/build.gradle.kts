@@ -3,7 +3,7 @@ plugins {
     id("com.github.bratek20.tests-in-test-fixtures-conventions")
 }
 
-version = "1.0.51"
+version = "1.0.52"
 
 dependencies {
     //event bus
