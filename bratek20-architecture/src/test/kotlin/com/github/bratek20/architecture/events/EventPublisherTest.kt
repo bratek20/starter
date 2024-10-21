@@ -1,12 +1,11 @@
 package com.github.bratek20.architecture.events
 
-import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.Test
 import com.github.bratek20.architecture.context.stableContextBuilder
 import com.github.bratek20.architecture.events.api.Event
-import com.github.bratek20.architecture.events.api.EventListener
 import com.github.bratek20.architecture.events.api.EventPublisher
 import com.github.bratek20.architecture.events.context.EventsImpl
+import org.assertj.core.api.Assertions
+import org.junit.jupiter.api.Test
 
 class EventPublisherTest {
     data class TestEvent(
@@ -18,18 +17,30 @@ class EventPublisherTest {
         val value: Int
     ) : Event
 
-    class TestEventListener : EventListener<TestEvent> {
+    class TestEventListener(
+        publisher: EventPublisher
+    ) {
+        init {
+            publisher.addListener(this::handleEvent)
+        }
+
         var events: MutableList<TestEvent> = ArrayList()
 
-        override fun handleEvent(event: TestEvent) {
+        private fun handleEvent(event: TestEvent) {
             events.add(event)
         }
     }
 
-    class OtherEventListener : EventListener<OtherEvent> {
+    class OtherEventListener(
+        publisher: EventPublisher
+    ) {
+        init {
+            publisher.addListener(this::handleEvent)
+        }
+
         var events: MutableList<OtherEvent> = ArrayList()
 
-        override fun handleEvent(event: OtherEvent) {
+        private fun handleEvent(event: OtherEvent) {
             events.add(event)
         }
     }
@@ -38,15 +49,13 @@ class EventPublisherTest {
     fun shouldWork() {
         // given
         val c = stableContextBuilder()
-            .addImpl(EventListener::class.java, TestEventListener::class.java)
-            .addImpl(EventListener::class.java, OtherEventListener::class.java)
+            .setClass(TestEventListener::class.java)
+            .setClass(OtherEventListener::class.java)
             .withModule(EventsImpl())
             .build()
 
-        val listeners = c.getMany(EventListener::class.java)
-
-        val listener = listeners.find { l: EventListener<*> -> l is TestEventListener } as TestEventListener
-        val otherListener = listeners.find { l: EventListener<*> -> l is OtherEventListener } as OtherEventListener
+        val listener = c.get(TestEventListener::class.java)
+        val otherListener = c.get(OtherEventListener::class.java)
 
         val publisher = c.get(EventPublisher::class.java)
 
