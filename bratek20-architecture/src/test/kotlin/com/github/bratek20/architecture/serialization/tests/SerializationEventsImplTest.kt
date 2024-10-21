@@ -13,7 +13,7 @@ import com.github.bratek20.architecture.serialization.fixtures.serializedValue
 import com.github.bratek20.architecture.serialization.fixtures.serializerConfig
 import org.assertj.core.api.Assertions.assertThat
 
-class SerializationImplTest {
+class SerializationEventsImplTest {
     data class SomeValue(
         val value: String
     )
