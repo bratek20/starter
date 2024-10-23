@@ -13,6 +13,10 @@ class EventPublisherMock : EventPublisher {
         publishedEvents.add(event)
     }
 
+    override fun <T : Event> addListener(listener: (T) -> Unit) {
+        TODO("Not yet implemented")
+    }
+
     inline fun <reified T: Event> assertOneEventPublished(eventAssertion: (T) -> Unit) {
         assertPublishedEventsCount(1)
         assertLastEventPublished(eventAssertion)
