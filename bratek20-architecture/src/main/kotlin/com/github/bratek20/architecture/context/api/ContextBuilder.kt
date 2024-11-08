@@ -25,7 +25,15 @@ interface ContextBuilder {
 
     fun build(): Context
 
+    @Deprecated(
+        "ContextBuilder.get can be confused with Context.get resulting in ugly bug",
+        ReplaceWith("buildAndGet(type)"),
+    )
     fun <T: Any> get(type: Class<T>): T {
+        return build().get(type)
+    }
+
+    fun <T: Any> buildAndGet(type: Class<T>): T {
         return build().get(type)
     }
 }

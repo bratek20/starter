@@ -20,7 +20,7 @@ class EventPublisherMockTest {
             .withModules(
                 EventsMocks()
             )
-            .get(EventPublisherMock::class.java)
+            .buildAndGet(EventPublisherMock::class.java)
 
         mock.assertNoEventsPublished()
 

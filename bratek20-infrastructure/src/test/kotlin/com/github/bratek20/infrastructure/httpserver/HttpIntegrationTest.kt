@@ -139,7 +139,7 @@ class HttpIntegrationTest {
                     )
                 )
             )
-            .get(SomeApi::class.java)
+            .buildAndGet(SomeApi::class.java)
 
         //when & then
         assertThat(api.mirror(SomeClass("test")))

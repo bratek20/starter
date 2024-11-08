@@ -51,11 +51,12 @@ class SerializationEventsImplTest {
     }
 
     private lateinit var serializer: Serializer
+
     @BeforeEach
     fun setUp() {
         serializer = stableContextBuilder()
             .withModules(SerializationImpl())
-            .get(Serializer::class.java)
+            .buildAndGet(Serializer::class.java)
     }
 
     @Test

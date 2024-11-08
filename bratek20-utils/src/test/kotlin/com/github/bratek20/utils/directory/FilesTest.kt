@@ -10,10 +10,10 @@ import com.github.bratek20.utils.directory.context.DirectoryImpl
 import com.github.bratek20.utils.directory.fixtures.assertFile
 import com.github.bratek20.utils.directory.fixtures.file
 
-class FilesTest: TempDirTest() {
+class FilesTest : TempDirTest() {
     private val files = someContextBuilder()
         .withModules(DirectoryImpl())
-        .get(Files::class.java)
+        .buildAndGet(Files::class.java)
 
     @Test
     fun shouldWork() {
@@ -21,7 +21,7 @@ class FilesTest: TempDirTest() {
         val filePath = tempDir.add(Path(fileName))
 
         assertApiExceptionThrown(
-            {files.read(filePath)},
+            { files.read(filePath) },
             {
                 type = FileNotFoundException::class
                 message = "File not found: ${filePath.value}"
@@ -42,7 +42,7 @@ class FilesTest: TempDirTest() {
 
         files.delete(filePath)
         assertApiExceptionThrown(
-            {files.read(filePath)},
+            { files.read(filePath) },
             {
                 type = FileNotFoundException::class
             }

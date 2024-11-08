@@ -12,7 +12,7 @@ internal class InMemoryPropertiesSourceTest : PropertiesSourceTest() {
             .withModules(
                 InMemoryPropertiesSourceImpl("someName")
             )
-            .get(InMemoryPropertiesSource::class.java)
+            .buildAndGet(InMemoryPropertiesSource::class.java)
 
         source.set(SOME_PROPERTY_OBJECT_KEY, EXPECTED_SOME_PROPERTY)
         source.set(SOME_PROPERTY_LIST_KEY, EXPECTED_SOME_PROPERTY_LIST)

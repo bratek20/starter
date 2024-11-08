@@ -30,7 +30,7 @@ class HttpClientImplTest {
 
         factory = someContextBuilder()
             .withModules(HttpClientImpl())
-            .get(HttpClientFactory::class.java)
+            .buildAndGet(HttpClientFactory::class.java)
 
         client = factory.create(httpClientConfig {
             baseUrl = "http://localhost:8080"

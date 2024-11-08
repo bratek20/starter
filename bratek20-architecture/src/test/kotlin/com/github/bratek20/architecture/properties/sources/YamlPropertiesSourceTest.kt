@@ -15,7 +15,7 @@ internal class YamlPropertiesSourceTest : PropertiesSourceTest() {
             .withModules(
                 YamlPropertiesSourceImpl()
             )
-            .get(YamlPropertiesSource::class.java)
+            .buildAndGet(YamlPropertiesSource::class.java)
 
         source.propertiesPath = "src/test/resources/someName.yaml"
 

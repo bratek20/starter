@@ -11,10 +11,10 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 
-class DirectoriesTest: TempDirTest() {
+class DirectoriesTest : TempDirTest() {
     private val directories = someContextBuilder()
         .withModules(DirectoryImpl())
-        .get(Directories::class.java)
+        .buildAndGet(Directories::class.java)
 
     @Test
     fun shouldWrite() {
@@ -81,9 +81,9 @@ class DirectoriesTest: TempDirTest() {
                 files = listOf {
                     name = "SomeFile.kt"
                     content = "package directory\n" +
-                         "\n" +
-                        "class SomeFile {\n" +
-                        "}"
+                            "\n" +
+                            "class SomeFile {\n" +
+                            "}"
                 }
             }
         }
