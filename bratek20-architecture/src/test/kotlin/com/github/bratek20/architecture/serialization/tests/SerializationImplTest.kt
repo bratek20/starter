@@ -13,7 +13,7 @@ import com.github.bratek20.architecture.serialization.fixtures.serializedValue
 import com.github.bratek20.architecture.serialization.fixtures.serializerConfig
 import org.assertj.core.api.Assertions.assertThat
 
-class SerializationEventsImplTest {
+class SerializationImplTest {
     data class SomeValue(
         val value: String
     )
@@ -189,7 +189,7 @@ class SerializationEventsImplTest {
     }
 
     @Test
-    fun `should throw exception when deserializing from invalid JSON`() {
+    fun `should throw exception when deserializing from invalid JSON - nullable types (string)`() {
         val serializedValue = serializedValue {
             value = "{}"
         }
@@ -199,6 +199,21 @@ class SerializationEventsImplTest {
             {
                 type = DeserializationException::class
                 message = "Deserialization failed: missing value for field `value`"
+            }
+        )
+    }
+
+    @Test
+    fun `should throw exception when deserializing from invalid JSON - primitive types (int)`() {
+        val serializedValue = serializedValue {
+            value = "{\"value\":\"test\"}"
+        }
+
+        assertApiExceptionThrown (
+            { serializer.deserialize(serializedValue, TestObject::class.java) },
+            {
+                type = DeserializationException::class
+                message = "Deserialization failed: missing value for field `number`"
             }
         )
     }

@@ -27,6 +27,7 @@ class SerializerLogic(
         )
         mapper.registerKotlinModule()
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        mapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, true)
     }
 
 
@@ -89,7 +90,18 @@ class SerializerLogic(
     private fun extractMissingFieldName(message: String): String? {
         val regex = "property ([a-zA-Z0-9]+) due to missing".toRegex()
         val matchResult = regex.find(message)
-        return matchResult?.groups?.get(1)?.value
+        matchResult?.groups?.get(1)?.value?.let { missingFieldName ->
+            return missingFieldName
+        }
+
+        //Missing required creator property 'number' (index 1)
+        val otherRegex = "Missing required creator property '([a-zA-Z0-9]+)'".toRegex()
+        val otherMatchResult = otherRegex.find(message)
+        otherMatchResult?.groups?.get(1)?.value?.let { missingFieldName ->
+            return missingFieldName
+        }
+
+        return null
     }
 
     override fun asStruct(value: Any): Struct {
