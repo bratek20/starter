@@ -29,7 +29,7 @@ class SpringEnvironmentSourceIntegrationTest {
         val properties = context.get(Properties::class.java)
         val env = context.get(ConfigurableEnvironment::class.java)
         val envSource = context.get(SpringEnvironmentSource::class.java)
-        envSource.env = env
+        envSource.init(env)
 
         env.propertySources.forEach { propertySource ->
             if (propertySource is MapPropertySource) {

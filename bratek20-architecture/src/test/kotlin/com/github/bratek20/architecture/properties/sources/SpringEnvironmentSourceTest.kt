@@ -70,8 +70,9 @@ class SpringEnvironmentSourceTest: PropertiesSourceTest() {
         val propertySource = OriginTrackedMapPropertySource(customProperties)
         springEnv.propertySources.addFirst(propertySource)
 
-        return context.get(SpringEnvironmentSource::class.java)
-
+        val source = context.get(SpringEnvironmentSource::class.java)
+        source.init(springEnv)
+        return source
     }
 
     override fun expectedName(): String {

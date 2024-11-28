@@ -19,11 +19,22 @@ class SpringEnvironmentPrefixProvider(
 
 class SpringEnvironmentSource(
     private val prefixProvider: SpringEnvironmentPrefixProvider,
-    var env: ConfigurableEnvironment
 ) : PropertiesSource {
 
     private val prefix: String
         get() = prefixProvider.value
+
+    private lateinit var env: ConfigurableEnvironment
+    fun init(env: ConfigurableEnvironment) {
+        this.env = env
+    }
+
+    private fun getEnv(): ConfigurableEnvironment {
+        if (!this::env.isInitialized) {
+            throw ApiException("SpringEnvironmentSource must be initialized with ConfigurableEnvironment")
+        }
+        return env
+    }
 
     override fun getName(): PropertiesSourceName {
         return PropertiesSourceName("spring-environment-$prefix")
@@ -41,7 +52,7 @@ class SpringEnvironmentSource(
     }
 
     private fun getMap(): Map<String, Any> {
-        val all: Sequence<MapPropertySource> = env.propertySources.asSequence()
+        val all: Sequence<MapPropertySource> = getEnv().propertySources.asSequence()
             .filterIsInstance<MapPropertySource>()
 
         val result: MutableMap<String, Any> = mutableMapOf()
