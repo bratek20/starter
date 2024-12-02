@@ -29,6 +29,15 @@ class PropertiesMock : Properties {
         TODO("Not yet implemented")
     }
 
+    private var allSerialized: List<SerializedProperty> = emptyList()
+    override fun getAllSerialized(): List<SerializedProperty> {
+        return allSerialized
+    }
+
+    fun setAllSerialized(allSerialized: List<SerializedProperty>) {
+        this.allSerialized = allSerialized
+    }
+
     fun <T: Any> set(key: PropertyKey<T>, value: T) {
         values[key] = value
     }

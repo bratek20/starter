@@ -8,6 +8,7 @@ import com.github.bratek20.architecture.context.stableContextBuilder
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.architecture.properties.api.*
 import com.github.bratek20.architecture.properties.context.PropertiesImpl
+import com.github.bratek20.architecture.properties.fixtures.assertSerializedProperty
 import com.github.bratek20.architecture.properties.sources.inmemory.InMemoryPropertiesSource
 import com.github.bratek20.architecture.properties.sources.inmemory.InMemoryPropertiesSourceImpl
 import org.junit.jupiter.api.Nested
@@ -166,6 +167,29 @@ class PropertiesTest {
                 }
             )
         }
+
+        @Test
+        fun `should return all serialized properties`() {
+            source1.set(ObjectPropertyKey("key1", SomeProperty::class), SomeProperty("x"))
+            source2.set(ListPropertyKey("key2", SomeProperty::class), listOf(SomeProperty("y")))
+
+            val allSerialized = properties.getAllSerialized()
+
+            assertThat(allSerialized).hasSize(2)
+
+            assertSerializedProperty(allSerialized[0]) {
+                keyName = "key1"
+                value = {
+                    value = "{\"value\":\"x\"}"
+                }
+            }
+            assertSerializedProperty(allSerialized[1]) {
+                keyName = "key2"
+                value = {
+                    value = "[{\"value\":\"y\"}]"
+                }
+            }
+        }
     }
 
     @Nested
@@ -185,17 +209,6 @@ class PropertiesTest {
 
         @Test
         fun shouldAddSource() {
-            val source = InMemoryPropertiesSource("source")
-            source.set(ObjectPropertyKey("key", SomeProperty::class), SomeProperty("x"))
-            properties.addSource(source)
-
-            val givenProp = properties.get(ObjectPropertyKey("key", SomeProperty::class))
-
-            assertThat(givenProp).isEqualTo(SomeProperty("x"))
-        }
-
-        @Test
-        fun shouldDetectSource() {
             val source = InMemoryPropertiesSource("source")
             source.set(ObjectPropertyKey("key", SomeProperty::class), SomeProperty("x"))
             properties.addSource(source)

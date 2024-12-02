@@ -31,6 +31,17 @@ class PropertiesLogic(
         addedSources.add(source)
     }
 
+    override fun getAllSerialized(): List<SerializedProperty> {
+        return allSources.flatMap { source ->
+            source.getAllKeys().map { keyName ->
+                SerializedProperty(
+                    keyName,
+                    source.getValue(keyName)
+                )
+            }
+        }
+    }
+
     private fun findSourceWithKeyName(keyName: String): PropertiesSource? {
         return allSources.firstOrNull {
             it.getAllKeys().contains(keyName)
