@@ -1,6 +1,17 @@
-package com.github.bratek20.architecture.serialization.api
+package com.github.bratek20.architecture.structs.api
 
-class StructList: ArrayList<Struct>()
+class StructList: AnyStruct, ArrayList<Struct>() {
+    override fun isObject(): Boolean = false
+    override fun isList(): Boolean = true
+
+    override fun asObject(): Struct {
+        throw StructConversionException("Tried to convert StructList to Struct")
+    }
+
+    override fun asList(): StructList {
+        return this
+    }
+}
 
 class StructListBuilder {
     private val list = StructList()

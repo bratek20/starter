@@ -1,8 +1,8 @@
 package com.github.bratek20.architecture.serialization.tests
 
 import com.github.bratek20.architecture.serialization.fixtures.asStruct
-import com.github.bratek20.architecture.serialization.fixtures.assertStructContains
-import com.github.bratek20.architecture.serialization.fixtures.assertStructEquals
+import com.github.bratek20.architecture.structs.fixtures.assertStructContains
+import com.github.bratek20.architecture.structs.fixtures.assertStructEquals
 import org.junit.jupiter.api.Test
 
 class SomeClass(val value: String, val otherValue: Int)

@@ -6,5 +6,5 @@ interface Properties {
 
     fun addSource(source: PropertiesSource)
 
-    fun getAllSerialized(): List<SerializedProperty>
+    fun getAll(): List<Property>
 }

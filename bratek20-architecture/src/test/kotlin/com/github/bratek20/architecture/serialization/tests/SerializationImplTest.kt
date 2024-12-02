@@ -7,10 +7,11 @@ import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.architecture.serialization.api.*
 import com.github.bratek20.architecture.serialization.context.SerializationFactory
 import com.github.bratek20.architecture.serialization.context.SerializationImpl
-import com.github.bratek20.architecture.serialization.fixtures.assertStructEquals
+import com.github.bratek20.architecture.structs.fixtures.assertStructEquals
 import com.github.bratek20.architecture.serialization.fixtures.assertSerializedValue
 import com.github.bratek20.architecture.serialization.fixtures.serializedValue
 import com.github.bratek20.architecture.serialization.fixtures.serializerConfig
+import com.github.bratek20.architecture.structs.api.*
 import org.assertj.core.api.Assertions.assertThat
 
 class SerializationImplTest {

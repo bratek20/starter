@@ -6,14 +6,13 @@ import com.github.bratek20.architecture.context.someContextBuilder
 import com.github.bratek20.architecture.exceptions.ApiException
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.architecture.serialization.api.Serializer
-import com.github.bratek20.architecture.serialization.api.Struct
+import com.github.bratek20.architecture.structs.api.Struct
 import com.github.bratek20.architecture.serialization.context.SerializationFactory
 import com.github.bratek20.infrastructure.httpclient.api.HttpClientConfig
 import com.github.bratek20.infrastructure.httpclient.api.HttpClientFactory
 import com.github.bratek20.infrastructure.httpclient.context.HttpClientImpl
 import com.github.bratek20.infrastructure.httpclient.fixtures.httpClientConfig
 import com.github.bratek20.infrastructure.httpserver.api.WebServerModule
-import com.github.bratek20.infrastructure.httpserver.fixtures.TestWebApp
 import com.github.bratek20.infrastructure.httpserver.fixtures.runTestWebApp
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

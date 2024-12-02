@@ -8,9 +8,10 @@ import com.github.bratek20.architecture.context.stableContextBuilder
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.architecture.properties.api.*
 import com.github.bratek20.architecture.properties.context.PropertiesImpl
-import com.github.bratek20.architecture.properties.fixtures.assertSerializedProperty
 import com.github.bratek20.architecture.properties.sources.inmemory.InMemoryPropertiesSource
 import com.github.bratek20.architecture.properties.sources.inmemory.InMemoryPropertiesSourceImpl
+import com.github.bratek20.architecture.structs.fixtures.assertStructEquals
+import com.github.bratek20.architecture.structs.fixtures.assertStructListEquals
 import org.junit.jupiter.api.Nested
 
 class PropertiesTest {
@@ -173,22 +174,19 @@ class PropertiesTest {
             source1.set(ObjectPropertyKey("key1", SomeProperty::class), SomeProperty("x"))
             source2.set(ListPropertyKey("key2", SomeProperty::class), listOf(SomeProperty("y")))
 
-            val allSerialized = properties.getAllSerialized()
+            val allProperties = properties.getAll()
 
-            assertThat(allSerialized).hasSize(2)
+            assertThat(allProperties).hasSize(2)
 
-            assertSerializedProperty(allSerialized[0]) {
-                keyName = "key1"
-                value = {
-                    value = "{\"value\":\"x\"}"
-                }
+            assertThat(allProperties[0].keyName).isEqualTo("key1")
+            assertStructEquals(allProperties[0].value.asObject()) {
+                "value" to "x"
             }
-            assertSerializedProperty(allSerialized[1]) {
-                keyName = "key2"
-                value = {
-                    value = "[{\"value\":\"y\"}]"
-                }
-            }
+
+            assertThat(allProperties[1].keyName).isEqualTo("key2")
+            assertStructListEquals(allProperties[1].value.asList(), listOf {
+                "value" to "y"
+            })
         }
     }
 

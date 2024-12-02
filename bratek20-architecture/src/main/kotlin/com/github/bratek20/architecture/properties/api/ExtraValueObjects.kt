@@ -4,6 +4,7 @@ import com.github.bratek20.architecture.storage.api.ListTypedKey
 import com.github.bratek20.architecture.storage.api.MapTypedKey
 import com.github.bratek20.architecture.storage.api.ObjectTypedKey
 import com.github.bratek20.architecture.storage.api.TypedKey
+import com.github.bratek20.architecture.structs.api.AnyStruct
 import kotlin.reflect.KClass
 
 data class PropertiesSourceName(val value: String)
@@ -21,3 +22,8 @@ class MapPropertyKey<Id: Any, E: Any>(
     elementType: KClass<E>,
     override val idProvider: (element: E) -> Id
 ) : ListPropertyKey<E>(name, elementType), MapTypedKey<Id, E>
+
+data class Property(
+    val keyName: String,
+    val value: AnyStruct
+)

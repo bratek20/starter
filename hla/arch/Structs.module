@@ -1,0 +1,16 @@
+CustomTypes
+    Struct
+    StructList
+
+Interfaces
+    AnyStruct
+        isObject(): bool
+        isList(): bool
+
+        asObject(): Struct
+            throws
+                StructConversionException
+
+        asList(): StructList
+            throws
+                StructConversionException

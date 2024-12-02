@@ -1,6 +1,7 @@
 package com.github.bratek20.architecture.serialization.api
 
 import com.github.bratek20.architecture.exceptions.ApiException
+import com.github.bratek20.architecture.structs.api.Struct
 
 class DeserializationException(message: String): ApiException(message)
 
