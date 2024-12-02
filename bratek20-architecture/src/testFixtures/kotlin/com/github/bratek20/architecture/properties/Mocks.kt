@@ -29,6 +29,10 @@ class PropertiesMock : Properties {
         TODO("Not yet implemented")
     }
 
+    override fun getAll(): List<Property> {
+        TODO("Not yet implemented")
+    }
+
     fun <T: Any> set(key: PropertyKey<T>, value: T) {
         values[key] = value
     }

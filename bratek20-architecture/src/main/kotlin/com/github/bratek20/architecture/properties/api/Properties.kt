@@ -5,4 +5,6 @@ interface Properties {
     fun <Id: Any, E: Any> findElement(key: MapPropertyKey<Id, E>, id: Id): E?
 
     fun addSource(source: PropertiesSource)
+
+    fun getAll(): List<Property>
 }

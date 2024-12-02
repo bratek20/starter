@@ -6,6 +6,7 @@ import com.github.bratek20.architecture.storage.api.NotFoundInStorageException
 import com.github.bratek20.architecture.storage.api.StorageElementNotFoundException
 import com.github.bratek20.architecture.storage.api.StorageKeyTypeException
 import com.github.bratek20.architecture.storage.impl.StorageLogic
+import com.github.bratek20.architecture.structs.api.*
 
 class PropertiesLogic(
     private val initialSources: Set<PropertiesSource>
@@ -29,6 +30,28 @@ class PropertiesLogic(
 
     override fun addSource(source: PropertiesSource) {
         addedSources.add(source)
+    }
+
+    override fun getAll(): List<Property> {
+        return allSources.flatMap { source ->
+            source.getAllKeys().map { keyName ->
+                Property(
+                    keyName,
+                    asAnyStruct(source.getValue(keyName))
+                )
+            }
+        }
+    }
+
+    private fun asAnyStruct(value: SerializedValue): AnyStruct {
+        if (value.getValue().startsWith("{")) {
+            return serializer.deserialize(value, Struct::class.java)
+        }
+
+        val list = StructList()
+        val rawStructList = serializer.deserializeList(value, Struct::class.java)
+        rawStructList.forEach { list.add(it) }
+        return list
     }
 
     private fun findSourceWithKeyName(keyName: String): PropertiesSource? {

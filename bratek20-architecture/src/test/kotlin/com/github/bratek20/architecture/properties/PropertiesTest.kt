@@ -10,6 +10,8 @@ import com.github.bratek20.architecture.properties.api.*
 import com.github.bratek20.architecture.properties.context.PropertiesImpl
 import com.github.bratek20.architecture.properties.sources.inmemory.InMemoryPropertiesSource
 import com.github.bratek20.architecture.properties.sources.inmemory.InMemoryPropertiesSourceImpl
+import com.github.bratek20.architecture.structs.fixtures.assertStructEquals
+import com.github.bratek20.architecture.structs.fixtures.assertStructListEquals
 import org.junit.jupiter.api.Nested
 
 class PropertiesTest {
@@ -166,6 +168,26 @@ class PropertiesTest {
                 }
             )
         }
+
+        @Test
+        fun `should return all serialized properties`() {
+            source1.set(ObjectPropertyKey("key1", SomeProperty::class), SomeProperty("x"))
+            source2.set(ListPropertyKey("key2", SomeProperty::class), listOf(SomeProperty("y")))
+
+            val allProperties = properties.getAll()
+
+            assertThat(allProperties).hasSize(2)
+
+            assertThat(allProperties[0].keyName).isEqualTo("key1")
+            assertStructEquals(allProperties[0].value.asObject()) {
+                "value" to "x"
+            }
+
+            assertThat(allProperties[1].keyName).isEqualTo("key2")
+            assertStructListEquals(allProperties[1].value.asList(), listOf {
+                "value" to "y"
+            })
+        }
     }
 
     @Nested
@@ -185,17 +207,6 @@ class PropertiesTest {
 
         @Test
         fun shouldAddSource() {
-            val source = InMemoryPropertiesSource("source")
-            source.set(ObjectPropertyKey("key", SomeProperty::class), SomeProperty("x"))
-            properties.addSource(source)
-
-            val givenProp = properties.get(ObjectPropertyKey("key", SomeProperty::class))
-
-            assertThat(givenProp).isEqualTo(SomeProperty("x"))
-        }
-
-        @Test
-        fun shouldDetectSource() {
             val source = InMemoryPropertiesSource("source")
             source.set(ObjectPropertyKey("key", SomeProperty::class), SomeProperty("x"))
             properties.addSource(source)

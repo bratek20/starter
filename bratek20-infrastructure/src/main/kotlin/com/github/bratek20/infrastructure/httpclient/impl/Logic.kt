@@ -3,7 +3,7 @@ package com.github.bratek20.infrastructure.httpclient.impl
 import com.github.bratek20.architecture.serialization.api.SerializationType
 import com.github.bratek20.architecture.serialization.api.SerializedValue
 import com.github.bratek20.architecture.serialization.api.Serializer
-import com.github.bratek20.architecture.serialization.api.Struct
+import com.github.bratek20.architecture.structs.api.Struct
 import com.github.bratek20.architecture.serialization.context.SerializationFactory
 import com.github.bratek20.infrastructure.httpclient.api.*
 import org.springframework.http.HttpEntity
