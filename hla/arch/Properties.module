@@ -1,0 +1,5 @@
+ValueObjects
+    SerializedProperty
+        keyName: string
+        value: SerializedValue
+
