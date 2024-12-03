@@ -16,13 +16,3 @@ fun assertStructValue(given: StructValue, expected: String) {
     val diff = diffStructValue(given, expected)
     assertThat(diff).withFailMessage(diff).isEqualTo("")
 }
-
-fun assertStruct(given: Struct, expectedInit: ExpectedStruct.() -> Unit) {
-    val diff = diffStruct(given, expectedInit)
-    assertThat(diff).withFailMessage(diff).isEqualTo("")
-}
-
-fun assertStructList(given: StructList, expectedInit: ExpectedStructList.() -> Unit) {
-    val diff = diffStructList(given, expectedInit)
-    assertThat(diff).withFailMessage(diff).isEqualTo("")
-}

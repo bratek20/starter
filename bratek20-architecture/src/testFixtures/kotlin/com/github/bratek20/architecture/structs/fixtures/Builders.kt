@@ -11,19 +11,3 @@ fun structPath(value: String = "field/[*]/a/b/[0]/c"): StructPath {
 fun structValue(value: String = "someValue"): StructValue {
     return StructValue(value)
 }
-
-data class StructDef(
-)
-fun struct(init: StructDef.() -> Unit = {}): Struct {
-    val def = StructDef().apply(init)
-    return structCreate(
-    )
-}
-
-data class StructListDef(
-)
-fun structList(init: StructListDef.() -> Unit = {}): StructList {
-    val def = StructListDef().apply(init)
-    return structListCreate(
-    )
-}
