@@ -4,6 +4,8 @@ import com.github.bratek20.architecture.context.api.ContextBuilder
 import com.github.bratek20.architecture.context.api.ContextModule
 import com.github.bratek20.architecture.exceptions.ApiException
 import com.github.bratek20.architecture.properties.api.*
+import com.github.bratek20.architecture.serialization.fixtures.asStruct
+import com.github.bratek20.architecture.serialization.fixtures.asStructList
 
 class ObjectPropertyNotSetException(message: String): ApiException(message)
 
@@ -30,7 +32,13 @@ class PropertiesMock : Properties {
     }
 
     override fun getAll(): List<Property> {
-        TODO("Not yet implemented")
+        return values.map { (key, value) ->
+            if (value is List<*>) {
+                Property(key.name, asStructList(value as List<Any>))
+            } else {
+                Property(key.name, asStruct(value))
+            }
+        }
     }
 
     fun <T: Any> set(key: PropertyKey<T>, value: T) {
