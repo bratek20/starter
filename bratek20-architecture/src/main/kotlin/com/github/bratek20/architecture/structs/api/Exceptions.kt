@@ -8,3 +8,8 @@ class StructConversionException(
     message: String = ""
 ): ApiException(message) {
 }
+
+class WrongStructPathException(
+    message: String = ""
+): ApiException(message) {
+}
