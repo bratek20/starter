@@ -27,6 +27,8 @@ class StructListBuilder {
     }
 }
 
-fun structList(build: StructListBuilder.() -> Unit): StructList {
-    return StructListBuilder().apply(build).build()
+fun structList(vararg buildOps: StructBuilder.() -> Unit): StructList {
+    val builder = StructListBuilder()
+    buildOps.forEach { op -> builder.struct(op) }
+    return builder.build()
 }

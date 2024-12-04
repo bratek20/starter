@@ -19,8 +19,10 @@ class AnyStructHelperLogic: AnyStructHelper {
             val idx = current.drop(1).dropLast(1).toInt()
             return getValues(list[idx], rest)
         }
-        else {
-            return listOf(StructValue(struct.asObject()[path.value].toString()))
+
+        if (rest.value.isEmpty()) {
+            return listOf(StructValue(struct.asObject()[current].toString()))
         }
+        return getValues(struct.asObject()[current] as AnyStruct, rest)
     }
 }
