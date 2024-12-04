@@ -277,16 +277,16 @@ class SerializationImplTest {
 
     @Test
     fun `should serialize StructList`() {
-        val structList = structList {
-            struct {
+        val structList = structList(
+            {
                 "value" to "test"
                 "number" to 1
-            }
-            struct {
+            },
+            {
                 "value" to "test2"
                 "number" to 2
             }
-        }
+        )
 
         val serializedValue = serializer.serialize(structList)
 
@@ -298,16 +298,16 @@ class SerializationImplTest {
 
     @Test
     fun `should deserialize from StructList`() {
-        val structList = structList {
-            struct {
+        val structList = structList(
+            {
                 "value" to "test"
                 "number" to 1
-            }
-            struct {
+            },
+            {
                 "value" to "test2"
                 "number" to 2
             }
-        }
+        )
         val serializedValue = serializer.serialize(structList)
 
         val deserializedObject = serializer.deserialize(serializedValue, StructList::class.java)

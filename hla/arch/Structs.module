@@ -2,6 +2,14 @@ CustomTypes
     Struct
     StructList
 
+ValueObjects
+    //[*] means all elements of list
+    //[n] means n-th element of list
+    StructPath: string (example: "field/[*]/a/b/[0]/c")
+
+    //for now always string
+    StructValue: string
+
 Interfaces
     AnyStruct
         isObject(): bool
@@ -14,3 +22,9 @@ Interfaces
         asList(): StructList
             throws
                 StructConversionException
+
+
+    AnyStructHelper
+        getValues(struct: AnyStruct, path: StructPath): StructValue[]
+            throws
+                WrongStructPathException

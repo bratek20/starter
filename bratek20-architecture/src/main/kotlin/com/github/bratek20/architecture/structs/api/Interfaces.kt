@@ -17,3 +17,10 @@ interface AnyStruct {
     )
     fun asList(): StructList
 }
+
+interface AnyStructHelper {
+    @Throws(
+        WrongStructPathException::class,
+    )
+    fun getValues(struct: AnyStruct, path: StructPath): List<StructValue>
+}
