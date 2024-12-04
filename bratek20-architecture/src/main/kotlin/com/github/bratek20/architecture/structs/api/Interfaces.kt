@@ -22,5 +22,5 @@ interface AnyStructHelper {
     @Throws(
         WrongStructPathException::class,
     )
-    fun getValues(struct: AnyStruct, path: StructPath): List<StructValue>
+    fun getValues(anyStruct: AnyStruct, path: StructPath): List<StructValue>
 }

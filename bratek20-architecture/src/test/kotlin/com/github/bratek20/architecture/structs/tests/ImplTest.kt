@@ -1,6 +1,8 @@
 package com.github.bratek20.architecture.structs.tests
 
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
+import com.github.bratek20.architecture.serialization.context.SerializationFactory
+import com.github.bratek20.architecture.serialization.fixtures.asStruct
 import com.github.bratek20.architecture.structs.api.*
 import com.github.bratek20.architecture.structs.context.StructsFactory
 import com.github.bratek20.architecture.structs.fixtures.structPath
@@ -9,6 +11,15 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
+
+private data class ExampleEntry(
+    val entryValue: Int
+)
+
+private data class ExampleClass(
+    val classValue: String,
+    val entries: List<ExampleEntry>
+)
 
 class StructsImplTest {
     @Test
@@ -142,6 +153,21 @@ class StructsImplTest {
             }
 
             assertValues(s, "a/b/[*]/c/[0]/d", listOf("1", "3"))
+        }
+
+        @Test
+        fun `should work for structs produced by serialized`() {
+            val obj = ExampleClass(
+                classValue = "value",
+                entries = listOf(
+                    ExampleEntry(1),
+                    ExampleEntry(2)
+                )
+            )
+            val objStruct = SerializationFactory.createSerializer().asStruct(obj)
+
+            assertValues(objStruct, "classValue", listOf("value"))
+            assertValues(objStruct, "entries/[*]/entryValue", listOf("1", "2"))
         }
 
         private fun assertValues(anyStruct: AnyStruct, path: String, expectedValues: List<String>) {
