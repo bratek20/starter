@@ -8,6 +8,10 @@ import com.github.bratek20.architecture.structs.api.StructPrimitive
 
 class AnyStructHelperLogic: AnyStructHelper {
     override fun getValues(anyStruct: AnyStruct, path: StructPath): List<AnyStruct> {
+        if (path.value.isEmpty()) {
+            return listOf(anyStruct)
+        }
+
         val parts = path.value.split("/")
         val current = parts[0]
         val rest = StructPath(parts.subList(1, parts.size).joinToString("/"))

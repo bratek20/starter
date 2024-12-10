@@ -4,6 +4,7 @@ import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.architecture.serialization.context.SerializationFactory
 import com.github.bratek20.architecture.structs.api.*
 import com.github.bratek20.architecture.structs.context.StructsFactory
+import com.github.bratek20.architecture.structs.fixtures.ExpectedStruct
 import com.github.bratek20.architecture.structs.fixtures.assertStructEquals
 import com.github.bratek20.architecture.structs.fixtures.structPath
 import org.assertj.core.api.Assertions.assertThat
@@ -129,6 +130,10 @@ class StructsImplTest {
             }
 
             assertPrimitiveValues(simpleObject, "key", listOf("value"))
+
+            assertStructValues(simpleObject, "", listOf {
+                "key" to "value"
+            })
         }
 
         @Test
@@ -145,6 +150,15 @@ class StructsImplTest {
             assertPrimitiveValues(simpleList, "[0]/key", listOf("value1"))
             assertPrimitiveValues(simpleList, "[1]/key", listOf("value2"))
             assertPrimitiveValues(simpleList, "[*]/key", listOf("value1", "value2"))
+
+            assertStructValues(simpleList, "[*]", listOf(
+                {
+                    "key" to "value1"
+                },
+                {
+                    "key" to "value2"
+                }
+            ))
         }
 
         @Test
@@ -157,9 +171,7 @@ class StructsImplTest {
 
             assertPrimitiveValues(obj, "key/nestedKey", listOf("value"))
 
-            val objValue = helper.getValues(obj, structPath("key")).first().asObject()
-
-            assertStructEquals(objValue, struct {
+            assertStructValues(obj, "key", listOf {
                 "nestedKey" to "value"
             })
         }
@@ -215,6 +227,14 @@ class StructsImplTest {
             val values = helper.getValues(anyStruct, structPath(path))
             val rawValues = values.map { it.asPrimitive().value }
             assertThat(rawValues).containsExactlyElementsOf(expectedValues)
+        }
+
+        private fun assertStructValues(anyStruct: AnyStruct, path: String, expectedValues: List<ExpectedStruct>) {
+            val values = helper.getValues(anyStruct, structPath(path))
+            val rawValues = values.map { it.asObject() }
+            values.zip(expectedValues).forEach { (actual, expected) ->
+                assertStructEquals(actual.asObject(), expected)
+            }
         }
     }
 }
