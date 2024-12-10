@@ -3,6 +3,7 @@ package com.github.bratek20.architecture.structs.api
 class Struct : AnyStruct, HashMap<String, Any?>() {
     override fun isObject(): Boolean = true
     override fun isList(): Boolean = false
+    override fun isPrimitive(): Boolean = false
 
     override fun asObject(): Struct {
         return this
@@ -10,6 +11,10 @@ class Struct : AnyStruct, HashMap<String, Any?>() {
 
     override fun asList(): StructList {
         throw StructConversionException("Tried to convert Struct to StructList")
+    }
+
+    override fun asPrimitive(): StructPrimitive {
+        throw StructConversionException("Tried to convert Struct to StructPrimitive")
     }
 }
 

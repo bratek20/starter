@@ -9,11 +9,3 @@ data class StructPath(
         return value.toString()
     }
 }
-
-data class StructValue(
-    val value: String
-) {
-    override fun toString(): String {
-        return value.toString()
-    }
-}

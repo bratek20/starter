@@ -1,19 +1,18 @@
-CustomTypes
+ExternalTypes
     Struct
     StructList
+    StructPrimitive
 
 ValueObjects
     //[*] means all elements of list
     //[n] means n-th element of list
     StructPath: string (example: "field/[*]/a/b/[0]/c")
 
-    //for now always string
-    StructValue: string
-
 Interfaces
     AnyStruct
         isObject(): bool
         isList(): bool
+        isPrimitive(): bool
 
         asObject(): Struct
             throws
@@ -23,8 +22,12 @@ Interfaces
             throws
                 StructConversionException
 
+        asPrimitive(): StructPrimitive
+            throws
+                StructConversionException
+
 
     AnyStructHelper
-        getValues(struct: AnyStruct, path: StructPath): StructValue[]
+        getValues(struct: AnyStruct, path: StructPath): AnyStruct[]
             throws
                 WrongStructPathException

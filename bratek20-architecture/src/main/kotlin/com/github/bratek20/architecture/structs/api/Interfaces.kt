@@ -7,20 +7,27 @@ interface AnyStruct {
 
     fun isList(): Boolean
 
+    fun isPrimitive(): Boolean
+
     @Throws(
         StructConversionException::class,
     )
-    fun asObject(): Struct
+    fun asObject(): com.github.bratek20.architecture.structs.api.Struct
 
     @Throws(
         StructConversionException::class,
     )
     fun asList(): StructList
+
+    @Throws(
+        StructConversionException::class,
+    )
+    fun asPrimitive(): StructPrimitive
 }
 
 interface AnyStructHelper {
     @Throws(
         WrongStructPathException::class,
     )
-    fun getValues(anyStruct: AnyStruct, path: StructPath): List<StructValue>
+    fun getValues(struct: AnyStruct, path: StructPath): List<AnyStruct>
 }

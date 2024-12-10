@@ -4,10 +4,10 @@ import com.github.bratek20.architecture.serialization.context.SerializationFacto
 import com.github.bratek20.architecture.structs.api.AnyStruct
 import com.github.bratek20.architecture.structs.api.AnyStructHelper
 import com.github.bratek20.architecture.structs.api.StructPath
-import com.github.bratek20.architecture.structs.api.StructValue
+import com.github.bratek20.architecture.structs.api.StructPrimitive
 
 class AnyStructHelperLogic: AnyStructHelper {
-    override fun getValues(anyStruct: AnyStruct, path: StructPath): List<StructValue> {
+    override fun getValues(anyStruct: AnyStruct, path: StructPath): List<AnyStruct> {
         val parts = path.value.split("/")
         val current = parts[0]
         val rest = StructPath(parts.subList(1, parts.size).joinToString("/"))
@@ -22,7 +22,7 @@ class AnyStructHelperLogic: AnyStructHelper {
         }
 
         if (rest.value.isEmpty()) {
-            return listOf(StructValue(anyStruct.asObject()[current].toString()))
+            return listOf(anyToAnyStruct(anyStruct.asObject()[current]!!))
         }
         return getValues(anyToAnyStruct(anyStruct.asObject()[current]!!), rest)
     }
@@ -31,7 +31,10 @@ class AnyStructHelperLogic: AnyStructHelper {
         if (any is List<*>) {
             return serializer.asStructList(any)
         }
-        return serializer.asStruct(any)
+        if (any is Map<*, *>) {
+            return serializer.asStruct(any)
+        }
+        return StructPrimitive(any.toString())
     }
 
     companion object {

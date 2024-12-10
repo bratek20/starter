@@ -10,9 +10,3 @@ fun assertStructPath(given: StructPath, expected: String) {
     val diff = diffStructPath(given, expected)
     assertThat(diff).withFailMessage(diff).isEqualTo("")
 }
-
-
-fun assertStructValue(given: StructValue, expected: String) {
-    val diff = diffStructValue(given, expected)
-    assertThat(diff).withFailMessage(diff).isEqualTo("")
-}
