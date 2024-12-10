@@ -12,7 +12,7 @@ fun assertStructPath(given: StructPath, expected: String) {
 }
 
 
-fun assertStructValue(given: StructValue, expected: String) {
-    val diff = diffStructValue(given, expected)
+fun assertStructPrimitive(given: StructPrimitive, expected: String) {
+    val diff = diffStructPrimitive(given, expected)
     assertThat(diff).withFailMessage(diff).isEqualTo("")
 }

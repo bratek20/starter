@@ -10,7 +10,7 @@ data class StructPath(
     }
 }
 
-data class StructValue(
+data class StructPrimitive(
     val value: String
 ) {
     override fun toString(): String {

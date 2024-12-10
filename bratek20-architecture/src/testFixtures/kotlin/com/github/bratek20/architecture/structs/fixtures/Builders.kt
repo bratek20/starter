@@ -8,6 +8,6 @@ fun structPath(value: String = "field/[*]/a/b/[0]/c"): StructPath {
     return StructPath(value)
 }
 
-fun structValue(value: String = "someValue"): StructValue {
-    return StructValue(value)
+fun structPrimitive(value: String = "someValue"): StructPrimitive {
+    return StructPrimitive(value)
 }
