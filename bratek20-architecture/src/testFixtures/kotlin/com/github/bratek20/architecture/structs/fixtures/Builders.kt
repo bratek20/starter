@@ -7,7 +7,3 @@ import com.github.bratek20.architecture.structs.api.*
 fun structPath(value: String = "field/[*]/a/b/[0]/c"): StructPath {
     return StructPath(value)
 }
-
-fun structPrimitive(value: String = "someValue"): StructPrimitive {
-    return StructPrimitive(value)
-}

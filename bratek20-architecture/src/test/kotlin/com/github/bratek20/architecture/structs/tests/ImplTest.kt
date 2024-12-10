@@ -2,9 +2,9 @@ package com.github.bratek20.architecture.structs.tests
 
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.architecture.serialization.context.SerializationFactory
-import com.github.bratek20.architecture.serialization.fixtures.asStruct
 import com.github.bratek20.architecture.structs.api.*
 import com.github.bratek20.architecture.structs.context.StructsFactory
+import com.github.bratek20.architecture.structs.fixtures.assertStructEquals
 import com.github.bratek20.architecture.structs.fixtures.structPath
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -49,18 +49,28 @@ class StructsImplTest {
                 "key" to "value"
             }
         )
+        val anyStructPrimitive: AnyStruct = StructPrimitive("value")
 
         assertThat(anyStructObject.isObject()).isTrue()
         assertThat(anyStructObject.isList()).isFalse()
+        assertThat(anyStructObject.isPrimitive()).isFalse()
 
         assertThat(anyStructList.isObject()).isFalse()
         assertThat(anyStructList.isList()).isTrue()
+        assertThat(anyStructList.isPrimitive()).isFalse()
+
+        assertThat(anyStructPrimitive.isObject()).isFalse()
+        assertThat(anyStructPrimitive.isList()).isFalse()
+        assertThat(anyStructPrimitive.isPrimitive()).isTrue()
 
         assertDoesNotThrow {
             anyStructObject.asObject()
         }
         assertDoesNotThrow {
             anyStructList.asList()
+        }
+        assertDoesNotThrow {
+            anyStructPrimitive.asPrimitive()
         }
 
         assertApiExceptionThrown(
@@ -69,12 +79,37 @@ class StructsImplTest {
             type = StructConversionException::class
             message = "Tried to convert Struct to StructList"
         }
+        assertApiExceptionThrown(
+            anyStructObject::asPrimitive
+        ) {
+            type = StructConversionException::class
+            message = "Tried to convert Struct to StructPrimitive"
+        }
 
         assertApiExceptionThrown(
             anyStructList::asObject
         ) {
             type = StructConversionException::class
             message = "Tried to convert StructList to Struct"
+        }
+        assertApiExceptionThrown(
+            anyStructList::asPrimitive
+        ) {
+            type = StructConversionException::class
+            message = "Tried to convert StructList to StructPrimitive"
+        }
+
+        assertApiExceptionThrown(
+            anyStructPrimitive::asObject
+        ) {
+            type = StructConversionException::class
+            message = "Tried to convert StructPrimitive to Struct"
+        }
+        assertApiExceptionThrown(
+            anyStructPrimitive::asList
+        ) {
+            type = StructConversionException::class
+            message = "Tried to convert StructPrimitive to StructList"
         }
     }
 
@@ -93,7 +128,7 @@ class StructsImplTest {
                 "key" to "value"
             }
 
-            assertValues(simpleObject, "key", listOf("value"))
+            assertPrimitiveValues(simpleObject, "key", listOf("value"))
         }
 
         @Test
@@ -107,9 +142,9 @@ class StructsImplTest {
                 }
             )
 
-            assertValues(simpleList, "[0]/key", listOf("value1"))
-            assertValues(simpleList, "[1]/key", listOf("value2"))
-            assertValues(simpleList, "[*]/key", listOf("value1", "value2"))
+            assertPrimitiveValues(simpleList, "[0]/key", listOf("value1"))
+            assertPrimitiveValues(simpleList, "[1]/key", listOf("value2"))
+            assertPrimitiveValues(simpleList, "[*]/key", listOf("value1", "value2"))
         }
 
         @Test
@@ -120,7 +155,13 @@ class StructsImplTest {
                 }
             }
 
-            assertValues(obj, "key/nestedKey", listOf("value"))
+            assertPrimitiveValues(obj, "key/nestedKey", listOf("value"))
+
+            val objValue = helper.getValues(obj, structPath("key")).first().asObject()
+
+            assertStructEquals(objValue, struct {
+                "nestedKey" to "value"
+            })
         }
 
         @Test
@@ -152,7 +193,7 @@ class StructsImplTest {
                 }
             }
 
-            assertValues(s, "a/b/[*]/c/[0]/d", listOf("1", "3"))
+            assertPrimitiveValues(s, "a/b/[*]/c/[0]/d", listOf("1", "3"))
         }
 
         @Test
@@ -166,13 +207,13 @@ class StructsImplTest {
             )
             val objStruct = SerializationFactory.createSerializer().asStruct(obj)
 
-            assertValues(objStruct, "classValue", listOf("value"))
-            assertValues(objStruct, "entries/[*]/entryValue", listOf("1", "2"))
+            assertPrimitiveValues(objStruct, "classValue", listOf("value"))
+            assertPrimitiveValues(objStruct, "entries/[*]/entryValue", listOf("1", "2"))
         }
 
-        private fun assertValues(anyStruct: AnyStruct, path: String, expectedValues: List<String>) {
+        private fun assertPrimitiveValues(anyStruct: AnyStruct, path: String, expectedValues: List<String>) {
             val values = helper.getValues(anyStruct, structPath(path))
-            val rawValues = values.map { it.value }
+            val rawValues = values.map { it.asPrimitive().value }
             assertThat(rawValues).containsExactlyElementsOf(expectedValues)
         }
     }

@@ -8,8 +8,3 @@ fun diffStructPath(given: StructPath, expected: String, path: String = ""): Stri
     if (given.value != expected) { return "${path}value ${given.value} != ${expected}" }
     return ""
 }
-
-fun diffStructPrimitive(given: StructPrimitive, expected: String, path: String = ""): String {
-    if (given.value != expected) { return "${path}value ${given.value} != ${expected}" }
-    return ""
-}
