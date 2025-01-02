@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test
 import com.github.bratek20.architecture.context.someContextBuilder
 import com.github.bratek20.architecture.context.stableContextBuilder
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
+import com.github.bratek20.architecture.properties.PropertiesMockTest.SomeClass
 import com.github.bratek20.architecture.properties.api.*
 import com.github.bratek20.architecture.properties.context.PropertiesImpl
 import com.github.bratek20.architecture.properties.sources.inmemory.InMemoryPropertiesSource
@@ -187,6 +188,17 @@ class PropertiesTest {
             assertStructListEquals(allProperties[1].value.asList(), listOf {
                 "value" to "y"
             })
+        }
+
+        @Test
+        fun `should work for different keys instances`() {
+            source1.set(ObjectPropertyKey("key1", SomeClass::class), SomeClass("value"))
+            val value = properties.get(ObjectPropertyKey("key1", SomeClass::class))
+            assertThat(value.value).isEqualTo("value")
+
+            source1.set(ListPropertyKey("key2", SomeClass::class), listOf(SomeClass("y")))
+            val value2 = properties.get(ListPropertyKey("key2", SomeClass::class))
+            assertThat(value2).hasSize(1)
         }
     }
 

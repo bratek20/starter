@@ -13,13 +13,18 @@ class PropertiesMock : Properties {
     private val values: MutableMap<PropertyKey<*>, Any> = mutableMapOf()
 
     override fun <T : Any> get(key: PropertyKey<T>): T {
-        if (key is ListPropertyKey<*> && !values.containsKey(key)) {
+        val entry = findEntry(key)
+        if (key is ListPropertyKey<*> && entry == null) {
             return emptyList<Any>() as T
         }
-        if (key is ObjectPropertyKey<*> && !values.containsKey(key)) {
+        if (key is ObjectPropertyKey<*> && entry == null) {
             throw ObjectPropertyNotSetException("No value was set in mock for object key `${key.name}`")
         }
-        return values[key] as T
+        return entry!!.value as T
+    }
+
+    private fun findEntry(key: PropertyKey<*>): Map.Entry<PropertyKey<*>, Any>? {
+        return values.entries.find { it.key.name == key.name }
     }
 
     override fun <Id : Any, E : Any> findElement(key: MapPropertyKey<Id, E>, id: Id): E? {

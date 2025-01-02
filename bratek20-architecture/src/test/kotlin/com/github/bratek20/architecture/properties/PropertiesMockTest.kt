@@ -1,5 +1,6 @@
 package com.github.bratek20.architecture.properties
 
+import com.github.bratek20.architecture.context.someContextBuilder
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.architecture.properties.api.ListPropertyKey
 import com.github.bratek20.architecture.properties.api.ObjectPropertyKey
@@ -20,7 +21,9 @@ class PropertiesMockTest {
 
     @BeforeEach
     fun setup() {
-        propertiesMock = PropertiesMock()
+        propertiesMock = someContextBuilder()
+            .withModules(PropertiesMocks())
+            .buildAndGet(PropertiesMock::class.java)
     }
 
     @Test
@@ -42,6 +45,17 @@ class PropertiesMockTest {
         propertiesMock.set(OBJECT_KEY, SomeClass("value2"))
         val value2 = propertiesMock.get(OBJECT_KEY)
         assertThat(value2.value).isEqualTo("value2")
+    }
+
+    @Test
+    fun `should work for different keys instances`() {
+        propertiesMock.set(ObjectPropertyKey("key1", SomeClass::class), SomeClass("value"))
+        val value = propertiesMock.get(ObjectPropertyKey("key1", SomeClass::class))
+        assertThat(value.value).isEqualTo("value")
+
+        propertiesMock.set(ListPropertyKey("key2", SomeClass::class), listOf(SomeClass("y")))
+        val value2 = propertiesMock.get(ListPropertyKey("key2", SomeClass::class))
+        assertThat(value2).hasSize(1)
     }
 
     @Test
