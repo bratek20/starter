@@ -1,34 +1,48 @@
 package com.github.bratek20.architecture.structs.impl
 
 import com.github.bratek20.architecture.serialization.context.SerializationFactory
-import com.github.bratek20.architecture.structs.api.AnyStruct
-import com.github.bratek20.architecture.structs.api.AnyStructHelper
-import com.github.bratek20.architecture.structs.api.StructPath
-import com.github.bratek20.architecture.structs.api.StructPrimitive
+import com.github.bratek20.architecture.structs.api.*
 
 class AnyStructHelperLogic: AnyStructHelper {
     override fun getValues(anyStruct: AnyStruct, path: StructPath): List<AnyStruct> {
+        return getValuesFor(anyStruct, path, "")
+    }
+
+    private fun getValuesFor(anyStruct: AnyStruct, path: StructPath, traversedPath: String): List<AnyStruct> {
         if (path.value.isEmpty()) {
             return listOf(anyStruct)
         }
 
         val parts = path.value.split("/")
-        val current = parts[0]
+        val currentRaw = parts[0]
+        val currentTraversed = "$traversedPath$currentRaw/"
+
+        val current = currentRaw.removeSuffix("?")
+        val isOptional = currentRaw.endsWith("?")
+
         val rest = StructPath(parts.subList(1, parts.size).joinToString("/"))
 
         if(current.startsWith("[")) {
             val list = anyStruct.asList()
             if (current == "[*]") {
-                return list.flatMap { getValues(it, rest) }
+                return list.flatMap { getValuesFor(it, rest, currentTraversed) }
             }
             val idx = current.drop(1).dropLast(1).toInt()
-            return getValues(list[idx], rest)
+            return getValuesFor(list[idx], rest, currentTraversed)
+        }
+
+        val value = anyStruct.asObject()[current]
+        if (value == null) {
+            if (isOptional) {
+                return listOf()
+            }
+            throw StructTraversalException("Null detected at '$currentTraversed'")
         }
 
         if (rest.value.isEmpty()) {
-            return listOf(anyToAnyStruct(anyStruct.asObject()[current]!!))
+            return listOf(anyToAnyStruct(value))
         }
-        return getValues(anyToAnyStruct(anyStruct.asObject()[current]!!), rest)
+        return getValuesFor(anyToAnyStruct(value), rest, currentTraversed)
     }
 
     private fun anyToAnyStruct(any: Any): AnyStruct {

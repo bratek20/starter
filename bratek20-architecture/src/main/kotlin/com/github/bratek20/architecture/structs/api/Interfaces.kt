@@ -27,7 +27,7 @@ interface AnyStruct {
 
 interface AnyStructHelper {
     @Throws(
-        WrongStructPathException::class,
+        StructTraversalException::class,
     )
     fun getValues(struct: AnyStruct, path: StructPath): List<AnyStruct>
 }
