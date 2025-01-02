@@ -6,7 +6,8 @@ ExternalTypes
 ValueObjects
     //[*] means all elements of list
     //[n] means n-th element of list
-    StructPath: string (example: "field/[*]/a/b/[0]/c")
+    //ending field name with ? means field can be null
+    StructPath: string (example: "field/[*]/a/b?/[0]/c")
 
 Interfaces
     AnyStruct
@@ -30,4 +31,4 @@ Interfaces
     AnyStructHelper
         getValues(struct: AnyStruct, path: StructPath): AnyStruct[]
             throws
-                WrongStructPathException
+                StructTraversalException

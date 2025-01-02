@@ -177,6 +177,33 @@ class StructsImplTest {
         }
 
         @Test
+        fun `should throw traversal exception if null value detected`() {
+            val obj = struct {
+                "a" to struct {
+                    "b" to null
+                }
+            }
+
+            assertApiExceptionThrown(
+                { helper.getValues(obj, structPath("a/b/c")) }
+            ) {
+                type = StructTraversalException::class
+                message = "Null detected at 'a/b/'"
+            }
+        }
+
+        @Test
+        fun `should support nullable values`() {
+            val obj = struct {
+                "a" to struct {
+                    "b" to null
+                }
+            }
+
+            assertPrimitiveValues(obj, "a/b?/c", emptyList())
+        }
+
+        @Test
         fun `complex case`() {
             val s = struct {
                 "a" to struct {

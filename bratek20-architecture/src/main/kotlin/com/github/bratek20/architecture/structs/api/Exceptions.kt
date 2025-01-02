@@ -9,7 +9,7 @@ class StructConversionException(
 ): ApiException(message) {
 }
 
-class WrongStructPathException(
+class StructTraversalException(
     message: String = ""
 ): ApiException(message) {
 }
