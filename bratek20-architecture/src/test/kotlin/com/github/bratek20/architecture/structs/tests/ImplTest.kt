@@ -193,14 +193,23 @@ class StructsImplTest {
         }
 
         @Test
-        fun `should support nullable values`() {
-            val obj = struct {
-                "a" to struct {
-                    "b" to null
+        fun `should skip nullable fields only if are null`() {
+            val s = structList(
+                {
+                    "a" to struct {
+                        "b" to null
+                    }
+                },
+                {
+                    "a" to struct {
+                        "b" to struct {
+                            "c" to "2"
+                        }
+                    }
                 }
-            }
+            )
 
-            assertPrimitiveValues(obj, "a/b?/c", emptyList())
+            assertPrimitiveValues(s, "[*]/a/b?/c", listOf("2"))
         }
 
         @Test
