@@ -16,11 +16,13 @@ class PropertiesLogic(
     private val allSources: Set<PropertiesSource>
         get() = initialSources + addedSources
 
+    private val cachedProperties = mutableMapOf<String, Any>()
     override fun <T : Any> get(key: PropertyKey<T>): T {
         findSourceWithKeyName(key.name)
             ?: throw PropertyNotFoundException("Property `${key.name}` not found, sources: ${allSources.map { it.getName().value }}")
 
-        return super.get(key)
+
+        return cachedProperties.getOrPut(key.name) { super.get(key) } as T
     }
 
     override fun <Id : Any, E : Any> findElement(key: MapPropertyKey<Id, E>, id: Id): E? {
