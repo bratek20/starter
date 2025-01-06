@@ -7,8 +7,11 @@ import org.junit.jupiter.api.Test
 
 class X
 interface A
+interface B
 class AImpl1: A
 class AImpl2: A
+
+class ABImpl: A, B
 
 class SomeClass
 
@@ -162,6 +165,19 @@ abstract class ContextApiTest {
         }
         .isInstanceOf(DependentClassNotFoundInContextException::class.java)
         .hasMessage("Class X needed by class WithXClass not found")
+    }
+
+    @Test
+    fun `should use same instance if class implements more than one interface`() {
+        val c = createInstance()
+            .setImpl(A::class.java, ABImpl::class.java)
+            .setImpl(B::class.java, ABImpl::class.java)
+            .build()
+
+        val a = c.get(A::class.java)
+        val b = c.get(B::class.java)
+
+        assertThat(a).isEqualTo(b)
     }
 
     @Disabled //TODO fix guice

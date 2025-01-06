@@ -1,8 +1,8 @@
 package com.github.bratek20.logs.system
 
-import com.github.bratek20.logs.api.Logger
+import com.github.bratek20.logs.api.LoggerIntegration
 
-class SystemLogger : Logger {
+class SystemLogger : LoggerIntegration {
     override fun info(message: String, source: Any?) {
         println("[INFO] $message")
     }

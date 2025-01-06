@@ -1,9 +1,10 @@
 package com.github.bratek20.logs.slf4j
 
 import com.github.bratek20.logs.api.Logger
+import com.github.bratek20.logs.api.LoggerIntegration
 import org.slf4j.LoggerFactory
 
-class Slf4jLogger : Logger {
+class Slf4jLogger : LoggerIntegration {
     private val defaultLogger = LoggerFactory.getLogger(Slf4jLogger::class.java)
     private val sourceLoggers = mutableMapOf<Any, org.slf4j.Logger>()
 
