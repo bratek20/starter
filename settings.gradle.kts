@@ -5,7 +5,7 @@ pluginManagement {
     includeBuild("build-logic")
 }
 
-val b20Version = "1.0.72"
+val b20Version = "1.0.93"
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
