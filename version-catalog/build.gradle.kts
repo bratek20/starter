@@ -4,15 +4,15 @@ plugins {
 }
 
 //changed by script
-val catalogVersion = "1.0.85"
+val catalogVersion = "1.0.94"
 
 //changed manually
-val b20ArchVersion = "1.0.65"
+val b20ArchVersion = "1.0.66"
 val b20InfraVersion = "1.0.51"
 val b20SpringVersion = "1.0.50"
 val b20UtilsVersion = "1.0.50"
 
-val b20LogsVersion = "1.0.31"
+val b20LogsVersion = "1.0.32"
 val b20PluginsVersion = "1.0.8"
 
 catalog {
@@ -64,10 +64,10 @@ catalog {
 
         version("slf4j", "1.7.36")
         version("log4j", "2.21.0")
-        version("logback", "1.2.12")
+        version("logback", "1.2.13")
 
         version("rest-assured", "5.3.0")
-        version("jackson", "2.13.0")
+        version("jackson", "2.15.0")
         version("guice", "7.0.0")
         version("guice-multibindings", "4.2.3")
 

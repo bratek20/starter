@@ -2,10 +2,12 @@ pluginManagement {
     includeBuild("../build-logic")
 }
 
+val b20Version = "1.0.93"
+
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
-            from("com.github.bratek20:version-catalog:1.0.54")
+            from("com.github.bratek20:version-catalog:$b20Version")
         }
     }
 
