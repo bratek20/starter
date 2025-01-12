@@ -109,5 +109,4 @@ class AuthTest {
             headers.add(HttpHeaders.COOKIE, String.join("; ", cookies));
         }
     }
-
 }
