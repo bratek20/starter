@@ -7,14 +7,9 @@ import com.github.bratek20.infrastructure.httpserver.api.WebApp
 import com.github.bratek20.infrastructure.httpserver.api.WebAppContext
 import com.github.bratek20.infrastructure.httpserver.api.WebServerModule
 import com.github.bratek20.logs.context.SystemLogsImpl
-import org.springframework.beans.factory.config.ConfigurableBeanFactory
-import org.springframework.beans.factory.config.CustomScopeConfigurer
-import org.springframework.boot.WebApplicationType
+import org.springframework.beans.factory.config.BeanDefinitionCustomizer
 import org.springframework.boot.builder.SpringApplicationBuilder
-import org.springframework.context.ConfigurableApplicationContext
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.web.context.WebApplicationContext
+import org.springframework.context.support.GenericApplicationContext
 
 class SpringWebApp(
     private val modules: List<ContextModule>,
@@ -29,20 +24,24 @@ class SpringWebApp(
             .flatMap { it.getControllers() }
             .toTypedArray()
 
-        val parentContext = SpringContextBuilder()
+        val applicationContext = SpringContextBuilder()
             .withModules(*modules.toTypedArray())
             .build() as SpringContext
 
-        val userContext = (SpringContextBuilder()
-            .withModules(*userModules.toTypedArray()) as SpringContextBuilder)
-            .buildAsSession()
-
-        userContext.value.parent = parentContext.value
+        val userContextBuilder = SpringContextBuilder()
+            .withModules(*userModules.toTypedArray()) as SpringContextBuilder
 
         val finalPort = calculatePort()
         val context = SpringApplicationBuilder()
-            .sources(WebAppConfig::class.java, *allControllers)
-            .parent(userContext.value)
+            .sources(WebAppConfig::class.java, *allControllers) // Add web app config and all controllers
+            .initializers({ ctx ->
+                userContextBuilder.classes.forEach { clazz ->
+                    (ctx as GenericApplicationContext).registerBean(clazz, BeanDefinitionCustomizer {
+                        it.scope = "session"
+                    })
+                }
+            })
+            .parent(applicationContext.value) // Set the application context as the parent
             .run(*args, "--server.port=$finalPort")
 
         return WebAppContext(
