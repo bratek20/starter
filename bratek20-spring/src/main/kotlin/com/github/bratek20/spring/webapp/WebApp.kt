@@ -37,7 +37,8 @@ class SpringWebApp(
             .initializers({ ctx ->
                 userContextBuilder.classes.forEach { clazz ->
                     (ctx as GenericApplicationContext).registerBean(clazz, BeanDefinitionCustomizer {
-                        it.scope = "session"
+//                        it.scope = "session"
+//                        it.setAttribute("org.springframework.context.annotation.ScopedProxyMode", org.springframework.context.annotation.ScopedProxyMode.TARGET_CLASS)
                     })
                 }
             })

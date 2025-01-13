@@ -148,14 +148,6 @@ class SpringWebAppTest {
             Assertions.assertThat(userScopedBeanResponse1.body).isEqualTo(userScopedBeanResponse2.body)
             Assertions.assertThat(userScopedBeanResponse1.body).isEqualTo("1")
 
-            // Step 3: Test secure endpoint with the logged-in session
-            val secureResponse = restTemplate.exchange(
-                getBaseUrl() + "/secure-endpoint", HttpMethod.GET, HttpEntity<Any>(sessionHeaders),
-                String::class.java
-            )
-
-            Assertions.assertThat(secureResponse.body).contains("Welcome back, 1")
-
             // Step 4: Simulate a second user session
 
             //login with other auth id

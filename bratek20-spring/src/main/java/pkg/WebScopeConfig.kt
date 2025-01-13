@@ -22,6 +22,7 @@ open class WebScopeConfig {
     }
 }
 
+@SessionScope
 class UserScopedBean(private val session: HttpSession) {
     val id: String
         get() = session.getAttribute("userId").toString()
