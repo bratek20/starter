@@ -4,20 +4,22 @@ import com.github.bratek20.architecture.context.api.ContextBuilder
 import com.github.bratek20.architecture.context.api.ContextModule
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.stereotype.Component
 import org.springframework.web.context.annotation.SessionScope
 import java.util.*
 import javax.servlet.http.HttpSession
 
-open class UserScopedBean(
+@Component
+class UserScopedBean(
     private val session: HttpSession
 ) {
     init {
         println("UserScopedBean created for session " + session.id)
     }
 
-    open val id: String = UUID.randomUUID().toString()
+    val id: String = UUID.randomUUID().toString()
 
-    open val sessionUserId: String
+    val sessionUserId: String
         get() = session.getAttribute("userId").toString()
 }
 
@@ -27,15 +29,15 @@ class ApplicationScopedBean {
 }
 
 @Configuration
-open class UserConfig {
+class UserConfig {
     @Bean
     @SessionScope
-    open fun userScopedBean(session: HttpSession): UserScopedBean {
+    fun userScopedBean(session: HttpSession): UserScopedBean {
         return UserScopedBean(session)
     }
 
     @Bean
-    open fun userController(userScopedBean: UserScopedBean): UserScopeController {
+    fun userController(userScopedBean: UserScopedBean): UserScopeController {
         return UserScopeController(userScopedBean)
     }
 }

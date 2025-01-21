@@ -1,5 +1,6 @@
 plugins {
     id("com.github.bratek20.kotlin-library-conventions")
+    kotlin("plugin.spring") version "1.9.23"
 }
 
 version = "1.0.50"
