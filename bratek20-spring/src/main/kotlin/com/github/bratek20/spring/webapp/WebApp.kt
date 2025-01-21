@@ -13,14 +13,14 @@ import org.springframework.context.support.GenericApplicationContext
 
 class SpringWebApp(
     private val modules: List<ContextModule>,
-    private val userModules: List<ContextModule> = emptyList(),
+    private val configs: List<Class<*>> = emptyList(),
     private val args: Array<String> = emptyArray(),
     private val port: Int = 8080,
     private val useRandomPort: Boolean = false
 ): WebApp {
 
     override fun run(): WebAppContext {
-        val allControllers = (modules + userModules).filterIsInstance<WebServerModule>()
+        val allControllers = modules.filterIsInstance<WebServerModule>()
             .flatMap { it.getControllers() }
             .toTypedArray()
 
@@ -28,20 +28,15 @@ class SpringWebApp(
             .withModules(*modules.toTypedArray())
             .build() as SpringContext
 
-        val userContextBuilder = SpringContextBuilder()
-            .withModules(*userModules.toTypedArray()) as SpringContextBuilder
+        val sources = listOf(
+            WebAppConfig::class.java,
+            *allControllers,
+            *configs.toTypedArray()
+        )
 
         val finalPort = calculatePort()
         val context = SpringApplicationBuilder()
-            .sources(WebAppConfig::class.java, *allControllers) // Add web app config and all controllers
-            .initializers({ ctx ->
-                userContextBuilder.classes.forEach { clazz ->
-                    (ctx as GenericApplicationContext).registerBean(clazz, BeanDefinitionCustomizer {
-//                        it.scope = "session"
-//                        it.setAttribute("org.springframework.context.annotation.ScopedProxyMode", org.springframework.context.annotation.ScopedProxyMode.TARGET_CLASS)
-                    })
-                }
-            })
+            .sources(*sources.toTypedArray())
             .parent(applicationContext.value) // Set the application context as the parent
             .run(*args, "--server.port=$finalPort")
 
@@ -62,14 +57,14 @@ class SpringWebApp(
     companion object {
         fun run(
             modules: List<ContextModule> = listOf(SystemLogsImpl()),
-            userModules: List<ContextModule> = emptyList(),
+            configs: List<Class<*>> = emptyList(),
             args: Array<String> = emptyArray(),
             port: Int = 8080,
             useRandomPort: Boolean = false
         ): WebAppContext {
             val app = SpringWebApp(
                 modules,
-                userModules,
+                configs,
                 args,
                 port,
                 useRandomPort

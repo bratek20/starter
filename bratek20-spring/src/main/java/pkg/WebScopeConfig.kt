@@ -8,25 +8,16 @@ import org.springframework.web.context.annotation.SessionScope
 import java.util.*
 import javax.servlet.http.HttpSession
 
-@Configuration
-open class WebScopeConfig {
-    @Bean
-    @SessionScope
-    open fun userScopedBean(session: HttpSession): UserScopedBean {
-        return UserScopedBean(session)
+open class UserScopedBean(
+    private val session: HttpSession
+) {
+    init {
+        println("UserScopedBean created for session " + session.id)
     }
 
-    @Bean
-    open fun applicationScopedBean(): ApplicationScopedBean {
-        return ApplicationScopedBean()
-    }
-}
+    open val id: String = UUID.randomUUID().toString()
 
-@SessionScope
-class UserScopedBean(private val session: HttpSession) {
-    val id: String = UUID.randomUUID().toString()
-
-    val sessionUserId: String
+    open val sessionUserId: String
         get() = session.getAttribute("userId").toString()
 }
 
@@ -35,9 +26,17 @@ class ApplicationScopedBean {
     val id: String = UUID.randomUUID().toString()
 }
 
-class UserModule : ContextModule {
-    override fun apply(builder: ContextBuilder) {
-        builder.addClass(UserScopedBean::class.java)
+@Configuration
+open class UserConfig {
+    @Bean
+    @SessionScope
+    open fun userScopedBean(session: HttpSession): UserScopedBean {
+        return UserScopedBean(session)
+    }
+
+    @Bean
+    open fun userController(userScopedBean: UserScopedBean): UserScopeController {
+        return UserScopeController(userScopedBean)
     }
 }
 

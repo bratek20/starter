@@ -106,9 +106,8 @@ class SpringWebAppTest {
                     ApplicationModule(),
                     ApplicationControllerModule(),
                 ),
-                userModules = listOf(
-                    UserModule(),
-                    UserScopeControllerModule(),
+                configs = listOf(
+                    UserConfig::class.java,
                 ),
                 useRandomPort = true,
             ).port

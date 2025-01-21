@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class ApplicationController(private val applicationScopedBean: ApplicationScopedBean) {
+class ApplicationController(
+    private val applicationScopedBean: ApplicationScopedBean
+) {
     @GetMapping("/application-scope")
     fun getApplicationScopedBean(): String {
         return applicationScopedBean.id
@@ -22,7 +24,9 @@ class ApplicationControllerModule : WebServerModule {
 }
 
 @RestController
-class UserScopeController(private val userScopedBean: UserScopedBean) {
+class UserScopeController(
+    private val userScopedBean: UserScopedBean
+) {
     @GetMapping("/user-scope-id")
     fun userScopeId(): String {
         return userScopedBean.id
@@ -31,15 +35,6 @@ class UserScopeController(private val userScopedBean: UserScopedBean) {
     @GetMapping("/session-user-id")
     fun sessionUserId(): String {
         return userScopedBean.sessionUserId
-    }
-}
-
-class UserScopeControllerModule : WebServerModule {
-    override fun apply(builder: ContextBuilder) {
-    }
-
-    override fun getControllers(): List<Class<*>> {
-        return listOf(UserScopeController::class.java)
     }
 }
 
