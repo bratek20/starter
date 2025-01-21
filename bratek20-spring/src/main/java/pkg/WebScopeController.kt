@@ -23,9 +23,14 @@ class ApplicationControllerModule : WebServerModule {
 
 @RestController
 class UserScopeController(private val userScopedBean: UserScopedBean) {
-    @GetMapping("/user-scope")
-    fun getUserScopedBean(): String {
+    @GetMapping("/user-scope-id")
+    fun userScopeId(): String {
         return userScopedBean.id
+    }
+
+    @GetMapping("/session-user-id")
+    fun sessionUserId(): String {
+        return userScopedBean.sessionUserId
     }
 }
 

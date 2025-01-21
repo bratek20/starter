@@ -24,7 +24,9 @@ open class WebScopeConfig {
 
 @SessionScope
 class UserScopedBean(private val session: HttpSession) {
-    val id: String
+    val id: String = UUID.randomUUID().toString()
+
+    val sessionUserId: String
         get() = session.getAttribute("userId").toString()
 }
 
