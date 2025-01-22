@@ -1,0 +1,17 @@
+ValueObjects
+    AuthId: string
+    UserId: string
+
+Data
+    UserMapping
+        authId: AuthId
+        userId: UserId
+    "UsersMapping" -> UserMapping[]
+
+Interfaces
+    UserAuthServerApi
+        createUserAndLogin(): UserMapping
+    
+        login(authId: AuthId): UserId
+            throws
+                UserMappingNotFoundException

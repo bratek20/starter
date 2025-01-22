@@ -1,0 +1,10 @@
+Data
+    "UserMapping" -> UserMapping
+
+Interfaces
+    UserAuthClientApi
+        login()
+
+        getUserId(): UserId
+            throws
+                NotLoggedInException

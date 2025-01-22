@@ -6,6 +6,7 @@ import com.github.bratek20.infrastructure.httpserver.api.WebServerModule
 import com.github.bratek20.logs.context.SystemLogsImpl
 import io.restassured.RestAssured
 import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -63,7 +64,7 @@ class SpringWebAppTest {
 
     @Test
     fun shouldPassApiExceptions() {
-        RestAssured.port= SpringWebApp.run(
+        RestAssured.port = SpringWebApp.run(
             modules = listOf(
                 SystemLogsImpl(),
                 ThrowingModule()
@@ -126,8 +127,9 @@ class SpringWebAppTest {
             Assertions.assertThat(loginResponse.body).contains("Logged in as 1")
 
             // Extract session cookies after login
-            val sessionCookies = loginResponse.headers[HttpHeaders.SET_COOKIE]
-            Assertions.assertThat(sessionCookies).isNotEmpty()
+            val sessionCookies = loginResponse.headers[HttpHeaders.SET_COOKIE]!!
+            assertThat(sessionCookies).hasSize(1)
+            assertThat(sessionCookies[0]).contains("JSESSIONID=")
 
             // Step 2: Test session-scoped bean with the logged-in session
             val sessionHeaders = HttpHeaders()

@@ -9,6 +9,7 @@ ValueObjects
     HttpClientConfig
        baseUrl: string
        auth: HttpClientAuth? = empty
+       persistSession: bool = false
 
 Interfaces
     HttpClient
