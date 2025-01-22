@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "com.github.bratek20.logs"
-version = "1.0.32"
+version = "1.0.33"
 
 subprojects {
     group = rootProject.group

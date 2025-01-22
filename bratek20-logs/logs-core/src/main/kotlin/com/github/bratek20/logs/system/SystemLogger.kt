@@ -3,6 +3,10 @@ package com.github.bratek20.logs.system
 import com.github.bratek20.logs.api.LoggerIntegration
 
 class SystemLogger : LoggerIntegration {
+    override fun debug(message: String, source: Any?) {
+        println("[DEBUG] $message")
+    }
+
     override fun info(message: String, source: Any?) {
         println("[INFO] $message")
     }
