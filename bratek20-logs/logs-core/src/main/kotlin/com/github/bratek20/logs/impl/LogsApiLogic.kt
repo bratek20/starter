@@ -13,6 +13,10 @@ class LogsApiLogic(
         errorListeners.add(onError)
     }
 
+    override fun debug(message: String, source: Any?) {
+        integration.debug(message, source)
+    }
+
     override fun info(message: String, source: Any?) {
         integration.info(message, source)
     }
