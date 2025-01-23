@@ -39,6 +39,7 @@ Interfaces
         SendResponse
             statusCode: int
             body: string
+            headers: HttpHeader[]
         send(request: HttpRequest): SendResponse
             throws
                 HttpRequesterException

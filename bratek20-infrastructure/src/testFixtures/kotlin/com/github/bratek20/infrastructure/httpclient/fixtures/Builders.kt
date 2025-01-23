@@ -63,11 +63,13 @@ fun httpRequest(init: HttpRequestDef.() -> Unit = {}): HttpRequest {
 data class SendResponseDef(
     var statusCode: Int = 0,
     var body: String = "someValue",
+    var headers: List<(HttpHeaderDef.() -> Unit)> = emptyList(),
 )
 fun sendResponse(init: SendResponseDef.() -> Unit = {}): SendResponse {
     val def = SendResponseDef().apply(init)
     return SendResponse.create(
         statusCode = def.statusCode,
         body = def.body,
+        headers = def.headers.map { it -> httpHeader(it) },
     )
 }

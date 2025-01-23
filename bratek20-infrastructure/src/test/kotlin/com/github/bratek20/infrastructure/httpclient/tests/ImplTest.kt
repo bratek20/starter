@@ -9,6 +9,7 @@ import com.github.bratek20.logs.LoggerMock
 import com.github.bratek20.logs.LogsMocks
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class HttpRequesterMock: HttpRequester {
@@ -52,7 +53,7 @@ class HttpClientImplTest {
     }
 
     @Test
-    fun `Should support GET`() {
+    fun `should support GET`() {
         val client = createClient {
             baseUrl = "http://localhost:8081"
         }
@@ -85,7 +86,7 @@ class HttpClientImplTest {
     }
 
     @Test
-    fun `Should support POST with Auth Header`() {
+    fun `should support POST with Auth Header`() {
         val client = createClient {
             baseUrl = "http://localhost:8080"
             auth = {
@@ -116,6 +117,43 @@ class HttpClientImplTest {
                 key = "Authorization"
                 value = "Basic dXNlcjpwYXNzd29yZA=="
             }
+        }
+    }
+
+    @Nested
+    inner class PersistSessionScope {
+        @Test
+        fun `should use session cookie from first response in next requests`() {
+            val client = createClient {
+                baseUrl = "http://localhost:8080"
+                persistSession = true
+            }
+
+            requesterMock.response = {
+                statusCode = 200
+                headers = listOf {
+                    key = "Set-Cookie"
+                    value = "session=123"
+                }
+            }
+            client.post("/login", null)
+
+            client.post("/test", null)
+            requesterMock.assertLastRequest {
+                headers = listOf {
+                    key = "Cookie"
+                    value = "session=123"
+                }
+            }
+        }
+
+        @Test
+        fun `should throw exception when first response does not have session cookie`() {
+            val client = createClient {
+                persistSession = true
+            }
+
+            client.post("/test", null)
         }
     }
 }

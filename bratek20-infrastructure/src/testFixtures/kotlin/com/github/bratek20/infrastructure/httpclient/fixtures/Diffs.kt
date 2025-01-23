@@ -119,6 +119,7 @@ fun diffHttpRequest(given: HttpRequest, expectedInit: ExpectedHttpRequest.() -> 
 data class ExpectedSendResponse(
     var statusCode: Int? = null,
     var body: String? = null,
+    var headers: List<(ExpectedHttpHeader.() -> Unit)>? = null,
 )
 fun diffSendResponse(given: SendResponse, expectedInit: ExpectedSendResponse.() -> Unit, path: String = ""): String {
     val expected = ExpectedSendResponse().apply(expectedInit)
@@ -130,6 +131,11 @@ fun diffSendResponse(given: SendResponse, expectedInit: ExpectedSendResponse.() 
 
     expected.body?.let {
         if (given.getBody() != it) { result.add("${path}body ${given.getBody()} != ${it}") }
+    }
+
+    expected.headers?.let {
+        if (given.getHeaders().size != it.size) { result.add("${path}headers size ${given.getHeaders().size} != ${it.size}"); return@let }
+        given.getHeaders().forEachIndexed { idx, entry -> if (diffHttpHeader(entry, it[idx]) != "") { result.add(diffHttpHeader(entry, it[idx], "${path}headers[${idx}].")) } }
     }
 
     return result.joinToString("\n")

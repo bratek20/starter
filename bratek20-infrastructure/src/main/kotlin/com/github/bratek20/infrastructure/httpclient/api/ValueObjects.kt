@@ -133,6 +133,7 @@ data class HttpRequest(
 data class SendResponse(
     private val statusCode: Int,
     private val body: String,
+    private val headers: List<HttpHeader>,
 ) {
     fun getStatusCode(): Int {
         return this.statusCode
@@ -142,14 +143,20 @@ data class SendResponse(
         return this.body
     }
 
+    fun getHeaders(): List<HttpHeader> {
+        return this.headers
+    }
+
     companion object {
         fun create(
             statusCode: Int,
             body: String,
+            headers: List<HttpHeader>,
         ): SendResponse {
             return SendResponse(
                 statusCode = statusCode,
                 body = body,
+                headers = headers,
             )
         }
     }
