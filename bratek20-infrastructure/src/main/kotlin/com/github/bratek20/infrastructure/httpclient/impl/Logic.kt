@@ -14,58 +14,88 @@ import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 import java.util.*
 
-class HttpClientFactoryLogic : HttpClientFactory {
+class HttpClientFactoryLogic(
+    private val requester: HttpRequester
+) : HttpClientFactory {
     override fun create(config: HttpClientConfig): HttpClient {
-        return HttpClientLogic(config)
+        return HttpClientLogic(requester, config)
+    }
+}
+
+class HttpRequesterLogic : HttpRequester {
+    private val restTemplate: RestTemplate = RestTemplate()
+
+    override fun send(request: HttpRequest): SendResponse {
+        val entity = HttpEntity<String>(request.getContent(), HttpHeaders().apply {
+            request.getHeaders().forEach { h -> this[h.getKey()] = h.getValue() }
+        })
+
+        val responseEntity: ResponseEntity<String> = restTemplate.exchange(
+            request.getUrl(),
+            mapMethod(request.getMethod()),
+            entity,
+            String::class.java
+        )
+
+        return SendResponse.create(
+            responseEntity.statusCode.value(),
+            responseEntity.body!!
+        )
+    }
+
+    private fun mapMethod(method: com.github.bratek20.infrastructure.httpclient.api.HttpMethod): HttpMethod {
+        return when (method) {
+            com.github.bratek20.infrastructure.httpclient.api.HttpMethod.GET -> HttpMethod.GET
+            com.github.bratek20.infrastructure.httpclient.api.HttpMethod.POST -> HttpMethod.POST
+        }
     }
 }
 
 class HttpClientLogic(
+    private val requester: HttpRequester,
     private val config: HttpClientConfig
 ) : HttpClient {
-    private val restTemplate: RestTemplate = RestTemplate()
+
 
     override fun get(path: String): HttpResponse {
-        val headers = HttpHeaders().apply {
-            addAuthHeaderIfPresent(this)
-        }
-        val entity = HttpEntity<String>(headers)
-        val responseEntity: ResponseEntity<String> = restTemplate.exchange(
-            getFullUrl(path),
-            HttpMethod.GET,
-            entity,
-            String::class.java
+        val sendResponse = requester.send(
+            HttpRequest.create(
+                getFullUrl(path),
+                com.github.bratek20.infrastructure.httpclient.api.HttpMethod.GET,
+                null,
+                "application/json",
+                getHeaders()
+            )
         )
 
-        return HttpResponseLogic(responseEntity.statusCode.value(), responseEntity.body)
+        return HttpResponseLogic(sendResponse)
     }
 
     override fun post(path: String, body: Any?): HttpResponse {
-        val headers = HttpHeaders().apply {
-            addAuthHeaderIfPresent(this)
-        }
-        val entity = HttpEntity(body?.let { getHttpBody(body) }, headers)
-        val responseEntity: ResponseEntity<String> = restTemplate.exchange(
-            getFullUrl(path),
-            HttpMethod.POST,
-            entity,
-            String::class.java
+        val sendResponse = requester.send(
+            HttpRequest.create(
+                getFullUrl(path),
+                com.github.bratek20.infrastructure.httpclient.api.HttpMethod.POST,
+                body?.let { SERIALIZER.serialize(it).getValue() },
+                "application/json",
+                getHeaders()
+            )
         )
 
-        extractPassedException(responseEntity)?.let {
+        extractPassedException(sendResponse)?.let {
             val type = Class.forName(it.`package` + "." + it.type)
             throw type.getConstructor(String::class.java).newInstance(it.message) as Throwable
         }
 
-        return HttpResponseLogic(responseEntity.statusCode.value(), responseEntity.body)
+        return HttpResponseLogic(sendResponse)
     }
 
-    private fun addAuthHeaderIfPresent(headers: HttpHeaders) {
-        config.getAuth()?.let {
+    private fun getHeaders(): List<HttpHeader> {
+        return config.getAuth()?.let {
             val auth = "${it.getUsername()}:${it.getPassword()}"
             val encodedAuth = Base64.getEncoder().encodeToString(auth.toByteArray())
-            headers["Authorization"] = "Basic $encodedAuth"
-        }
+            listOf(HttpHeader.create("Authorization", "Basic $encodedAuth"))
+        } ?: emptyList()
     }
 
     data class PassedException(
@@ -78,19 +108,15 @@ class HttpClientLogic(
         val passedException: PassedException
     )
 
-    private fun extractPassedException(responseEntity: ResponseEntity<String>): PassedException? {
+    private fun extractPassedException(sendResponse: SendResponse): PassedException? {
         return try {
             SERIALIZER.deserialize(
-                SerializedValue.create(responseEntity.body!!, SerializationType.JSON),
+                SerializedValue.create(sendResponse.getBody(), SerializationType.JSON),
                 PassedExceptionResponse::class.java
             ).passedException
         } catch (e: Exception) {
             null
         }
-    }
-
-    private fun getHttpBody(body: Any): Struct {
-        return SERIALIZER.asStruct(body)
     }
 
     private fun getFullUrl(path: String): String {
@@ -103,15 +129,14 @@ class HttpClientLogic(
 }
 
 class HttpResponseLogic(
-    private val statusCode: Int,
-    private val body: String?,
+    private val sendResponse: SendResponse
 ) : HttpResponse {
     override fun getStatusCode(): Int {
-        return statusCode
+        return sendResponse.getStatusCode()
     }
 
     override fun <T> getBody(clazz: Class<T>): T {
-        return body!!.let {
+        return sendResponse.getBody().let {
             SERIALIZER.deserialize(
                 SerializedValue.create(it, SerializationType.JSON),
                 clazz

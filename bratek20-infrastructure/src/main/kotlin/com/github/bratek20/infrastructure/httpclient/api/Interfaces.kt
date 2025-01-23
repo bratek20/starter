@@ -11,3 +11,10 @@ interface HttpClient {
 interface HttpClientFactory {
     fun create(config: HttpClientConfig): HttpClient
 }
+
+interface HttpRequester {
+    @Throws(
+        HttpRequesterException::class,
+    )
+    fun send(request: HttpRequest): SendResponse
+}

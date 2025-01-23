@@ -4,6 +4,11 @@ package com.github.bratek20.infrastructure.httpclient.fixtures
 
 import com.github.bratek20.infrastructure.httpclient.api.*
 
+fun diffHttpMethod(given: HttpMethod, expected: String, path: String = ""): String {
+    if (given != HttpMethod.valueOf(expected)) { return "${path}value ${given.name} != ${expected}" }
+    return ""
+}
+
 data class ExpectedHttpClientAuth(
     var username: String? = null,
     var password: String? = null,
@@ -27,6 +32,7 @@ data class ExpectedHttpClientConfig(
     var baseUrl: String? = null,
     var authEmpty: Boolean? = null,
     var auth: (ExpectedHttpClientAuth.() -> Unit)? = null,
+    var persistSession: Boolean? = null,
 )
 fun diffHttpClientConfig(given: HttpClientConfig, expectedInit: ExpectedHttpClientConfig.() -> Unit, path: String = ""): String {
     val expected = ExpectedHttpClientConfig().apply(expectedInit)
@@ -42,6 +48,88 @@ fun diffHttpClientConfig(given: HttpClientConfig, expectedInit: ExpectedHttpClie
 
     expected.auth?.let {
         if (diffHttpClientAuth(given.getAuth()!!, it) != "") { result.add(diffHttpClientAuth(given.getAuth()!!, it, "${path}auth.")) }
+    }
+
+    expected.persistSession?.let {
+        if (given.getPersistSession() != it) { result.add("${path}persistSession ${given.getPersistSession()} != ${it}") }
+    }
+
+    return result.joinToString("\n")
+}
+
+data class ExpectedHttpHeader(
+    var key: String? = null,
+    var value: String? = null,
+)
+fun diffHttpHeader(given: HttpHeader, expectedInit: ExpectedHttpHeader.() -> Unit, path: String = ""): String {
+    val expected = ExpectedHttpHeader().apply(expectedInit)
+    val result: MutableList<String> = mutableListOf()
+
+    expected.key?.let {
+        if (given.getKey() != it) { result.add("${path}key ${given.getKey()} != ${it}") }
+    }
+
+    expected.value?.let {
+        if (given.getValue() != it) { result.add("${path}value ${given.getValue()} != ${it}") }
+    }
+
+    return result.joinToString("\n")
+}
+
+data class ExpectedHttpRequest(
+    var url: String? = null,
+    var method: String? = null,
+    var contentEmpty: Boolean? = null,
+    var content: String? = null,
+    var contentType: String? = null,
+    var headers: List<(ExpectedHttpHeader.() -> Unit)>? = null,
+)
+fun diffHttpRequest(given: HttpRequest, expectedInit: ExpectedHttpRequest.() -> Unit, path: String = ""): String {
+    val expected = ExpectedHttpRequest().apply(expectedInit)
+    val result: MutableList<String> = mutableListOf()
+
+    expected.url?.let {
+        if (given.getUrl() != it) { result.add("${path}url ${given.getUrl()} != ${it}") }
+    }
+
+    expected.method?.let {
+        if (diffHttpMethod(given.getMethod(), it) != "") { result.add(diffHttpMethod(given.getMethod(), it, "${path}method.")) }
+    }
+
+    expected.contentEmpty?.let {
+        if ((given.getContent() == null) != it) { result.add("${path}content empty ${(given.getContent() == null)} != ${it}") }
+    }
+
+    expected.content?.let {
+        if (given.getContent()!! != it) { result.add("${path}content ${given.getContent()!!} != ${it}") }
+    }
+
+    expected.contentType?.let {
+        if (given.getContentType() != it) { result.add("${path}contentType ${given.getContentType()} != ${it}") }
+    }
+
+    expected.headers?.let {
+        if (given.getHeaders().size != it.size) { result.add("${path}headers size ${given.getHeaders().size} != ${it.size}"); return@let }
+        given.getHeaders().forEachIndexed { idx, entry -> if (diffHttpHeader(entry, it[idx]) != "") { result.add(diffHttpHeader(entry, it[idx], "${path}headers[${idx}].")) } }
+    }
+
+    return result.joinToString("\n")
+}
+
+data class ExpectedSendResponse(
+    var statusCode: Int? = null,
+    var body: String? = null,
+)
+fun diffSendResponse(given: SendResponse, expectedInit: ExpectedSendResponse.() -> Unit, path: String = ""): String {
+    val expected = ExpectedSendResponse().apply(expectedInit)
+    val result: MutableList<String> = mutableListOf()
+
+    expected.statusCode?.let {
+        if (given.getStatusCode() != it) { result.add("${path}statusCode ${given.getStatusCode()} != ${it}") }
+    }
+
+    expected.body?.let {
+        if (given.getBody() != it) { result.add("${path}body ${given.getBody()} != ${it}") }
     }
 
     return result.joinToString("\n")

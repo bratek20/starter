@@ -15,3 +15,18 @@ fun assertHttpClientConfig(given: HttpClientConfig, expectedInit: ExpectedHttpCl
     val diff = diffHttpClientConfig(given, expectedInit)
     assertThat(diff).withFailMessage(diff).isEqualTo("")
 }
+
+fun assertHttpHeader(given: HttpHeader, expectedInit: ExpectedHttpHeader.() -> Unit) {
+    val diff = diffHttpHeader(given, expectedInit)
+    assertThat(diff).withFailMessage(diff).isEqualTo("")
+}
+
+fun assertHttpRequest(given: HttpRequest, expectedInit: ExpectedHttpRequest.() -> Unit) {
+    val diff = diffHttpRequest(given, expectedInit)
+    assertThat(diff).withFailMessage(diff).isEqualTo("")
+}
+
+fun assertSendResponse(given: SendResponse, expectedInit: ExpectedSendResponse.() -> Unit) {
+    val diff = diffSendResponse(given, expectedInit)
+    assertThat(diff).withFailMessage(diff).isEqualTo("")
+}

@@ -18,7 +18,7 @@ class AuthController {
     fun login(@RequestHeader("AuthId") authId: String, session: HttpSession): String {
         // If AuthId is not registered, create a new account or session
         val userId = authDatabase.computeIfAbsent(authId) { nextUserId++ }
-        session.setAttribute("userId", userId)
+        //session.setAttribute("userId", userId)
         return "Logged in as $userId"
     }
 }
