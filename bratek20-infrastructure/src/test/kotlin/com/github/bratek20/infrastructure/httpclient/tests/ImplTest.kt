@@ -121,7 +121,7 @@ class HttpClientImplTest {
             client.post("/test", SOME_REQEUST)
             requesterMock.assertLastRequest {
                 headers = listOf {
-                    key = "Set-Cookie"
+                    key = "Cookie"
                     value = "session=123"
                 }
             }
@@ -140,7 +140,6 @@ class HttpClientImplTest {
                     message = "Session can not be persisted! Set-Cookie not found in response header for first request"
                 }
             )
-
         }
     }
 }

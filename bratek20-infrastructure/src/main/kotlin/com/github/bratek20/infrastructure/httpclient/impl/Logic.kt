@@ -29,7 +29,6 @@ class HttpRequesterLogic : HttpRequester {
         val entity = HttpEntity<String>(request.getContent(), HttpHeaders().apply {
             request.getHeaders().forEach { h -> this[h.getKey()] = h.getValue() }
         })
-
         val responseEntity: ResponseEntity<String> = restTemplate.exchange(
             request.getUrl(),
             mapMethod(request.getMethod()),
@@ -78,11 +77,11 @@ class HttpClientLogic(
 
         if (config.getPersistSession() && requestNumber == 0) {
             sessionCookie = sendResponse.getHeaders()
-                .firstOrNull { it.getKey() == SET_COOKIE_HEADER_KEY }
+                .firstOrNull { it.getKey() == "Set-Cookie" }
                 ?.getValue()
 
             if(sessionCookie == null) {
-                throw HttpClientException("Session can not be persisted! $SET_COOKIE_HEADER_KEY not found in response header for first request")
+                throw HttpClientException("Session can not be persisted! Set-Cookie not found in response header for first request")
             }
         }
         requestNumber++
@@ -99,7 +98,7 @@ class HttpClientLogic(
         }
 
         if (config.getPersistSession() && requestNumber > 0) {
-            result.add(HttpHeader.create("Set-Cookie", sessionCookie!!))
+            result.add(HttpHeader.create("Cookie", sessionCookie!!))
         }
 
         return result
@@ -132,7 +131,6 @@ class HttpClientLogic(
 
     companion object {
         private val SERIALIZER: Serializer = SerializationFactory.createSerializer()
-        private const val SET_COOKIE_HEADER_KEY = "Set-Cookie"
     }
 }
 
