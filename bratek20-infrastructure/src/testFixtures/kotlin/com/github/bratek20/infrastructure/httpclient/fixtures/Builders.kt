@@ -17,7 +17,7 @@ fun httpClientAuth(init: HttpClientAuthDef.() -> Unit = {}): HttpClientAuth {
 }
 
 data class HttpClientConfigDef(
-    var baseUrl: String = "someValue",
+    var baseUrl: String = "http://localhost:8080",
     var auth: (HttpClientAuthDef.() -> Unit)? = null,
     var persistSession: Boolean = false,
 )

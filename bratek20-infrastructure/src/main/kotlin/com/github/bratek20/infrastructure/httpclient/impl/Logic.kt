@@ -58,7 +58,8 @@ class HttpClientLogic(
     private val requester: HttpRequester,
     private val config: HttpClientConfig
 ) : HttpClient {
-
+    private var requestNumber = 0
+    private var sessionCookie: String? = null
 
     override fun get(path: String): HttpResponse {
         val sendResponse = requester.send(
@@ -90,15 +91,27 @@ class HttpClientLogic(
             throw type.getConstructor(String::class.java).newInstance(it.message) as Throwable
         }
 
+        if (config.getPersistSession() && requestNumber == 0) {
+            sessionCookie = sendResponse.getHeaders().first { it.getKey() == "Set-Cookie" }.getValue()
+        }
+        requestNumber++
         return HttpResponseLogic(sendResponse)
     }
 
     private fun getHeaders(): List<HttpHeader> {
-        return config.getAuth()?.let {
+        val result = mutableListOf<HttpHeader>()
+
+        config.getAuth()?.let {
             val auth = "${it.getUsername()}:${it.getPassword()}"
             val encodedAuth = Base64.getEncoder().encodeToString(auth.toByteArray())
-            listOf(HttpHeader.create("Authorization", "Basic $encodedAuth"))
-        } ?: emptyList()
+            result.add(HttpHeader.create("Authorization", "Basic $encodedAuth"))
+        }
+
+        if (config.getPersistSession() && requestNumber > 0) {
+            result.add(HttpHeader.create("Set-Cookie", sessionCookie!!))
+        }
+
+        return result
     }
 
     data class PassedException(

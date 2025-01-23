@@ -125,7 +125,6 @@ class HttpClientImplTest {
         @Test
         fun `should use session cookie from first response in next requests`() {
             val client = createClient {
-                baseUrl = "http://localhost:8080"
                 persistSession = true
             }
 
@@ -141,9 +140,30 @@ class HttpClientImplTest {
             client.post("/test", null)
             requesterMock.assertLastRequest {
                 headers = listOf {
-                    key = "Cookie"
+                    key = "Set-Cookie"
                     value = "session=123"
                 }
+            }
+        }
+
+        @Test
+        fun `should not use session cookie from first response in next requests if persist session disabled`() {
+            val client = createClient {
+                persistSession = false
+            }
+
+            requesterMock.response = {
+                statusCode = 200
+                headers = listOf {
+                    key = "Set-Cookie"
+                    value = "session=123"
+                }
+            }
+            client.post("/login", null)
+
+            client.post("/test", null)
+            requesterMock.assertLastRequest {
+                headers = emptyList()
             }
         }
 
