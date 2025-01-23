@@ -44,7 +44,7 @@ fun httpHeader(init: HttpHeaderDef.() -> Unit = {}): HttpHeader {
 
 data class HttpRequestDef(
     var url: String = "someValue",
-    var method: String = HttpMethod.GET.name,
+    var method: String = HttpMethod.POST.name,
     var content: String? = null,
     var contentType: String = "someValue",
     var headers: List<(HttpHeaderDef.() -> Unit)> = emptyList(),

@@ -4,6 +4,11 @@ package com.github.bratek20.infrastructure.httpclient.api
 
 import com.github.bratek20.architecture.exceptions.ApiException
 
+class HttpClientException(
+    message: String = ""
+): ApiException(message) {
+}
+
 class HttpRequesterException(
     message: String = ""
 ): ApiException(message) {

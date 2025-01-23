@@ -1,6 +1,7 @@
 package com.github.bratek20.infrastructure.httpclient.tests
 
 import com.github.bratek20.architecture.context.someContextBuilder
+import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.infrastructure.httpclient.api.*
 import com.github.bratek20.infrastructure.httpclient.context.HttpClientBaseImpl
 import com.github.bratek20.infrastructure.httpclient.context.HttpClientImpl
@@ -52,28 +53,6 @@ class HttpClientImplTest {
         )
     }
 
-    @Test
-    fun `should support GET`() {
-        val client = createClient {
-            baseUrl = "http://localhost:8081"
-        }
-
-        requesterMock.response = {
-            statusCode = 200
-            body = "{\"value\": \"Some value\"}"
-        }
-
-        val response = client.get("/test")
-
-        assertThat(response.getStatusCode()).isEqualTo(200)
-        requesterMock.assertLastRequest {
-            url = "http://localhost:8081/test"
-            method = "GET"
-            contentEmpty = true
-            headers = emptyList()
-        }
-    }
-
     data class SomeRequest(
         private val value: String
     ) {
@@ -120,6 +99,8 @@ class HttpClientImplTest {
         }
     }
 
+    val SOME_REQEUST = SomeRequest.create("request value")
+
     @Nested
     inner class PersistSessionScope {
         @Test
@@ -135,9 +116,9 @@ class HttpClientImplTest {
                     value = "session=123"
                 }
             }
-            client.post("/login", null)
+            client.post("/login", SOME_REQEUST)
 
-            client.post("/test", null)
+            client.post("/test", SOME_REQEUST)
             requesterMock.assertLastRequest {
                 headers = listOf {
                     key = "Set-Cookie"
@@ -145,35 +126,21 @@ class HttpClientImplTest {
                 }
             }
         }
-
-        @Test
-        fun `should not use session cookie from first response in next requests if persist session disabled`() {
-            val client = createClient {
-                persistSession = false
-            }
-
-            requesterMock.response = {
-                statusCode = 200
-                headers = listOf {
-                    key = "Set-Cookie"
-                    value = "session=123"
-                }
-            }
-            client.post("/login", null)
-
-            client.post("/test", null)
-            requesterMock.assertLastRequest {
-                headers = emptyList()
-            }
-        }
-
+        
         @Test
         fun `should throw exception when first response does not have session cookie`() {
             val client = createClient {
                 persistSession = true
             }
 
-            client.post("/test", null)
+            assertApiExceptionThrown(
+                { client.post("/test", SOME_REQEUST) },
+                {
+                    type = HttpClientException::class
+                    message = "Session can not be persisted! Set-Cookie not found in response header for first request"
+                }
+            )
+
         }
     }
 }

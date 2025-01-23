@@ -1,6 +1,5 @@
 Enums
     HttpMethod
-        GET
         POST
 
 ExternalTypes
@@ -19,8 +18,9 @@ ValueObjects
 
 Interfaces
     HttpClient
-        get(path: String): HttpResponse
-        post(path: String, body: any?): HttpResponse
+        post(path: String, body: any): HttpResponse
+            throws
+                HttpClientException
 
     HttpClientFactory
         create(config: HttpClientConfig): HttpClient

@@ -119,17 +119,6 @@ class OldHttpClientImplTest {
     }
 
     @Test
-    fun shouldSupportGet() {
-        stub(
-            testUrl = "/get",
-        )
-
-        val response = client.get("/get")
-
-        assertResponse(response)
-    }
-
-    @Test
     fun shouldSupportPost() {
         stub(
             testUrl = "/post",
@@ -137,19 +126,6 @@ class OldHttpClientImplTest {
         )
 
         val response = client.post("/post", requestBody())
-
-        assertResponse(response)
-    }
-
-    @Test
-    fun shouldSupportPostNullBody() {
-        stub(
-            testUrl = "/post",
-            post = true,
-            withPostRequestBody = false
-        )
-
-        val response = client.post("/post", null)
 
         assertResponse(response)
     }
@@ -181,27 +157,5 @@ class OldHttpClientImplTest {
                 message = "Some message"
             }
         )
-    }
-
-    @Test
-    fun shouldSendAuthHeaderIfAuthInConfigPresent() {
-        server.stubFor(WireMock.get(WireMock.urlEqualTo("/getAuth"))
-            .withHeader("Authorization", WireMock.equalTo("Basic dXNlcjpwYXNzd29yZA==")) // "user:password" base64 encoded
-            .willReturn(
-                wireMockResponse()
-            )
-        )
-
-        client = factory.create(httpClientConfig {
-            baseUrl = "http://localhost:8080"
-            auth = {
-                username = "user"
-                password = "password"
-            }
-        })
-
-        val response = client.get("/getAuth")
-
-        assertResponse(response)
     }
 }

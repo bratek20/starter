@@ -48,7 +48,6 @@ class HttpRequesterLogic : HttpRequester {
 
     private fun mapMethod(method: com.github.bratek20.infrastructure.httpclient.api.HttpMethod): HttpMethod {
         return when (method) {
-            com.github.bratek20.infrastructure.httpclient.api.HttpMethod.GET -> HttpMethod.GET
             com.github.bratek20.infrastructure.httpclient.api.HttpMethod.POST -> HttpMethod.POST
         }
     }
@@ -61,26 +60,12 @@ class HttpClientLogic(
     private var requestNumber = 0
     private var sessionCookie: String? = null
 
-    override fun get(path: String): HttpResponse {
-        val sendResponse = requester.send(
-            HttpRequest.create(
-                getFullUrl(path),
-                com.github.bratek20.infrastructure.httpclient.api.HttpMethod.GET,
-                null,
-                "application/json",
-                getHeaders()
-            )
-        )
-
-        return HttpResponseLogic(sendResponse)
-    }
-
-    override fun post(path: String, body: Any?): HttpResponse {
+    override fun post(path: String, body: Any): HttpResponse {
         val sendResponse = requester.send(
             HttpRequest.create(
                 getFullUrl(path),
                 com.github.bratek20.infrastructure.httpclient.api.HttpMethod.POST,
-                body?.let { SERIALIZER.serialize(it).getValue() },
+                SERIALIZER.serialize(body).getValue(),
                 "application/json",
                 getHeaders()
             )
@@ -92,7 +77,13 @@ class HttpClientLogic(
         }
 
         if (config.getPersistSession() && requestNumber == 0) {
-            sessionCookie = sendResponse.getHeaders().first { it.getKey() == "Set-Cookie" }.getValue()
+            sessionCookie = sendResponse.getHeaders()
+                .firstOrNull { it.getKey() == SET_COOKIE_HEADER_KEY }
+                ?.getValue()
+
+            if(sessionCookie == null) {
+                throw HttpClientException("Session can not be persisted! $SET_COOKIE_HEADER_KEY not found in response header for first request")
+            }
         }
         requestNumber++
         return HttpResponseLogic(sendResponse)
@@ -141,6 +132,7 @@ class HttpClientLogic(
 
     companion object {
         private val SERIALIZER: Serializer = SerializationFactory.createSerializer()
+        private const val SET_COOKIE_HEADER_KEY = "Set-Cookie"
     }
 }
 

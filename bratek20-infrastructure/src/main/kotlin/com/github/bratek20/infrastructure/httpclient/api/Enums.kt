@@ -2,6 +2,5 @@
 
 package com.github.bratek20.infrastructure.httpclient.api
 enum class HttpMethod {
-    GET,
     POST,
 }
