@@ -21,4 +21,8 @@ Interfaces
             throws
                 NotLoggedInException
 
- 
+
+Web
+    Http
+        ExposedInterfaces
+            UserAuthServerApi
