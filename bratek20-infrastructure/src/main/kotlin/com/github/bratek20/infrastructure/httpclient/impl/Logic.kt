@@ -6,10 +6,9 @@ import com.github.bratek20.architecture.serialization.api.Serializer
 import com.github.bratek20.architecture.structs.api.Struct
 import com.github.bratek20.architecture.serialization.context.SerializationFactory
 import com.github.bratek20.infrastructure.httpclient.api.*
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
+import com.github.bratek20.infrastructure.httpclient.api.HttpRequest
+import org.springframework.http.*
 import org.springframework.http.HttpMethod
-import org.springframework.http.ResponseEntity
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 import java.util.*
@@ -28,6 +27,7 @@ class HttpRequesterLogic : HttpRequester {
     override fun send(request: HttpRequest): SendResponse {
         val entity = HttpEntity<String>(request.getContent(), HttpHeaders().apply {
             request.getHeaders().forEach { h -> this[h.getKey()] = h.getValue() }
+            this.contentType = MediaType.APPLICATION_JSON
         })
         val responseEntity: ResponseEntity<String> = restTemplate.exchange(
             request.getUrl(),
@@ -59,12 +59,12 @@ class HttpClientLogic(
     private var requestNumber = 0
     private var sessionCookie: String? = null
 
-    override fun post(path: String, body: Any): HttpResponse {
+    override fun post(path: String, body: Any?): HttpResponse {
         val sendResponse = requester.send(
             HttpRequest.create(
                 getFullUrl(path),
                 com.github.bratek20.infrastructure.httpclient.api.HttpMethod.POST,
-                SERIALIZER.serialize(body).getValue(),
+                body?.let { SERIALIZER.serialize(it).getValue() },
                 "application/json",
                 getHeaders()
             )

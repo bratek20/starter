@@ -67,7 +67,7 @@ class HttpIntegrationTest {
         }
 
         override fun throwException() {
-            client.post("/throw", Any())
+            client.post("/throw", null)
         }
     }
 

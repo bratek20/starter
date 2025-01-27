@@ -18,7 +18,8 @@ ValueObjects
 
 Interfaces
     HttpClient
-        post(path: String, body: any): HttpResponse
+        //body can be null to send a request without a body
+        post(path: String, body: any?): HttpResponse
             throws
                 HttpClientException
 

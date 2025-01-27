@@ -99,6 +99,17 @@ class HttpClientImplTest {
         }
     }
 
+    @Test
+    fun `should support POST with no body`() {
+        val client = createClient()
+
+        client.post("/test", null)
+
+        requesterMock.assertLastRequest {
+            contentEmpty = true
+        }
+    }
+
     val SOME_REQEUST = SomeRequest.create("request value")
 
     @Nested

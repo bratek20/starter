@@ -6,7 +6,7 @@ interface HttpClient {
     @Throws(
         HttpClientException::class,
     )
-    fun post(path: String, body: Any): HttpResponse
+    fun post(path: String, body: Any?): HttpResponse
 }
 
 interface HttpClientFactory {

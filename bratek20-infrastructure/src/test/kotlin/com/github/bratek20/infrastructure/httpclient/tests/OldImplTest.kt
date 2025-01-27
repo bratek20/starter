@@ -79,7 +79,11 @@ class OldHttpClientImplTest {
             mapping = WireMock.post(WireMock.urlEqualTo("/post"))
 
             if (withPostRequestBody) {
-                mapping.withRequestBody(WireMock.equalToJson("{\"value\": \"Some request\", \"amount\": 1}"))
+                mapping
+                    .withRequestBody(WireMock
+                        .equalToJson("{\"value\": \"Some request\", \"amount\": 1}")
+                    )
+                    .withHeader("Content-Type", WireMock.equalTo("application/json"))
             }
         }
 
