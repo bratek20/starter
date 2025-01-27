@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 import com.github.bratek20.infrastructure.userauthserver.api.*
 
 @RestController
-@RequestMapping("/userAuthServerApi")
+@RequestMapping("/b20/userAuthServerApi")
 class UserAuthServerApiController(
     private val api: UserAuthServerApi,
 ) {

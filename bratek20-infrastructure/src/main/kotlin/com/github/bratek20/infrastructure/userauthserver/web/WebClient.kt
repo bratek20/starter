@@ -13,11 +13,11 @@ class UserAuthServerApiWebClient(
     private val client = factory.create(config.value)
 
     override fun createUserAndLogin(): UserMapping {
-        return client.post("/userAuthServerApi/createUserAndLogin", null).getBody(UserAuthServerApiCreateUserAndLoginResponse::class.java).getValue()
+        return client.post("/b20/userAuthServerApi/createUserAndLogin", null).getBody(UserAuthServerApiCreateUserAndLoginResponse::class.java).getValue()
     }
 
     override fun login(authId: AuthId): UserId {
-        return client.post("/userAuthServerApi/login", UserAuthServerApiLoginRequest.create(authId)).getBody(UserAuthServerApiLoginResponse::class.java).getValue()
+        return client.post("/b20/userAuthServerApi/login", UserAuthServerApiLoginRequest.create(authId)).getBody(UserAuthServerApiLoginResponse::class.java).getValue()
     }
 }
 

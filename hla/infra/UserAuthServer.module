@@ -22,7 +22,9 @@ Interfaces
                 NotLoggedInException
 
 
-Web
-    Http
-        ExposedInterfaces
-            UserAuthServerApi
+//Commented as some custom code was added to generated code
+//Web
+    //Http
+        //ExposedInterfaces
+            //UserAuthServerApi
+        //urlPathPrefix = "/b20"
