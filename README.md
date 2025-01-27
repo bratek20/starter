@@ -24,6 +24,8 @@ I recommend to use saved configurations for IntelliJ IDEA from .run directory.
 
 All publish scripts are stored in `bash` folder. All scripts assume you execute them EXACTLY from `bash` folder.
 
+To publish you NEED TO BE collaborator of `bratek20-starter` repository!
+
 To publish new version of architecture
 1. Open console in `bash` folder
 2. Change `version` in `bratek20-architecture/build.gradle.kts`
