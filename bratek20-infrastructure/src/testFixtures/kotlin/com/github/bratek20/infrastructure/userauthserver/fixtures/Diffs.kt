@@ -9,14 +9,14 @@ fun diffAuthId(given: AuthId, expected: String, path: String = ""): String {
     return ""
 }
 
-fun diffUserId(given: UserId, expected: String, path: String = ""): String {
+fun diffUserId(given: UserId, expected: Int, path: String = ""): String {
     if (given.value != expected) { return "${path}value ${given.value} != ${expected}" }
     return ""
 }
 
 data class ExpectedUserMapping(
     var authId: String? = null,
-    var userId: String? = null,
+    var userId: Int? = null,
 )
 fun diffUserMapping(given: UserMapping, expectedInit: ExpectedUserMapping.() -> Unit, path: String = ""): String {
     val expected = ExpectedUserMapping().apply(expectedInit)

@@ -17,3 +17,7 @@ interface UserSession {
     )
     fun getUserId(): UserId
 }
+
+interface AuthIdGenerator {
+    fun generate(): AuthId
+}

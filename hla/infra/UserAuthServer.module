@@ -1,6 +1,6 @@
 ValueObjects
     AuthId: string
-    UserId: string
+    UserId: int
 
 Data
     UserMapping
@@ -21,6 +21,8 @@ Interfaces
             throws
                 NotLoggedInException
 
+    AuthIdGenerator
+        generate(): AuthId
 
 //Commented as some custom code was added to generated code
 //Web

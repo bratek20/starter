@@ -4,7 +4,7 @@ package com.github.bratek20.infrastructure.userauthserver.api
 
 data class UserMapping(
     private var authId: String,
-    private var userId: String,
+    private var userId: Int,
 ) {
     fun getAuthId(): AuthId {
         return AuthId(this.authId)

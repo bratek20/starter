@@ -29,8 +29,8 @@ class DataStorageLogic(
         integration.setValue(key.name, null)
     }
 
-    override fun <Id : Any, E : Any> addElement(key: MapDataKey<Id, E>, id: Id, value: E): Boolean {
-        return super.addElement(key, id, value)
+    override fun <Id : Any, E : Any> addElement(key: MapDataKey<Id, E>, value: E): Boolean {
+        return super.addElement(key, value)
     }
 
     override fun <Id : Any, E : Any> findElement(key: MapDataKey<Id, E>, id: Id): E? {

@@ -8,13 +8,13 @@ fun authId(value: String = "someValue"): AuthId {
     return AuthId(value)
 }
 
-fun userId(value: String = "someValue"): UserId {
+fun userId(value: Int = 0): UserId {
     return UserId(value)
 }
 
 data class UserMappingDef(
     var authId: String = "someValue",
-    var userId: String = "someValue",
+    var userId: Int = 0,
 )
 fun userMapping(init: UserMappingDef.() -> Unit = {}): UserMapping {
     val def = UserMappingDef().apply(init)

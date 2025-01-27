@@ -12,7 +12,7 @@ fun assertAuthId(given: AuthId, expected: String) {
 }
 
 
-fun assertUserId(given: UserId, expected: String) {
+fun assertUserId(given: UserId, expected: Int) {
     val diff = diffUserId(given, expected)
     assertThat(diff).withFailMessage(diff).isEqualTo("")
 }

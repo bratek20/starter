@@ -30,7 +30,7 @@ class UserAuthServerApiLoginRequest(
     }
 }
 class UserAuthServerApiLoginResponse(
-    private val value: String
+    private val value: Int
 ) {
     fun getValue(): UserId {
         return UserId(value)
