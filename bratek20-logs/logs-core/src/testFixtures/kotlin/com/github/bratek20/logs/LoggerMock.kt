@@ -47,6 +47,23 @@ class LoggerMock: Logger {
         assertLogs(LogLevel.ERROR, *messages)
     }
 
+    private fun assertContainsLogs(level: LogLevel, vararg messages: String) {
+        val logs = getLogs(level)
+        assertThat(logs).contains(*messages)
+    }
+    fun assertContainsDebugs(vararg messages: String) {
+        assertContainsLogs(LogLevel.DEBUG, *messages)
+    }
+    fun assertContainsInfos(vararg messages: String) {
+        assertContainsLogs(LogLevel.INFO, *messages)
+    }
+    fun assertContainsWarns(vararg messages: String) {
+        assertContainsLogs(LogLevel.WARN, *messages)
+    }
+    fun assertContainsErrors(vararg messages: String) {
+        assertContainsLogs(LogLevel.ERROR, *messages)
+    }
+
     private fun assertLogsFor(level: LogLevel, sourceType: Class<*>, vararg messages: String) {
         val logs = getLogsFor(level, sourceType)
         assertThat(logs).containsExactly(*messages)
