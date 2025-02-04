@@ -209,7 +209,7 @@ class StructsImplTest {
                 }
             )
 
-            assertPrimitiveValues(s, "[*]/a/b?/c", listOf("2"))
+            assertPrimitiveValues(s, "[*]/a/b?/c", listOf("2"), listOf("[1]/a/b?/c"))
         }
 
         @Test
@@ -241,7 +241,7 @@ class StructsImplTest {
                 }
             }
 
-            assertPrimitiveValues(s, "a/b/[*]/c/[0]/d", listOf("1", "3"))
+            assertPrimitiveValues(s, "a/b/[*]/c/[0]/d", listOf("1", "3"), listOf("a/b/[0]/c/[0]/d", "a/b/[1]/c/[0]/d"))
         }
 
         @Test
@@ -259,18 +259,37 @@ class StructsImplTest {
             assertPrimitiveValues(objStruct, "entries/[*]/entryValue", listOf("1", "2"))
         }
 
-        private fun assertPrimitiveValues(anyStruct: AnyStruct, path: String, expectedValues: List<String>) {
+        private fun assertPrimitiveValues(
+            anyStruct: AnyStruct,
+            path: String,
+            expectedValues: List<String>,
+            expectedPaths: List<String>? = null
+        ) {
             val values = helper.getValues(anyStruct, structPath(path))
-            val rawValues = values.map { it.asPrimitive().value }
+            val rawValues = values.map { it.value.asPrimitive().value }
             assertThat(rawValues).containsExactlyElementsOf(expectedValues)
+            expectedPaths?.let { assertPaths(values, it) }
         }
 
-        private fun assertStructValues(anyStruct: AnyStruct, path: String, expectedValues: List<ExpectedStruct>) {
+        private fun assertStructValues(
+            anyStruct: AnyStruct,
+            path: String,
+            expectedValues: List<ExpectedStruct>,
+            expectedPaths: List<String>? = null
+        ) {
             val values = helper.getValues(anyStruct, structPath(path))
-            val rawValues = values.map { it.asObject() }
             values.zip(expectedValues).forEach { (actual, expected) ->
-                assertStructEquals(actual.asObject(), expected)
+                assertStructEquals(actual.value.asObject(), expected)
             }
+            expectedPaths?.let { assertPaths(values, it) }
+        }
+
+        private fun assertPaths(
+            given: List<AnyStructWithPath>,
+            expectedPaths: List<String>
+        ) {
+            val actualPaths = given.map { it.path.value }
+            assertThat(actualPaths).containsExactlyElementsOf(expectedPaths)
         }
     }
 }

@@ -4,13 +4,20 @@ import com.github.bratek20.architecture.serialization.context.SerializationFacto
 import com.github.bratek20.architecture.structs.api.*
 
 class AnyStructHelperLogic: AnyStructHelper {
-    override fun getValues(anyStruct: AnyStruct, path: StructPath): List<AnyStruct> {
+    override fun getValues(anyStruct: AnyStruct, path: StructPath): List<AnyStructWithPath> {
         return getValuesFor(anyStruct, path, "")
     }
 
-    private fun getValuesFor(anyStruct: AnyStruct, path: StructPath, traversedPath: String): List<AnyStruct> {
+    private fun toStructPath(traversedPath: String): StructPath {
+        if (traversedPath.endsWith("/")) {
+            return StructPath(traversedPath.dropLast(1))
+        }
+        return StructPath(traversedPath)
+    }
+
+    private fun getValuesFor(anyStruct: AnyStruct, path: StructPath, traversedPath: String): List<AnyStructWithPath> {
         if (path.value.isEmpty()) {
-            return listOf(anyStruct)
+            return listOf(AnyStructWithPath(anyStruct, toStructPath(traversedPath)))
         }
 
         val parts = path.value.split("/")
@@ -25,7 +32,10 @@ class AnyStructHelperLogic: AnyStructHelper {
         if(current.startsWith("[")) {
             val list = anyStruct.asList()
             if (current == "[*]") {
-                return list.flatMap { getValuesFor(it, rest, currentTraversed) }
+                return list.flatMapIndexed { idx, struct ->
+                    val currentTraversedWithIdx = currentTraversed.replace("[*]", "[$idx]")
+                    getValuesFor(struct, rest, currentTraversedWithIdx)
+                }
             }
             val idx = current.drop(1).dropLast(1).toInt()
             return getValuesFor(list[idx], rest, currentTraversed)
@@ -40,7 +50,7 @@ class AnyStructHelperLogic: AnyStructHelper {
         }
 
         if (rest.value.isEmpty()) {
-            return listOf(anyToAnyStruct(value))
+            return listOf(AnyStructWithPath(anyToAnyStruct(value), toStructPath(currentTraversed)))
         }
         return getValuesFor(anyToAnyStruct(value), rest, currentTraversed)
     }
