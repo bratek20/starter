@@ -3,6 +3,8 @@ package com.github.bratek20.infrastructure.userauthserver.tests
 import com.github.bratek20.architecture.context.api.ContextBuilder
 import com.github.bratek20.architecture.context.api.ContextModule
 import com.github.bratek20.architecture.context.someContextBuilder
+import com.github.bratek20.architecture.data.context.DataImpl
+import com.github.bratek20.architecture.data.context.DataInMemoryImpl
 import com.github.bratek20.infrastructure.httpclient.context.HttpClientImpl
 import com.github.bratek20.infrastructure.httpclient.fixtures.httpClientConfig
 import com.github.bratek20.infrastructure.httpserver.HttpIntegrationTest
@@ -50,6 +52,7 @@ class UserAuthServerWebTest {
     fun `should login and start session`() {
         val app = runTestWebApp(
             modules = listOf(
+                DataInMemoryImpl(),
                 UserAuthServerWebServer(),
                 SomeUserModuleWebServer(),
             )

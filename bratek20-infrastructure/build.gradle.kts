@@ -13,6 +13,8 @@ dependencies {
 
     //http client
     implementation(libs.spring.web)
+    //servlet-api = { group = "javax.servlet", name = "javax.servlet-api", version = "4.0.1" }
+    implementation("javax.servlet:javax.servlet-api:4.0.1") //TODO check if compatible version and move to version catalog
 
     testImplementation(libs.wiremock)
 

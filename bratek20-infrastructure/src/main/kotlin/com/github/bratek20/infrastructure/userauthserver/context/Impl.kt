@@ -18,5 +18,6 @@ class UserAuthServerImpl: ContextModule {
         builder
             .withModule(UserAuthServerBaseImpl())
             .setImpl(UserSession::class.java, UserSessionLogic::class.java)
+            .setImpl(AuthIdGenerator::class.java, AuthIdGeneratorLogic::class.java)
     }
 }

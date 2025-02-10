@@ -2,11 +2,19 @@ package com.github.bratek20.infrastructure.userauthserver.impl
 
 import com.github.bratek20.architecture.data.api.DataStorage
 import com.github.bratek20.infrastructure.userauthserver.api.*
+import org.springframework.web.context.annotation.SessionScope
+import javax.servlet.http.HttpSession
 
 val USERS_MAPPING_DATA_MAP_KEY = com.github.bratek20.architecture.data.api.MapDataKey(
     "UsersMapping",
     UserMapping::class
 ) { it.getAuthId() }
+
+class AuthIdGeneratorLogic: AuthIdGenerator {
+    override fun generate(): AuthId {
+        return AuthId(java.util.UUID.randomUUID().toString())
+    }
+}
 
 class UserAuthServerApiLogic(
     private val authIdGenerator: AuthIdGenerator,
@@ -37,8 +45,12 @@ class UserAuthServerApiLogic(
     }
 }
 
-class UserSessionLogic: UserSession {
+class UserSessionLogic(
+    private val session: HttpSession
+): UserSession {
     override fun getUserId(): UserId {
-        TODO("Not yet implemented")
+        val userIdValue = session.getAttribute("userId") as Int?
+            ?: throw NotLoggedInException("User is not logged in")
+        return UserId(userIdValue)
     }
 }
