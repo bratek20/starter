@@ -28,7 +28,10 @@ Interfaces
                 StructConversionException
 
 
-    AnyStructHelper
-        getValues(struct: AnyStruct, path: StructPath): AnyStruct[]
-            throws
-                StructTraversalException
+    //AnyStructHelper
+        //AnyStructWithPath
+            //value: AnyStruct
+            //path: StructPath
+        //getValues(struct: AnyStruct, path: StructPath): AnyStructWithPath[]
+            //throws
+                //StructTraversalException

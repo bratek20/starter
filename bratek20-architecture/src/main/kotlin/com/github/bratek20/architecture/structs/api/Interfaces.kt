@@ -25,9 +25,3 @@ interface AnyStruct {
     fun asPrimitive(): StructPrimitive
 }
 
-interface AnyStructHelper {
-    @Throws(
-        StructTraversalException::class,
-    )
-    fun getValues(struct: AnyStruct, path: StructPath): List<AnyStruct>
-}

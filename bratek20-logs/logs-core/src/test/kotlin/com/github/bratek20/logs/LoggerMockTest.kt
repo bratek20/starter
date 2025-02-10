@@ -30,11 +30,15 @@ class LoggerMockTest {
 
         logger.debug("debug")
         logger.info("info")
+        logger.info("info2")
         logger.warn("warn")
         logger.error("error")
 
         loggerMock.assertDebugs("debug")
-        loggerMock.assertInfos("info")
+
+        loggerMock.assertInfos("info", "info2")
+        loggerMock.assertContainsInfos("info")
+
         loggerMock.assertWarns("warn")
         loggerMock.assertErrors("error")
 
