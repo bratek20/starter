@@ -2,7 +2,7 @@ plugins {
     id("com.github.bratek20.kotlin-library-conventions")
 }
 
-version = "1.0.51"
+version = "1.0.52"
 
 dependencies {
     api(project(":bratek20-architecture"))
