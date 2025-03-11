@@ -245,6 +245,15 @@ class StructsImplTest {
         }
 
         @Test
+        fun `struct with list of simple values`() {
+            val s = struct {
+                "listValues" to listOf("1","2")
+            }
+
+            assertPrimitiveValues(s, "listValues/[*]", listOf("1", "2"), listOf("listValues/[0]", "listValues/[1]"))
+        }
+
+        @Test
         fun `should work for structs produced by serialized`() {
             val obj = ExampleClass(
                 classValue = "value",
