@@ -9,7 +9,7 @@ class Struct : AnyStruct, HashMap<String, Any?>() {
         return this
     }
 
-    override fun asList(): StructList {
+    override fun asList(): SerializableList {
         throw StructConversionException("Tried to convert Struct to StructList")
     }
 

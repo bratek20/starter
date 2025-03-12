@@ -50,7 +50,7 @@ class PropertiesLogic(
             return serializer.deserialize(value, Struct::class.java)
         }
 
-        val list = StructList()
+        val list = SerializableList()
         val rawStructList = serializer.deserializeList(value, Struct::class.java)
         rawStructList.forEach { list.add(it) }
         return list

@@ -7,7 +7,7 @@ import com.github.bratek20.architecture.properties.api.ListPropertyKey
 import com.github.bratek20.architecture.properties.api.ObjectPropertyKey
 import com.github.bratek20.architecture.properties.api.PropertiesSource
 import com.github.bratek20.architecture.serialization.fixtures.assertSerializedValueAsStruct
-import com.github.bratek20.architecture.serialization.fixtures.assertSerializedValueAsStructList
+import com.github.bratek20.architecture.serialization.fixtures.assertSerializedValueAsListOfStructs
 
 abstract class PropertiesSourceTest {
     data class SomeProperty(val value: String, val otherValue: String)
@@ -43,7 +43,7 @@ abstract class PropertiesSourceTest {
         }
 
 
-        assertSerializedValueAsStructList(source.getValue(SOME_PROPERTY_LIST_KEY.name),
+        assertSerializedValueAsListOfStructs(source.getValue(SOME_PROPERTY_LIST_KEY.name),
             listOf(
                 {
                     "value" to "some value 1"
