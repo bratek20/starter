@@ -310,7 +310,7 @@ class SerializationImplTest {
         )
         val serializedValue = serializer.serialize(structList)
 
-        val deserializedObject = serializer.deserialize(serializedValue, StructList::class.java)
+        val deserializedObject = serializer.deserialize(serializedValue, SerializableList::class.java)
 
         val expected = listOf(
             mapOf("value" to "test", "number" to 1),

@@ -49,7 +49,7 @@ class StructsImplTest {
             {
                 "key" to "value"
             }
-        )
+        ).asSerializableList()
         val anyStructPrimitive: AnyStruct = StructPrimitive("value")
 
         assertThat(anyStructObject.isObject()).isTrue()
@@ -145,7 +145,7 @@ class StructsImplTest {
                 {
                     "key" to "value2"
                 }
-            )
+            ).asSerializableList()
 
             assertPrimitiveValues(simpleList, "[0]/key", listOf("value1"))
             assertPrimitiveValues(simpleList, "[1]/key", listOf("value2"))
@@ -207,7 +207,7 @@ class StructsImplTest {
                         }
                     }
                 }
-            )
+            ).asSerializableList()
 
             assertPrimitiveValues(s, "[*]/a/b?/c", listOf("2"), listOf("[1]/a/b?/c"))
         }

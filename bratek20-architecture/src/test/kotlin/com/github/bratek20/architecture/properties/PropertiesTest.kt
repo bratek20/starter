@@ -11,6 +11,7 @@ import com.github.bratek20.architecture.properties.api.*
 import com.github.bratek20.architecture.properties.context.PropertiesImpl
 import com.github.bratek20.architecture.properties.sources.inmemory.InMemoryPropertiesSource
 import com.github.bratek20.architecture.properties.sources.inmemory.InMemoryPropertiesSourceImpl
+import com.github.bratek20.architecture.structs.api.StructList
 import com.github.bratek20.architecture.structs.fixtures.assertStructEquals
 import com.github.bratek20.architecture.structs.fixtures.assertStructListEquals
 import org.junit.jupiter.api.Nested
@@ -185,6 +186,7 @@ class PropertiesTest {
             }
 
             assertThat(allProperties[1].keyName).isEqualTo("key2")
+
             assertStructListEquals(allProperties[1].value.asList(), listOf {
                 "value" to "y"
             })

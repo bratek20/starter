@@ -4,6 +4,7 @@ import com.github.bratek20.architecture.context.someContextBuilder
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.architecture.properties.api.ListPropertyKey
 import com.github.bratek20.architecture.properties.api.ObjectPropertyKey
+import com.github.bratek20.architecture.structs.api.StructList
 import com.github.bratek20.architecture.structs.fixtures.assertStructEquals
 import com.github.bratek20.architecture.structs.fixtures.assertStructListEquals
 import org.assertj.core.api.Assertions.assertThat

@@ -34,11 +34,11 @@ class AnyStructHelperLogic: AnyStructHelper {
             if (current == "[*]") {
                 return list.flatMapIndexed { idx, struct ->
                     val currentTraversedWithIdx = currentTraversed.replace("[*]", "[$idx]")
-                    getValuesFor(struct, rest, currentTraversedWithIdx)
+                    getValuesFor(anyToAnyStruct(struct), rest, currentTraversedWithIdx)
                 }
             }
             val idx = current.drop(1).dropLast(1).toInt()
-            return getValuesFor(list[idx], rest, currentTraversed)
+            return getValuesFor(anyToAnyStruct(list[idx]), rest, currentTraversed)
         }
 
         val value = anyStruct.asObject()[current]

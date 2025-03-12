@@ -1,8 +1,6 @@
 package com.github.bratek20.architecture.structs.fixtures
 
-import com.github.bratek20.architecture.structs.api.Struct
-import com.github.bratek20.architecture.structs.api.StructBuilder
-import com.github.bratek20.architecture.structs.api.struct
+import com.github.bratek20.architecture.structs.api.*
 import org.assertj.core.api.Assertions.assertThat
 
 typealias ExpectedStruct = StructBuilder.() -> Unit
@@ -30,6 +28,11 @@ fun assertStructEquals(given: Struct, expectedInit: StructBuilder.() -> Unit) {
 fun assertStructEquals(given: Struct, expected: Struct) {
     assertThat(given).isEqualTo(expected)
 }
+
+fun assertStructListEquals(given: SerializableList, expected: List<StructBuilder.() -> Unit>) {
+    assertStructListEquals(StructList.fromSerializableList(given), expected)
+}
+
 
 fun assertStructListEquals(given: List<Struct>, expected: List<StructBuilder.() -> Unit>) {
     assertThat(given).hasSameSizeAs(expected)

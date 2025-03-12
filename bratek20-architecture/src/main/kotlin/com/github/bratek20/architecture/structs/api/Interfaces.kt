@@ -17,7 +17,7 @@ interface AnyStruct {
     @Throws(
         StructConversionException::class,
     )
-    fun asList(): StructList
+    fun asList(): SerializableList
 
     @Throws(
         StructConversionException::class,
