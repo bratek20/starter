@@ -177,6 +177,21 @@ class StructsImplTest {
         }
 
         @Test
+        fun `BUG-TOBEFIXED test`() {
+            val obj = struct {
+                "someNestedWithUniqueIds" to listOf(
+                    "otherClass" to struct {
+                        "uniqueId" to "1"
+                    }
+                )
+            }
+
+            assertThat(obj).hasSize(2)
+            assertThat(obj.getValue("someNestedWithUniqueIds")).isNotNull()
+            assertThat(obj.getValue("otherClass")).isNotNull() // It not should be here but only inside someNestedWithUniqueIds
+        }
+
+        @Test
         fun `should throw traversal exception if null value detected`() {
             val obj = struct {
                 "a" to struct {
