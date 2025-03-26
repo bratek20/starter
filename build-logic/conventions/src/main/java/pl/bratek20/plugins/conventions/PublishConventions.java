@@ -3,6 +3,7 @@ package pl.bratek20.conventions;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.repositories.PasswordCredentials;
+import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.publish.PublishingExtension;
 import org.gradle.api.publish.maven.MavenPublication;
 import org.gradle.api.publish.maven.plugins.MavenPublishPlugin;
@@ -15,6 +16,8 @@ public class PublishConventions implements Plugin<Project> {
     @Override
     public void apply(Project project) {
         project.getPluginManager().apply(MavenPublishPlugin.class);
+
+        project.getExtensions().getByType(JavaPluginExtension.class).withSourcesJar();
 
         project.getExtensions().configure(PublishingExtension.class, publishing -> {
             publishing.publications(publications -> {
