@@ -4,7 +4,9 @@ import com.github.bratek20.architecture.context.someContextBuilder
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.architecture.properties.api.ListPropertyKey
 import com.github.bratek20.architecture.properties.api.ObjectPropertyKey
+import com.github.bratek20.architecture.structs.api.Struct
 import com.github.bratek20.architecture.structs.api.StructList
+import com.github.bratek20.architecture.structs.api.struct
 import com.github.bratek20.architecture.structs.fixtures.assertStructEquals
 import com.github.bratek20.architecture.structs.fixtures.assertStructListEquals
 import org.assertj.core.api.Assertions.assertThat
@@ -47,6 +49,27 @@ class PropertiesMockTest {
         val value2 = propertiesMock.get(OBJECT_KEY)
         assertThat(value2.value).isEqualTo("value2")
     }
+
+    @Test
+    fun `Should not throw serializing list containing list of objects`() {
+        val SomeStructWithNestedOtherClassUniqueIds = ListPropertyKey(
+            "SomeStructWithNestedOtherClassUniqueIds",
+            Struct::class
+        )
+        val propertiesMock = PropertiesMock()
+        propertiesMock.set(SomeStructWithNestedOtherClassUniqueIds, listOf(
+            struct {
+                "someNestedWithUniqueIds" to listOf(
+                    "otherClass" to struct {
+                        "uniqueId" to "1"
+                    }
+                )
+            }
+        ))
+
+        propertiesMock.getAll()
+    }
+
 
     @Test
     fun `should work for different keys instances`() {
