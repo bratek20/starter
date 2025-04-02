@@ -1,5 +1,8 @@
 my:
   properties:
     myProperty:
-      someInt: 2
-      someString: "b"
+      someInt: 3
+      someString: "c"
+    myPropertyList:
+      - someInt: 3
+        someString: "c"

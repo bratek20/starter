@@ -36,9 +36,9 @@ class SpringEnvironmentSourceIntegrationTest {
         envSource.init(env)
 
         assertThat(properties.get(ObjectPropertyKey("myProperty", MyProperty::class)))
-            .isEqualTo(MyProperty(1, "a"))
+            .isEqualTo(MyProperty(3, "c"))
 
         assertThat(properties.get(ListPropertyKey("myPropertyList", MyProperty::class)))
-            .containsExactly(MyProperty(1, "a"), MyProperty(2, "b"))
+            .containsExactly(MyProperty(3, "c"), MyProperty(2, "b"))
     }
 }

@@ -76,7 +76,8 @@ class SpringEnvironmentSource(
         val result: MutableMap<String, Any> = mutableMapOf()
         getAllPropertiesFromEnv().forEach { (key, value) ->
             if (key.startsWith(prefix)) {
-                result[key.removePrefix("$prefix.")] = value
+                val strippedKey = key.removePrefix("$prefix.")
+                result[strippedKey] = getEnv().getRequiredProperty(key)
             }
         }
         return result
