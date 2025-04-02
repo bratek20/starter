@@ -5,11 +5,11 @@ import com.github.bratek20.architecture.properties.api.ObjectPropertyKey
 import com.github.bratek20.architecture.properties.api.Properties
 import com.github.bratek20.architecture.properties.context.PropertiesImpl
 import com.github.bratek20.architecture.properties.sources.spring.SpringEnvironmentSource
+import com.github.bratek20.architecture.properties.sources.spring.SpringEnvironmentSourceConfig
 import com.github.bratek20.architecture.properties.sources.spring.SpringEnvironmentSourceImpl
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.core.env.ConfigurableEnvironment
-import org.springframework.core.env.MapPropertySource
 
 data class MyProperty(
     val someInt: Int,
@@ -18,12 +18,16 @@ data class MyProperty(
 
 class SpringEnvironmentSourceIntegrationTest {
     @Test
-    fun shouldReadPropertiesFromApplicationYaml() {
+    fun shouldReadPropertiesFromManyApplicationYaml() {
         val context = SpringApp.run(
             modules = listOf(
                 PropertiesImpl(),
-                SpringEnvironmentSourceImpl("my.properties")
-            )
+                SpringEnvironmentSourceImpl(SpringEnvironmentSourceConfig(
+                    prefix = "my.properties",
+                    printAllPropertiesOnInit = true
+                ))
+            ),
+            args = arrayOf( "--spring.config.additional-location=src/test/resources/additional-application.yaml")
         )
 
         val properties = context.get(Properties::class.java)
@@ -31,19 +35,10 @@ class SpringEnvironmentSourceIntegrationTest {
         val envSource = context.get(SpringEnvironmentSource::class.java)
         envSource.init(env)
 
-        env.propertySources.forEach { propertySource ->
-            if (propertySource is MapPropertySource) {
-                val map = propertySource.source
-                map.forEach { (key: String, value: Any) ->
-                    println("$key: $value")
-                }
-            }
-        }
-
         assertThat(properties.get(ObjectPropertyKey("myProperty", MyProperty::class)))
-            .isEqualTo(MyProperty(1, "a"))
+            .isEqualTo(MyProperty(3, "c"))
 
         assertThat(properties.get(ListPropertyKey("myPropertyList", MyProperty::class)))
-            .containsExactly(MyProperty(1, "a"), MyProperty(2, "b"))
+            .containsExactly(MyProperty(3, "c"), MyProperty(2, "b"))
     }
 }
