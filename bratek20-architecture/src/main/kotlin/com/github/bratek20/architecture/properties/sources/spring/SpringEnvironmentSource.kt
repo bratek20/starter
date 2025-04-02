@@ -13,20 +13,41 @@ import com.github.bratek20.architecture.serialization.api.SerializedValue
 import org.springframework.core.env.ConfigurableEnvironment
 import org.springframework.core.env.MapPropertySource
 
-class SpringEnvironmentPrefixProvider(
-    val value: String
+class SpringEnvironmentSourceConfig(
+    val prefix: String,
+    val printAllPropertiesOnInit: Boolean = false,
 )
 
 class SpringEnvironmentSource(
-    private val prefixProvider: SpringEnvironmentPrefixProvider,
+    private val config: SpringEnvironmentSourceConfig,
 ) : PropertiesSource {
 
     private val prefix: String
-        get() = prefixProvider.value
+        get() = config.prefix
 
     private lateinit var env: ConfigurableEnvironment
     fun init(env: ConfigurableEnvironment) {
         this.env = env
+
+        if (config.printAllPropertiesOnInit) {
+            getAllPropertiesFromEnv().forEach { (key, value) ->
+                println("[B20-Debug] $key: $value")
+            }
+        }
+    }
+
+    private fun getAllPropertiesFromEnv(): Map<String, Any> {
+        val result: MutableMap<String, Any> = mutableMapOf()
+        getEnv().propertySources.forEach { propertySource ->
+            if (propertySource is MapPropertySource) {
+                result.putAll(
+                    propertySource.source.keys.map {
+                        it to propertySource.getProperty(it)
+                    }
+                )
+            }
+        }
+        return result
     }
 
     private fun getEnv(): ConfigurableEnvironment {
@@ -52,17 +73,11 @@ class SpringEnvironmentSource(
     }
 
     private fun getMap(): Map<String, Any> {
-        val all: Sequence<MapPropertySource> = getEnv().propertySources.asSequence()
-            .filterIsInstance<MapPropertySource>()
-
         val result: MutableMap<String, Any> = mutableMapOf()
-        all.forEach { map ->
-            val filtered = map.source.filterKeys { it.startsWith(prefix) }
-            result.putAll(
-                filtered.map {
-                    it.key.removePrefix("$prefix.") to map.getProperty(it.key)
-                }
-            )
+        getAllPropertiesFromEnv().forEach { (key, value) ->
+            if (key.startsWith(prefix)) {
+                result[key.removePrefix("$prefix.")] = value
+            }
         }
         return result
     }
@@ -74,7 +89,7 @@ class SpringEnvironmentSource(
 }
 
 class SpringEnvironmentSourceImpl(
-    private val prefix: String
+    private val config: SpringEnvironmentSourceConfig
 ) : ContextModule {
     override fun apply(builder: ContextBuilder) {
         if (builder !is SpringContextBuilder) {
@@ -82,7 +97,7 @@ class SpringEnvironmentSourceImpl(
         }
 
         builder
-            .addImplObject(SpringEnvironmentPrefixProvider::class.java, SpringEnvironmentPrefixProvider(prefix))
+            .addImplObject(SpringEnvironmentSourceConfig::class.java, config)
             .addImpl(PropertiesSource::class.java, SpringEnvironmentSource::class.java)
     }
 }

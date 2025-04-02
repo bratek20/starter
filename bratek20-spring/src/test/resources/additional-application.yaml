@@ -1,0 +1,5 @@
+my:
+  properties:
+    myProperty:
+      someInt: 2
+      someString: "b"
