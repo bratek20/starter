@@ -8,19 +8,40 @@ import com.github.bratek20.architecture.storage.api.StorageKeyTypeException
 import com.github.bratek20.architecture.storage.impl.StorageLogic
 import com.github.bratek20.architecture.structs.api.*
 
-class PropertiesLogic(
-    private val initialSources: Set<PropertiesSource>
-) : Properties, StorageLogic() {
-    private val addedSources = mutableListOf<PropertiesSource>()
+private class PropertiesSourceWithCache(
+    private val source: PropertiesSource
+): PropertiesSource {
+    override fun getName(): PropertiesSourceName {
+        return source.getName()
+    }
 
-    private val allSources: Set<PropertiesSource>
-        get() = initialSources + addedSources
+    private var cachedAllKeys: Set<String>? = null
+    override fun getAllKeys(): Set<String> {
+        if (cachedAllKeys == null) {
+            cachedAllKeys = source.getAllKeys()
+        }
+        return cachedAllKeys!!
+    }
+
+    private val cachedValues: MutableMap<String, SerializedValue> = mutableMapOf()
+    override fun getValue(keyName: String): SerializedValue {
+        return cachedValues.getOrPut(keyName) {
+            source.getValue(keyName)
+        }
+    }
+}
+
+class PropertiesLogic(
+    initialSources: Set<PropertiesSource>
+) : Properties, StorageLogic() {
+    private val allSources = initialSources
+        .map { PropertiesSourceWithCache(it) }
+        .toMutableList()
 
     private val cachedProperties = mutableMapOf<String, Any>()
     override fun <T : Any> get(key: PropertyKey<T>): T {
         findSourceWithKeyName(key.name)
             ?: throw PropertyNotFoundException("Property `${key.name}` not found, sources: ${allSources.map { it.getName().value }}")
-
 
         return cachedProperties.getOrPut(key.name) { super.get(key) } as T
     }
@@ -31,7 +52,7 @@ class PropertiesLogic(
     }
 
     override fun addSource(source: PropertiesSource) {
-        addedSources.add(source)
+        allSources.add(PropertiesSourceWithCache(source))
     }
 
     override fun getAll(): List<Property> {

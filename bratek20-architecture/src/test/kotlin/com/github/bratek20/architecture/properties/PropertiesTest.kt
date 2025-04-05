@@ -11,10 +11,15 @@ import com.github.bratek20.architecture.properties.api.*
 import com.github.bratek20.architecture.properties.context.PropertiesImpl
 import com.github.bratek20.architecture.properties.sources.inmemory.InMemoryPropertiesSource
 import com.github.bratek20.architecture.properties.sources.inmemory.InMemoryPropertiesSourceImpl
+import com.github.bratek20.architecture.serialization.api.SerializationType
+import com.github.bratek20.architecture.serialization.api.SerializedValue
+import com.github.bratek20.architecture.structs.api.Struct
 import com.github.bratek20.architecture.structs.api.StructList
 import com.github.bratek20.architecture.structs.fixtures.assertStructEquals
 import com.github.bratek20.architecture.structs.fixtures.assertStructListEquals
 import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Timeout
+import java.util.concurrent.TimeUnit
 
 class PropertiesTest {
     data class SomeProperty(val value: String)
@@ -130,6 +135,15 @@ class PropertiesTest {
             val objectKey = ObjectPropertyKey("object", SomeProperty::class)
             source1.setAny(objectKey, listOf(SomeProperty("x")))
 
+            val listKey = ListPropertyKey("list", SomeProperty::class)
+            source1.setAny(listKey, SomeProperty("x"))
+
+            val otherObjectKey = ObjectPropertyKey("otherObject", OtherProperty::class)
+            source1.setAny(otherObjectKey, SomeProperty("x"))
+
+            val otherListKey = ListPropertyKey("otherList", OtherProperty::class)
+            source1.setAny(otherListKey, listOf(SomeProperty("x")))
+
             assertApiExceptionThrown(
                 { properties.get(objectKey) },
                 {
@@ -137,9 +151,6 @@ class PropertiesTest {
                     message = "Property `object` is a list but was requested as object"
                 }
             )
-
-            val listKey = ListPropertyKey("list", SomeProperty::class)
-            source1.setAny(listKey, SomeProperty("x"))
 
             assertApiExceptionThrown(
                 { properties.get(listKey) },
@@ -149,9 +160,6 @@ class PropertiesTest {
                 }
             )
 
-            val otherObjectKey = ObjectPropertyKey("otherObject", OtherProperty::class)
-            source1.setAny(otherObjectKey, SomeProperty("x"))
-
             assertApiExceptionThrown(
                 { properties.get(otherObjectKey) },
                 {
@@ -160,8 +168,6 @@ class PropertiesTest {
                 }
             )
 
-            val otherListKey = ListPropertyKey("otherList", OtherProperty::class)
-            source1.setAny(otherListKey, listOf(SomeProperty("x")))
             assertApiExceptionThrown(
                 { properties.get(otherListKey) },
                 {
@@ -195,10 +201,11 @@ class PropertiesTest {
         @Test
         fun `should work for different keys instances`() {
             source1.set(ObjectPropertyKey("key1", SomeClass::class), SomeClass("value"))
+            source1.set(ListPropertyKey("key2", SomeClass::class), listOf(SomeClass("y")))
+
             val value = properties.get(ObjectPropertyKey("key1", SomeClass::class))
             assertThat(value.value).isEqualTo("value")
 
-            source1.set(ListPropertyKey("key2", SomeClass::class), listOf(SomeClass("y")))
             val value2 = properties.get(ListPropertyKey("key2", SomeClass::class))
             assertThat(value2).hasSize(1)
         }
@@ -228,6 +235,67 @@ class PropertiesTest {
             val givenProp = properties.get(ObjectPropertyKey("key", SomeProperty::class))
 
             assertThat(givenProp).isEqualTo(SomeProperty("x"))
+        }
+    }
+
+    class SlowSource(
+        private val operationDelayMs: Long
+    ): PropertiesSource {
+        override fun getName(): PropertiesSourceName {
+            return PropertiesSourceName("slow")
+        }
+
+        override fun getAllKeys(): Set<String> {
+            Thread.sleep(operationDelayMs)
+            return setOf("key")
+        }
+
+        override fun getValue(keyName: String): SerializedValue {
+            Thread.sleep(operationDelayMs)
+            return SerializedValue.create("[]", SerializationType.JSON)
+        }
+    }
+
+    @Nested
+    inner class Performance {
+        val OPERATION_DELAY_MS = 100L
+
+        @BeforeEach
+        fun setup() {
+            val c = stableContextBuilder()
+                .withModules(
+                    PropertiesImpl(),
+                )
+                .addImplObject(PropertiesSource::class.java, SlowSource(OPERATION_DELAY_MS))
+                .build()
+
+            properties = c.get(
+                Properties::class.java
+            )
+        }
+
+        @Test
+        @Timeout(value = 5, unit = TimeUnit.SECONDS)
+        fun `should execute only once getAllKeys and getValue on source`() {
+            val propertyKey = ListPropertyKey("key", Struct::class)
+
+            val iterations = 100
+            val expectedCachedOpDurationMs = 5
+
+            val startTime = System.currentTimeMillis()
+            for (i in 0..iterations) {
+                properties.get(propertyKey)
+                properties.getAll()
+            }
+            val endTime = System.currentTimeMillis()
+            val duration = endTime - startTime
+            println("Duration: $duration ms")
+
+            assertThat(endTime - startTime)
+                .isLessThan(
+                    2 * OPERATION_DELAY_MS
+                    + iterations * 2 * expectedCachedOpDurationMs
+                )
         }
     }
 }
