@@ -21,12 +21,14 @@ import org.junit.jupiter.api.Test
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.ScopedProxyMode
+import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.context.annotation.SessionScope
 
 class UserAuthServerWebTest {
-    open class SomeUserModuleLogic(
+    @Component
+    class SomeUserModuleLogic(
         private val userSession: UserSession
     ) {
         fun getUserId(): UserId {
@@ -114,8 +116,8 @@ class UserAuthServerWebTest {
         val userIdFromSession = c.someUserModuleWebClient.getUserIdFromSession()
         assertUserId(userIdFromSession, 1)
 
-//        val userId = c.someUserModuleWebClient.getUserId()
-//        assertUserId(userId, 1)
+        val userId = c.someUserModuleWebClient.getUserId()
+        assertUserId(userId, 1)
 
         //login again
         val c2 = createClient(app.port)
