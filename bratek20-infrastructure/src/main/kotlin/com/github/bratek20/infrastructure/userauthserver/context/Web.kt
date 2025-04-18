@@ -25,6 +25,15 @@ class UserAuthServerWebClient(
     }
 }
 
+@Configuration
+open class UserSessionConfig {
+    @Bean
+    @SessionScope
+    open fun userSession(session: HttpSession): UserSession {
+        return UserSessionLogic(session)
+    }
+}
+
 class UserAuthServerWebServer: WebServerModule {
     override fun apply(builder: ContextBuilder) {
         builder.withModule(UserAuthServerImpl())
@@ -35,13 +44,10 @@ class UserAuthServerWebServer: WebServerModule {
             UserAuthServerApiController::class.java,
         )
     }
-}
 
-@Configuration
-open class UserSessionConfig {
-    @Bean
-    @SessionScope
-    open fun userSession(session: HttpSession): UserSession {
-        return UserSessionLogic(session)
+    override fun getConfigs(): List<Class<*>> {
+        return listOf(
+            UserSessionConfig::class.java,
+        )
     }
 }

@@ -24,6 +24,10 @@ class SpringWebApp(
             .flatMap { it.getControllers() }
             .toTypedArray()
 
+        val allWebConfigs = modules.filterIsInstance<WebServerModule>()
+            .flatMap { it.getConfigs() }
+            .toTypedArray()
+
         val applicationContext = SpringContextBuilder()
             .withModules(*modules.toTypedArray())
             .build() as SpringContext
@@ -31,6 +35,7 @@ class SpringWebApp(
         val sources = listOf(
             WebAppConfig::class.java,
             *allControllers,
+            *allWebConfigs,
             *configs.toTypedArray()
         )
 

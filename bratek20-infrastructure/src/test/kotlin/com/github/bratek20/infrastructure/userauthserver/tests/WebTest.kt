@@ -64,9 +64,6 @@ class UserAuthServerWebTest {
                 UserAuthServerWebServer(),
                 SomeUserModuleWebServer(),
             ),
-            configs = listOf(
-                UserSessionConfig::class.java,
-            )
         )
 
         val c = createClient(app.port)
