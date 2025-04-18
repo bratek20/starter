@@ -16,8 +16,12 @@ import java.util.*
 class HttpClientFactoryLogic(
     private val requester: HttpRequester
 ) : HttpClientFactory {
+    private val cache = mutableMapOf<HttpClientConfig, HttpClient>()
+
     override fun create(config: HttpClientConfig): HttpClient {
-        return HttpClientLogic(requester, config)
+        return cache.getOrPut(config) {
+            HttpClientLogic(requester, config)
+        }
     }
 }
 

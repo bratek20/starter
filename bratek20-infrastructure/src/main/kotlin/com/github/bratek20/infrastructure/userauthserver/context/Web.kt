@@ -8,7 +8,12 @@ import com.github.bratek20.infrastructure.httpclient.api.HttpClientConfig
 import com.github.bratek20.infrastructure.httpserver.api.WebServerModule
 
 import com.github.bratek20.infrastructure.userauthserver.api.*
+import com.github.bratek20.infrastructure.userauthserver.impl.UserSessionLogic
 import com.github.bratek20.infrastructure.userauthserver.web.*
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.web.context.annotation.SessionScope
+import javax.servlet.http.HttpSession
 
 class UserAuthServerWebClient(
     private val config: HttpClientConfig
@@ -29,5 +34,14 @@ class UserAuthServerWebServer: WebServerModule {
         return listOf(
             UserAuthServerApiController::class.java,
         )
+    }
+}
+
+@Configuration
+open class UserSessionConfig {
+    @Bean
+    @SessionScope
+    open fun userSession(session: HttpSession): UserSession {
+        return UserSessionLogic(session)
     }
 }

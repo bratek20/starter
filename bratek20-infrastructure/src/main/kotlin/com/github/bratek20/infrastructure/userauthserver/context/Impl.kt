@@ -17,7 +17,6 @@ class UserAuthServerImpl: ContextModule {
     override fun apply(builder: ContextBuilder) {
         builder
             .withModule(UserAuthServerBaseImpl())
-            .setImpl(UserSession::class.java, UserSessionLogic::class.java)
             .setImpl(AuthIdGenerator::class.java, AuthIdGeneratorLogic::class.java)
     }
 }

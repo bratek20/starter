@@ -9,7 +9,8 @@ import com.github.bratek20.logs.LogsMocks
 import com.github.bratek20.spring.webapp.SpringWebApp
 
 class TestWebApp(
-    private val modules: List<ContextModule>
+    private val modules: List<ContextModule>,
+    private val configs: List<Class<*>> = emptyList(),
 ): WebApp {
     lateinit var context: WebAppContext
 
@@ -19,6 +20,7 @@ class TestWebApp(
         )
         context = SpringWebApp.run(
             modules = finalModules,
+            configs = configs,
             useRandomPort = true
         )
         return context
@@ -32,9 +34,13 @@ class TestWebApp(
 }
 
 fun runTestWebApp(
-    modules: List<ContextModule>
+    modules: List<ContextModule> = emptyList(),
+    configs: List<Class<*>> = emptyList(),
 ): TestWebApp {
-    val app = TestWebApp(modules)
+    val app = TestWebApp(
+        modules = modules,
+        configs = configs,
+    )
     app.run()
     return app
 }

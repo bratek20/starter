@@ -1,13 +1,12 @@
 package com.github.bratek20.infrastructure.userauthserver.tests
 
 import com.github.bratek20.architecture.context.api.ContextBuilder
-import com.github.bratek20.architecture.context.api.ContextModule
 import com.github.bratek20.architecture.context.someContextBuilder
-import com.github.bratek20.architecture.data.context.DataImpl
 import com.github.bratek20.architecture.data.context.DataInMemoryImpl
+import com.github.bratek20.infrastructure.httpclient.api.HttpClientConfig
+import com.github.bratek20.infrastructure.httpclient.api.HttpClientFactory
 import com.github.bratek20.infrastructure.httpclient.context.HttpClientImpl
 import com.github.bratek20.infrastructure.httpclient.fixtures.httpClientConfig
-import com.github.bratek20.infrastructure.httpserver.HttpIntegrationTest
 import com.github.bratek20.infrastructure.httpserver.api.WebServerModule
 import com.github.bratek20.infrastructure.httpserver.fixtures.runTestWebApp
 import com.github.bratek20.infrastructure.userauthserver.api.UserAuthServerApi
@@ -15,7 +14,8 @@ import com.github.bratek20.infrastructure.userauthserver.api.UserId
 import com.github.bratek20.infrastructure.userauthserver.api.UserSession
 import com.github.bratek20.infrastructure.userauthserver.context.UserAuthServerWebClient
 import com.github.bratek20.infrastructure.userauthserver.context.UserAuthServerWebServer
-import com.github.bratek20.infrastructure.userauthserver.fixtures.assertUserMapping
+import com.github.bratek20.infrastructure.userauthserver.context.UserSessionConfig
+import com.github.bratek20.infrastructure.userauthserver.fixtures.assertUserId
 import org.junit.jupiter.api.Test
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
@@ -31,9 +31,17 @@ class UserAuthServerWebTest {
         }
     }
 
-    class SomeImpl: ContextModule {
-        override fun apply(builder: ContextBuilder) {
-            builder.setImpl(HttpIntegrationTest.SomeApi::class.java, HttpIntegrationTest.SomeApiLogic::class.java)
+    data class SomeUserModuleWebClientConfig(
+        val value: HttpClientConfig
+    )
+    class SomeUserModuleWebClient(
+        config: SomeUserModuleWebClientConfig,
+        factory: HttpClientFactory,
+    ) {
+        private val client = factory.create(config.value)
+
+        fun getUserId(): UserId {
+            return client.post("/getUserId", null).getBody(UserId::class.java)
         }
     }
 
@@ -55,21 +63,54 @@ class UserAuthServerWebTest {
                 DataInMemoryImpl(),
                 UserAuthServerWebServer(),
                 SomeUserModuleWebServer(),
+            ),
+            configs = listOf(
+                UserSessionConfig::class.java,
             )
         )
 
-        val api = someContextBuilder()
+        val c = createClient(app.port)
+
+        //create
+        val mapping = c.userAuthServerApi.createUserAndLogin()
+        assertUserId(mapping.getUserId(), 1)
+        val userId = c.someUserModuleWebClient.getUserId()
+        assertUserId(userId, 1)
+
+        //login again
+        val c2 = createClient(app.port)
+        val userId2 = c2.userAuthServerApi.login(mapping.getAuthId())
+        assertUserId(userId2, 1)
+
+        //different user
+        val c3 = createClient(app.port)
+        val userId3 = c3.userAuthServerApi.createUserAndLogin().getUserId()
+        assertUserId(userId3, 2)
+    }
+
+    data class ClientApis(
+        val userAuthServerApi: UserAuthServerApi,
+        val someUserModuleWebClient: SomeUserModuleWebClient
+    )
+    private fun createClient(port: Int): ClientApis {
+        val httpConfig = httpClientConfig {
+            baseUrl = "http://localhost:$port"
+            persistSession = true
+        }
+        val c = someContextBuilder()
             .withModules(
                 HttpClientImpl(),
                 UserAuthServerWebClient(
-                    config = httpClientConfig {
-                        baseUrl = "http://localhost:${app.port}"
-                        persistSession = true
-                    }
+                    config = httpConfig
                 )
             )
-            .buildAndGet(UserAuthServerApi::class.java)
+            .setImplObject(SomeUserModuleWebClientConfig::class.java, SomeUserModuleWebClientConfig(httpConfig))
+            .setClass(SomeUserModuleWebClient::class.java)
+            .build()
 
-        val userId = api.createUserAndLogin().getUserId()
+        return ClientApis(
+            userAuthServerApi = c.get(UserAuthServerApi::class.java),
+            someUserModuleWebClient = c.get(SomeUserModuleWebClient::class.java)
+        )
     }
 }

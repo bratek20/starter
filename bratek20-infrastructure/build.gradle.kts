@@ -20,4 +20,6 @@ dependencies {
 
     //http server
     testFixturesImplementation(project(":bratek20-spring"))
+
+    implementation(libs.spring.context)
 }

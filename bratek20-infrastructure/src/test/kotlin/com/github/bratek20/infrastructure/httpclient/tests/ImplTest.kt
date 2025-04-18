@@ -112,6 +112,14 @@ class HttpClientImplTest {
 
     val SOME_REQEUST = SomeRequest.create("request value")
 
+    @Test
+    fun `should return same client if config is the same`() {
+        val client1 = createClient()
+        val client2 = createClient()
+
+        assertThat(client1).isSameAs(client2)
+    }
+
     @Nested
     inner class PersistSessionScope {
         @Test
