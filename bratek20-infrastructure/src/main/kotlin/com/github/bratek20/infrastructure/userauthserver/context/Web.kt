@@ -26,10 +26,10 @@ class UserAuthServerWebClient(
 }
 
 @Configuration
-open class UserSessionConfig {
+class UserSessionConfig {
     @Bean
     @SessionScope
-    open fun userSession(session: HttpSession): UserSession {
+    fun userSession(session: HttpSession): UserSession {
         return UserSessionLogic(session)
     }
 }

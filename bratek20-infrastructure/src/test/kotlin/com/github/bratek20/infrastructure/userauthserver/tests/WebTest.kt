@@ -37,10 +37,10 @@ class UserAuthServerWebTest {
     }
 
     @Configuration
-    open class SomeUserModuleSessionConfig {
+    class SomeUserModuleSessionConfig {
         @Bean
         @SessionScope
-        open fun someUserModuleLogic(userSession: UserSession): SomeUserModuleLogic {
+        fun someUserModuleLogic(userSession: UserSession): SomeUserModuleLogic {
             return SomeUserModuleLogic(userSession)
         }
     }
