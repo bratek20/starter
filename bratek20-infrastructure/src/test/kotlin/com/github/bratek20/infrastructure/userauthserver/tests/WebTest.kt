@@ -2,6 +2,9 @@ package com.github.bratek20.infrastructure.userauthserver.tests
 
 import com.github.bratek20.architecture.context.api.ContextBuilder
 import com.github.bratek20.architecture.context.someContextBuilder
+import com.github.bratek20.architecture.data.api.DataKey
+import com.github.bratek20.architecture.data.api.DataStorage
+import com.github.bratek20.architecture.data.api.ObjectDataKey
 import com.github.bratek20.architecture.data.context.DataInMemoryImpl
 import com.github.bratek20.infrastructure.httpclient.api.HttpClientConfig
 import com.github.bratek20.infrastructure.httpclient.api.HttpClientFactory
@@ -9,6 +12,7 @@ import com.github.bratek20.infrastructure.httpclient.context.HttpClientImpl
 import com.github.bratek20.infrastructure.httpclient.fixtures.httpClientConfig
 import com.github.bratek20.infrastructure.httpserver.api.WebServerModule
 import com.github.bratek20.infrastructure.httpserver.fixtures.runTestWebApp
+import com.github.bratek20.infrastructure.sessiondata.context.SessionDataConfig
 import com.github.bratek20.infrastructure.userauthserver.api.UserAuthServerApi
 import com.github.bratek20.infrastructure.userauthserver.api.UserId
 import com.github.bratek20.infrastructure.userauthserver.api.UserSession
@@ -27,12 +31,25 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.context.annotation.SessionScope
 
 class UserAuthServerWebTest {
+    class UserData(
+        var value: Int = 0
+    )
+
     @Component
     class SomeUserModuleLogic(
-        private val userSession: UserSession
+        private val userSession: UserSession,
+        private val storage: DataStorage
     ) {
         fun getUserId(): UserId {
             return userSession.getUserId()
+        }
+
+        fun increaseValue(): Int {
+            val dataKey = ObjectDataKey<UserData>("userData", UserData::class)
+            val userData = storage.find(dataKey) ?: UserData()
+            userData.value += 1
+            storage.set(dataKey, userData)
+            return userData.value
         }
     }
 
@@ -40,8 +57,8 @@ class UserAuthServerWebTest {
     class SomeUserModuleSessionConfig {
         @Bean
         @SessionScope
-        fun someUserModuleLogic(userSession: UserSession): SomeUserModuleLogic {
-            return SomeUserModuleLogic(userSession)
+        fun someUserModuleLogic(userSession: UserSession, dataStorage: DataStorage): SomeUserModuleLogic {
+            return SomeUserModuleLogic(userSession, dataStorage)
         }
     }
 
@@ -58,6 +75,11 @@ class UserAuthServerWebTest {
         @PostMapping("/getUserIdFromSession")
         fun getUserIdFromSession(): UserId {
             return userSession.getUserId()
+        }
+
+        @PostMapping("/increaseValue")
+        fun increaseValue(): Int {
+            return logic.increaseValue()
         }
     }
 
@@ -76,6 +98,10 @@ class UserAuthServerWebTest {
 
         fun getUserIdFromSession(): UserId {
             return client.post("/getUserIdFromSession", null).getBody(UserId::class.java)
+        }
+
+        fun increaseValue(): Int {
+            return client.post("/increaseValue", null).getBody(Int::class.java)
         }
     }
 
@@ -105,6 +131,9 @@ class UserAuthServerWebTest {
                 UserAuthServerWebServer(),
                 SomeUserModuleWebServer(),
             ),
+            configs = listOf(
+                SessionDataConfig::class.java
+            )
         )
 
         val c = createClient(app.port)
@@ -115,6 +144,7 @@ class UserAuthServerWebTest {
 
         val userIdFromSession = c.someUserModuleWebClient.getUserIdFromSession()
         assertUserId(userIdFromSession, 1)
+
 
         val userId = c.someUserModuleWebClient.getUserId()
         assertUserId(userId, 1)
@@ -128,6 +158,9 @@ class UserAuthServerWebTest {
         val c3 = createClient(app.port)
         val userId3 = c3.userAuthServerApi.createUserAndLogin().getUserId()
         assertUserId(userId3, 2)
+
+        //data storage
+        c.someUserModuleWebClient.increaseValue()
     }
 
     data class ClientApis(
