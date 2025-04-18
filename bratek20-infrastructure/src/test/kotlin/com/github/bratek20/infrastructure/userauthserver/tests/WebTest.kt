@@ -16,17 +16,45 @@ import com.github.bratek20.infrastructure.userauthserver.context.UserAuthServerW
 import com.github.bratek20.infrastructure.userauthserver.context.UserAuthServerWebServer
 import com.github.bratek20.infrastructure.userauthserver.context.UserSessionConfig
 import com.github.bratek20.infrastructure.userauthserver.fixtures.assertUserId
+import com.github.bratek20.infrastructure.userauthserver.impl.UserSessionLogic
 import org.junit.jupiter.api.Test
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.ScopedProxyMode
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.context.annotation.SessionScope
 
 class UserAuthServerWebTest {
+    open class SomeUserModuleLogic(
+        private val userSession: UserSession
+    ) {
+        fun getUserId(): UserId {
+            return userSession.getUserId()
+        }
+    }
+
+    @Configuration
+    open class SomeUserModuleSessionConfig {
+        @Bean
+        @SessionScope
+        open fun someUserModuleLogic(userSession: UserSession): SomeUserModuleLogic {
+            return SomeUserModuleLogic(userSession)
+        }
+    }
+
     @RestController
     class SomeUserModuleController(
+        private val logic: SomeUserModuleLogic,
         private val userSession: UserSession
     ) {
         @PostMapping("/getUserId")
         fun getUserId(): UserId {
+            return logic.getUserId()
+        }
+
+        @PostMapping("/getUserIdFromSession")
+        fun getUserIdFromSession(): UserId {
             return userSession.getUserId()
         }
     }
@@ -43,6 +71,10 @@ class UserAuthServerWebTest {
         fun getUserId(): UserId {
             return client.post("/getUserId", null).getBody(UserId::class.java)
         }
+
+        fun getUserIdFromSession(): UserId {
+            return client.post("/getUserIdFromSession", null).getBody(UserId::class.java)
+        }
     }
 
     class SomeUserModuleWebServer: WebServerModule {
@@ -52,7 +84,14 @@ class UserAuthServerWebTest {
             )
         }
 
+        override fun getConfigs(): List<Class<*>> {
+            return listOf(
+                SomeUserModuleSessionConfig::class.java
+            )
+        }
+
         override fun apply(builder: ContextBuilder) {
+            //builder.setClass(SomeUserModuleLogic::class.java)
         }
     }
 
@@ -71,8 +110,12 @@ class UserAuthServerWebTest {
         //create
         val mapping = c.userAuthServerApi.createUserAndLogin()
         assertUserId(mapping.getUserId(), 1)
-        val userId = c.someUserModuleWebClient.getUserId()
-        assertUserId(userId, 1)
+
+        val userIdFromSession = c.someUserModuleWebClient.getUserIdFromSession()
+        assertUserId(userIdFromSession, 1)
+
+//        val userId = c.someUserModuleWebClient.getUserId()
+//        assertUserId(userId, 1)
 
         //login again
         val c2 = createClient(app.port)
