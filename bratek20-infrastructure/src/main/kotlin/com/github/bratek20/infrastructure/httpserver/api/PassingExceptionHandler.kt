@@ -8,13 +8,25 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.WebRequest
 
+enum class PassingExceptionLoggingLevel {
+    WARN,
+    ERROR
+}
+
 @ControllerAdvice
 class PassingExceptionHandler(
     private val logger: Logger
 ) {
+    var loggingLevel: PassingExceptionLoggingLevel = PassingExceptionLoggingLevel.WARN
+
     @ExceptionHandler(ApiException::class)
     fun handleException(ex: ApiException, request: WebRequest?): ResponseEntity<String> {
-        logger.warn("Passing exception `${ex.javaClass.simpleName}` with message `${ex.message}`")
+        val log = "Passing exception `${ex.javaClass.simpleName}` with message `${ex.message}`"
+        if (loggingLevel == PassingExceptionLoggingLevel.WARN) {
+            logger.warn(log)
+        } else {
+            logger.error(log)
+        }
 
         val message = """
             {

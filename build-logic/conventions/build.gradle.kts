@@ -1,6 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-version = "1.0.8"
+version = "1.0.9"
 
 plugins {
     `kotlin-dsl`

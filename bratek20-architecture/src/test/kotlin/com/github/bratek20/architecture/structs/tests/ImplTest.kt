@@ -49,7 +49,7 @@ class StructsImplTest {
             {
                 "key" to "value"
             }
-        )
+        ).asSerializableList()
         val anyStructPrimitive: AnyStruct = StructPrimitive("value")
 
         assertThat(anyStructObject.isObject()).isTrue()
@@ -145,7 +145,7 @@ class StructsImplTest {
                 {
                     "key" to "value2"
                 }
-            )
+            ).asSerializableList()
 
             assertPrimitiveValues(simpleList, "[0]/key", listOf("value1"))
             assertPrimitiveValues(simpleList, "[1]/key", listOf("value2"))
@@ -174,6 +174,21 @@ class StructsImplTest {
             assertStructValues(obj, "key", listOf {
                 "nestedKey" to "value"
             })
+        }
+
+        @Test
+        fun `BUG-TOBEFIXED test`() {
+            val obj = struct {
+                "someNestedWithUniqueIds" to listOf(
+                    "otherClass" to struct {
+                        "uniqueId" to "1"
+                    }
+                )
+            }
+
+            assertThat(obj).hasSize(2)
+            assertThat(obj.getValue("someNestedWithUniqueIds")).isNotNull()
+            assertThat(obj.getValue("otherClass")).isNotNull() // It not should be here but only inside someNestedWithUniqueIds
         }
 
         @Test
@@ -207,7 +222,7 @@ class StructsImplTest {
                         }
                     }
                 }
-            )
+            ).asSerializableList()
 
             assertPrimitiveValues(s, "[*]/a/b?/c", listOf("2"), listOf("[1]/a/b?/c"))
         }
@@ -242,6 +257,15 @@ class StructsImplTest {
             }
 
             assertPrimitiveValues(s, "a/b/[*]/c/[0]/d", listOf("1", "3"), listOf("a/b/[0]/c/[0]/d", "a/b/[1]/c/[0]/d"))
+        }
+
+        @Test
+        fun `struct with list of simple values`() {
+            val s = struct {
+                "listValues" to listOf("1","2")
+            }
+
+            assertPrimitiveValues(s, "listValues/[*]", listOf("1", "2"), listOf("listValues/[0]", "listValues/[1]"))
         }
 
         @Test

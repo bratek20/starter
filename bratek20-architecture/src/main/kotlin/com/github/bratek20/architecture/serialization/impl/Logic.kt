@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.github.bratek20.architecture.serialization.api.*
 import com.github.bratek20.architecture.structs.api.Struct
-import com.github.bratek20.architecture.structs.api.StructList
+import com.github.bratek20.architecture.structs.api.SerializableList
 
 class SerializerLogic(
     private val config: SerializerConfig
@@ -111,9 +111,9 @@ class SerializerLogic(
         return deserialize(tmp, Struct::class.java)
     }
 
-    override fun asStructList(value: Any): StructList {
+    override fun asStructList(value: Any): SerializableList {
         val tmp = serialize(value)
-        return deserialize(tmp, StructList::class.java)
+        return deserialize(tmp, SerializableList::class.java)
     }
 
     override fun <T> fromStruct(struct: Struct, type: Class<T>): T {

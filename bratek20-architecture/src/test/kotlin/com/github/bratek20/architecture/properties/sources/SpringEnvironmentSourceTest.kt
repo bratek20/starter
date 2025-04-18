@@ -5,6 +5,7 @@ import com.github.bratek20.architecture.context.spring.SpringContextBuilder
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.architecture.properties.PropertiesSourceTest
 import com.github.bratek20.architecture.properties.api.PropertiesSource
+import com.github.bratek20.architecture.properties.sources.spring.SpringEnvironmentSourceConfig
 import com.github.bratek20.architecture.properties.sources.spring.SpringEnvironmentSource
 import com.github.bratek20.architecture.properties.sources.spring.SpringEnvironmentSourceImpl
 import org.junit.jupiter.api.Test
@@ -51,7 +52,9 @@ class SpringEnvironmentSourceTest: PropertiesSourceTest() {
     override fun createAndSetupSource(): PropertiesSource {
         val context = SpringContextBuilder()
             .withModules(
-                SpringEnvironmentSourceImpl("test.scope")
+                SpringEnvironmentSourceImpl(SpringEnvironmentSourceConfig(
+                    prefix = "test.scope"
+                ))
             )
             .build()
 
@@ -85,7 +88,9 @@ class SpringEnvironmentSourceTest: PropertiesSourceTest() {
             {
                 GuiceContextBuilder()
                     .withModules(
-                        SpringEnvironmentSourceImpl("test.scope")
+                        SpringEnvironmentSourceImpl(SpringEnvironmentSourceConfig(
+                            prefix = "test.scope"
+                        ))
                     )
                     .build()
                     .get(SpringEnvironmentSource::class.java)

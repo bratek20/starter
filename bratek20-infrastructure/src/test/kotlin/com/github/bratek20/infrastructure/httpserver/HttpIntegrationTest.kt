@@ -12,6 +12,8 @@ import com.github.bratek20.infrastructure.httpclient.api.HttpClientConfig
 import com.github.bratek20.infrastructure.httpclient.api.HttpClientFactory
 import com.github.bratek20.infrastructure.httpclient.context.HttpClientImpl
 import com.github.bratek20.infrastructure.httpclient.fixtures.httpClientConfig
+import com.github.bratek20.infrastructure.httpserver.api.PassingExceptionHandler
+import com.github.bratek20.infrastructure.httpserver.api.PassingExceptionLoggingLevel
 import com.github.bratek20.infrastructure.httpserver.api.WebServerModule
 import com.github.bratek20.infrastructure.httpserver.fixtures.runTestWebApp
 import org.assertj.core.api.Assertions.assertThat
@@ -152,6 +154,15 @@ class HttpIntegrationTest {
             }
         )
         app.loggerMock.assertWarns(
+            "Passing exception `SomeException` with message `Some message`"
+        )
+
+        app.context.get(PassingExceptionHandler::class.java).loggingLevel = PassingExceptionLoggingLevel.ERROR
+        assertApiExceptionThrown(
+            { api.throwException() },
+            {}
+        )
+        app.loggerMock.assertErrors(
             "Passing exception `SomeException` with message `Some message`"
         )
     }

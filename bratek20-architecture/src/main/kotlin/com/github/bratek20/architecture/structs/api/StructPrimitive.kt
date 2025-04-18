@@ -11,7 +11,7 @@ class StructPrimitive(
         throw StructConversionException("Tried to convert StructPrimitive to Struct")
     }
 
-    override fun asList(): StructList {
+    override fun asList(): SerializableList {
         throw StructConversionException("Tried to convert StructPrimitive to StructList")
     }
 
