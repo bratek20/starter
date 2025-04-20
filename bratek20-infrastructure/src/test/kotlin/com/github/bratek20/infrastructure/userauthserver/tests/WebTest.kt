@@ -12,6 +12,7 @@ import com.github.bratek20.infrastructure.httpclient.context.HttpClientImpl
 import com.github.bratek20.infrastructure.httpclient.fixtures.httpClientConfig
 import com.github.bratek20.infrastructure.httpserver.api.WebServerModule
 import com.github.bratek20.infrastructure.httpserver.fixtures.runTestWebApp
+import com.github.bratek20.infrastructure.sessiondata.SessionDataStorage
 import com.github.bratek20.infrastructure.sessiondata.context.SessionDataConfig
 import com.github.bratek20.infrastructure.userauthserver.api.UserAuthServerApi
 import com.github.bratek20.infrastructure.userauthserver.api.UserId
@@ -21,6 +22,7 @@ import com.github.bratek20.infrastructure.userauthserver.context.UserAuthServerW
 import com.github.bratek20.infrastructure.userauthserver.context.UserSessionConfig
 import com.github.bratek20.infrastructure.userauthserver.fixtures.assertUserId
 import com.github.bratek20.infrastructure.userauthserver.impl.UserSessionLogic
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -38,7 +40,7 @@ class UserAuthServerWebTest {
     @Component
     class SomeUserModuleLogic(
         private val userSession: UserSession,
-        private val storage: DataStorage
+        private val storage: SessionDataStorage
     ) {
         fun getUserId(): UserId {
             return userSession.getUserId()
@@ -57,7 +59,7 @@ class UserAuthServerWebTest {
     class SomeUserModuleSessionConfig {
         @Bean
         @SessionScope
-        fun someUserModuleLogic(userSession: UserSession, dataStorage: DataStorage): SomeUserModuleLogic {
+        fun someUserModuleLogic(userSession: UserSession, dataStorage: SessionDataStorage): SomeUserModuleLogic {
             return SomeUserModuleLogic(userSession, dataStorage)
         }
     }
@@ -124,7 +126,7 @@ class UserAuthServerWebTest {
     }
 
     @Test
-    fun `should login and start session`() {
+    fun `should login and start session + session data storage`() {
         val app = runTestWebApp(
             modules = listOf(
                 DataInMemoryImpl(),
@@ -145,7 +147,6 @@ class UserAuthServerWebTest {
         val userIdFromSession = c.someUserModuleWebClient.getUserIdFromSession()
         assertUserId(userIdFromSession, 1)
 
-
         val userId = c.someUserModuleWebClient.getUserId()
         assertUserId(userId, 1)
 
@@ -160,7 +161,22 @@ class UserAuthServerWebTest {
         assertUserId(userId3, 2)
 
         //data storage
-        c.someUserModuleWebClient.increaseValue()
+        val c1Inc = c.someUserModuleWebClient.increaseValue()
+        assertThat(c1Inc).isEqualTo(1)
+
+        val c2Inc = c2.someUserModuleWebClient.increaseValue()
+        assertThat(c2Inc).isEqualTo(2)
+
+        val c3Inc = c3.someUserModuleWebClient.increaseValue()
+        assertThat(c3Inc).isEqualTo(1)
+
+        val appStorage = app.context.get(DataStorage::class.java)
+        appStorage.get(ObjectDataKey("user1.userData", UserData::class)).let {
+            assertThat(it.value).isEqualTo(2)
+        }
+        appStorage.get(ObjectDataKey("user2.userData", UserData::class)).let {
+            assertThat(it.value).isEqualTo(1)
+        }
     }
 
     data class ClientApis(

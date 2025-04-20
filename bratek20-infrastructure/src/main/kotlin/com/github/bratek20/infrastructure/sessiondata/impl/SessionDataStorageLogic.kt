@@ -3,6 +3,7 @@ package com.github.bratek20.infrastructure.sessiondata.impl
 import com.github.bratek20.architecture.data.api.DataKey
 import com.github.bratek20.architecture.data.api.DataStorage
 import com.github.bratek20.architecture.data.api.MapDataKey
+import com.github.bratek20.infrastructure.sessiondata.SessionDataStorage
 import com.github.bratek20.infrastructure.userauthserver.api.UserSession
 import org.springframework.stereotype.Component
 
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component
 class SessionDataStorageLogic(
     private val appStorage: DataStorage,
     private val userSession: UserSession
-): DataStorage {
+): SessionDataStorage {
     override fun <T : Any> set(key: DataKey<T>, value: T) {
         appStorage.set(toUserKey(key), value)
     }
