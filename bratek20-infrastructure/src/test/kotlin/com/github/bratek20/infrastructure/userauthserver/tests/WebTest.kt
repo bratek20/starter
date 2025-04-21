@@ -11,47 +11,42 @@ import com.github.bratek20.infrastructure.httpclient.context.HttpClientImpl
 import com.github.bratek20.infrastructure.httpclient.fixtures.httpClientConfig
 import com.github.bratek20.infrastructure.httpserver.api.WebServerModule
 import com.github.bratek20.infrastructure.httpserver.fixtures.runTestWebApp
-import com.github.bratek20.infrastructure.sessiondata.SessionDataStorage
+import com.github.bratek20.infrastructure.sessiondata.api.SessionDataStorage
 import com.github.bratek20.infrastructure.sessiondata.context.SessionDataConfig
 import com.github.bratek20.infrastructure.userauthserver.api.UserAuthServerApi
 import com.github.bratek20.infrastructure.userauthserver.api.UserId
 import com.github.bratek20.infrastructure.userauthserver.api.UserSession
+import com.github.bratek20.infrastructure.userauthserver.context.SessionComponent
 import com.github.bratek20.infrastructure.userauthserver.context.UserAuthServerWebClient
 import com.github.bratek20.infrastructure.userauthserver.context.UserAuthServerWebServer
 import com.github.bratek20.infrastructure.userauthserver.fixtures.assertUserId
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.springframework.context.annotation.Scope
-import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.context.WebApplicationContext
-import org.springframework.web.context.annotation.SessionScope
-import java.lang.annotation.ElementType
-import java.lang.annotation.RetentionPolicy
 
-
-@Target(AnnotationTarget.CLASS)
-@Retention(AnnotationRetention.RUNTIME)
-@Component
-@Scope(WebApplicationContext.SCOPE_SESSION)
-annotation class SessionComponent
 
 class UserAuthServerWebTest {
     class UserData(
         var value: Int = 0
     )
 
+    interface SomeUserModuleApi {
+        fun getUserId(): UserId
+        fun increaseValue(): Int
+        fun increaseValueInSession(): Int
+    }
+
     @SessionComponent
-    class SomeUserModuleLogic(
+    class SomeUserModuleApiLogic(
         private val userSession: UserSession,
         private val storage: SessionDataStorage
-    ) {
-        fun getUserId(): UserId {
+    ): SomeUserModuleApi {
+        override fun getUserId(): UserId {
             return userSession.getUserId()
         }
 
-        fun increaseValue(): Int {
+        override fun increaseValue(): Int {
             val dataKey = ObjectDataKey<UserData>("userData", UserData::class)
             val userData = storage.find(dataKey) ?: UserData()
             userData.value += 1
@@ -60,7 +55,7 @@ class UserAuthServerWebTest {
         }
 
         private var value: Int = 0
-        fun increaseValueInSession(): Int {
+        override fun increaseValueInSession(): Int {
             value += 1
             return value
         }
@@ -68,12 +63,12 @@ class UserAuthServerWebTest {
 
     @RestController
     class SomeUserModuleController(
-        private val logic: SomeUserModuleLogic,
+        private val api: SomeUserModuleApi,
         private val userSession: UserSession
     ) {
         @PostMapping("/getUserId")
         fun getUserId(): UserId {
-            return logic.getUserId()
+            return api.getUserId()
         }
 
         @PostMapping("/getUserIdFromSession")
@@ -83,12 +78,12 @@ class UserAuthServerWebTest {
 
         @PostMapping("/increaseValue")
         fun increaseValue(): Int {
-            return logic.increaseValue()
+            return api.increaseValue()
         }
 
         @PostMapping("/increaseValueInSession")
         fun increaseValueInSession(): Int {
-            return logic.increaseValueInSession()
+            return api.increaseValueInSession()
         }
     }
 
@@ -127,7 +122,7 @@ class UserAuthServerWebTest {
 
         override fun getConfigs(): List<Class<*>> {
             return listOf(
-                SomeUserModuleLogic::class.java
+                SomeUserModuleApiLogic::class.java
             )
         }
 
@@ -192,6 +187,8 @@ class UserAuthServerWebTest {
         //session data
         val c1IncSession = c.someUserModuleWebClient.increaseValueInSession()
         assertThat(c1IncSession).isEqualTo(1)
+        val c1IncSession2 = c.someUserModuleWebClient.increaseValueInSession()
+        assertThat(c1IncSession2).isEqualTo(2)
 
         val c2IncSession = c2.someUserModuleWebClient.increaseValueInSession()
         assertThat(c2IncSession).isEqualTo(1)

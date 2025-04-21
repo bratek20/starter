@@ -3,9 +3,8 @@ package com.github.bratek20.infrastructure.sessiondata.impl
 import com.github.bratek20.architecture.data.api.DataKey
 import com.github.bratek20.architecture.data.api.DataStorage
 import com.github.bratek20.architecture.data.api.MapDataKey
-import com.github.bratek20.infrastructure.sessiondata.SessionDataStorage
+import com.github.bratek20.infrastructure.sessiondata.api.SessionDataStorage
 import com.github.bratek20.infrastructure.userauthserver.api.UserSession
-import org.springframework.stereotype.Component
 
 class SessionDataStorageLogic(
     private val appStorage: DataStorage,

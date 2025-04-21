@@ -2,6 +2,7 @@ package com.github.bratek20.infrastructure.userauthserver.impl
 
 import com.github.bratek20.architecture.data.api.DataStorage
 import com.github.bratek20.infrastructure.userauthserver.api.*
+import com.github.bratek20.infrastructure.userauthserver.context.SessionComponent
 import org.springframework.stereotype.Component
 import org.springframework.web.context.annotation.SessionScope
 import javax.servlet.http.HttpSession
@@ -46,7 +47,6 @@ class UserAuthServerApiLogic(
     }
 }
 
-//@Component
 class UserSessionLogic(
     private val session: HttpSession
 ): UserSession {
