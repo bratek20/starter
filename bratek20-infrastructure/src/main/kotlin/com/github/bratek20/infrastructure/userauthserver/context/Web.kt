@@ -28,7 +28,7 @@ class UserAuthServerWebClient(
 @Configuration
 class UserSessionConfig {
     @Bean
-    @SessionScope
+//    @SessionScope
     fun userSession(session: HttpSession): UserSession {
         return UserSessionLogic(session)
     }
@@ -47,7 +47,8 @@ class UserAuthServerWebServer: WebServerModule {
 
     override fun getConfigs(): List<Class<*>> {
         return listOf(
-            UserSessionConfig::class.java,
+            //UserSessionConfig::class.java,
+            UserSessionLogic::class.java,
         )
     }
 }

@@ -7,7 +7,6 @@ import com.github.bratek20.infrastructure.sessiondata.SessionDataStorage
 import com.github.bratek20.infrastructure.userauthserver.api.UserSession
 import org.springframework.stereotype.Component
 
-@Component
 class SessionDataStorageLogic(
     private val appStorage: DataStorage,
     private val userSession: UserSession

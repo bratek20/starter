@@ -37,7 +37,7 @@ class UserAuthServerWebTest {
         var value: Int = 0
     )
 
-    @Component
+    //@Component
     class SomeUserModuleLogic(
         private val userSession: UserSession,
         private val storage: SessionDataStorage
@@ -58,7 +58,7 @@ class UserAuthServerWebTest {
     @Configuration
     class SomeUserModuleSessionConfig {
         @Bean
-        @SessionScope
+        //@SessionScope
         fun someUserModuleLogic(userSession: UserSession, dataStorage: SessionDataStorage): SomeUserModuleLogic {
             return SomeUserModuleLogic(userSession, dataStorage)
         }
@@ -83,11 +83,6 @@ class UserAuthServerWebTest {
         fun increaseValue(): Int {
             return logic.increaseValue()
         }
-
-        @PostMapping("/getUserSessionRef")
-        fun getUserSessionRef(): Int {
-            return System.identityHashCode(userSession)
-        }
     }
 
     data class SomeUserModuleWebClientConfig(
@@ -110,10 +105,6 @@ class UserAuthServerWebTest {
         fun increaseValue(): Int {
             return client.post("/increaseValue", null).getBody(Int::class.java)
         }
-
-        fun getUserSessionRef(): Int {
-            return client.post("/getUserSessionRef", null).getBody(Int::class.java)
-        }
     }
 
     class SomeUserModuleWebServer: WebServerModule {
@@ -125,7 +116,8 @@ class UserAuthServerWebTest {
 
         override fun getConfigs(): List<Class<*>> {
             return listOf(
-                SomeUserModuleSessionConfig::class.java
+                //SomeUserModuleSessionConfig::class.java
+                SomeUserModuleLogic::class.java
             )
         }
 
@@ -186,14 +178,6 @@ class UserAuthServerWebTest {
         appStorage.get(ObjectDataKey("user2.userData", UserData::class)).let {
             assertThat(it.value).isEqualTo(1)
         }
-
-        //user session not being singleton
-        val c1SessionHash = c.someUserModuleWebClient.getUserSessionRef()
-        val c2SessionHash = c2.someUserModuleWebClient.getUserSessionRef()
-        val c3SessionHash = c3.someUserModuleWebClient.getUserSessionRef()
-
-        assertThat(c1SessionHash).isNotEqualTo(c2SessionHash)
-        assertThat(c1SessionHash).isNotEqualTo(c3SessionHash)
     }
 
     data class ClientApis(

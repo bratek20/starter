@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Primary
 import org.springframework.web.context.annotation.SessionScope
 
 @Configuration
-@ComponentScan("com.github.bratek20.infrastructure.sessiondata.impl")
 class SessionDataConfig {
     @Bean
     @Primary
@@ -22,6 +21,17 @@ class SessionDataConfig {
     ): DataStorage {
         return DataStorageLogic(
             integration
+        )
+    }
+
+    @Bean
+    fun sessionDataStorage(
+        appStorage: DataStorage,
+        userSession: UserSession
+    ): SessionDataStorage {
+        return SessionDataStorageLogic(
+            appStorage,
+            userSession
         )
     }
 }

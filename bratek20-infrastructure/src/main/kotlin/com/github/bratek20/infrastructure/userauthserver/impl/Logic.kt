@@ -46,7 +46,7 @@ class UserAuthServerApiLogic(
     }
 }
 
-@Component
+//@Component
 class UserSessionLogic(
     private val session: HttpSession
 ): UserSession {
