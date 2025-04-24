@@ -30,8 +30,8 @@ class SomeModuleContextModule: ContextModule {
 }
 
 interface C
-class WithBImplA(val withC: WithCImplB): A
-class WithCImplB(val c: C): B
+class WithCImplA(val withC: WithCDependencyImplB): A
+class WithCDependencyImplB(val c: C): B
 
 class WithValue(val value: String)
 
@@ -175,12 +175,12 @@ abstract class ContextApiTest {
     fun `should throw for impl showing correct missing dependency`() {
         assertThatThrownBy {
             createInstance()
-                .setImpl(A::class.java, WithBImplA::class.java)
-                .setImpl(B::class.java, WithCImplB::class.java)
+                .setImpl(A::class.java, WithCImplA::class.java)
+                .setImpl(B::class.java, WithCDependencyImplB::class.java)
                 .build()
             }
             .isInstanceOf(DependentClassNotFoundInContextException::class.java)
-            .hasMessage("Class C needed by class WithCImplB not found")
+            .hasMessage("Class C needed by class WithCDependencyImplB not found")
     }
 
     @Test
