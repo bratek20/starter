@@ -61,6 +61,6 @@ class PropertiesMocks(
     override fun apply(builder: ContextBuilder) {
         val mock = PropertiesMock()
         initMockOps?.let { mock.apply(it) }
-        builder.setImplObject(PropertiesMock::class.java, mock)
+        builder.setImplObject(Properties::class.java, mock)
     }
 }
