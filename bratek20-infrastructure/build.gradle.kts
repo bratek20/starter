@@ -3,7 +3,7 @@ plugins {
     kotlin("plugin.spring") version "1.9.23" // this plugin is needed to allow proper proxing of kotlin classes
 }
 
-version = "1.0.53"
+version = "1.0.54"
 
 dependencies {
     api(project(":bratek20-architecture"))
