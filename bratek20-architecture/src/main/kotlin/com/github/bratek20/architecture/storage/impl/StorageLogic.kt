@@ -60,8 +60,9 @@ abstract class StorageLogic {
             )
     }
 
-    fun <Id : Any, E : Any> addElement(key: MapTypedKey<Id, E>, id: Id, value: E): Boolean {
+    fun <Id : Any, E : Any> addElement(key: MapTypedKey<Id, E>, value: E): Boolean {
         val list = get(key).toMutableList()
+        val id = key.idProvider(value)
         if (list.any { key.idProvider(it) == id }) {
             return false
         }

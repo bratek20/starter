@@ -1,5 +1,6 @@
 plugins {
     id("com.github.bratek20.kotlin-library-conventions")
+    kotlin("plugin.spring") version "1.9.23" // this plugin is needed to allow proper proxing of kotlin classes
 }
 
 version = "1.0.52"
@@ -13,9 +14,11 @@ dependencies {
 
     //http client
     implementation(libs.spring.web)
-
-    testImplementation(libs.wiremock)
+    //servlet-api = { group = "javax.servlet", name = "javax.servlet-api", version = "4.0.1" }
+    implementation("javax.servlet:javax.servlet-api:4.0.1") //TODO check if compatible version and move to version catalog
 
     //http server
     testFixturesImplementation(project(":bratek20-spring"))
+
+    implementation(libs.spring.context)
 }

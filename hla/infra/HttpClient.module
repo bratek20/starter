@@ -1,19 +1,46 @@
+Enums
+    HttpMethod
+        POST
+
 ExternalTypes
     HttpResponse // TODO-REF hla missing generic types support
         //getStatusCode(): Int
         //getBody<T>(type: Class<T>): T
+
 ValueObjects
     HttpClientAuth
         username: string
         password: string
     HttpClientConfig
-       baseUrl: string
+       baseUrl: string (example: "http://localhost:8080")
        auth: HttpClientAuth? = empty
+       persistSession: bool = false
 
 Interfaces
     HttpClient
-        get(path: String): HttpResponse
+        //body can be null to send a request without a body
         post(path: String, body: any?): HttpResponse
+            throws
+                HttpClientException
 
     HttpClientFactory
         create(config: HttpClientConfig): HttpClient
+
+    //incoming
+    HttpRequester
+        HttpHeader
+            key: string
+            value: string
+        HttpRequest
+            url: string
+            method: HttpMethod
+            content: string?
+            contentType: string
+            headers: HttpHeader[]
+        SendResponse
+            statusCode: int
+            body: string
+            headers: HttpHeader[]
+        send(request: HttpRequest): SendResponse
+            throws
+                HttpRequesterException

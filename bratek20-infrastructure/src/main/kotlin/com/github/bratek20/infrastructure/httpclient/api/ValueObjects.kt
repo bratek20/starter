@@ -30,6 +30,7 @@ data class HttpClientAuth(
 data class HttpClientConfig(
     private val baseUrl: String,
     private val auth: HttpClientAuth? = null,
+    private val persistSession: Boolean = false,
 ) {
     fun getBaseUrl(): String {
         return this.baseUrl
@@ -39,14 +40,123 @@ data class HttpClientConfig(
         return this.auth
     }
 
+    fun getPersistSession(): Boolean {
+        return this.persistSession
+    }
+
     companion object {
         fun create(
             baseUrl: String,
             auth: HttpClientAuth? = null,
+            persistSession: Boolean = false,
         ): HttpClientConfig {
             return HttpClientConfig(
                 baseUrl = baseUrl,
                 auth = auth,
+                persistSession = persistSession,
+            )
+        }
+    }
+}
+
+data class HttpHeader(
+    private val key: String,
+    private val value: String,
+) {
+    fun getKey(): String {
+        return this.key
+    }
+
+    fun getValue(): String {
+        return this.value
+    }
+
+    companion object {
+        fun create(
+            key: String,
+            value: String,
+        ): HttpHeader {
+            return HttpHeader(
+                key = key,
+                value = value,
+            )
+        }
+    }
+}
+
+data class HttpRequest(
+    private val url: String,
+    private val method: String,
+    private val content: String?,
+    private val contentType: String,
+    private val headers: List<HttpHeader>,
+) {
+    fun getUrl(): String {
+        return this.url
+    }
+
+    fun getMethod(): HttpMethod {
+        return HttpMethod.valueOf(this.method)
+    }
+
+    fun getContent(): String? {
+        return this.content
+    }
+
+    fun getContentType(): String {
+        return this.contentType
+    }
+
+    fun getHeaders(): List<HttpHeader> {
+        return this.headers
+    }
+
+    companion object {
+        fun create(
+            url: String,
+            method: HttpMethod,
+            content: String?,
+            contentType: String,
+            headers: List<HttpHeader>,
+        ): HttpRequest {
+            return HttpRequest(
+                url = url,
+                method = method.name,
+                content = content,
+                contentType = contentType,
+                headers = headers,
+            )
+        }
+    }
+}
+
+data class SendResponse(
+    private val statusCode: Int,
+    private val body: String,
+    private val headers: List<HttpHeader>,
+) {
+    fun getStatusCode(): Int {
+        return this.statusCode
+    }
+
+    fun getBody(): String {
+        return this.body
+    }
+
+    fun getHeaders(): List<HttpHeader> {
+        return this.headers
+    }
+
+    companion object {
+        fun create(
+            statusCode: Int,
+            body: String,
+            headers: List<HttpHeader>,
+        ): SendResponse {
+            return SendResponse(
+                statusCode = statusCode,
+                body = body,
+                headers = headers,
             )
         }
     }

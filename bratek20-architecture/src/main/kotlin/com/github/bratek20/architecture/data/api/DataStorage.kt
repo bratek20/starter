@@ -6,7 +6,7 @@ interface DataStorage {
     fun <T: Any> get(key: DataKey<T>): T
     fun <T: Any> delete(key: DataKey<T>)
 
-    fun <Id: Any, E: Any> addElement(key: MapDataKey<Id, E>, id: Id, value: E): Boolean
+    fun <Id: Any, E: Any> addElement(key: MapDataKey<Id, E>, value: E): Boolean
     fun <Id: Any, E: Any> findElement(key: MapDataKey<Id, E>, id: Id): E?
     fun <Id: Any, E: Any> getElement(key: MapDataKey<Id, E>, id: Id): E
 }

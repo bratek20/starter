@@ -1,5 +1,6 @@
 plugins {
     id("com.github.bratek20.kotlin-library-conventions")
+    kotlin("plugin.spring") version "1.9.23"
 }
 
 version = "1.0.50"
@@ -17,7 +18,7 @@ dependencies {
     testImplementation(libs.rest.assured)
 
     //old, might be useful in the future
-    //testFixturesImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
     //
     //api("org.springframework.boot:spring-boot-starter-data-jdbc")
     //testFixturesImplementation("org.springframework.boot:spring-boot-starter-data-jdbc")

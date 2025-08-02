@@ -6,11 +6,13 @@ import com.github.bratek20.architecture.context.api.Context
 import com.github.bratek20.architecture.context.api.ContextBuilder
 import com.github.bratek20.architecture.context.api.DependentClassNotFoundInContextException
 import com.github.bratek20.architecture.context.impl.AbstractContextBuilder
+import org.springframework.beans.factory.support.GenericBeanDefinition
 import java.util.*
+import java.util.function.Supplier
 
 class SpringContextBuilder: AbstractContextBuilder() {
-    private val classes = mutableListOf<Class<*>>()
-    private val objects = mutableListOf<Any>()
+    val classes = mutableListOf<Class<*>>()
+    val objects = mutableListOf<Any>()
 
     override fun <T> setClass(type: Class<T>): SpringContextBuilder {
         classes.add(type)

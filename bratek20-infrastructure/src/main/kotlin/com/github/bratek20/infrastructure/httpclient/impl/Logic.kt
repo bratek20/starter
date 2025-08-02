@@ -6,66 +6,106 @@ import com.github.bratek20.architecture.serialization.api.Serializer
 import com.github.bratek20.architecture.structs.api.Struct
 import com.github.bratek20.architecture.serialization.context.SerializationFactory
 import com.github.bratek20.infrastructure.httpclient.api.*
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
+import com.github.bratek20.infrastructure.httpclient.api.HttpRequest
+import org.springframework.http.*
 import org.springframework.http.HttpMethod
-import org.springframework.http.ResponseEntity
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 import java.util.*
 
-class HttpClientFactoryLogic : HttpClientFactory {
+class HttpClientFactoryLogic(
+    private val requester: HttpRequester
+) : HttpClientFactory {
+    private val cache = mutableMapOf<HttpClientConfig, HttpClient>()
+
     override fun create(config: HttpClientConfig): HttpClient {
-        return HttpClientLogic(config)
+        return cache.getOrPut(config) {
+            HttpClientLogic(requester, config)
+        }
+    }
+}
+
+class HttpRequesterLogic : HttpRequester {
+    private val restTemplate: RestTemplate = RestTemplate()
+
+    override fun send(request: HttpRequest): SendResponse {
+        val entity = HttpEntity<String>(request.getContent(), HttpHeaders().apply {
+            request.getHeaders().forEach { h -> this[h.getKey()] = h.getValue() }
+            this.contentType = MediaType.APPLICATION_JSON
+        })
+        val responseEntity: ResponseEntity<String> = restTemplate.exchange(
+            request.getUrl(),
+            mapMethod(request.getMethod()),
+            entity,
+            String::class.java
+        )
+
+
+        val headers = responseEntity.headers.map { HttpHeader.create(it.key, it.value.joinToString()) }
+        return SendResponse.create(
+            responseEntity.statusCode.value(),
+            responseEntity.body!!,
+            headers
+        )
+    }
+
+    private fun mapMethod(method: com.github.bratek20.infrastructure.httpclient.api.HttpMethod): HttpMethod {
+        return when (method) {
+            com.github.bratek20.infrastructure.httpclient.api.HttpMethod.POST -> HttpMethod.POST
+        }
     }
 }
 
 class HttpClientLogic(
+    private val requester: HttpRequester,
     private val config: HttpClientConfig
 ) : HttpClient {
-    private val restTemplate: RestTemplate = RestTemplate()
-
-    override fun get(path: String): HttpResponse {
-        val headers = HttpHeaders().apply {
-            addAuthHeaderIfPresent(this)
-        }
-        val entity = HttpEntity<String>(headers)
-        val responseEntity: ResponseEntity<String> = restTemplate.exchange(
-            getFullUrl(path),
-            HttpMethod.GET,
-            entity,
-            String::class.java
-        )
-
-        return HttpResponseLogic(responseEntity.statusCode.value(), responseEntity.body)
-    }
+    private var requestNumber = 0
+    private var sessionCookie: String? = null
 
     override fun post(path: String, body: Any?): HttpResponse {
-        val headers = HttpHeaders().apply {
-            addAuthHeaderIfPresent(this)
-        }
-        val entity = HttpEntity(body?.let { getHttpBody(body) }, headers)
-        val responseEntity: ResponseEntity<String> = restTemplate.exchange(
-            getFullUrl(path),
-            HttpMethod.POST,
-            entity,
-            String::class.java
+        val sendResponse = requester.send(
+            HttpRequest.create(
+                getFullUrl(path),
+                com.github.bratek20.infrastructure.httpclient.api.HttpMethod.POST,
+                body?.let { SERIALIZER.serialize(it).getValue() },
+                "application/json",
+                getHeaders()
+            )
         )
 
-        extractPassedException(responseEntity)?.let {
+        extractPassedException(sendResponse)?.let {
             val type = Class.forName(it.`package` + "." + it.type)
             throw type.getConstructor(String::class.java).newInstance(it.message) as Throwable
         }
 
-        return HttpResponseLogic(responseEntity.statusCode.value(), responseEntity.body)
+        if (config.getPersistSession() && requestNumber == 0) {
+            sessionCookie = sendResponse.getHeaders()
+                .firstOrNull { it.getKey() == "Set-Cookie" }
+                ?.getValue()
+
+            if(sessionCookie == null) {
+                throw HttpClientException("Session can not be persisted! Set-Cookie not found in response header for first request")
+            }
+        }
+        requestNumber++
+        return HttpResponseLogic(sendResponse)
     }
 
-    private fun addAuthHeaderIfPresent(headers: HttpHeaders) {
+    private fun getHeaders(): List<HttpHeader> {
+        val result = mutableListOf<HttpHeader>()
+
         config.getAuth()?.let {
             val auth = "${it.getUsername()}:${it.getPassword()}"
             val encodedAuth = Base64.getEncoder().encodeToString(auth.toByteArray())
-            headers["Authorization"] = "Basic $encodedAuth"
+            result.add(HttpHeader.create("Authorization", "Basic $encodedAuth"))
         }
+
+        if (config.getPersistSession() && requestNumber > 0) {
+            result.add(HttpHeader.create("Cookie", sessionCookie!!))
+        }
+
+        return result
     }
 
     data class PassedException(
@@ -78,19 +118,15 @@ class HttpClientLogic(
         val passedException: PassedException
     )
 
-    private fun extractPassedException(responseEntity: ResponseEntity<String>): PassedException? {
+    private fun extractPassedException(sendResponse: SendResponse): PassedException? {
         return try {
             SERIALIZER.deserialize(
-                SerializedValue.create(responseEntity.body!!, SerializationType.JSON),
+                SerializedValue.create(sendResponse.getBody(), SerializationType.JSON),
                 PassedExceptionResponse::class.java
             ).passedException
         } catch (e: Exception) {
             null
         }
-    }
-
-    private fun getHttpBody(body: Any): Struct {
-        return SERIALIZER.asStruct(body)
     }
 
     private fun getFullUrl(path: String): String {
@@ -103,15 +139,14 @@ class HttpClientLogic(
 }
 
 class HttpResponseLogic(
-    private val statusCode: Int,
-    private val body: String?,
+    private val sendResponse: SendResponse
 ) : HttpResponse {
     override fun getStatusCode(): Int {
-        return statusCode
+        return sendResponse.getStatusCode()
     }
 
     override fun <T> getBody(clazz: Class<T>): T {
-        return body!!.let {
+        return sendResponse.getBody().let {
             SERIALIZER.deserialize(
                 SerializedValue.create(it, SerializationType.JSON),
                 clazz

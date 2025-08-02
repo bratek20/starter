@@ -1,0 +1,32 @@
+ValueObjects
+    AuthId: string
+    UserId: int
+
+Data
+    UserMapping
+        authId: AuthId
+        userId: UserId
+    "UsersMapping" -> UserMapping[]
+
+Interfaces
+    UserAuthServerApi
+        createUserAndLogin(): UserMapping
+    
+        login(authId: AuthId): UserId
+            throws
+                UserMappingNotFoundException
+
+    UserSession
+        getUserId(): UserId
+            throws
+                NotLoggedInException
+
+    AuthIdGenerator
+        generate(): AuthId
+
+//Commented as some custom code was added to generated code
+//Web
+    //Http
+        //ExposedInterfaces
+            //UserAuthServerApi
+        //urlPathPrefix = "/b20"
