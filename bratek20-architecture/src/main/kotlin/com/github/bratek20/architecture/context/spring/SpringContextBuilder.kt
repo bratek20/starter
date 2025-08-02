@@ -58,7 +58,7 @@ class SpringContextBuilder: AbstractContextBuilder() {
         }
         catch (ex: UnsatisfiedDependencyException) {
             val msg = ex.message ?: "";
-            val beanWithError = msg.substringAfter("Error creating bean with name '").substringBefore("'")
+            val beanWithError = msg.substringAfterLast("Error creating bean with name '").substringBefore("'")
             val classWithError = beanWithError[0].uppercase() + beanWithError.substring(1)
 
             val fullDependentClassName = msg.substringAfter("No qualifying bean of type '").substringBefore("'")

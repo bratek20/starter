@@ -51,8 +51,16 @@ class PropertiesMock : Properties {
     }
 }
 
-class PropertiesMocks : ContextModule {
+/**
+ * @param initMockOps Lambda to customize the [PropertiesMock] before registration,
+ * useful if some ContextModule is using properties to set impl
+ */
+class PropertiesMocks(
+    private val initMockOps: (PropertiesMock.() -> Unit)? = null
+): ContextModule {
     override fun apply(builder: ContextBuilder) {
-        builder.setImpl(Properties::class.java, PropertiesMock::class.java)
+        val mock = PropertiesMock()
+        initMockOps?.let { mock.apply(it) }
+        builder.setImplObject(Properties::class.java, mock)
     }
 }

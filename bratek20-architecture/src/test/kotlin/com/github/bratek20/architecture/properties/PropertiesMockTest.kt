@@ -1,9 +1,11 @@
 package com.github.bratek20.architecture.properties
 
+import com.github.bratek20.architecture.context.guice.GuiceContextBuilder
 import com.github.bratek20.architecture.context.someContextBuilder
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.architecture.properties.api.ListPropertyKey
 import com.github.bratek20.architecture.properties.api.ObjectPropertyKey
+import com.github.bratek20.architecture.properties.api.Properties
 import com.github.bratek20.architecture.structs.fixtures.assertStructEquals
 import com.github.bratek20.architecture.structs.fixtures.assertStructListEquals
 import org.assertj.core.api.Assertions.assertThat
@@ -17,19 +19,23 @@ class PropertiesMockTest {
         val LIST_KEY = ListPropertyKey("key2", SomeClass::class)
     }
 
+    private lateinit var properties: Properties
     private lateinit var propertiesMock: PropertiesMock
 
     @BeforeEach
     fun setup() {
-        propertiesMock = someContextBuilder()
+        val c = someContextBuilder()
             .withModules(PropertiesMocks())
-            .buildAndGet(PropertiesMock::class.java)
+            .build()
+
+        properties = c.get(Properties::class.java)
+        propertiesMock = c.get(PropertiesMock::class.java)
     }
 
     @Test
     fun `should work for object keys`() {
         assertApiExceptionThrown(
-            { propertiesMock.get(OBJECT_KEY) },
+            { properties.get(OBJECT_KEY) },
             {
                 type = ObjectPropertyNotSetException::class
                 message = "No value was set in mock for object key `key1`"
@@ -38,29 +44,29 @@ class PropertiesMockTest {
 
         
         propertiesMock.set(OBJECT_KEY, SomeClass("value"))
-        val value = propertiesMock.get(OBJECT_KEY)
+        val value = properties.get(OBJECT_KEY)
         assertThat(value.value).isEqualTo("value")
 
         // re-set to different value
         propertiesMock.set(OBJECT_KEY, SomeClass("value2"))
-        val value2 = propertiesMock.get(OBJECT_KEY)
+        val value2 = properties.get(OBJECT_KEY)
         assertThat(value2.value).isEqualTo("value2")
     }
 
     @Test
     fun `should work for different keys instances`() {
         propertiesMock.set(ObjectPropertyKey("key1", SomeClass::class), SomeClass("value"))
-        val value = propertiesMock.get(ObjectPropertyKey("key1", SomeClass::class))
+        val value = properties.get(ObjectPropertyKey("key1", SomeClass::class))
         assertThat(value.value).isEqualTo("value")
 
         propertiesMock.set(ListPropertyKey("key2", SomeClass::class), listOf(SomeClass("y")))
-        val value2 = propertiesMock.get(ListPropertyKey("key2", SomeClass::class))
+        val value2 = properties.get(ListPropertyKey("key2", SomeClass::class))
         assertThat(value2).hasSize(1)
     }
 
     @Test
     fun `should work for list keys`() {
-        assertThat(propertiesMock.get(LIST_KEY)).isEmpty()
+        assertThat(properties.get(LIST_KEY)).isEmpty()
     }
 
     @Test
@@ -68,7 +74,7 @@ class PropertiesMockTest {
         propertiesMock.set(OBJECT_KEY, SomeClass("x"))
         propertiesMock.set(LIST_KEY, listOf(SomeClass("y")))
 
-        val allProperties = propertiesMock.getAll()
+        val allProperties = properties.getAll()
 
         assertThat(allProperties).hasSize(2)
 

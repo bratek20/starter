@@ -3,6 +3,7 @@ package com.github.bratek20.architecture.context.api
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class X
@@ -28,6 +29,10 @@ class SomeModuleContextModule: ContextModule {
         builder.setClass(SomeClass::class.java)
     }
 }
+
+interface C
+class WithCImplA(val withC: WithCDependencyImplB): A
+class WithCDependencyImplB(val c: C): B
 
 class WithValue(val value: String)
 
@@ -167,6 +172,8 @@ abstract class ContextApiTest {
         .hasMessage("Class X needed by class WithXClass not found")
     }
 
+
+
     @Test
     fun `should use same instance if class implements more than one interface`() {
         val c = createInstance()
@@ -189,5 +196,20 @@ abstract class ContextApiTest {
             .get(WithXClassSet::class.java)
 
         assertThat(obj.x).isEmpty()
+    }
+
+    @Nested
+    inner class TransitiveException {
+        @Test
+        fun `should throw for impl showing correct missing dependency`() {
+            assertThatThrownBy {
+                createInstance()
+                    .setImpl(A::class.java, WithCImplA::class.java)
+                    .setImpl(B::class.java, WithCDependencyImplB::class.java)
+                    .build()
+            }
+                .isInstanceOf(DependentClassNotFoundInContextException::class.java)
+                .hasMessage("Class C needed by class WithCDependencyImplB not found")
+        }
     }
 }

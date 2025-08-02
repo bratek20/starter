@@ -30,7 +30,7 @@ To publish new version of architecture
 1. Open console in `bash` folder
 2. Change `version` in `bratek20-architecture/build.gradle.kts`
 3. Set the same version in `version-catalog/build.gradle.kts` in variable `b20ArchVersion`
-4. Run `./arch/publish.sh` script to publish artifact to Github Packages and TSG repos
+4. Run `./arch/publish.sh` script (or `Publish arch` configuration) to publish artifact to Github Packages and TSG repos
 5. Run `./versionCatalogPublish.sh` script to publish new version of version catalog to Github Packages and TSG repos
 6. Use new `catalogVersion` from `version-catalog/build.gradle.kts` (it was updated automatically) in other projects to use published code
 7. Remember to commit and push changes from build.gradle.kts files
