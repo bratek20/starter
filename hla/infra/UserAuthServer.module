@@ -30,3 +30,7 @@ Interfaces
         //ExposedInterfaces
             //UserAuthServerApi
         //urlPathPrefix = "/b20"
+
+Fixtures
+    MockedInterfaces
+        UserAuthServerApi

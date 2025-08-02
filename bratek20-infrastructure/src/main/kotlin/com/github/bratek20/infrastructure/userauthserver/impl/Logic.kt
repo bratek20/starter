@@ -3,6 +3,7 @@ package com.github.bratek20.infrastructure.userauthserver.impl
 import com.github.bratek20.architecture.data.api.DataStorage
 import com.github.bratek20.infrastructure.userauthserver.api.*
 import com.github.bratek20.infrastructure.userauthserver.context.SessionComponent
+import com.github.bratek20.logs.api.Logger
 import org.springframework.stereotype.Component
 import org.springframework.web.context.annotation.SessionScope
 import javax.servlet.http.HttpSession
@@ -20,7 +21,8 @@ class AuthIdGeneratorLogic: AuthIdGenerator {
 
 class UserAuthServerApiLogic(
     private val authIdGenerator: AuthIdGenerator,
-    private val storage: DataStorage
+    private val storage: DataStorage,
+    private val logger: Logger
 ): UserAuthServerApi {
     init {
         if (storage.find(USERS_MAPPING_DATA_MAP_KEY) == null) {
@@ -37,12 +39,17 @@ class UserAuthServerApiLogic(
 
         storage.addElement(USERS_MAPPING_DATA_MAP_KEY, mapping)
 
+        logger.info("New user with id '${mapping.getUserId()}' created")
+
         return mapping
     }
 
     override fun login(authId: AuthId): UserId {
         val mapping = storage.findElement(USERS_MAPPING_DATA_MAP_KEY, authId)
             ?: throw UserMappingNotFoundException("User mapping not found for authId '$authId'")
+
+        logger.info("Existing user '${mapping.getUserId()}' logged in")
+
         return mapping.getUserId()
     }
 }

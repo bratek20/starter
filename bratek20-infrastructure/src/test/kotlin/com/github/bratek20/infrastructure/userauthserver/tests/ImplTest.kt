@@ -7,6 +7,8 @@ import com.github.bratek20.infrastructure.userauthserver.api.*
 import com.github.bratek20.infrastructure.userauthserver.context.UserAuthServerBaseImpl
 import com.github.bratek20.infrastructure.userauthserver.fixtures.assertUserId
 import com.github.bratek20.infrastructure.userauthserver.fixtures.assertUserMapping
+import com.github.bratek20.logs.LoggerMock
+import com.github.bratek20.logs.LogsMocks
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -22,28 +24,35 @@ class UserAuthServerImplTest {
     private lateinit var api: UserAuthServerApi
 
     private lateinit var authIdGeneratorMock: AuthIdGeneratorMock
+    private lateinit var loggerMock: LoggerMock
 
     @BeforeEach
     fun setup() {
         val c = someContextBuilder()
             .withModules(
                 DataInMemoryImpl(),
-                UserAuthServerBaseImpl()
+                UserAuthServerBaseImpl(),
+                LogsMocks()
             )
             .setImpl(AuthIdGenerator::class.java, AuthIdGeneratorMock::class.java)
             .build()
 
         api = c.get(UserAuthServerApi::class.java)
         authIdGeneratorMock = c.get(AuthIdGeneratorMock::class.java)
+        loggerMock = c.get(LoggerMock::class.java)
     }
 
     @Test
-    fun `should create new users`() {
+    fun `should create new users + log info`() {
         authIdGeneratorMock.nextAuthId = "abc"
         assertUserMapping(api.createUserAndLogin()) {
             authId = "abc"
             userId = 1
         }
+
+        loggerMock.assertInfos(
+            "New user with id '1' created",
+        )
 
         authIdGeneratorMock.nextAuthId = "def"
         assertUserMapping(api.createUserAndLogin()) {
@@ -53,10 +62,14 @@ class UserAuthServerImplTest {
     }
 
     @Test
-    fun `should login to existing user`() {
+    fun `should login to existing user + log info`() {
         val authId = api.createUserAndLogin().getAuthId()
 
         assertUserId(api.login(authId), 1)
+
+        loggerMock.assertContainsInfos(
+            "Existing user '1' logged in"
+        )
     }
 
     @Test
