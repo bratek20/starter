@@ -199,8 +199,8 @@ class DataTest {
                 }
             )
 
-            assertThat(storage.addElement(key, "y", SomeProperty("y"))).isTrue()
-            assertThat(storage.addElement(key, "y", SomeProperty("y"))).isFalse()
+            assertThat(storage.addElement(key, SomeProperty("y"))).isTrue()
+            assertThat(storage.addElement(key, SomeProperty("y"))).isFalse()
             assertThat(storage.get(key)).isEqualTo(listOf(SomeProperty("x"), SomeProperty("y")))
 
             assertThat(storage.findElement(key, "y")).isEqualTo(SomeProperty("y"))
