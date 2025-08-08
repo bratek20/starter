@@ -44,7 +44,7 @@ class HttpRequesterLogic : HttpRequester {
         val headers = responseEntity.headers.map { HttpHeader.create(it.key, it.value.joinToString()) }
         return SendResponse.create(
             responseEntity.statusCode.value(),
-            responseEntity.body!!,
+            responseEntity.body,
             headers
         )
     }
