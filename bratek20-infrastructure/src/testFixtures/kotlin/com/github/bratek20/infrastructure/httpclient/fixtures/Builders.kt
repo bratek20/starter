@@ -62,7 +62,7 @@ fun httpRequest(init: HttpRequestDef.() -> Unit = {}): HttpRequest {
 
 data class SendResponseDef(
     var statusCode: Int = 0,
-    var body: String = "someValue",
+    var body: String? = null,
     var headers: List<(HttpHeaderDef.() -> Unit)> = emptyList(),
 )
 fun sendResponse(init: SendResponseDef.() -> Unit = {}): SendResponse {

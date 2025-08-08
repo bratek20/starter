@@ -2,6 +2,7 @@ package com.github.bratek20.architecture.properties
 
 import com.github.bratek20.architecture.context.guice.GuiceContextBuilder
 import com.github.bratek20.architecture.context.someContextBuilder
+import com.github.bratek20.architecture.context.stableContextBuilder
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.architecture.properties.api.ListPropertyKey
 import com.github.bratek20.architecture.properties.api.ObjectPropertyKey
@@ -24,7 +25,7 @@ class PropertiesMockTest {
 
     @BeforeEach
     fun setup() {
-        val c = someContextBuilder()
+        val c = stableContextBuilder()
             .withModules(PropertiesMocks())
             .build()
 

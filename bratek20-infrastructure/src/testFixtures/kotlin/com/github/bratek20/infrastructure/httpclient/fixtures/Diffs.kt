@@ -118,6 +118,7 @@ fun diffHttpRequest(given: HttpRequest, expectedInit: ExpectedHttpRequest.() -> 
 
 data class ExpectedSendResponse(
     var statusCode: Int? = null,
+    var bodyEmpty: Boolean? = null,
     var body: String? = null,
     var headers: List<(ExpectedHttpHeader.() -> Unit)>? = null,
 )
@@ -129,8 +130,12 @@ fun diffSendResponse(given: SendResponse, expectedInit: ExpectedSendResponse.() 
         if (given.getStatusCode() != it) { result.add("${path}statusCode ${given.getStatusCode()} != ${it}") }
     }
 
+    expected.bodyEmpty?.let {
+        if ((given.getBody() == null) != it) { result.add("${path}body empty ${(given.getBody() == null)} != ${it}") }
+    }
+
     expected.body?.let {
-        if (given.getBody() != it) { result.add("${path}body ${given.getBody()} != ${it}") }
+        if (given.getBody()!! != it) { result.add("${path}body ${given.getBody()!!} != ${it}") }
     }
 
     expected.headers?.let {

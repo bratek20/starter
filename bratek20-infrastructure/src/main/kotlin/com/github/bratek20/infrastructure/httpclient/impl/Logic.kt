@@ -119,14 +119,14 @@ class HttpClientLogic(
     )
 
     private fun extractPassedException(sendResponse: SendResponse): PassedException? {
-        return try {
+        return sendResponse.getBody()?.let { try {
             SERIALIZER.deserialize(
-                SerializedValue.create(sendResponse.getBody(), SerializationType.JSON),
+                SerializedValue.create(it, SerializationType.JSON),
                 PassedExceptionResponse::class.java
             ).passedException
         } catch (e: Exception) {
             null
-        }
+        } }
     }
 
     private fun getFullUrl(path: String): String {
@@ -146,12 +146,12 @@ class HttpResponseLogic(
     }
 
     override fun <T> getBody(clazz: Class<T>): T {
-        return sendResponse.getBody().let {
+        return sendResponse.getBody()?.let {
             SERIALIZER.deserialize(
                 SerializedValue.create(it, SerializationType.JSON),
                 clazz
             )
-        }
+        } ?: throw HttpClientException("Response body is null")
     }
 
     companion object {

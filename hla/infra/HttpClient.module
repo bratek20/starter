@@ -39,7 +39,7 @@ Interfaces
             headers: HttpHeader[]
         SendResponse
             statusCode: int
-            body: string
+            body: string?
             headers: HttpHeader[]
         send(request: HttpRequest): SendResponse
             throws
