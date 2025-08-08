@@ -110,6 +110,27 @@ class HttpClientImplTest {
         }
     }
 
+    @Test
+    fun `should throw exception when reading null body`() {
+        val client = createClient()
+
+        requesterMock.response = {
+            body = null
+        }
+
+        val resp = client.post("/test", null)
+
+        assertApiExceptionThrown(
+            {
+                resp.getBody(Any::class.java)
+            },
+            {
+                type = HttpClientException::class
+                message = "Response body is null"
+            }
+        )
+    }
+
     val SOME_REQEUST = SomeRequest.create("request value")
 
     @Test
