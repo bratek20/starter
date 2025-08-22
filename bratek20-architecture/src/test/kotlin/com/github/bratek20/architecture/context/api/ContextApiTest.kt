@@ -214,7 +214,7 @@ abstract class ContextApiTest {
 
     @Nested
     inner class WithModuleScope {
-        inner class ModuleWithImplObject: ContextModule {
+        inner class ModuleWithXImplObject: ContextModule {
             override fun apply(builder: ContextBuilder) {
                 builder.setImplObject(X::class.java, X())
             }
@@ -224,8 +224,8 @@ abstract class ContextApiTest {
         fun `BUG-FIXED should not set impl object twice if module added twice`() {
             val c = createInstance()
                 .withModules(
-                    ModuleWithImplObject(),
-                    ModuleWithImplObject()
+                    ModuleWithXImplObject(),
+                    ModuleWithXImplObject()
                 )
                 .setClass(WithXClass::class.java)
                 .build()
