@@ -40,7 +40,7 @@ class InMemoryPropertiesSource(
     }
 }
 
-class InMemoryPropertiesSourceImpl(
+open class InMemoryPropertiesSourceImpl(
     private val name: String = "in-memory-properties-source"
 ): ContextModule {
     override fun apply(builder: ContextBuilder) {

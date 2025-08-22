@@ -1,8 +1,5 @@
 package com.github.bratek20.architecture.properties
 
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 import com.github.bratek20.architecture.context.someContextBuilder
 import com.github.bratek20.architecture.context.stableContextBuilder
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
@@ -14,12 +11,17 @@ import com.github.bratek20.architecture.properties.sources.inmemory.InMemoryProp
 import com.github.bratek20.architecture.serialization.api.SerializationType
 import com.github.bratek20.architecture.serialization.api.SerializedValue
 import com.github.bratek20.architecture.structs.api.Struct
-import com.github.bratek20.architecture.structs.api.StructList
 import com.github.bratek20.architecture.structs.fixtures.assertStructEquals
 import com.github.bratek20.architecture.structs.fixtures.assertStructListEquals
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Timeout
 import java.util.concurrent.TimeUnit
+
+class InMemoryPropertiesSource1Impl: InMemoryPropertiesSourceImpl("source1")
+class InMemoryPropertiesSource2Impl: InMemoryPropertiesSourceImpl("source2")
 
 class PropertiesTest {
     data class SomeProperty(val value: String)
@@ -38,8 +40,8 @@ class PropertiesTest {
             val c = someContextBuilder()
                 .withModules(
                     PropertiesImpl(),
-                    InMemoryPropertiesSourceImpl("source1"),
-                    InMemoryPropertiesSourceImpl("source2")
+                    InMemoryPropertiesSource1Impl(),
+                    InMemoryPropertiesSource2Impl()
                 )
                 .build()
 
