@@ -4,10 +4,10 @@ plugins {
 }
 
 //changed by script
-val catalogVersion = "1.0.108"
+val catalogVersion = "1.0.110"
 
 //changed manually
-val b20ArchVersion = "1.0.74"
+val b20ArchVersion = "1.0.76"
 val b20InfraVersion = "1.0.56"
 val b20SpringVersion = "1.0.50"
 val b20UtilsVersion = "1.0.50"

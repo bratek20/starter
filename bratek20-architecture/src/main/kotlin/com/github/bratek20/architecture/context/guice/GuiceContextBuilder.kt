@@ -91,6 +91,7 @@ class GuiceContextBuilder: AbstractContextBuilder() {
         modules.add(object: AbstractModule() {
             override fun configure() {
                 bind(interfaceType).toInstance(implementationObj)
+                bind(implementationObj.javaClass).toInstance(implementationObj)
             }
         })
         return this

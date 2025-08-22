@@ -23,6 +23,9 @@ class WithXClassSet(
     val x: Set<X>
 )
 
+interface SomeInterface
+class SomeInterfaceImpl: SomeInterface
+
 class SomeModuleContextModule: ContextModule {
     override fun apply(builder: ContextBuilder) {
         builder.setClass(SomeClass::class.java)
@@ -233,6 +236,21 @@ abstract class ContextApiTest {
             assertThatCode {
                 c.get(WithXClass::class.java)
             }.doesNotThrowAnyException()
+        }
+    }
+
+    @Nested
+    inner class ImplObjectScope {
+        @Test
+        fun `should support getting both interface and impl from context`() {
+            val c = createInstance()
+                .setImplObject(SomeInterface::class.java, SomeInterfaceImpl())
+                .build()
+
+            val someInterface = c.get(SomeInterface::class.java)
+            val someInterfaceImpl = c.get(SomeInterfaceImpl::class.java)
+
+            assertThat(someInterface).isSameAs(someInterfaceImpl)
         }
     }
 }
