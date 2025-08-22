@@ -1,7 +1,6 @@
 package com.github.bratek20.architecture.context.api
 
-import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -199,7 +198,7 @@ abstract class ContextApiTest {
     }
 
     @Nested
-    inner class TransitiveException {
+    inner class TransitiveExceptionScope {
         @Test
         fun `should throw for impl showing correct missing dependency`() {
             assertThatThrownBy {
@@ -210,6 +209,30 @@ abstract class ContextApiTest {
             }
                 .isInstanceOf(DependentClassNotFoundInContextException::class.java)
                 .hasMessage("Class C needed by class WithCDependencyImplB not found")
+        }
+    }
+
+    @Nested
+    inner class WithModuleScope {
+        inner class ModuleWithImplObject: ContextModule {
+            override fun apply(builder: ContextBuilder) {
+                builder.setImplObject(X::class.java, X())
+            }
+
+        }
+        @Test
+        fun `BUG-FIXED should not set impl object twice if module added twice`() {
+            val c = createInstance()
+                .withModules(
+                    ModuleWithImplObject(),
+                    ModuleWithImplObject()
+                )
+                .setClass(WithXClass::class.java)
+                .build()
+
+            assertThatCode {
+                c.get(WithXClass::class.java)
+            }.doesNotThrowAnyException()
         }
     }
 }
