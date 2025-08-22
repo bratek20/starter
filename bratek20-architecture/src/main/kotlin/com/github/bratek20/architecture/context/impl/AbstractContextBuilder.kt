@@ -5,7 +5,12 @@ import com.github.bratek20.architecture.context.api.ContextModule
 
 abstract class AbstractContextBuilder: ContextBuilder {
 
+    private val knownModules = mutableSetOf<Class<*>>()
     final override fun withModule(module: ContextModule): ContextBuilder {
+        if (module::class.java in knownModules) {
+            return this
+        }
+        knownModules.add(module::class.java)
         module.apply(this)
         return this
     }
