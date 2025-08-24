@@ -22,7 +22,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation(platform("org.testcontainers:testcontainers-bom:1.16.2"))
-    testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation("org.testcontainers:mongodb")
+    testImplementation(libs.testcontainers.junit.jupiter)
+    testImplementation("org.testcontainers:mongodb:${libs.versions.testcontainers.get()}")
 }
