@@ -1,12 +1,17 @@
 package com.github.bratek20.spring.webapp
 
+import com.github.bratek20.architecture.context.api.ClassNotFoundInContextException
 import com.github.bratek20.architecture.context.api.ContextBuilder
+import com.github.bratek20.architecture.context.api.DependentClassNotFoundInContextException
 import com.github.bratek20.architecture.exceptions.ApiException
+import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.infrastructure.httpserver.api.WebServerModule
 import com.github.bratek20.logs.context.SystemLogsImpl
 import io.restassured.RestAssured
+import org.assertj.core.api.Assertions.assertThatCode
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.jupiter.api.Test
+import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -31,6 +36,20 @@ class SpringWebAppTest {
             .`when`()["/health"]
             .then()
             .statusCode(200)
+    }
+
+    @Test
+    fun `should not have mongo by default`() {
+        val app = SpringWebApp.run(
+            useRandomPort = true
+        )
+
+        assertApiExceptionThrown(
+            { app.get(MongoTemplate::class.java) },
+            {
+                type = ClassNotFoundInContextException::class
+            }
+        )
     }
 
     @RestController

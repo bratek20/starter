@@ -7,6 +7,7 @@ version = "1.0.50"
 
 dependencies {
     api(project(":bratek20-infrastructure"))
+    testImplementation(testFixtures(project(":bratek20-architecture")))
 
     implementation(platform(libs.spring.boot.dependencies))
     implementation("org.springframework.boot:spring-boot-starter-web")
