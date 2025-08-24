@@ -10,6 +10,7 @@ import com.github.bratek20.logs.context.SystemLogsImpl
 import org.springframework.beans.factory.config.BeanDefinitionCustomizer
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.context.support.GenericApplicationContext
+import java.net.ServerSocket
 
 class SpringWebApp(
     private val modules: List<ContextModule>,
@@ -29,6 +30,7 @@ class SpringWebApp(
             .toTypedArray()
 
         val applicationContext = SpringContextBuilder()
+            .withArgs(args)
             .withModules(*modules.toTypedArray())
             .build() as SpringContext
 
@@ -52,11 +54,13 @@ class SpringWebApp(
     }
 
     private fun calculatePort(): Int {
-        return if (useRandomPort) drawPort() else port
+        return if (useRandomPort) drawFreePort() else port
     }
 
-    private fun drawPort(): Int {
-        return (1024..65535).random()
+    private fun drawFreePort(): Int {
+        ServerSocket(0).use { socket ->
+            return socket.localPort
+        }
     }
 
     companion object {

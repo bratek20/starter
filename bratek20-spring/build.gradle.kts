@@ -3,10 +3,11 @@ plugins {
     kotlin("plugin.spring") version "1.9.23"
 }
 
-version = "1.0.50"
+version = "1.0.52"
 
 dependencies {
     api(project(":bratek20-infrastructure"))
+    testImplementation(testFixtures(project(":bratek20-architecture")))
 
     implementation(platform(libs.spring.boot.dependencies))
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -17,9 +18,10 @@ dependencies {
     // web testing
     testImplementation(libs.rest.assured)
 
-    //old, might be useful in the future
+    //mongo
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    //
-    //api("org.springframework.boot:spring-boot-starter-data-jdbc")
-    //testFixturesImplementation("org.springframework.boot:spring-boot-starter-data-jdbc")
+    testImplementation(libs.testcontainers.junit.jupiter)
+    testImplementation("org.testcontainers:mongodb:${libs.versions.testcontainers.get()}")
 }
