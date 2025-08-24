@@ -2,13 +2,10 @@ package com.github.bratek20.spring.mongo
 
 import com.github.bratek20.architecture.data.DataManipulatorTest
 import com.github.bratek20.architecture.data.api.DataManipulator
-import com.github.bratek20.architecture.serialization.api.SerializationType
-import com.github.bratek20.architecture.serialization.api.SerializedValue
+import com.github.bratek20.logs.context.SystemLogsImpl
 import com.github.bratek20.spring.webapp.SpringWebApp
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.testcontainers.containers.MongoDBContainer
 import org.testcontainers.junit.jupiter.Container
@@ -28,8 +25,9 @@ class MongoDataManipulatorIntegrationTest: DataManipulatorTest() {
     @BeforeEach
     fun setup() {
         val app = SpringWebApp.run(
-            configs = listOf(
-                MongoConfig::class.java
+            modules = listOf(
+                SystemLogsImpl(),
+                DataMongoImpl()
             ),
             args = arrayOf(
                 "--spring.data.mongodb.uri=${mongo.replicaSetUrl}" // tell Spring where Mongo lives
@@ -42,7 +40,7 @@ class MongoDataManipulatorIntegrationTest: DataManipulatorTest() {
 
     @AfterEach
     fun clean() {
-        template.dropCollection("kv_store") // test isolation
+        template.dropCollection(MongoDataManipulator.COLLECTION_NAME)
     }
 
     override fun create(): DataManipulator {

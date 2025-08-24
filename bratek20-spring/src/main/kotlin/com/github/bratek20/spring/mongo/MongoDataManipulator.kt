@@ -18,7 +18,7 @@ class MongoDataManipulator(
 ) : DataManipulator {
 
     companion object {
-        private const val COLLECTION_NAME = "kv_store"
+        const val COLLECTION_NAME = "kv_store"
     }
 
     override fun findValue(keyName: String): SerializedValue? {

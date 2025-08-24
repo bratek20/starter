@@ -7,12 +7,20 @@ import com.github.bratek20.architecture.context.api.ContextBuilder
 import com.github.bratek20.architecture.context.api.DependentClassNotFoundInContextException
 import com.github.bratek20.architecture.context.impl.AbstractContextBuilder
 import org.springframework.beans.factory.support.GenericBeanDefinition
+import org.springframework.core.env.SimpleCommandLinePropertySource
 import java.util.*
 import java.util.function.Supplier
 
 class SpringContextBuilder: AbstractContextBuilder() {
     val classes = mutableListOf<Class<*>>()
     val objects = mutableListOf<Any>()
+
+    private var cliArgs: Array<String> = emptyArray()
+
+    fun withArgs(args: Array<String>): SpringContextBuilder {
+        this.cliArgs = args
+        return this
+    }
 
     override fun <T> setClass(type: Class<T>): SpringContextBuilder {
         classes.add(type)
@@ -46,6 +54,12 @@ class SpringContextBuilder: AbstractContextBuilder() {
 
     override fun build(): SpringContext {
         val context = AnnotationConfigApplicationContext()
+
+        if (cliArgs.isNotEmpty()) {
+            val ps = SimpleCommandLinePropertySource(*cliArgs)
+            context.environment.propertySources.addFirst(ps)
+        }
+
         classes.forEach {
             context.register(it)
         }

@@ -30,6 +30,7 @@ class SpringWebApp(
             .toTypedArray()
 
         val applicationContext = SpringContextBuilder()
+            .withArgs(args)
             .withModules(*modules.toTypedArray())
             .build() as SpringContext
 
