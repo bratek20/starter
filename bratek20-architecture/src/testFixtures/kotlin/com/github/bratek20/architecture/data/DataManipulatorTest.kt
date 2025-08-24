@@ -42,5 +42,13 @@ open class DataManipulatorTest {
         // Delete key
         i.setValue("test", null)
         assertThat(i.findValue("test")).isNull()
+
+        // json array
+        i.setValue("testArray", serializedValue {
+            value = """[{"a": 1}, {"b": 2}]"""
+        })
+        assertThat(i.findValue("testArray")).isEqualTo(serializedValue {
+            value = """[{"a": 1}, {"b": 2}]"""
+        })
     }
 }

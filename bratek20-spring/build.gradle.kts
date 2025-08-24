@@ -3,7 +3,7 @@ plugins {
     kotlin("plugin.spring") version "1.9.23"
 }
 
-version = "1.0.52"
+version = "1.0.53"
 
 dependencies {
     api(project(":bratek20-infrastructure"))
@@ -22,6 +22,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation(libs.testcontainers.junit.jupiter)
-    testImplementation("org.testcontainers:mongodb:${libs.versions.testcontainers.get()}")
+    testFixturesImplementation(libs.testcontainers.junit.jupiter)
+    testFixturesImplementation("org.testcontainers:mongodb:${libs.versions.testcontainers.get()}")
 }
