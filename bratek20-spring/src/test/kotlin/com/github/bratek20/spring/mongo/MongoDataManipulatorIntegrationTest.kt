@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.data.mongodb.core.MongoTemplate
 
-@ExtendWith(MongoDbExtension::class)
+@ExtendWith(MongoDBExtension::class)
 class MongoDataManipulatorIntegrationTest: DataManipulatorTest() {
     private lateinit var manipulator: MongoDataManipulator;
     private lateinit var template: MongoTemplate;
@@ -22,7 +22,7 @@ class MongoDataManipulatorIntegrationTest: DataManipulatorTest() {
                 DataMongoImpl()
             ),
             args = arrayOf(
-                "--spring.data.mongodb.uri=${MongoDbExtension.replicaSetUrl}" // tell Spring where Mongo lives
+                "--spring.data.mongodb.uri=${MongoDBExtension.replicaSetUrl}" // tell Spring where Mongo lives
             ),
             useRandomPort = true
         )

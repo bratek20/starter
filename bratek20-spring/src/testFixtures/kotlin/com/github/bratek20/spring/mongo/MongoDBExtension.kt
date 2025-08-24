@@ -19,7 +19,7 @@ object GlobalMongo {
     }
 }
 
-class MongoDbExtension : BeforeAllCallback {
+class MongoDBExtension : BeforeAllCallback {
     override fun beforeAll(context: ExtensionContext) {
         GlobalMongo.ensureStarted()
     }
