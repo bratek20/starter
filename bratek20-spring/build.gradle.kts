@@ -17,9 +17,11 @@ dependencies {
     // web testing
     testImplementation(libs.rest.assured)
 
-    //old, might be useful in the future
+    //mongo
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    //
-    //api("org.springframework.boot:spring-boot-starter-data-jdbc")
-    //testFixturesImplementation("org.springframework.boot:spring-boot-starter-data-jdbc")
+    testImplementation(platform("org.testcontainers:testcontainers-bom:1.16.2"))
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:mongodb")
 }
