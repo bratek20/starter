@@ -3,6 +3,7 @@ package com.github.bratek20.spring.mongo
 import com.github.bratek20.architecture.data.api.DataManipulator
 import com.github.bratek20.architecture.serialization.api.SerializationType
 import com.github.bratek20.architecture.serialization.api.SerializedValue
+import com.github.bratek20.logs.api.Logger
 import org.bson.Document
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
@@ -12,12 +13,14 @@ import org.springframework.stereotype.Service
 
 @Service
 class MongoDataManipulator(
-    private val mongoTemplate: MongoTemplate
+    private val mongoTemplate: MongoTemplate,
+    private val logger: Logger // TODO-REF move times logging to DataStorage + move logs to architecture
 ) : DataManipulator {
 
     private val collectionName = "kv_store"
 
     override fun findValue(keyName: String): SerializedValue? {
+        val start = System.currentTimeMillis()
         require(keyName.isNotBlank()) { "keyName must not be blank" }
 
         // {_id: keyName, v: <Document>}
@@ -25,10 +28,13 @@ class MongoDataManipulator(
         val payload: Document = doc?.get("v", Document::class.java) ?: return null
 
         // Convert back to JSON string for your SerializedValue
+        val end = System.currentTimeMillis()
+        logger.debug("MongoDataManipulator.findValue('$keyName') took ${end - start}ms", this)
         return SerializedValue.create(payload.toJson(), SerializationType.JSON)
     }
 
     override fun setValue(keyName: String, value: SerializedValue?) {
+        val start = System.currentTimeMillis()
         require(keyName.isNotBlank()) { "keyName must not be blank" }
 
         // Null value means delete the key entirely
@@ -55,5 +61,7 @@ class MongoDataManipulator(
         val q = Query(Criteria.where("_id").`is`(keyName))
         val u = Update().set("v", parsed)
         mongoTemplate.upsert(q, u, collectionName)
+        val end = System.currentTimeMillis()
+        logger.debug("MongoDataManipulator.setValue('$keyName') took ${end - start}ms", this)
     }
 }

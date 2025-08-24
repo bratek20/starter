@@ -18,26 +18,28 @@ open class DataManipulatorTest {
         assertThat(i.findValue("test")).isNull()
 
         i.setValue("test", serializedValue {
-            value = "x"
+            value = """{"x": 1}"""
         })
         assertThat(i.findValue("test")).isEqualTo(serializedValue {
-            value = "x"
+            value = """{"x": 1}"""
         })
 
         i.setValue("test2", serializedValue {
-            value = "y"
+            value = """{"y": 2}"""
         })
         assertThat(i.findValue("test2")).isEqualTo(serializedValue {
-            value = "y"
+            value = """{"y": 2}"""
         })
 
+        // Update existing key
         i.setValue("test", serializedValue {
-            value = "z"
+            value = """{"z": 3}"""
         })
         assertThat(i.findValue("test")).isEqualTo(serializedValue {
-            value = "z"
+            value = """{"z": 3}"""
         })
 
+        // Delete key
         i.setValue("test", null)
         assertThat(i.findValue("test")).isNull()
     }
