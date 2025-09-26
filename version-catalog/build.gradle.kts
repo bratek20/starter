@@ -4,10 +4,10 @@ plugins {
 }
 
 //changed by script
-val catalogVersion = "1.0.113"
+val catalogVersion = "1.0.118"
 
 //changed manually
-val b20ArchVersion = "1.0.77"
+val b20ArchVersion = "1.0.78"
 val b20InfraVersion = "1.0.56"
 val b20SpringVersion = "1.0.53"
 val b20UtilsVersion = "1.0.50"
@@ -143,6 +143,7 @@ publishing {
     repositories {
         mavenLocal()
 
+        //todo
         if (project.hasProperty("githubActor") && project.hasProperty("githubToken")) {
             maven {
                 name = "GitHubPackages"
