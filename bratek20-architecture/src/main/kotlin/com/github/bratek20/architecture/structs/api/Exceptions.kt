@@ -13,3 +13,8 @@ class StructTraversalException(
     message: String = ""
 ): ApiException(message) {
 }
+
+class StructBuilderException(
+        message: String = ""
+): ApiException(message) {
+}
