@@ -1,5 +1,6 @@
 package com.github.bratek20.architecture.structs.fixtures
 
+import com.github.bratek20.architecture.serialization.fixtures.asStruct
 import com.github.bratek20.architecture.structs.api.*
 import org.assertj.core.api.Assertions.assertThat
 
@@ -13,7 +14,7 @@ fun assertStructContains(given: Struct, expectedInit: ExpectedStruct) {
 fun assertStructContains(given: Struct, expected: Struct) {
     expected.forEach { (key, value) ->
         if (value is Struct) {
-            assertStructContains(given[key] as Struct, value)
+            assertStructContains(asStruct(given[key]!!), value)
         } else {
             assertThat(given[key]).isEqualTo(value)
         }

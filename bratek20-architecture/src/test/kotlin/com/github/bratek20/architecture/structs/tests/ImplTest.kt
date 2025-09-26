@@ -283,6 +283,35 @@ class StructsImplTest {
             assertPrimitiveValues(objStruct, "entries/[*]/entryValue", listOf("1", "2"))
         }
 
+        @Test
+        fun `should build nested structure`() {
+            val obj = struct {
+                "nested_struct" to struct {
+                    "string_value" to "some_value"
+                }
+            }
+
+            var nested = obj["nested_struct"] as Struct
+            assertThat(nested["string_value"] == "some_value")
+        }
+
+        @Test
+        fun `should fail for invalid struct builder`() {
+            assertApiExceptionThrown(
+                    {
+                        struct {
+                            "nested_struct" to {
+                                "string_value" to "some_value"
+                            }
+                        }
+                    },
+                    {
+                        type = StructBuilderException::class
+                        message = "Lambda provided, did you forgot to use 'struct' for builder function?"
+                    }
+            );
+        }
+
         private fun assertPrimitiveValues(
             anyStruct: AnyStruct,
             path: String,

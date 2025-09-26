@@ -22,6 +22,10 @@ class StructBuilder {
     private val struct = Struct()
 
     infix fun String.to(value: Any?): StructBuilder {
+        if(value is Function0<*>) {
+            throw StructBuilderException("Lambda provided, did you forgot to use 'struct' for builder function?")
+        }
+
         struct[this] = value
         return this@StructBuilder
     }
