@@ -39,8 +39,8 @@ class StructsFixturesTest {
     }
 
     @Test
-    @Disabled("Disabled as it should fail - ensuring assertions fails for diff in nested value")
-    fun `failing struct assertion`() {
+    @Disabled("Disabled as it should fail - ensuring assertions fails for value diff in nested value")
+    fun `failing struct assertion by value`() {
         assertStructContains(
                 struct {
                     "nestedStructure" to struct {
@@ -54,6 +54,17 @@ class StructsFixturesTest {
                 "someMap" to struct {
                     "nestedValue" to 2
                 }
+            }
+        }
+    }
+
+    @Test
+    @Disabled("Disabled as it should fail - ensuring assertions fails for type diff in nested value")
+    fun `failing struct assertion by type`() {
+        val someClassStruct = asStruct(SomeClass("someValue", mapOf("someMap" to 1)))
+        assertStructContains(someClassStruct) {
+            "value" to struct {
+                "nestedValue" to 1
             }
         }
     }

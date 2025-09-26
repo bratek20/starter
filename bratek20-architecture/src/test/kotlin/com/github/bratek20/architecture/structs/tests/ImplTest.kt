@@ -292,7 +292,7 @@ class StructsImplTest {
             }
 
             var nested = obj["nested_struct"] as Struct
-            assertThat(nested["string_value"] == "some_value")
+            assertThat(nested["string_value"]).isEqualTo("some_value")
         }
 
         @Test
@@ -307,7 +307,7 @@ class StructsImplTest {
                     },
                     {
                         type = StructBuilderException::class
-                        message = "Lambda provided, did you forgot to use 'struct' for builder function?"
+                        message = "Lambda provided for key 'nested_struct', did you forgot to use 'struct' for builder function?"
                     }
             );
         }

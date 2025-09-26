@@ -13,10 +13,15 @@ fun assertStructContains(given: Struct, expectedInit: ExpectedStruct) {
 
 fun assertStructContains(given: Struct, expected: Struct) {
     expected.forEach { (key, value) ->
+        val givenValue = given[key]
         if (value is Struct) {
-            assertStructContains(asStruct(given[key]!!), value)
+            assertThat(givenValue)
+                    .withFailMessage("Key '$key' was expected to be a Struct, but was ${givenValue?.javaClass?.simpleName ?: "null"}")
+                    .isInstanceOfAny(Struct::class.java, Map::class.java)
+
+            assertStructContains(asStruct(givenValue!!), value)
         } else {
-            assertThat(given[key]).isEqualTo(value)
+            assertThat(givenValue).isEqualTo(value)
         }
     }
 }
