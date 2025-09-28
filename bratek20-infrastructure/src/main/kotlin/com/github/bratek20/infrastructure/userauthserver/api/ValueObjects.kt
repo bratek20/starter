@@ -9,23 +9,3 @@ data class AuthId(
         return value.toString()
     }
 }
-
-data class UserId(
-    val value: Int
-) {
-    override fun toString(): String {
-        return value.toString()
-    }
-
-    operator fun plus(other: UserId): UserId {
-        return UserId(this.value + other.value)
-    }
-
-    operator fun minus(other: UserId): UserId {
-        return UserId(this.value - other.value)
-    }
-
-    operator fun times(amount: Int): UserId {
-        return UserId(this.value * amount)
-    }
-}

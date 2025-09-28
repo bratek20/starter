@@ -23,6 +23,8 @@ interface ContextBuilder {
         return this
     }
 
+    fun withParent(parent: Context): ContextBuilder
+
     fun build(): Context
 
     @Deprecated(

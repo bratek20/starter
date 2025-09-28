@@ -30,4 +30,14 @@ class MapDataKey<Id: Any, E: Any>(
     name: String,
     elementType: KClass<E>,
     override val idProvider: (element: E) -> Id
-) : ListDataKey<E>(name, elementType), MapTypedKey<Id, E>
+) : ListDataKey<E>(name, elementType), MapTypedKey<Id, E> {
+    override fun copy(newName: String): DataKey<List<E>> {
+        return MapDataKey(newName, elementType, idProvider)
+    }
+}
+
+fun <Id: Any, E: Any> ListDataKey<E>.asMapKey(
+    idProvider: (element: E) -> Id
+): MapDataKey<Id, E> {
+    return MapDataKey(this.name, this.elementType, idProvider)
+}

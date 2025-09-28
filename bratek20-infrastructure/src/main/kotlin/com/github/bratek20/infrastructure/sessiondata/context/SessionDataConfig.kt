@@ -4,7 +4,7 @@ import com.github.bratek20.architecture.data.api.DataManipulator
 import com.github.bratek20.architecture.data.api.DataStorage
 import com.github.bratek20.architecture.data.impl.DataStorageLogic
 import com.github.bratek20.infrastructure.sessiondata.api.SessionDataStorage
-import com.github.bratek20.infrastructure.sessiondata.impl.SessionDataStorageLogic
+import com.github.bratek20.architecture.users.impl.UserDataStorageLogic
 import com.github.bratek20.infrastructure.userauthserver.api.UserSession
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -27,7 +27,7 @@ class SessionDataConfig {
         appStorage: DataStorage,
         userSession: UserSession
     ): SessionDataStorage {
-        return SessionDataStorageLogic(
+        return UserDataStorageLogic(
             appStorage,
             userSession
         )

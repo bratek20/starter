@@ -1,5 +1,7 @@
 package com.github.bratek20.architecture.storage.api
 
+import com.github.bratek20.architecture.data.api.ListDataKey
+import com.github.bratek20.architecture.data.api.MapDataKey
 import kotlin.reflect.KClass
 
 interface TypedKey<T> {
