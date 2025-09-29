@@ -25,7 +25,6 @@ import org.junit.jupiter.api.Test
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 
-
 class UserAuthServerWebTest {
     class UserData(
         var value: Int = 0
