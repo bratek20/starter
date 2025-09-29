@@ -2,7 +2,7 @@
 
 package com.github.bratek20.infrastructure.userauthserver.api
 
-import com.github.bratek20.architecture.users.api.UserId
+import com.github.bratek20.architecture.users.api.*
 
 interface UserAuthServerApi {
     fun createUserAndLogin(): UserMapping

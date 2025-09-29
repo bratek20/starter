@@ -2,6 +2,8 @@
 
 package com.github.bratek20.infrastructure.userauthserver.api
 
+import com.github.bratek20.architecture.users.api.*
+
 data class AuthId(
     val value: String
 ) {

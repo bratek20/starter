@@ -3,6 +3,7 @@
 package com.github.bratek20.infrastructure.userauthserver.api
 
 import com.github.bratek20.architecture.exceptions.ApiException
+import com.github.bratek20.architecture.users.api.*
 
 class UserMappingNotFoundException(
     message: String = ""

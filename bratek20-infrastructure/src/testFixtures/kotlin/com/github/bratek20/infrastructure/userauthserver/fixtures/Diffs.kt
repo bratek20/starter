@@ -2,14 +2,12 @@
 
 package com.github.bratek20.infrastructure.userauthserver.fixtures
 
+import com.github.bratek20.architecture.users.api.*
+import com.github.bratek20.architecture.users.fixtures.*
+
 import com.github.bratek20.infrastructure.userauthserver.api.*
 
 fun diffAuthId(given: AuthId, expected: String, path: String = ""): String {
-    if (given.value != expected) { return "${path}value ${given.value} != ${expected}" }
-    return ""
-}
-
-fun diffUserId(given: UserId, expected: Int, path: String = ""): String {
     if (given.value != expected) { return "${path}value ${given.value} != ${expected}" }
     return ""
 }
