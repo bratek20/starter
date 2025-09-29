@@ -32,7 +32,7 @@ interface ContextBuilder {
         ReplaceWith("buildAndGet(type)"),
     )
     fun <T: Any> get(type: Class<T>): T {
-        return build().get(type)
+        return buildAndGet(type)
     }
 
     fun <T: Any> buildAndGet(type: Class<T>): T {

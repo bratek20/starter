@@ -2,6 +2,8 @@
 
 package com.github.bratek20.infrastructure.userauthserver.api
 
+import com.github.bratek20.architecture.users.api.UserId
+
 data class UserMapping(
     private var authId: String,
     private var userId: Int,

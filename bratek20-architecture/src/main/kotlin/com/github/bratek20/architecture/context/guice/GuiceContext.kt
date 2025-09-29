@@ -7,7 +7,7 @@ import com.github.bratek20.architecture.context.api.Context
 import com.github.bratek20.architecture.context.api.DependentClassNotFoundInContextException
 import com.github.bratek20.architecture.context.api.MultipleClassesFoundInContextException
 
-class GuiceContext(private val injector: Injector) : Context {
+class GuiceContext(val injector: Injector) : Context {
     override fun <T : Any> get(type: Class<T>): T {
         try {
             val x = injector.getInstance(Key.get(setOf(type)))

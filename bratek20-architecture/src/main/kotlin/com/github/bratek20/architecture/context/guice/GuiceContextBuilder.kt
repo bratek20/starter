@@ -7,6 +7,7 @@ import com.google.inject.Scopes
 import com.google.inject.binder.LinkedBindingBuilder
 import com.google.inject.multibindings.Multibinder
 import com.github.bratek20.architecture.context.api.Context
+import com.github.bratek20.architecture.context.api.ContextBuilder
 import com.github.bratek20.architecture.context.api.DependentClassNotFoundInContextException
 import com.github.bratek20.architecture.context.impl.AbstractContextBuilder
 import java.lang.reflect.Constructor
@@ -109,9 +110,11 @@ class GuiceContextBuilder: AbstractContextBuilder() {
 
     override fun build(): Context {
         try {
-            return GuiceContext(
-                Guice.createInjector(GuiceBuilderMainModule(modules))
-            )
+            val injector = parentContext?.let {
+                (it as GuiceContext).injector.createChildInjector(GuiceBuilderMainModule(modules))
+            } ?: Guice.createInjector(GuiceBuilderMainModule(modules))
+
+            return GuiceContext(injector)
         } catch (e: CreationException) {
             val msg = e.message ?: ""
 

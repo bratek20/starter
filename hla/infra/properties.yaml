@@ -1,6 +1,9 @@
 profiles:
   - name: "main"
     language: "KOTLIN"
+    imports:
+      - hlaFolderPath: "../arch"
+        profileName: "main"
     paths:
       project: "../../bratek20-infrastructure"
       src:

@@ -1,5 +1,7 @@
 package com.github.bratek20.architecture.context.api
 
+import com.github.bratek20.architecture.context.someContextBuilder
+import com.github.bratek20.architecture.context.spring.SpringContextBuilder
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
@@ -38,9 +40,10 @@ class WithCDependencyImplB(val c: C): B
 
 class WithValue(val value: String)
 
-abstract class ContextApiTest {
-
-    abstract fun createInstance(): ContextBuilder
+open class ContextApiTest {
+    open fun createInstance(): ContextBuilder {
+        return SpringContextBuilder()
+    }
 
     @Test
     fun `should get class`() {
@@ -251,6 +254,25 @@ abstract class ContextApiTest {
             val someInterfaceImpl = c.get(SomeInterfaceImpl::class.java)
 
             assertThat(someInterface).isSameAs(someInterfaceImpl)
+        }
+    }
+
+    @Nested
+    inner class WithParentScope {
+        @Test
+        fun `should get dependency from parent context`() {
+            val parent = createInstance()
+                .setClass(X::class.java)
+                .build()
+
+            val c = createInstance()
+                .withParent(parent)
+                .setClass(WithXClass::class.java)
+                .build()
+
+            val withX = c.get(WithXClass::class.java)
+
+            assertThat(withX.x).isNotNull()
         }
     }
 }

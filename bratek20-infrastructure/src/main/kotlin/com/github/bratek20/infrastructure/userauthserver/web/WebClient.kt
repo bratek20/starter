@@ -2,6 +2,7 @@
 
 package com.github.bratek20.infrastructure.userauthserver.web
 
+import com.github.bratek20.architecture.users.api.UserId
 import com.github.bratek20.infrastructure.httpclient.api.HttpClientFactory
 
 import com.github.bratek20.infrastructure.userauthserver.api.*

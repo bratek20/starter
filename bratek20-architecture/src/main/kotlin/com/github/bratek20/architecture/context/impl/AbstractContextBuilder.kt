@@ -1,5 +1,6 @@
 package com.github.bratek20.architecture.context.impl
 
+import com.github.bratek20.architecture.context.api.Context
 import com.github.bratek20.architecture.context.api.ContextBuilder
 import com.github.bratek20.architecture.context.api.ContextModule
 
@@ -12,6 +13,12 @@ abstract class AbstractContextBuilder: ContextBuilder {
         }
         knownModules.add(module::class.java)
         module.apply(this)
+        return this
+    }
+
+    protected var parentContext: Context? = null
+    final override fun withParent(parent: Context): ContextBuilder {
+        this.parentContext = parent
         return this
     }
 

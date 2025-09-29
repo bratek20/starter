@@ -1,6 +1,7 @@
 package com.github.bratek20.infrastructure.userauthclient.impl
 
 import com.github.bratek20.architecture.data.api.DataStorage
+import com.github.bratek20.architecture.users.api.UserId
 import com.github.bratek20.infrastructure.userauthclient.api.*
 import com.github.bratek20.infrastructure.userauthclient.api.NotLoggedInException
 

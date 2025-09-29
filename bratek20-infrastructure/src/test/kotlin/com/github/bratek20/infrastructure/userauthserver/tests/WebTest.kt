@@ -12,11 +12,11 @@ import com.github.bratek20.infrastructure.httpclient.fixtures.httpClientConfig
 import com.github.bratek20.infrastructure.httpserver.api.WebServerModule
 import com.github.bratek20.infrastructure.httpserver.fixtures.runTestWebApp
 import com.github.bratek20.infrastructure.sessiondata.api.SessionDataStorage
-import com.github.bratek20.infrastructure.sessiondata.context.SessionDataConfig
+import com.github.bratek20.infrastructure.sessionuser.SessionDataConfig
 import com.github.bratek20.infrastructure.userauthserver.api.UserAuthServerApi
 import com.github.bratek20.infrastructure.userauthserver.api.UserId
 import com.github.bratek20.infrastructure.userauthserver.api.UserSession
-import com.github.bratek20.infrastructure.userauthserver.context.SessionComponent
+import com.github.bratek20.infrastructure.sessionuser.SessionComponent
 import com.github.bratek20.infrastructure.userauthserver.context.UserAuthServerWebClient
 import com.github.bratek20.infrastructure.userauthserver.context.UserAuthServerWebServer
 import com.github.bratek20.infrastructure.userauthserver.fixtures.assertUserId
