@@ -4,6 +4,8 @@ package com.github.bratek20.infrastructure.userauthserver.fixtures
 
 import com.github.bratek20.infrastructure.userauthserver.api.*
 import org.assertj.core.api.Assertions.assertThat
+import com.github.bratek20.architecture.users.fixtures.*
+import com.github.bratek20.architecture.users.api.*
 
 class UserAuthServerApiMock: UserAuthServerApi {
     private var createUserAndLoginCallsNumber: Int = 0

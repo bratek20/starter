@@ -2,30 +2,12 @@
 
 package com.github.bratek20.infrastructure.userauthserver.api
 
+import com.github.bratek20.architecture.users.api.*
+
 data class AuthId(
     val value: String
 ) {
     override fun toString(): String {
         return value.toString()
-    }
-}
-
-data class UserId(
-    val value: Int
-) {
-    override fun toString(): String {
-        return value.toString()
-    }
-
-    operator fun plus(other: UserId): UserId {
-        return UserId(this.value + other.value)
-    }
-
-    operator fun minus(other: UserId): UserId {
-        return UserId(this.value - other.value)
-    }
-
-    operator fun times(amount: Int): UserId {
-        return UserId(this.value * amount)
     }
 }

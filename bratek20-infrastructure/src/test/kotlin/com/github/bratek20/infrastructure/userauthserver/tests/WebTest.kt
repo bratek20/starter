@@ -5,26 +5,25 @@ import com.github.bratek20.architecture.context.someContextBuilder
 import com.github.bratek20.architecture.data.api.DataStorage
 import com.github.bratek20.architecture.data.api.ObjectDataKey
 import com.github.bratek20.architecture.data.context.DataInMemoryImpl
+import com.github.bratek20.architecture.users.api.User
+import com.github.bratek20.architecture.users.api.UserDataStorage
+import com.github.bratek20.architecture.users.api.UserId
+import com.github.bratek20.architecture.users.fixtures.assertUserId
 import com.github.bratek20.infrastructure.httpclient.api.HttpClientConfig
 import com.github.bratek20.infrastructure.httpclient.api.HttpClientFactory
 import com.github.bratek20.infrastructure.httpclient.context.HttpClientImpl
 import com.github.bratek20.infrastructure.httpclient.fixtures.httpClientConfig
 import com.github.bratek20.infrastructure.httpserver.api.WebServerModule
 import com.github.bratek20.infrastructure.httpserver.fixtures.runTestWebApp
-import com.github.bratek20.infrastructure.sessiondata.api.SessionDataStorage
-import com.github.bratek20.infrastructure.sessiondata.context.SessionDataConfig
+import com.github.bratek20.infrastructure.sessionuser.SessionDataConfig
 import com.github.bratek20.infrastructure.userauthserver.api.UserAuthServerApi
-import com.github.bratek20.infrastructure.userauthserver.api.UserId
-import com.github.bratek20.infrastructure.userauthserver.api.UserSession
-import com.github.bratek20.infrastructure.userauthserver.context.SessionComponent
+import com.github.bratek20.infrastructure.sessionuser.SessionComponent
 import com.github.bratek20.infrastructure.userauthserver.context.UserAuthServerWebClient
 import com.github.bratek20.infrastructure.userauthserver.context.UserAuthServerWebServer
-import com.github.bratek20.infrastructure.userauthserver.fixtures.assertUserId
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
-
 
 class UserAuthServerWebTest {
     class UserData(
@@ -39,11 +38,11 @@ class UserAuthServerWebTest {
 
     @SessionComponent
     class SomeUserModuleApiLogic(
-        private val userSession: UserSession,
-        private val storage: SessionDataStorage
+        private val user: User,
+        private val storage: UserDataStorage
     ): SomeUserModuleApi {
         override fun getUserId(): UserId {
-            return userSession.getUserId()
+            return user.getId()
         }
 
         override fun increaseValue(): Int {
@@ -64,7 +63,7 @@ class UserAuthServerWebTest {
     @RestController
     class SomeUserModuleController(
         private val api: SomeUserModuleApi,
-        private val userSession: UserSession
+        private val user: User
     ) {
         @PostMapping("/getUserId")
         fun getUserId(): UserId {
@@ -73,7 +72,7 @@ class UserAuthServerWebTest {
 
         @PostMapping("/getUserIdFromSession")
         fun getUserIdFromSession(): UserId {
-            return userSession.getUserId()
+            return user.getId()
         }
 
         @PostMapping("/increaseValue")

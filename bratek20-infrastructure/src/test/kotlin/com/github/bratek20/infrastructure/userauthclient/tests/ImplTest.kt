@@ -4,12 +4,12 @@ import com.github.bratek20.architecture.context.someContextBuilder
 import com.github.bratek20.architecture.data.api.DataStorage
 import com.github.bratek20.architecture.data.context.DataInMemoryImpl
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
+import com.github.bratek20.architecture.users.fixtures.assertUserId
 import com.github.bratek20.infrastructure.userauthclient.api.NotLoggedInException
 import com.github.bratek20.infrastructure.userauthclient.api.UserAuthClientApi
 import com.github.bratek20.infrastructure.userauthclient.context.UserAuthClientImpl
 import com.github.bratek20.infrastructure.userauthserver.api.UserAuthServerApi
 import com.github.bratek20.infrastructure.userauthserver.fixtures.UserAuthServerApiMock
-import com.github.bratek20.infrastructure.userauthserver.fixtures.assertUserId
 import com.github.bratek20.infrastructure.userauthserver.fixtures.authId
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach

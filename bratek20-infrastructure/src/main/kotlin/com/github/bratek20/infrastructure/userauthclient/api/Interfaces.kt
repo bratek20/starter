@@ -2,7 +2,7 @@
 
 package com.github.bratek20.infrastructure.userauthclient.api
 
-import com.github.bratek20.infrastructure.userauthserver.api.*
+import com.github.bratek20.architecture.users.api.*
 
 interface UserAuthClientApi {
     fun login(): Unit

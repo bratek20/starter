@@ -1,15 +1,15 @@
-package com.github.bratek20.infrastructure.sessiondata.impl
+package com.github.bratek20.architecture.users.impl
 
 import com.github.bratek20.architecture.data.api.DataKey
 import com.github.bratek20.architecture.data.api.DataStorage
 import com.github.bratek20.architecture.data.api.MapDataKey
-import com.github.bratek20.infrastructure.sessiondata.api.SessionDataStorage
-import com.github.bratek20.infrastructure.userauthserver.api.UserSession
+import com.github.bratek20.architecture.users.api.User
+import com.github.bratek20.architecture.users.api.UserDataStorage
 
-class SessionDataStorageLogic(
+class UserDataStorageLogic(
     private val appStorage: DataStorage,
-    private val userSession: UserSession
-): SessionDataStorage {
+    private val user: User
+): UserDataStorage {
     override fun <T : Any> set(key: DataKey<T>, value: T) {
         appStorage.set(toUserKey(key), value)
     }
@@ -39,10 +39,10 @@ class SessionDataStorageLogic(
     }
 
     private fun <T: Any> toUserKey(key: DataKey<T>): DataKey<T> {
-        return key.copy("user" + userSession.getUserId() + "." + key.name)
+        return key.copy("user" + user.getId() + "." + key.name)
     }
 
     private fun <Id : Any, E : Any> toUserKey(key: MapDataKey<Id, E>): MapDataKey<Id, E> {
-        return key.copy("user" + userSession.getUserId() + "." + key.name) as MapDataKey<Id, E>
+        return key.copy("user" + user.getId() + "." + key.name) as MapDataKey<Id, E>
     }
 }

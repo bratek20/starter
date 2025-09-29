@@ -2,14 +2,13 @@
 
 package com.github.bratek20.infrastructure.userauthserver.fixtures
 
+import com.github.bratek20.architecture.users.api.*
+import com.github.bratek20.architecture.users.fixtures.*
+
 import com.github.bratek20.infrastructure.userauthserver.api.*
 
 fun authId(value: String = "someValue"): AuthId {
     return AuthId(value)
-}
-
-fun userId(value: Int = 0): UserId {
-    return UserId(value)
 }
 
 data class UserMappingDef(

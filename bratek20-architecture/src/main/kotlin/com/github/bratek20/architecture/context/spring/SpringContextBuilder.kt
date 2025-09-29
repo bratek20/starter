@@ -52,8 +52,13 @@ class SpringContextBuilder: AbstractContextBuilder() {
         return this
     }
 
+
     override fun build(): SpringContext {
         val context = AnnotationConfigApplicationContext()
+
+        parentContext?.let {
+            context.parent = (it as SpringContext).value
+        }
 
         if (cliArgs.isNotEmpty()) {
             val ps = SimpleCommandLinePropertySource(*cliArgs)

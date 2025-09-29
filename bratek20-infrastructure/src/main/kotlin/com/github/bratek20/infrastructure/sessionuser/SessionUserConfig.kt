@@ -1,14 +1,15 @@
-package com.github.bratek20.infrastructure.sessiondata.context
+package com.github.bratek20.infrastructure.sessionuser
 
 import com.github.bratek20.architecture.data.api.DataManipulator
 import com.github.bratek20.architecture.data.api.DataStorage
 import com.github.bratek20.architecture.data.impl.DataStorageLogic
-import com.github.bratek20.infrastructure.sessiondata.api.SessionDataStorage
-import com.github.bratek20.infrastructure.sessiondata.impl.SessionDataStorageLogic
-import com.github.bratek20.infrastructure.userauthserver.api.UserSession
+import com.github.bratek20.architecture.users.api.User
+import com.github.bratek20.architecture.users.api.UserDataStorage
+import com.github.bratek20.architecture.users.impl.UserDataStorageLogic
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
+import javax.servlet.http.HttpSession
 
 @Configuration
 class SessionDataConfig {
@@ -23,13 +24,18 @@ class SessionDataConfig {
     }
 
     @Bean
-    fun sessionDataStorage(
+    fun user(session: HttpSession): User {
+        return SessionUser(session)
+    }
+
+    @Bean
+    fun userDataStorage(
         appStorage: DataStorage,
-        userSession: UserSession
-    ): SessionDataStorage {
-        return SessionDataStorageLogic(
+        user: User
+    ): UserDataStorage {
+        return UserDataStorageLogic(
             appStorage,
-            userSession
+            user
         )
     }
 }

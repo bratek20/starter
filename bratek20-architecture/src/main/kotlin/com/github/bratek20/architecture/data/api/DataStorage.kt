@@ -9,4 +9,18 @@ interface DataStorage {
     fun <Id: Any, E: Any> addElement(key: MapDataKey<Id, E>, value: E): Boolean
     fun <Id: Any, E: Any> findElement(key: MapDataKey<Id, E>, id: Id): E?
     fun <Id: Any, E: Any> getElement(key: MapDataKey<Id, E>, id: Id): E
+
+    fun <Id: Any, E: Any> getOrCreateElement(
+        key: MapDataKey<Id, E>,
+        id: Id,
+        elementFactory: (id: Id) -> E
+    ): E {
+        var elem = this.findElement(key, id)
+        if (elem == null) {
+            this.set(key, mutableListOf())
+            this.addElement(key, elementFactory(id))
+            elem = this.getElement(key, id)
+        }
+        return elem
+    }
 }

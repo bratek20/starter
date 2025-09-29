@@ -1,0 +1,7 @@
+ValueObjects
+    UserId: int
+
+Interfaces
+    User
+        getId(): UserId
+

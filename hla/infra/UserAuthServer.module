@@ -1,12 +1,14 @@
 ValueObjects
     AuthId: string
-    UserId: int
 
 Data
     UserMapping
         authId: AuthId
         userId: UserId
     "UsersMapping" -> UserMapping[]
+
+Exceptions
+    NotLoggedInException
 
 Interfaces
     UserAuthServerApi
@@ -15,11 +17,6 @@ Interfaces
         login(authId: AuthId): UserId
             throws
                 UserMappingNotFoundException
-
-    UserSession
-        getUserId(): UserId
-            throws
-                NotLoggedInException
 
     AuthIdGenerator
         generate(): AuthId

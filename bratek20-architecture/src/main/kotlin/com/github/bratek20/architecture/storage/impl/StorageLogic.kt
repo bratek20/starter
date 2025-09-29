@@ -49,8 +49,8 @@ abstract class StorageLogic {
     }
 
     fun <Id : Any, E : Any> findElement(key: MapTypedKey<Id, E>, id: Id): E? {
-        val list = get(key)
-        return list.firstOrNull { key.idProvider(it) == id }
+        val list = find(key)
+        return list?.firstOrNull { key.idProvider(it) == id }
     }
 
     fun <Id : Any, E : Any> getElement(key: MapTypedKey<Id, E>, id: Id): E {

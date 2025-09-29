@@ -23,6 +23,8 @@ interface ContextBuilder {
         return this
     }
 
+    fun withParent(parent: Context): ContextBuilder
+
     fun build(): Context
 
     @Deprecated(
@@ -30,7 +32,7 @@ interface ContextBuilder {
         ReplaceWith("buildAndGet(type)"),
     )
     fun <T: Any> get(type: Class<T>): T {
-        return build().get(type)
+        return buildAndGet(type)
     }
 
     fun <T: Any> buildAndGet(type: Class<T>): T {

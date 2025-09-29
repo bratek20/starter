@@ -3,10 +3,11 @@ plugins {
     kotlin("plugin.spring") version "1.9.23" // this plugin is needed to allow proper proxing of kotlin classes
 }
 
-version = "1.0.56"
+version = "1.0.57"
 
 dependencies {
     api(project(":bratek20-architecture"))
+    testFixturesImplementation(testFixtures(project(":bratek20-architecture")))
     testApi(testFixtures(project(":bratek20-architecture")))
 
     implementation(libs.bratek20.logs.core)

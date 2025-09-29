@@ -2,6 +2,8 @@
 
 package com.github.bratek20.infrastructure.userauthserver.api
 
+import com.github.bratek20.architecture.users.api.*
+
 interface UserAuthServerApi {
     fun createUserAndLogin(): UserMapping
 
@@ -9,13 +11,6 @@ interface UserAuthServerApi {
         UserMappingNotFoundException::class,
     )
     fun login(authId: AuthId): UserId
-}
-
-interface UserSession {
-    @Throws(
-        NotLoggedInException::class,
-    )
-    fun getUserId(): UserId
 }
 
 interface AuthIdGenerator {
