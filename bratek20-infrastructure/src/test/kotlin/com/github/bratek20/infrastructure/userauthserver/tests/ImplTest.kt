@@ -3,9 +3,9 @@ package com.github.bratek20.infrastructure.userauthserver.tests
 import com.github.bratek20.architecture.context.someContextBuilder
 import com.github.bratek20.architecture.data.context.DataInMemoryImpl
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
+import com.github.bratek20.architecture.users.fixtures.assertUserId
 import com.github.bratek20.infrastructure.userauthserver.api.*
 import com.github.bratek20.infrastructure.userauthserver.context.UserAuthServerBaseImpl
-import com.github.bratek20.infrastructure.userauthserver.fixtures.assertUserId
 import com.github.bratek20.infrastructure.userauthserver.fixtures.assertUserMapping
 import com.github.bratek20.logs.LoggerMock
 import com.github.bratek20.logs.LogsMocks

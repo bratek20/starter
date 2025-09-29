@@ -7,6 +7,7 @@ version = "1.0.56"
 
 dependencies {
     api(project(":bratek20-architecture"))
+    testFixturesImplementation(testFixtures(project(":bratek20-architecture")))
     testApi(testFixtures(project(":bratek20-architecture")))
 
     implementation(libs.bratek20.logs.core)

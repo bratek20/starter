@@ -3,6 +3,7 @@
 package com.github.bratek20.infrastructure.userauthclient.api
 
 import com.github.bratek20.architecture.users.api.*
+import com.github.bratek20.infrastructure.userauthserver.api.UserMapping
 
 val USER_MAPPING_DATA_KEY = com.github.bratek20.architecture.data.api.ObjectDataKey(
     "UserMapping",
