@@ -5,7 +5,7 @@ import com.github.bratek20.architecture.data.context.DataInMemoryImpl
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.architecture.users.fixtures.assertUserId
 import com.github.bratek20.infrastructure.userauthserver.api.*
-import com.github.bratek20.infrastructure.userauthserver.context.UserAuthServerBaseImpl
+import com.github.bratek20.infrastructure.userauthserver.impl.UserAuthServerBaseImpl
 import com.github.bratek20.infrastructure.userauthserver.fixtures.assertUserMapping
 import com.github.bratek20.logs.LoggerMock
 import com.github.bratek20.logs.LogsMocks
@@ -28,10 +28,14 @@ class UserAuthServerImplTest {
 
     @BeforeEach
     fun setup() {
+        setupWithProperties(UserAuthServerProperties())
+    }
+
+    private fun setupWithProperties(properties: UserAuthServerProperties) {
         val c = someContextBuilder()
             .withModules(
                 DataInMemoryImpl(),
-                UserAuthServerBaseImpl(),
+                UserAuthServerBaseImpl(properties),
                 LogsMocks()
             )
             .setImpl(AuthIdGenerator::class.java, AuthIdGeneratorMock::class.java)
@@ -65,7 +69,9 @@ class UserAuthServerImplTest {
     fun `should login to existing user + log info`() {
         val authId = api.createUserAndLogin().getAuthId()
 
-        assertUserId(api.login(authId), 1)
+        assertUserMapping(api.login(authId)) {
+            userId = 1
+        }
 
         loggerMock.assertContainsInfos(
             "Existing user '1' logged in"
@@ -77,9 +83,25 @@ class UserAuthServerImplTest {
         assertApiExceptionThrown(
             { api.login(AuthId("unknown")) },
             {
-                type = UserMappingNotFoundException::class
+                type = UnknownAuthIdException::class
                 message = "User mapping not found for authId 'unknown'"
             }
+        )
+    }
+
+    @Test
+    fun `should create new user and log warning for unknown user if configured`() {
+        setupWithProperties(UserAuthServerProperties(
+            createNewUserForUnknownAuthId = true
+        ))
+
+        val mapping = api.login(AuthId("unknown"))
+        assertUserMapping(mapping) {
+            userId = 1
+        }
+
+        loggerMock.assertWarns(
+            "Unknown authId 'unknown' - creating new user with id '1'"
         )
     }
 }

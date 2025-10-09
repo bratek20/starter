@@ -2,10 +2,11 @@
 
 package com.github.bratek20.infrastructure.userauthserver.web
 
-import com.github.bratek20.architecture.users.api.UserId
 import com.github.bratek20.infrastructure.httpclient.api.HttpClientConfig
 
 import com.github.bratek20.infrastructure.userauthserver.api.*
+
+import com.github.bratek20.architecture.users.api.*
 
 class UserAuthServerWebClientConfig(
     val value: HttpClientConfig
@@ -31,9 +32,9 @@ class UserAuthServerApiLoginRequest(
     }
 }
 class UserAuthServerApiLoginResponse(
-    private val value: Int
+    private val value: UserMapping
 ) {
-    fun getValue(): UserId {
-        return UserId(value)
+    fun getValue(): UserMapping {
+        return value
     }
 }

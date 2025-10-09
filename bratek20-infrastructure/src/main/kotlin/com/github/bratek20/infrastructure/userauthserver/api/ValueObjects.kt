@@ -11,3 +11,21 @@ data class AuthId(
         return value.toString()
     }
 }
+
+data class UserAuthServerProperties(
+    private val createNewUserForUnknownAuthId: Boolean = false,
+) {
+    fun getCreateNewUserForUnknownAuthId(): Boolean {
+        return this.createNewUserForUnknownAuthId
+    }
+
+    companion object {
+        fun create(
+            createNewUserForUnknownAuthId: Boolean = false,
+        ): UserAuthServerProperties {
+            return UserAuthServerProperties(
+                createNewUserForUnknownAuthId = createNewUserForUnknownAuthId,
+            )
+        }
+    }
+}

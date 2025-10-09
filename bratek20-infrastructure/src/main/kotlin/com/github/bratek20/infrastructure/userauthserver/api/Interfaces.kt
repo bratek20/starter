@@ -8,9 +8,9 @@ interface UserAuthServerApi {
     fun createUserAndLogin(): UserMapping
 
     @Throws(
-        UserMappingNotFoundException::class,
+        UnknownAuthIdException::class,
     )
-    fun login(authId: AuthId): UserId
+    fun login(authId: AuthId): UserMapping
 }
 
 interface AuthIdGenerator {

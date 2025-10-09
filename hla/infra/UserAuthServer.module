@@ -7,6 +7,13 @@ Data
         userId: UserId
     "UsersMapping" -> UserMapping[]
 
+Properties
+    UserAuthServerProperties
+        createNewUserForUnknownAuthId: bool = false
+        //if true, will log warn
+        //if false, will throw
+
+
 Exceptions
     NotLoggedInException
 
@@ -14,9 +21,9 @@ Interfaces
     UserAuthServerApi
         createUserAndLogin(): UserMapping
     
-        login(authId: AuthId): UserId
+        login(authId: AuthId): UserMapping
             throws
-                UserMappingNotFoundException
+                UnknownAuthIdException
 
     AuthIdGenerator
         generate(): AuthId

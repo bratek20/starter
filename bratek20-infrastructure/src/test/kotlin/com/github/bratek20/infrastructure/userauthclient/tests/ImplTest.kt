@@ -55,16 +55,22 @@ class UserAuthClientImplTest {
     }
 
     @Test
-    fun `on next login should use auth from first login`() {
+    fun `on next login should use auth from last login`() {
         serverApiMock.setCreateUserAndLoginResponse {
             authId = "abc"
+        }
+        api.login()
+
+        serverApiMock.setLoginResponse {
+            authId = "cde"
         }
         api.login()
 
         api.login()
 
         serverApiMock.assertLoginCalls(listOf(
-            "abc"
+            "abc",
+            "cde"
         ))
     }
 }

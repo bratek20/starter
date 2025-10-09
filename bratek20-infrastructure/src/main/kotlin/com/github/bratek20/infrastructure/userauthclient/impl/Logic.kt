@@ -20,7 +20,8 @@ class UserAuthClientApiLogic(
             dataStorage.set(USER_MAPPING_DATA_KEY, currentMapping)
         }
         else {
-            serverApi.login(currentMapping.getAuthId())
+            val newMapping = serverApi.login(currentMapping.getAuthId())
+            dataStorage.set(USER_MAPPING_DATA_KEY, newMapping)
         }
         loggedIn = true
     }
