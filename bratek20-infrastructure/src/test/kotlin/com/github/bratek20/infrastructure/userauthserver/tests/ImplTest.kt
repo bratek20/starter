@@ -28,10 +28,14 @@ class UserAuthServerImplTest {
 
     @BeforeEach
     fun setup() {
+        setupWithProperties(UserAuthServerProperties())
+    }
+
+    private fun setupWithProperties(properties: UserAuthServerProperties) {
         val c = someContextBuilder()
             .withModules(
                 DataInMemoryImpl(),
-                UserAuthServerBaseImpl(),
+                UserAuthServerBaseImpl(properties),
                 LogsMocks()
             )
             .setImpl(AuthIdGenerator::class.java, AuthIdGeneratorMock::class.java)
@@ -82,6 +86,22 @@ class UserAuthServerImplTest {
                 type = UnknownAuthIdException::class
                 message = "User mapping not found for authId 'unknown'"
             }
+        )
+    }
+
+    @Test
+    fun `should create new user and log warning for unknown user if configured`() {
+        setupWithProperties(UserAuthServerProperties(
+            createNewUserForUnknownAuthId = true
+        ))
+
+        val mapping = api.login(AuthId("unknown"))
+        assertUserMapping(mapping) {
+            userId = 1
+        }
+
+        loggerMock.assertWarns(
+            "Unknown authId 'unknown' - creating new user with id '1'"
         )
     }
 }
