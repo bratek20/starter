@@ -2,10 +2,11 @@
 
 package com.github.bratek20.infrastructure.userauthserver.web
 
-import com.github.bratek20.architecture.users.api.UserId
 import com.github.bratek20.infrastructure.httpclient.api.HttpClientFactory
 
 import com.github.bratek20.infrastructure.userauthserver.api.*
+
+import com.github.bratek20.architecture.users.api.*
 
 class UserAuthServerApiWebClient(
     factory: HttpClientFactory,
@@ -17,7 +18,7 @@ class UserAuthServerApiWebClient(
         return client.post("/b20/userAuthServerApi/createUserAndLogin", null).getBody(UserAuthServerApiCreateUserAndLoginResponse::class.java).getValue()
     }
 
-    override fun login(authId: AuthId): UserId {
+    override fun login(authId: AuthId): UserMapping {
         return client.post("/b20/userAuthServerApi/login", UserAuthServerApiLoginRequest.create(authId)).getBody(UserAuthServerApiLoginResponse::class.java).getValue()
     }
 }

@@ -43,13 +43,13 @@ class UserAuthServerApiLogic(
         return mapping
     }
 
-    override fun login(authId: AuthId): UserId {
+    override fun login(authId: AuthId): UserMapping {
         val mapping = storage.findElement(USERS_MAPPING_DATA_MAP_KEY, authId)
-            ?: throw UserMappingNotFoundException("User mapping not found for authId '$authId'")
+            ?: throw UnknownAuthIdException("User mapping not found for authId '$authId'")
 
         logger.info("Existing user '${mapping.getUserId()}' logged in")
 
-        return mapping.getUserId()
+        return mapping
     }
 }
 

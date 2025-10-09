@@ -1,10 +1,9 @@
-package com.github.bratek20.infrastructure.userauthserver.context
+package com.github.bratek20.infrastructure.userauthserver.impl
 
 import com.github.bratek20.architecture.context.api.ContextBuilder
 import com.github.bratek20.architecture.context.api.ContextModule
 
 import com.github.bratek20.infrastructure.userauthserver.api.*
-import com.github.bratek20.infrastructure.userauthserver.impl.*
 
 class UserAuthServerBaseImpl: ContextModule {
     override fun apply(builder: ContextBuilder) {

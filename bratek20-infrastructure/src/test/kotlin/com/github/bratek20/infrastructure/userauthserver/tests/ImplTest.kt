@@ -5,7 +5,7 @@ import com.github.bratek20.architecture.data.context.DataInMemoryImpl
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.architecture.users.fixtures.assertUserId
 import com.github.bratek20.infrastructure.userauthserver.api.*
-import com.github.bratek20.infrastructure.userauthserver.context.UserAuthServerBaseImpl
+import com.github.bratek20.infrastructure.userauthserver.impl.UserAuthServerBaseImpl
 import com.github.bratek20.infrastructure.userauthserver.fixtures.assertUserMapping
 import com.github.bratek20.logs.LoggerMock
 import com.github.bratek20.logs.LogsMocks
@@ -65,7 +65,9 @@ class UserAuthServerImplTest {
     fun `should login to existing user + log info`() {
         val authId = api.createUserAndLogin().getAuthId()
 
-        assertUserId(api.login(authId), 1)
+        assertUserMapping(api.login(authId)) {
+            userId = 1
+        }
 
         loggerMock.assertContainsInfos(
             "Existing user '1' logged in"
@@ -77,7 +79,7 @@ class UserAuthServerImplTest {
         assertApiExceptionThrown(
             { api.login(AuthId("unknown")) },
             {
-                type = UserMappingNotFoundException::class
+                type = UnknownAuthIdException::class
                 message = "User mapping not found for authId 'unknown'"
             }
         )

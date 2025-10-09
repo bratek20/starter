@@ -18,8 +18,9 @@ import com.github.bratek20.infrastructure.httpserver.fixtures.runTestWebApp
 import com.github.bratek20.infrastructure.sessionuser.SessionDataConfig
 import com.github.bratek20.infrastructure.userauthserver.api.UserAuthServerApi
 import com.github.bratek20.infrastructure.sessionuser.SessionComponent
-import com.github.bratek20.infrastructure.userauthserver.context.UserAuthServerWebClient
-import com.github.bratek20.infrastructure.userauthserver.context.UserAuthServerWebServer
+import com.github.bratek20.infrastructure.userauthserver.fixtures.assertUserMapping
+import com.github.bratek20.infrastructure.userauthserver.web.UserAuthServerWebClient
+import com.github.bratek20.infrastructure.userauthserver.web.UserAuthServerWebServer
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.web.bind.annotation.PostMapping
@@ -152,13 +153,15 @@ class UserAuthServerWebTest {
         val userIdFromSession = c.someUserModuleWebClient.getUserIdFromSession()
         assertUserId(userIdFromSession, 1)
 
-        val userId = c.someUserModuleWebClient.getUserId()
-        assertUserId(userId, 1)
+        val user1Id = c.someUserModuleWebClient.getUserId()
+        assertUserId(user1Id, 1)
 
         //login again
         val c2 = createClient(app.port)
-        val userId2 = c2.userAuthServerApi.login(mapping.getAuthId())
-        assertUserId(userId2, 1)
+        val user2 = c2.userAuthServerApi.login(mapping.getAuthId())
+        assertUserMapping(user2) {
+            userId = 1
+        }
 
         //different user
         val c3 = createClient(app.port)

@@ -11,6 +11,16 @@ fun authId(value: String = "someValue"): AuthId {
     return AuthId(value)
 }
 
+data class UserAuthServerPropertiesDef(
+    var createNewUserForUnknownAuthId: Boolean = false,
+)
+fun userAuthServerProperties(init: UserAuthServerPropertiesDef.() -> Unit = {}): UserAuthServerProperties {
+    val def = UserAuthServerPropertiesDef().apply(init)
+    return UserAuthServerProperties.create(
+        createNewUserForUnknownAuthId = def.createNewUserForUnknownAuthId,
+    )
+}
+
 data class UserMappingDef(
     var authId: String = "someValue",
     var userId: Int = 0,

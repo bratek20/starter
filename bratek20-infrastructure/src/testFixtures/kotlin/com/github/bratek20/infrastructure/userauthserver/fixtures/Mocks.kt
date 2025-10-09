@@ -12,7 +12,7 @@ class UserAuthServerApiMock: UserAuthServerApi {
     private var createUserAndLoginResponse: (UserMappingDef.() -> Unit) = {}
     private var loginCallsNumber: Int = 0
     private var loginCalls: MutableList<AuthId> = mutableListOf()
-    private var loginResponse: Int = 0
+    private var loginResponse: (UserMappingDef.() -> Unit) = {}
     override fun createUserAndLogin(): UserMapping {
         createUserAndLoginCallsNumber = createUserAndLoginCallsNumber + 1
         return userMapping(createUserAndLoginResponse)
@@ -23,10 +23,10 @@ class UserAuthServerApiMock: UserAuthServerApi {
     fun setCreateUserAndLoginResponse(response: (UserMappingDef.() -> Unit)) {
         createUserAndLoginResponse = response
     }
-    override fun login(authId: AuthId): UserId {
+    override fun login(authId: AuthId): UserMapping {
         loginCallsNumber = loginCallsNumber + 1
         loginCalls.add(authId)
-        return UserId(loginResponse)
+        return userMapping(loginResponse)
     }
     fun assertLoginCallsNumber(expectedNumber: Int) {
         assertThat(loginCallsNumber).withFailMessage("Expected 'login' to be called " + expectedNumber + " times but was called " + loginCallsNumber + " times").isEqualTo(expectedNumber)
@@ -37,7 +37,7 @@ class UserAuthServerApiMock: UserAuthServerApi {
             assertAuthId(loginCalls[i], expectedArgs[i])
         }
     }
-    fun setLoginResponse(response: Int) {
+    fun setLoginResponse(response: (UserMappingDef.() -> Unit)) {
         loginResponse = response
     }
     fun reset() {
@@ -45,6 +45,6 @@ class UserAuthServerApiMock: UserAuthServerApi {
         createUserAndLoginResponse = {}
         loginCallsNumber = 0
         loginCalls = mutableListOf()
-        loginResponse = 0
+        loginResponse = {}
     }
 }
