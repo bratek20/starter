@@ -6,10 +6,10 @@ import com.github.bratek20.architecture.data.impl.DataStorageLogic
 import com.github.bratek20.architecture.users.api.User
 import com.github.bratek20.architecture.users.api.UserDataStorage
 import com.github.bratek20.architecture.users.impl.UserDataStorageLogic
+import jakarta.servlet.http.HttpSession
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
-import javax.servlet.http.HttpSession
 
 @Configuration
 class SessionDataConfig {

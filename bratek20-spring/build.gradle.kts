@@ -6,22 +6,24 @@ plugins {
 version = "1.0.53"
 
 dependencies {
+    implementation(platform("org.springframework.boot:spring-boot-dependencies:3.5.6"))
+
     api(project(":bratek20-infrastructure"))
     testImplementation(testFixtures(project(":bratek20-architecture")))
 
-    implementation(platform(libs.spring.boot.dependencies))
     implementation("org.springframework.boot:spring-boot-starter-web")
     testFixturesImplementation("org.springframework.boot:spring-boot-starter-web")
 
     implementation(libs.bratek20.logs.core)
 
     // web testing
-    testImplementation(libs.rest.assured)
+    testImplementation("io.rest-assured:rest-assured")
 
     //mongo
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 
+    testFixturesImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testFixturesImplementation(libs.testcontainers.junit.jupiter)
-    testFixturesImplementation("org.testcontainers:mongodb:${libs.versions.testcontainers.get()}")
+    testFixturesImplementation("org.testcontainers:junit-jupiter")
+    testFixturesImplementation("org.testcontainers:mongodb")
 }

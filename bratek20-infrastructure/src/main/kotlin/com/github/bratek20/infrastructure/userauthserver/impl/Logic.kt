@@ -1,11 +1,9 @@
 package com.github.bratek20.infrastructure.userauthserver.impl
 
 import com.github.bratek20.architecture.data.api.DataStorage
-import com.github.bratek20.architecture.users.api.User
 import com.github.bratek20.architecture.users.api.UserId
 import com.github.bratek20.infrastructure.userauthserver.api.*
 import com.github.bratek20.logs.api.Logger
-import javax.servlet.http.HttpSession
 
 val USERS_MAPPING_DATA_MAP_KEY = com.github.bratek20.architecture.data.api.MapDataKey(
     "UsersMapping",
