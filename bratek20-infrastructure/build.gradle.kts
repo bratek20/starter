@@ -5,8 +5,10 @@ plugins {
 
 version = "1.0.58"
 
+val springBootVersion: String by project
+
 dependencies {
-    implementation(platform("org.springframework.boot:spring-boot-dependencies:3.5.6"))
+    implementation(platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion"))
 
     api(project(":bratek20-architecture"))
     testFixturesImplementation(testFixtures(project(":bratek20-architecture")))
