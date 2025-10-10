@@ -6,6 +6,8 @@ plugins {
 version = "1.0.58"
 
 dependencies {
+    implementation(platform("org.springframework.boot:spring-boot-dependencies:3.5.6"))
+
     api(project(":bratek20-architecture"))
     testFixturesImplementation(testFixtures(project(":bratek20-architecture")))
     testApi(testFixtures(project(":bratek20-architecture")))
@@ -14,12 +16,12 @@ dependencies {
     testFixturesImplementation(testFixtures(libs.bratek20.logs))
 
     //http client
-    implementation(libs.spring.web)
-    //servlet-api = { group = "javax.servlet", name = "javax.servlet-api", version = "4.0.1" }
-    implementation("javax.servlet:javax.servlet-api:4.0.1") //TODO check if compatible version and move to version catalog
+    implementation("org.springframework:spring-web")
+    compileOnly("jakarta.servlet:jakarta.servlet-api")
 
     //http server
     testFixturesImplementation(project(":bratek20-spring"))
 
-    implementation(libs.spring.context)
+    //implementation(libs.spring.context)
+    implementation("org.springframework:spring-context")
 }

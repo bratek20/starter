@@ -1,16 +1,14 @@
 package com.github.bratek20.infrastructure.userauthserver.web
 
-import com.github.bratek20.architecture.structs.api.Struct
 import com.github.bratek20.architecture.serialization.api.Serializer
 import com.github.bratek20.architecture.serialization.context.SerializationFactory
-
+import com.github.bratek20.architecture.structs.api.Struct
+import com.github.bratek20.infrastructure.userauthserver.api.UserAuthServerApi
+import jakarta.servlet.http.HttpSession
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-
-import com.github.bratek20.infrastructure.userauthserver.api.*
-import javax.servlet.http.HttpSession
 
 @RestController
 @RequestMapping("/b20/userAuthServerApi")
