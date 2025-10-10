@@ -3,7 +3,7 @@ plugins {
     kotlin("plugin.spring")
 }
 
-version = "1.0.58"
+version = "1.1.0"
 
 val springBootVersion: String by project
 
