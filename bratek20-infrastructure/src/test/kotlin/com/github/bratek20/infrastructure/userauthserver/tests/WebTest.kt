@@ -5,6 +5,7 @@ import com.github.bratek20.architecture.context.someContextBuilder
 import com.github.bratek20.architecture.data.api.DataStorage
 import com.github.bratek20.architecture.data.api.ObjectDataKey
 import com.github.bratek20.architecture.data.context.DataInMemoryImpl
+import com.github.bratek20.architecture.properties.context.PropertiesImpl
 import com.github.bratek20.architecture.users.api.User
 import com.github.bratek20.architecture.users.api.UserDataStorage
 import com.github.bratek20.architecture.users.api.UserId
@@ -136,6 +137,7 @@ class UserAuthServerWebTest {
         val app = runTestWebApp(
             modules = listOf(
                 DataInMemoryImpl(),
+                PropertiesImpl(),
                 UserAuthServerWebServer(),
                 SomeUserModuleWebServer(),
             ),

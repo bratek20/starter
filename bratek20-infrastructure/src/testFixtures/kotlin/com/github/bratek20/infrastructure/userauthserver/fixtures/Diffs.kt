@@ -12,11 +12,11 @@ fun diffAuthId(given: AuthId, expected: String, path: String = ""): String {
     return ""
 }
 
-data class ExpectedUserAuthServerProperties(
+data class ExpectedUserAuthServerConfig(
     var createNewUserForUnknownAuthId: Boolean? = null,
 )
-fun diffUserAuthServerProperties(given: UserAuthServerProperties, expectedInit: ExpectedUserAuthServerProperties.() -> Unit, path: String = ""): String {
-    val expected = ExpectedUserAuthServerProperties().apply(expectedInit)
+fun diffUserAuthServerConfig(given: UserAuthServerConfig, expectedInit: ExpectedUserAuthServerConfig.() -> Unit, path: String = ""): String {
+    val expected = ExpectedUserAuthServerConfig().apply(expectedInit)
     val result: MutableList<String> = mutableListOf()
 
     expected.createNewUserForUnknownAuthId?.let {

@@ -211,6 +211,18 @@ class PropertiesTest {
             val value2 = properties.get(ListPropertyKey("key2", SomeClass::class))
             assertThat(value2).hasSize(1)
         }
+
+        @Test
+        fun `find works`() {
+            val key = ObjectPropertyKey("mine", SomeProperty::class)
+            source1.set(key, SomeProperty("x"))
+
+            val found = properties.find(key)
+            assertThat(found).isEqualTo(SomeProperty("x"))
+
+            val notFound = properties.find(ObjectPropertyKey("notExisting", SomeProperty::class))
+            assertThat(notFound).isNull()
+        }
     }
 
     @Nested

@@ -5,22 +5,17 @@ import com.github.bratek20.architecture.context.api.ContextModule
 
 import com.github.bratek20.infrastructure.userauthserver.api.*
 
-class UserAuthServerBaseImpl(
-    private val properties: UserAuthServerProperties = UserAuthServerProperties(),
-): ContextModule {
+class UserAuthServerBaseImpl: ContextModule {
     override fun apply(builder: ContextBuilder) {
         builder
-            .setImplObject(UserAuthServerProperties::class.java, properties)
             .setImpl(UserAuthServerApi::class.java, UserAuthServerApiLogic::class.java)
     }
 }
 
-class UserAuthServerImpl(
-    private val properties: UserAuthServerProperties = UserAuthServerProperties(),
-): ContextModule {
+class UserAuthServerImpl: ContextModule {
     override fun apply(builder: ContextBuilder) {
         builder
-            .withModule(UserAuthServerBaseImpl(properties))
+            .withModule(UserAuthServerBaseImpl())
             .setImpl(AuthIdGenerator::class.java, AuthIdGeneratorLogic::class.java)
     }
 }

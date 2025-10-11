@@ -23,6 +23,11 @@ class PropertiesMock : Properties {
         return entry!!.value as T
     }
 
+    override fun <T : Any> find(key: PropertyKey<T>): T? {
+        val entry = findEntry(key)
+        return entry?.value as T?
+    }
+
     private fun findEntry(key: PropertyKey<*>): Map.Entry<PropertyKey<*>, Any>? {
         return values.entries.find { it.key.name == key.name }
     }
