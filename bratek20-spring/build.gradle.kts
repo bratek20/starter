@@ -3,7 +3,7 @@ plugins {
     kotlin("plugin.spring")
 }
 
-version = "1.0.53"
+version = "1.1.0"
 
 val springBootVersion: String by project
 
@@ -22,7 +22,8 @@ dependencies {
     testImplementation("io.rest-assured:rest-assured")
 
     //mongo
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+    compileOnly("org.springframework.boot:spring-boot-starter-data-mongodb")
+    testImplementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 
     testFixturesImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

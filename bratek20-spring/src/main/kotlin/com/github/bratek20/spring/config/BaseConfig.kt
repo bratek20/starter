@@ -16,4 +16,4 @@ import org.springframework.context.annotation.Configuration
         MongoDataAutoConfiguration::class
     ]
 )
-open class BaseConfig
+class BaseConfig

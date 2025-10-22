@@ -13,21 +13,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class HttpRequesterMock: HttpRequester {
-    private var lastRequest: HttpRequest? = null
-
-    var response: SendResponseDef.() -> Unit = {}
-
-    override fun send(request: HttpRequest): SendResponse {
-        lastRequest = request
-        return sendResponse(response)
-    }
-
-    fun assertLastRequest(expected: ExpectedHttpRequest.() -> Unit) {
-        assertHttpRequest(lastRequest!!, expected)
-    }
-}
-
 class HttpClientImplTest {
     private lateinit var factory: HttpClientFactory
 
