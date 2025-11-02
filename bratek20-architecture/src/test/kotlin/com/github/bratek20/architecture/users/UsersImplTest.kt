@@ -9,12 +9,12 @@ import org.junit.jupiter.api.Test
 
 class TestData(
     val id: String,
-    val value: Int
+    var value: Int
 )
 
 class UsersImplTest {
     @Test
-    fun `should work`() {
+    fun `should write to different keys per user + getOrCreate + upsert`() {
         val builder = TestUserContextBuilder()
         val c1 = builder.build(1)
         val c2 = builder.build(2)
@@ -27,9 +27,12 @@ class UsersImplTest {
             it.id
         }
 
-        userStorage1.getOrCreateElement(key, "e1") {
+        val e1 = userStorage1.getOrCreateElement(key, "e1") {
             TestData(it, 1)
         }
+        e1.value = 3
+        userStorage1.upsertElement(key, e1)
+
         userStorage2.getOrCreateElement(key, "e2") {
             TestData(it, 2)
         }
@@ -38,7 +41,7 @@ class UsersImplTest {
             ListDataKey("user${userId}.test_key", TestData::class)
         }
         appStorage.get(testUserKeyFor("1")).forEach {
-            assertThat(it.value).isEqualTo(1)
+            assertThat(it.value).isEqualTo(3)
         }
         appStorage.get(testUserKeyFor("2")).forEach {
             assertThat(it.value).isEqualTo(2)
