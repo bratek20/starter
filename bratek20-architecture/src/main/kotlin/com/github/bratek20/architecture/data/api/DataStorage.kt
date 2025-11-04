@@ -17,7 +17,9 @@ interface DataStorage {
     ): E {
         var elem = this.findElement(key, id)
         if (elem == null) {
-            this.set(key, mutableListOf())
+            if (this.find(key) == null) {
+                this.set(key, mutableListOf())
+            }
             this.addElement(key, elementFactory(id))
             elem = this.getElement(key, id)
         }
