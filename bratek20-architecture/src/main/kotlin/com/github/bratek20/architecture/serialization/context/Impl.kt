@@ -23,3 +23,6 @@ class SerializationFactory {
         }
     }
 }
+
+// default serializer instance
+val serializer: Serializer = SerializationFactory.createSerializer()
