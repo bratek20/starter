@@ -1,6 +1,7 @@
 package com.github.bratek20.infrastructure.userauthserver.impl
 
 import com.github.bratek20.architecture.data.api.DataStorage
+import com.github.bratek20.architecture.properties.api.Properties
 import com.github.bratek20.architecture.users.api.UserId
 import com.github.bratek20.infrastructure.userauthserver.api.*
 import com.github.bratek20.logs.api.Logger
@@ -20,7 +21,7 @@ class UserAuthServerApiLogic(
     private val authIdGenerator: AuthIdGenerator,
     private val storage: DataStorage,
     private val logger: Logger,
-    private val properties: UserAuthServerProperties
+    private val properties: Properties
 ): UserAuthServerApi {
     init {
         if (storage.find(USERS_MAPPING_DATA_MAP_KEY) == null) {
@@ -52,7 +53,7 @@ class UserAuthServerApiLogic(
         var mapping = storage.findElement(USERS_MAPPING_DATA_MAP_KEY, authId)
 
         if (mapping == null) {
-            if (properties.getCreateNewUserForUnknownAuthId()) {
+            if (getConfig().getCreateNewUserForUnknownAuthId()) {
                 mapping = createNewUser()
                 logger.warn("Unknown authId '$authId' - creating new user with id '${mapping.getUserId()}'")
             } else {
@@ -63,6 +64,10 @@ class UserAuthServerApiLogic(
         logger.info("Existing user '${mapping.getUserId()}' logged in")
 
         return mapping
+    }
+
+    private fun getConfig(): UserAuthServerConfig {
+        return properties.find(USER_AUTH_SERVER_CONFIG_PROPERTY_KEY) ?: UserAuthServerConfig()
     }
 }
 

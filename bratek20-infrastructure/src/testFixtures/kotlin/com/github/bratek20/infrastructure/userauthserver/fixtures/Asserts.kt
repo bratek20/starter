@@ -14,8 +14,8 @@ fun assertAuthId(given: AuthId, expected: String) {
     assertThat(diff).withFailMessage(diff).isEqualTo("")
 }
 
-fun assertUserAuthServerProperties(given: UserAuthServerProperties, expectedInit: ExpectedUserAuthServerProperties.() -> Unit) {
-    val diff = diffUserAuthServerProperties(given, expectedInit)
+fun assertUserAuthServerConfig(given: UserAuthServerConfig, expectedInit: ExpectedUserAuthServerConfig.() -> Unit) {
+    val diff = diffUserAuthServerConfig(given, expectedInit)
     assertThat(diff).withFailMessage(diff).isEqualTo("")
 }
 

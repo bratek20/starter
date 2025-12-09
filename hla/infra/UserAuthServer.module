@@ -8,11 +8,12 @@ Data
     "UsersMapping" -> UserMapping[]
 
 Properties
-    UserAuthServerProperties
+    UserAuthServerConfig
         createNewUserForUnknownAuthId: bool = false
         //if true, will log warn
         //if false, will throw
 
+    "UserAuthServerConfig" -> UserAuthServerConfig
 
 Exceptions
     NotLoggedInException

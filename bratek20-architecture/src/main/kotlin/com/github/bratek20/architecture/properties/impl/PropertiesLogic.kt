@@ -43,7 +43,17 @@ class PropertiesLogic(
         findSourceWithKeyName(key.name)
             ?: throw PropertyNotFoundException("Property `${key.name}` not found, sources: ${allSources.map { it.getName().value }}")
 
-        return cachedProperties.getOrPut(key.name) { super.get(key) } as T
+        return find(key)
+            ?: throwNotFoundInStorageException(key.name)
+    }
+
+    override fun <T : Any> find(key: PropertyKey<T>): T? {
+        if (cachedProperties.containsKey(key.name)) {
+            return cachedProperties[key.name] as T
+        }
+        val value = super.find(key) ?: return null
+        cachedProperties[key.name] = value
+        return value
     }
 
     override fun <Id : Any, E : Any> findElement(key: MapPropertyKey<Id, E>, id: Id): E? {

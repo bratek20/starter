@@ -3,10 +3,13 @@ package com.github.bratek20.infrastructure.userauthserver.tests
 import com.github.bratek20.architecture.context.someContextBuilder
 import com.github.bratek20.architecture.data.context.DataInMemoryImpl
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
+import com.github.bratek20.architecture.properties.PropertiesMock
+import com.github.bratek20.architecture.properties.PropertiesMocks
 import com.github.bratek20.architecture.users.fixtures.assertUserId
 import com.github.bratek20.infrastructure.userauthserver.api.*
 import com.github.bratek20.infrastructure.userauthserver.impl.UserAuthServerBaseImpl
 import com.github.bratek20.infrastructure.userauthserver.fixtures.assertUserMapping
+import com.github.bratek20.infrastructure.userauthserver.fixtures.userAuthServerConfig
 import com.github.bratek20.logs.LoggerMock
 import com.github.bratek20.logs.LogsMocks
 import org.junit.jupiter.api.BeforeEach
@@ -25,18 +28,16 @@ class UserAuthServerImplTest {
 
     private lateinit var authIdGeneratorMock: AuthIdGeneratorMock
     private lateinit var loggerMock: LoggerMock
+    private lateinit var propertiesMock: PropertiesMock
 
     @BeforeEach
     fun setup() {
-        setupWithProperties(UserAuthServerProperties())
-    }
-
-    private fun setupWithProperties(properties: UserAuthServerProperties) {
         val c = someContextBuilder()
             .withModules(
                 DataInMemoryImpl(),
-                UserAuthServerBaseImpl(properties),
-                LogsMocks()
+                UserAuthServerBaseImpl(),
+                LogsMocks(),
+                PropertiesMocks(),
             )
             .setImpl(AuthIdGenerator::class.java, AuthIdGeneratorMock::class.java)
             .build()
@@ -44,6 +45,7 @@ class UserAuthServerImplTest {
         api = c.get(UserAuthServerApi::class.java)
         authIdGeneratorMock = c.get(AuthIdGeneratorMock::class.java)
         loggerMock = c.get(LoggerMock::class.java)
+        propertiesMock = c.get(PropertiesMock::class.java)
     }
 
     @Test
@@ -91,9 +93,9 @@ class UserAuthServerImplTest {
 
     @Test
     fun `should create new user and log warning for unknown user if configured`() {
-        setupWithProperties(UserAuthServerProperties(
+        propertiesMock.set(USER_AUTH_SERVER_CONFIG_PROPERTY_KEY, userAuthServerConfig {
             createNewUserForUnknownAuthId = true
-        ))
+        })
 
         val mapping = api.login(AuthId("unknown"))
         assertUserMapping(mapping) {

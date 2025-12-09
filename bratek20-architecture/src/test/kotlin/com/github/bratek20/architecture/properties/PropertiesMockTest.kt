@@ -67,7 +67,11 @@ class PropertiesMockTest {
 
     @Test
     fun `should work for list keys`() {
+        //does not throw
         assertThat(properties.get(LIST_KEY)).isEmpty()
+
+        //but find returns null
+        assertThat(properties.find(LIST_KEY)).isNull()
     }
 
     @Test

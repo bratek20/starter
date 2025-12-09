@@ -11,12 +11,12 @@ fun authId(value: String = "someValue"): AuthId {
     return AuthId(value)
 }
 
-data class UserAuthServerPropertiesDef(
+data class UserAuthServerConfigDef(
     var createNewUserForUnknownAuthId: Boolean = false,
 )
-fun userAuthServerProperties(init: UserAuthServerPropertiesDef.() -> Unit = {}): UserAuthServerProperties {
-    val def = UserAuthServerPropertiesDef().apply(init)
-    return UserAuthServerProperties.create(
+fun userAuthServerConfig(init: UserAuthServerConfigDef.() -> Unit = {}): UserAuthServerConfig {
+    val def = UserAuthServerConfigDef().apply(init)
+    return UserAuthServerConfig.create(
         createNewUserForUnknownAuthId = def.createNewUserForUnknownAuthId,
     )
 }

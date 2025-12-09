@@ -12,7 +12,7 @@ data class AuthId(
     }
 }
 
-data class UserAuthServerProperties(
+data class UserAuthServerConfig(
     private val createNewUserForUnknownAuthId: Boolean = false,
 ) {
     fun getCreateNewUserForUnknownAuthId(): Boolean {
@@ -22,8 +22,8 @@ data class UserAuthServerProperties(
     companion object {
         fun create(
             createNewUserForUnknownAuthId: Boolean = false,
-        ): UserAuthServerProperties {
-            return UserAuthServerProperties(
+        ): UserAuthServerConfig {
+            return UserAuthServerConfig(
                 createNewUserForUnknownAuthId = createNewUserForUnknownAuthId,
             )
         }

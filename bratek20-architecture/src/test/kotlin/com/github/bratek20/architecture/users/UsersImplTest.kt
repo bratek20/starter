@@ -9,12 +9,12 @@ import org.junit.jupiter.api.Test
 
 class TestData(
     val id: String,
-    val value: Int
+    var value: Int
 )
 
 class UsersImplTest {
     @Test
-    fun `should work`() {
+    fun `should write to different keys per user + getOrCreate + upsert`() {
         val builder = TestUserContextBuilder()
         val c1 = builder.build(1)
         val c2 = builder.build(2)
@@ -27,9 +27,15 @@ class UsersImplTest {
             it.id
         }
 
-        userStorage1.getOrCreateElement(key, "e1") {
+        val e1A = userStorage1.getOrCreateElement(key, "e1A") {
             TestData(it, 1)
         }
+        userStorage1.getOrCreateElement(key, "e1B") {
+            TestData(it, 1)
+        }
+        e1A.value = 3
+        userStorage1.upsertElement(key, e1A)
+
         userStorage2.getOrCreateElement(key, "e2") {
             TestData(it, 2)
         }
@@ -37,9 +43,14 @@ class UsersImplTest {
         val testUserKeyFor =  { userId: String ->
             ListDataKey("user${userId}.test_key", TestData::class)
         }
-        appStorage.get(testUserKeyFor("1")).forEach {
-            assertThat(it.value).isEqualTo(1)
-        }
+
+        val list1 = appStorage.get(testUserKeyFor("1"))
+        assertThat(list1).hasSize(2)
+        assertThat(list1[0].id).isEqualTo("e1A")
+        assertThat(list1[0].value).isEqualTo(3)
+        assertThat(list1[1].id).isEqualTo("e1B")
+        assertThat(list1[1].value).isEqualTo(1)
+
         appStorage.get(testUserKeyFor("2")).forEach {
             assertThat(it.value).isEqualTo(2)
         }

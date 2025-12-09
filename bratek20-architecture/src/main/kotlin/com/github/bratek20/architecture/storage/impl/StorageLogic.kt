@@ -24,7 +24,7 @@ abstract class StorageLogic {
     }
 
     fun <T : Any> get(key: TypedKey<T>): T {
-        val keyValue = findValue(key.name) ?: throw notFoundInStorageException("${storageEntityName()} `${key.name}` not found")
+        val keyValue = findValue(key.name) ?: throwNotFoundInStorageException(key.name)
 
         if (key is ObjectTypedKey<T>) {
             if (isListWithElementType(keyValue, key.type) == null) {
@@ -46,6 +46,10 @@ abstract class StorageLogic {
         }
 
         throw ShouldNeverHappenException()
+    }
+
+    protected fun throwNotFoundInStorageException(keyName: String): Nothing {
+        throw notFoundInStorageException("${storageEntityName()} `$keyName` not found")
     }
 
     fun <Id : Any, E : Any> findElement(key: MapTypedKey<Id, E>, id: Id): E? {

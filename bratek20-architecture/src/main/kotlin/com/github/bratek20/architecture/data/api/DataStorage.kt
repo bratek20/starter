@@ -17,10 +17,27 @@ interface DataStorage {
     ): E {
         var elem = this.findElement(key, id)
         if (elem == null) {
-            this.set(key, mutableListOf())
+            if (this.find(key) == null) {
+                this.set(key, mutableListOf())
+            }
             this.addElement(key, elementFactory(id))
             elem = this.getElement(key, id)
         }
         return elem
+    }
+
+    fun <Id: Any, E: Any> upsertElement(
+        key: MapDataKey<Id, E>,
+        elem: E
+    ) {
+        val id = key.idProvider(elem)
+        val list = this.find(key)?.toMutableList() ?: mutableListOf()
+        val index = list.indexOfFirst { key.idProvider(it) == id }
+        if (index >= 0) {
+            list[index] = elem
+        } else {
+            list.add(elem)
+        }
+        this.set(key, list)
     }
 }
