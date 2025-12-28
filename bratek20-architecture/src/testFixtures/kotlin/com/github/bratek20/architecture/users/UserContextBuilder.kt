@@ -7,6 +7,17 @@ import com.github.bratek20.architecture.data.context.DataInMemoryImpl
 import com.github.bratek20.architecture.users.api.UserId
 import com.github.bratek20.architecture.users.impl.InMemoryUser
 import com.github.bratek20.architecture.users.impl.UsersInMemoryImpl
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory
+import org.springframework.context.annotation.Configuration
+import org.springframework.context.support.SimpleThreadScope
+
+@Configuration
+open class TestSessionScopeConfig : BeanFactoryPostProcessor {
+    override fun postProcessBeanFactory(beanFactory: ConfigurableListableBeanFactory) {
+        beanFactory.registerScope("session", SimpleThreadScope())
+    }
+}
 
 class TestUserContextBuilder(
     appBuilderOps: ContextBuilder.() -> Unit = {},
@@ -29,6 +40,7 @@ class TestUserContextBuilder(
             .withModules(
                 UsersInMemoryImpl()
             )
+            .setClass(TestSessionScopeConfig::class.java)
             .apply(userBuilderOps)
             .build()
 
