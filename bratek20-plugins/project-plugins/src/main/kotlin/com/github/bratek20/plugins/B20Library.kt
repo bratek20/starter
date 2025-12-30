@@ -1,0 +1,51 @@
+package com.github.bratek20.plugins
+
+import org.gradle.api.Plugin
+import org.gradle.api.Project
+import org.gradle.api.artifacts.VersionCatalog
+import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.kotlin.dsl.create
+import org.gradle.kotlin.dsl.getByType
+
+open class B20LibraryExtension {
+    var testsInTestFixtures: Boolean = false
+    var addBomFromCatalog: Boolean = true
+}
+
+fun Project.b20Catalog(): VersionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
+
+class B20Library : Plugin<Project> {
+    override fun apply(project: Project) {
+        val ext = project.extensions.create<B20LibraryExtension>("b20Library")
+
+        with(project) {
+            with(pluginManager) {
+                apply("java-library")
+                apply("java-test-fixtures")
+            }
+
+            with(plugins) {
+                apply(B20Java::class.java)
+                apply(B20Kotlin::class.java)
+
+                apply(B20Test::class.java)
+
+                afterEvaluate {
+                    if (ext.testsInTestFixtures) {
+                        plugins.apply(B20TestsInTestFixtures::class.java)
+                    }
+                }
+            }
+
+            with(dependencies) {
+                if (ext.addBomFromCatalog) {
+                    val b20BomLib = b20Catalog().findLibrary("b20-bom").get()
+                    add("implementation", platform(b20BomLib))
+                    add("testFixturesImplementation", platform(b20BomLib))
+                }
+
+                add("testFixturesImplementation", "org.assertj:assertj-core")
+            }
+        }
+    }
+}

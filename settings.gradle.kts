@@ -1,9 +1,10 @@
+pluginManagement {
+    includeBuild("build-logic")
+    includeBuild("bratek20-plugins")
+}
 includeBuild("bratek20-logs")
 includeBuild("examples")
 
-pluginManagement {
-    includeBuild("build-logic")
-}
 
 val b20Version = "1.0.93"
 dependencyResolutionManagement {
@@ -39,10 +40,4 @@ include("bratek20-architecture")
 include("bratek20-infrastructure")
 include("bratek20-spring")
 include("bratek20-utils")
-
-// "Legacy" modules
-
-//include("bratek20-tests")
-//include("bratek20-commons")
-//include("spring-disabled")
 
