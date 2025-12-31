@@ -3,7 +3,7 @@ package com.github.bratek20.plugins
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-class B20App : Plugin<Project> {
+open class B20App : Plugin<Project> {
     override fun apply(project: Project) {
         with(project) {
             with(plugins) {
@@ -11,9 +11,6 @@ class B20App : Plugin<Project> {
                 apply(B20Kotlin::class.java)
 
                 apply(B20Test::class.java)
-
-                apply("org.springframework.boot")
-                apply("org.jetbrains.kotlin.plugin.spring")
             }
 
             with(dependencies) {
@@ -23,3 +20,4 @@ class B20App : Plugin<Project> {
         }
     }
 }
+

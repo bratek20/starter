@@ -3,7 +3,6 @@ package com.github.bratek20.plugins
 import org.gradle.api.Plugin
 import org.gradle.api.initialization.Settings
 import org.gradle.kotlin.dsl.create
-import java.net.URI
 
 open class B20SettingsExtension {
     var catalogVersion: String? = null

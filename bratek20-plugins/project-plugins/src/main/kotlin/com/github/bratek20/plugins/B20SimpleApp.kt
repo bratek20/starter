@@ -1,18 +1,19 @@
-package pl.bratek20.conventions
+package com.github.bratek20.plugins
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.named
-import pl.bratek20.extensions.sourceSets
 import java.io.File
 
-class SimpleAppConventions : Plugin<Project> {
+class B20SimpleApp : B20App() {
     override fun apply(project: Project) {
+        super.apply(project)
+
         with(project) {
             plugins.apply("com.github.johnrengelman.shadow")
-            plugins.apply(KotlinConventions::class.java)
 
             val mainClassName = findMainClassName(project)
             if (mainClassName != null) {
@@ -58,3 +59,4 @@ class SimpleAppConventions : Plugin<Project> {
             .plus("Kt")
     }
 }
+
