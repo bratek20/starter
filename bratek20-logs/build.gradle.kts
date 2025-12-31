@@ -1,17 +1,21 @@
 plugins {
-    id("com.github.bratek20.kotlin-library-conventions")
+    id("com.github.bratek20.plugins.b20-library")
+    id("com.github.bratek20.plugins.b20-publish")
 }
 
-group = "com.github.bratek20.logs"
-version = "1.0.34"
+val logsGroup = "com.github.bratek20.logs"
+val logsVersion = "1.1.0"
+
+group = logsGroup
+version = logsVersion
 
 subprojects {
-    group = rootProject.group
-    version = rootProject.version
+    group = logsGroup
+    version = logsVersion
 }
 
 dependencies {
     // default setup if consumer does not care about more details
-    api(project(":logs-logback"))
-    testFixturesApi(testFixtures(project(":logs-logback")))
+    api(project(":bratek20-logs:logs-logback"))
+    testFixturesApi(testFixtures(project(":bratek20-logs:logs-logback")))
 }
