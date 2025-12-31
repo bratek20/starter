@@ -2,7 +2,7 @@ import com.github.bratek20.plugins.B20PublishComponent
 
 plugins {
     `java-platform`
-    id("com.github.bratek20.b20-publish")
+    id("com.github.bratek20.plugins.b20-publish")
 }
 
 version = "0.0.6"
@@ -17,8 +17,10 @@ javaPlatform {
     allowDependencies()
 }
 
+val springBootVersion = "3.5.6"
+
 dependencies {
-    api(platform("org.springframework.boot:spring-boot-dependencies:3.5.6"))
+    api(platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion"))
 }
 
 

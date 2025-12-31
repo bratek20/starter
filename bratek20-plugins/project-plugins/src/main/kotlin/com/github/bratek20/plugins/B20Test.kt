@@ -26,6 +26,8 @@ class B20Test : Plugin<Project> {
             }
 
             tasks.withType<Test>().configureEach {
+                useJUnitPlatform()
+
                 if (ext.printTestLogs) {
                     testLogging {
                         showStandardStreams = true

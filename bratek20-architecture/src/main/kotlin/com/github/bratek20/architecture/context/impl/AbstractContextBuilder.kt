@@ -21,8 +21,4 @@ abstract class AbstractContextBuilder: ContextBuilder {
         this.parentContext = parent
         return this
     }
-
-    override fun withDefaultModule(module: ContextModule): ContextBuilder {
-        TODO("Not yet implemented")
-    }
 }

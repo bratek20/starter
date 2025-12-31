@@ -1,7 +1,11 @@
 version = "0.1.0"
 
+val kotlinVersion = "1.9.25"
+
 dependencies {
     implementation(project(":settings-plugins"))
+
+    implementation("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:$kotlinVersion")
 }
 
 gradlePlugin {

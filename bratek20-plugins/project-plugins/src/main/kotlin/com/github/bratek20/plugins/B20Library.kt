@@ -6,6 +6,7 @@ import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.project
 
 open class B20LibraryExtension {
     var testsInTestFixtures: Boolean = false
@@ -38,13 +39,19 @@ class B20Library : Plugin<Project> {
             }
 
             with(dependencies) {
-                if (ext.addBomFromCatalog) {
-                    val b20BomLib = b20Catalog().findLibrary("b20-bom").get()
-                    add("implementation", platform(b20BomLib))
-                    add("testFixturesImplementation", platform(b20BomLib))
-                }
-
                 add("testFixturesImplementation", "org.assertj:assertj-core")
+
+                afterEvaluate {
+                    if (ext.addBomFromCatalog) {
+                        val b20BomLib = b20Catalog().findLibrary("b20-bom").get()
+                        add("implementation", platform(b20BomLib))
+                        add("testFixturesImplementation", platform(b20BomLib))
+                    }
+                    else {
+                        add("implementation", platform(project(":bratek20-bom")))
+                        add("testFixturesImplementation", platform(project(":bratek20-bom")))
+                    }
+                }
             }
         }
     }
