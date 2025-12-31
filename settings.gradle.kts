@@ -1,7 +1,7 @@
 pluginManagement {
     includeBuild("bratek20-plugins")
 }
-//includeBuild("examples")
+includeBuild("examples")
 
 plugins {
     id("com.github.bratek20.plugins.b20-settings")

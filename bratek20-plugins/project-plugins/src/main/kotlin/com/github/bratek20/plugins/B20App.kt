@@ -17,7 +17,7 @@ class B20App : Plugin<Project> {
             }
 
             with(dependencies) {
-                val b20BomLib = b20Catalog().findLibrary("b20-bom").get()
+                val b20BomLib = getB20BomLib(project)
                 add("implementation", platform(b20BomLib))
             }
         }

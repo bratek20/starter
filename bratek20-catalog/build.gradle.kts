@@ -6,7 +6,7 @@ plugins {
 }
 
 //changed by script
-val catalogVersion = "1.1.3"
+val catalogVersion = "1.1.4"
 
 //changed manually
 val b20ArchVersion = "1.1.0"
@@ -25,6 +25,7 @@ catalog {
         library("bratek20-infrastructure", "com.github.bratek20", "bratek20-infrastructure").version(b20InfraVersion)
         library("bratek20-spring", "com.github.bratek20", "bratek20-spring").version(b20SpringVersion)
         library("bratek20-utils", "com.github.bratek20", "bratek20-utils").version(b20UtilsVersion)
+        library("bratek20-bom", "com.github.bratek20", "bratek20-bom").version(b20BomVersion)
 
         library("bratek20-logs", "com.github.bratek20.logs", "bratek20-logs").version(b20LogsVersion)
         library("bratek20-logs-core", "com.github.bratek20.logs", "logs-core").version(b20LogsVersion)
