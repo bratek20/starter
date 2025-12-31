@@ -1,21 +1,17 @@
 plugins {
-    id("com.github.bratek20.kotlin-library-conventions")
+    id("com.github.bratek20.plugins.b20-library")
     kotlin("plugin.spring")
 }
 
-version = "1.1.1"
-
-val springBootVersion: String by project
+version = "1.1.2"
 
 dependencies {
-    implementation(platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion"))
-
     api(project(":bratek20-architecture"))
     testFixturesImplementation(testFixtures(project(":bratek20-architecture")))
     testApi(testFixtures(project(":bratek20-architecture")))
 
-    implementation(libs.bratek20.logs.core)
-    testFixturesImplementation(testFixtures(libs.bratek20.logs))
+    implementation(project(":bratek20-logs:logs-core"))
+    testFixturesImplementation(testFixtures(project(":bratek20-logs")))
 
     //http client
     implementation("org.springframework:spring-web")

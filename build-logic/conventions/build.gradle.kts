@@ -48,7 +48,7 @@ gradlePlugin {
             implementationClass = "pl.bratek20.conventions.JavaConventions"
         }
         register("kotlin-library-conventions") {
-            id = "com.github.bratek20.kotlin-library-conventions"
+            id = "com.github.bratek20.plugins.b20-library"
             implementationClass = "pl.bratek20.conventions.KotlinLibraryConventions"
         }
         register("internal-kotlin-library-conventions") {

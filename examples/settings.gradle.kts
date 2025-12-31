@@ -8,7 +8,7 @@ include("tests-in-test-fixtures")
 val catalogVersion = "1.0.55"
 
 pluginManagement {
-    includeBuild("../build-logic")
+    includeBuild("../bratek20-plugins")
 }
 
 dependencyResolutionManagement {

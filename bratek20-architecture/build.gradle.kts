@@ -6,7 +6,6 @@ version = "1.1.0"
 
 b20Library {
     testsInTestFixtures = true
-    addBomFromCatalog = false
 }
 
 val guavaVersion = "32.1.2-jre"

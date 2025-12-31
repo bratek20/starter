@@ -1,19 +1,29 @@
 pluginManagement {
-    //includeBuild("build-logic")
     includeBuild("bratek20-plugins")
 }
-includeBuild("bratek20-logs")
-includeBuild("examples")
+//includeBuild("examples") //TODO-FIX
 
 plugins {
     id("com.github.bratek20.plugins.b20-settings")
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
 }
 
 rootProject.name = "bratek20-starter"
 
+include("bratek20-catalog")
 include("bratek20-bom")
+
 include("bratek20-architecture")
-//include("bratek20-infrastructure")
-//include("bratek20-spring")
-//include("bratek20-utils")
+
+include("bratek20-logs")
+include("bratek20-logs:logs-core")
+findProject(":bratek20-logs:logs-core")?.name = "logs-core"
+include("bratek20-logs:logs-slf4j")
+findProject(":bratek20-logs:logs-slf4j")?.name = "logs-slf4j"
+include("bratek20-logs:logs-logback")
+findProject(":bratek20-logs:logs-logback")?.name = "logs-logback"
+
+include("bratek20-infrastructure")
+include("bratek20-spring")
+include("bratek20-utils")
 

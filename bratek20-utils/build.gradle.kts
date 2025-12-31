@@ -1,9 +1,8 @@
 plugins {
-    id("com.github.bratek20.kotlin-library-conventions")
-    id("com.github.bratek20.kotest-conventions")
+    id("com.github.bratek20.plugins.b20-library")
 }
 
-version = "1.0.50"
+version = "1.1.0"
 
 dependencies {
     implementation(project(":bratek20-architecture"))

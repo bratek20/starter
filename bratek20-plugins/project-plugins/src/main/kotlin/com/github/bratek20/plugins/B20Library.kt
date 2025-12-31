@@ -10,10 +10,11 @@ import org.gradle.kotlin.dsl.project
 
 open class B20LibraryExtension {
     var testsInTestFixtures: Boolean = false
-    var addBomFromCatalog: Boolean = true
 }
 
 fun Project.b20Catalog(): VersionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
+fun Project.hasB20Catalog(): Boolean =
+    extensions.getByType<VersionCatalogsExtension>().find("libs").isPresent
 
 class B20Library : Plugin<Project> {
     override fun apply(project: Project) {
@@ -41,16 +42,14 @@ class B20Library : Plugin<Project> {
             with(dependencies) {
                 add("testFixturesImplementation", "org.assertj:assertj-core")
 
-                afterEvaluate {
-                    if (ext.addBomFromCatalog) {
-                        val b20BomLib = b20Catalog().findLibrary("b20-bom").get()
-                        add("implementation", platform(b20BomLib))
-                        add("testFixturesImplementation", platform(b20BomLib))
-                    }
-                    else {
-                        add("implementation", platform(project(":bratek20-bom")))
-                        add("testFixturesImplementation", platform(project(":bratek20-bom")))
-                    }
+                if (hasB20Catalog()) {
+                    val b20BomLib = b20Catalog().findLibrary("b20-bom").get()
+                    add("implementation", platform(b20BomLib))
+                    add("testFixturesImplementation", platform(b20BomLib))
+                }
+                else {
+                    add("implementation", platform(project(":bratek20-bom")))
+                    add("testFixturesImplementation", platform(project(":bratek20-bom")))
                 }
             }
         }

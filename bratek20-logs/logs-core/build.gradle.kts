@@ -1,9 +1,8 @@
 plugins {
-    id("com.github.bratek20.kotlin-library-conventions")
-    id("com.github.bratek20.kotest-conventions")
+    id("com.github.bratek20.plugins.b20-library")
 }
 
 dependencies {
-    implementation(libs.bratek20.architecture)
-    testImplementation(testFixtures(libs.bratek20.architecture))
+    implementation(project(":bratek20-architecture"))
+    testImplementation(testFixtures(project(":bratek20-architecture")))
 }

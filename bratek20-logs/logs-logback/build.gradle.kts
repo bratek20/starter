@@ -1,14 +1,14 @@
 plugins {
-    id("com.github.bratek20.kotlin-library-conventions")
+    id("com.github.bratek20.plugins.b20-library")
 }
 
 dependencies {
-    api(project(":logs-slf4j"))
-    testFixturesApi(testFixtures(project(":logs-slf4j")))
+    api(project(":bratek20-logs:logs-slf4j"))
+    testFixturesApi(testFixtures(project(":bratek20-logs:logs-slf4j")))
 
-    implementation(libs.bratek20.architecture)
+    implementation(project(":bratek20-architecture"))
 
-    api(libs.logback.classic)
+    api("ch.qos.logback:logback-classic")
 
-    testImplementation(testFixtures(libs.bratek20.architecture))
+    testImplementation(testFixtures(project(":bratek20-architecture")))
 }

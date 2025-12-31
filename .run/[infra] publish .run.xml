@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Publish arch" type="GradleRunConfiguration" factoryName="Gradle">
+  <configuration default="false" name="[infra] publish " type="GradleRunConfiguration" factoryName="Gradle">
     <ExternalSystemSettings>
       <option name="executionName" />
-      <option name="externalProjectPath" value="$PROJECT_DIR$/bratek20-architecture" />
+      <option name="externalProjectPath" value="$PROJECT_DIR$/bratek20-infrastructure" />
       <option name="externalSystemIdString" value="GRADLE" />
       <option name="scriptParameters" value="" />
       <option name="taskDescriptions">
