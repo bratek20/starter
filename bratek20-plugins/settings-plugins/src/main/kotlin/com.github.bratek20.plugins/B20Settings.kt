@@ -28,13 +28,13 @@ class B20Settings : Plugin<Settings> {
                     mavenCentral()
                     mavenLocal()
 
-                    val githubActor = settings.findProperty("githubActor")
-                    val githubToken = settings.findProperty("githubToken")
+                    val githubActor = settings.tryResolveProperty(GITHUB_ACTOR)
+                    val githubToken = settings.tryResolveProperty(GITHUB_TOKEN)
 
                     if (githubActor != null && githubToken != null) {
                         maven {
-                            name = "GitHubPackages"
-                            url = URI.create("https://maven.pkg.github.com/bratek20/starter")
+                            name = "b20-starter"
+                            url = B20_STARTER_URI
                             credentials {
                                 username = githubActor
                                 password = githubToken

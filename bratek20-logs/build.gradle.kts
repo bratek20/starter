@@ -1,13 +1,17 @@
 plugins {
     id("com.github.bratek20.plugins.b20-library")
+    id("com.github.bratek20.plugins.b20-publish")
 }
 
-group = "com.github.bratek20.logs"
-version = "1.1.0"
+val logsGroup = "com.github.bratek20.logs"
+val logsVersion = "1.1.0"
+
+group = logsGroup
+version = logsVersion
 
 subprojects {
-    group = rootProject.group
-    version = rootProject.version
+    group = logsGroup
+    version = logsVersion
 }
 
 dependencies {

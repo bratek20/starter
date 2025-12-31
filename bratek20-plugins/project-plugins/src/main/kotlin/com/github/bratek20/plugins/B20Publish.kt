@@ -6,6 +6,7 @@ import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
+import java.net.URI
 
 enum class B20PublishComponent(val componentName: String) {
     JAVA("java"),
@@ -44,7 +45,7 @@ class B20Publish : Plugin<Project> {
 
             project.logger.lifecycle(
                 """
-                [B20Publish] Final publish configuration for ${project.name}:
+                [B20Publish] Publish configuration for ${project.name}:
                   • Component:    $componentName
                   • Group:        $groupId
                   • Artifact:     $artifactId
@@ -76,13 +77,28 @@ class B20Publish : Plugin<Project> {
                 }
 
                 repositories {
-                    maven {
-                        name = "tsg"
-                        url = TSG_ARTIFACTORY_LIBS_RELEASE_LOCAL_URI
-                        credentials {
-                            username = project.resolveProperty("artifactoryUsername")
-                            password = project.resolveProperty("artifactoryPassword")
+                    project.tryResolveProperty(GITHUB_ACTOR)?.let { resolvedUsername ->
+                        maven {
+                            name = "b20-starter"
+                            url = B20_STARTER_URI
+                            credentials {
+                                username = resolvedUsername
+                                password = project.resolveProperty(GITHUB_TOKEN)
+                            }
                         }
+                        project.logger.lifecycle("[B20Publish] B20 starter repository configured for publishing")
+                    }
+
+                    project.tryResolveProperty("artifactoryUsername")?.let { resolvedUsername ->
+                        maven {
+                            name = "tsg"
+                            url = URI.create("https://artifactory.devs.tensquaregames.com/artifactory/libs-release-local")
+                            credentials {
+                                username = resolvedUsername
+                                password = project.resolveProperty("artifactoryPassword")
+                            }
+                        }
+                        project.logger.lifecycle("[B20Publish] TSG Artifactory repository configured for publishing")
                     }
                 }
             }

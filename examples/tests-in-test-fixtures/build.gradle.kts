@@ -1,4 +1,7 @@
 plugins {
-    id("com.github.bratek20.internal-kotlin-library-conventions")
-    id("com.github.bratek20.tests-in-test-fixtures-conventions")
+    //id("com.github.bratek20.plugins.b20-library")
 }
+
+//b20Library {
+//    testsInTestFixtures = true
+//}

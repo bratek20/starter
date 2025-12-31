@@ -10,6 +10,10 @@ fun Project.resolveProperty(name: String): String {
     return resolveProperty(providers, logger, name)
 }
 
+fun Project.tryResolveProperty(name: String): String? {
+    return tryResolveProperty(providers, logger, name)
+}
+
 val Settings.logger: Logger
     get() = Logging.getLogger(this::class.java)
 
@@ -17,16 +21,16 @@ fun Settings.resolveProperty(name: String): String {
     return resolveProperty(providers, logger, name)
 }
 
-fun Settings.findProperty(name: String): String? {
-    return findProperty(providers, logger, name)
+fun Settings.tryResolveProperty(name: String): String? {
+    return tryResolveProperty(providers, logger, name)
 }
 
 fun resolveProperty(providers: ProviderFactory, logger: Logger, name: String): String {
-    return findProperty(providers, logger, name)
+    return tryResolveProperty(providers, logger, name)
         ?: error("Property '$name' not found in Gradle properties or environment variables")
 }
 
-fun findProperty(providers: ProviderFactory, logger: Logger, name: String): String {
+fun tryResolveProperty(providers: ProviderFactory, logger: Logger, name: String): String? {
     providers.gradleProperty(name).orNull?.let {
         logger.lifecycle("Property '$name' resolved using Gradle properties")
         return it

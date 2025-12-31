@@ -5,7 +5,7 @@ plugins {
     id("com.github.bratek20.plugins.b20-publish")
 }
 
-version = "0.0.6"
+version = "1.1.0"
 
 b20Publish {
     component = B20PublishComponent.JAVA_PLATFORM
@@ -17,10 +17,8 @@ javaPlatform {
     allowDependencies()
 }
 
-val springBootVersion = "3.5.6"
-
 dependencies {
-    api(platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion"))
+    api(platform("org.springframework.boot:spring-boot-dependencies:${common.versions.springBoot.get()}"))
 }
 
 

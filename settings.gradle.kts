@@ -1,11 +1,19 @@
 pluginManagement {
     includeBuild("bratek20-plugins")
 }
-//includeBuild("examples") //TODO-FIX
+//includeBuild("examples")
 
 plugins {
     id("com.github.bratek20.plugins.b20-settings")
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
+}
+
+dependencyResolutionManagement {
+    versionCatalogs {
+        create("common") {
+            from(files("gradle/common.versions.toml"))
+        }
+    }
 }
 
 rootProject.name = "bratek20-starter"
