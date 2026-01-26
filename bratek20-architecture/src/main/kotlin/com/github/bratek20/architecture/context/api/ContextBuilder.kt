@@ -2,7 +2,7 @@ package com.github.bratek20.architecture.context.api
 
 interface ContextBuilder {
     fun <T> setClass(type: Class<T>): ContextBuilder
-    fun <T> setClasses(vararg types: Class<*>): ContextBuilder {
+    fun setClasses(vararg types: Class<*>): ContextBuilder {
         types.forEach { setClass(it) }
         return this
     }
