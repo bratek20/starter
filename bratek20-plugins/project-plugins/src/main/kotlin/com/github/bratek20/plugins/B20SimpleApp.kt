@@ -17,7 +17,7 @@ class B20SimpleApp : B20App() {
 
             val mainClassName = findMainClassName(project)
             if (mainClassName != null) {
-                logger.lifecycle("Main class found: $mainClassName")
+                logger.lifecycle("[B20SimpleApp] Main class found: $mainClassName")
                 tasks.named<ShadowJar>("shadowJar") {
                     archiveClassifier.set("") // removes the "-all" suffix from the JAR name
                     manifest {
@@ -29,20 +29,9 @@ class B20SimpleApp : B20App() {
                     dependsOn(tasks.named("shadowJar"))
                 }
             } else {
-                logger.error("Main class not found. Please create a kotlin file with main!")
+                logger.error("[B20SimpleApp] Main class not found. Please create a kotlin file with main!")
             }
         }
-    }
-
-    private fun findMainClassName(project: Project): String? {
-        val mainSrcDirs = project.sourceSets()["main"].allSource.srcDirs
-        mainSrcDirs.forEach { dir ->
-            val mainClassFile = findMainClassFile(dir)
-            if (mainClassFile != null) {
-                return toClassName(mainClassFile, project)
-            }
-        }
-        return null
     }
 
     private fun findMainClassFile(dir: File): File? {
@@ -51,11 +40,21 @@ class B20SimpleApp : B20App() {
         }
     }
 
-    private fun toClassName(file: File, project: Project): String {
-        val relativePath = file.toRelativeString(project.projectDir).removeSuffix(".kt")
+    private fun findMainClassName(project: Project): String? {
+        val mainSrcDirs = project.sourceSets()["main"].allSource.srcDirs
+        mainSrcDirs.forEach { srcDir ->
+            val mainClassFile = findMainClassFile(srcDir)
+            if (mainClassFile != null) {
+                return toClassName(mainClassFile, srcDir)
+            }
+        }
+        return null
+    }
+
+    private fun toClassName(file: File, srcDir: File): String {
+        val relativePath = file.toRelativeString(srcDir).removeSuffix(".kt")
         return relativePath
-            .replace(File.separator, ".")
-            .removePrefix("src.main.kotlin.")
+            .replace(File.separatorChar, '.')
             .plus("Kt")
     }
 }
