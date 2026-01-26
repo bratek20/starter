@@ -1,27 +1,30 @@
 plugins {
-    id("com.github.bratek20.kotlin-library-conventions")
-    kotlin("plugin.spring") version "1.9.23"
+    id("com.github.bratek20.plugins.b20-library")
+    id("com.github.bratek20.plugins.b20-publish")
+
+    kotlin("plugin.spring")
 }
 
-version = "1.0.53"
+version = "1.1.1"
 
 dependencies {
     api(project(":bratek20-infrastructure"))
     testImplementation(testFixtures(project(":bratek20-architecture")))
 
-    implementation(platform(libs.spring.boot.dependencies))
     implementation("org.springframework.boot:spring-boot-starter-web")
     testFixturesImplementation("org.springframework.boot:spring-boot-starter-web")
 
-    implementation(libs.bratek20.logs.core)
+    implementation(project(":bratek20-logs:logs-core"))
 
     // web testing
-    testImplementation(libs.rest.assured)
+    testImplementation("io.rest-assured:rest-assured")
 
     //mongo
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+    compileOnly("org.springframework.boot:spring-boot-starter-data-mongodb")
+    testImplementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 
+    testFixturesImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testFixturesImplementation(libs.testcontainers.junit.jupiter)
-    testFixturesImplementation("org.testcontainers:mongodb:${libs.versions.testcontainers.get()}")
+    testFixturesImplementation("org.testcontainers:junit-jupiter")
+    testFixturesImplementation("org.testcontainers:mongodb")
 }

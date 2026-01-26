@@ -1,3 +1,3 @@
 plugins {
-    id("com.github.bratek20.spring-app-conventions")
+    id("com.github.bratek20.plugins.b20-spring-app")
 }

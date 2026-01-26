@@ -58,8 +58,10 @@ open class ContextApiTest {
     @Test
     fun `should get class that needs other class`() {
         val withX = createInstance()
-            .setClass(X::class.java)
-            .setClass(WithXClass::class.java)
+            .setClasses(
+                X::class.java,
+                WithXClass::class.java
+            )
             .build()
             .get(WithXClass::class.java)
 

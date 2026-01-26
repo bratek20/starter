@@ -1,25 +1,33 @@
 plugins {
-    id("com.github.bratek20.kotlin-library-conventions")
-    id("com.github.bratek20.tests-in-test-fixtures-conventions")
+    id("com.github.bratek20.plugins.b20-library")
+    id("com.github.bratek20.plugins.b20-publish")
 }
 
-version = "1.0.83"
+version = "1.1.1"
+
+b20Library {
+    testsInTestFixtures = true
+}
+
+val guavaVersion = "32.1.2-jre"
+val guiceVersion = "7.0.0"
+val guiceMultibindingsVersion = "4.2.3"
 
 dependencies {
     //event bus
-    implementation(libs.guava)
+    implementation("com.google.guava:guava:$guavaVersion")
 
     //spring context
-    implementation(libs.spring.context)
+    implementation("org.springframework:spring-context")
 
     //guice context
-    implementation(libs.guice)
-    implementation(libs.guice.multibindings)
+    implementation("com.google.inject:guice:$guiceVersion")
+    implementation("com.google.inject.extensions:guice-multibindings:$guiceMultibindingsVersion")
 
     //properties
-    implementation(libs.jackson.dataformat.yaml)
-    implementation(libs.jackson.module.kotlin)
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     //serialization
-    implementation(libs.jackson.databind)
+    implementation("com.fasterxml.jackson.core:jackson-databind")
 }
