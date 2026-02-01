@@ -5,7 +5,7 @@ plugins {
     id("com.github.bratek20.plugins.b20-publish")
 }
 
-version = "1.1.0"
+version = "1.1.2"
 
 b20Publish {
     component = B20PublishComponent.JAVA_PLATFORM
