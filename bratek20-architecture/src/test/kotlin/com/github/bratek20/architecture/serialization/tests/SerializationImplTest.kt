@@ -61,6 +61,18 @@ class SerializationImplTest {
     }
 
     @Test
+    fun `should serialize and deserialize primitive values`() {
+        val serializedValue = serializer.serialize(1)
+        assertSerializedValue(serializedValue) {
+            value = "1"
+            type = "JSON"
+        }
+
+        val deserializedValue = serializer.deserialize(serializedValue, Any::class.java)
+        assertThat(deserializedValue).isEqualTo(1)
+    }
+
+    @Test
     fun `should serialize as JSON`() {
         val testObject = TestObject("test", 1, null)
 
