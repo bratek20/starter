@@ -5,11 +5,11 @@ plugins {
     id("com.github.bratek20.plugins.b20-publish")
 }
 
-//changed by script
-val catalogVersion = "1.1.8"
+// change it when publishing new version
+val catalogVersion = "1.1.9"
 
-//changed manually
-val b20ArchVersion = "1.1.1"
+// other versions
+val b20ArchVersion = "1.1.2"
 val b20InfraVersion = "1.1.2"
 val b20SpringVersion = "1.1.2"
 val b20UtilsVersion = "1.1.0"
