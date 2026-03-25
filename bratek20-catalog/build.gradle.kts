@@ -6,10 +6,10 @@ plugins {
 }
 
 // change it when publishing new version
-val catalogVersion = "1.1.9"
+val catalogVersion = "1.1.10"
 
 // other versions
-val b20ArchVersion = "1.1.2"
+val b20ArchVersion = "1.1.3"
 val b20InfraVersion = "1.1.2"
 val b20SpringVersion = "1.1.2"
 val b20UtilsVersion = "1.1.0"

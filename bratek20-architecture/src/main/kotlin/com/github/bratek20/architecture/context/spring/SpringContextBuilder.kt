@@ -2,14 +2,10 @@ package com.github.bratek20.architecture.context.spring
 
 import org.springframework.beans.factory.UnsatisfiedDependencyException
 import org.springframework.context.annotation.AnnotationConfigApplicationContext
-import com.github.bratek20.architecture.context.api.Context
-import com.github.bratek20.architecture.context.api.ContextBuilder
 import com.github.bratek20.architecture.context.api.DependentClassNotFoundInContextException
 import com.github.bratek20.architecture.context.impl.AbstractContextBuilder
-import org.springframework.beans.factory.support.GenericBeanDefinition
 import org.springframework.core.env.SimpleCommandLinePropertySource
 import java.util.*
-import java.util.function.Supplier
 
 class SpringContextBuilder: AbstractContextBuilder() {
     val classes = mutableListOf<Class<*>>()
@@ -52,6 +48,15 @@ class SpringContextBuilder: AbstractContextBuilder() {
         return this
     }
 
+    fun withConfiguration(configurationType: Class<*>): SpringContextBuilder {
+        setClass(configurationType)
+        return this
+    }
+
+    fun withConfigurations(vararg configurationTypes: Class<*>): SpringContextBuilder {
+        configurationTypes.forEach { withConfiguration(it) }
+        return this
+    }
 
     override fun build(): SpringContext {
         val context = AnnotationConfigApplicationContext()
