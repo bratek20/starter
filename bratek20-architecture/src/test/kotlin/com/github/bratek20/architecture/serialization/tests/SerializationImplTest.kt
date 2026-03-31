@@ -380,4 +380,19 @@ class SerializationImplTest {
 
         assertThat(deserializedObject).isEqualTo(OnlyResultField("OK"))
     }
+
+    @Test
+    fun `helper methods for json`() {
+        serializer.asJson(SomeValue("test")).let { json ->
+            assertThat(json).isEqualTo("{\"value\":\"test\"}")
+        }
+
+        serializer.fromJsonObject("{\"value\":\"test\"}", SomeValue::class.java).let { obj ->
+            assertThat(obj).isEqualTo(SomeValue("test"))
+        }
+
+        serializer.fromJsonList("[{\"value\":\"test\"}]", SomeValue::class.java).let { list ->
+            assertThat(list).isEqualTo(listOf(SomeValue("test")))
+        }
+    }
 }
