@@ -12,7 +12,7 @@ val catalogVersion = "1.1.12"
 val b20ArchVersion = "1.1.6"
 val b20InfraVersion = "1.1.3"
 val b20SpringVersion = "1.1.3"
-val b20UtilsVersion = "1.1.1"
+val b20UtilsVersion = "1.2.0"
 
 val b20LogsVersion = "1.1.1"
 val b20PluginsVersion = "1.1.3"
