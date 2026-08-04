@@ -7,6 +7,7 @@ import org.gradle.api.attributes.Category
 import org.gradle.api.attributes.DocsType
 import org.gradle.api.attributes.Usage
 import org.gradle.api.component.AdhocComponentWithVariants
+import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.kotlin.dsl.configure
@@ -20,6 +21,13 @@ class B20Sources : Plugin<Project> {
             // main sources: `-sources.jar` + `sourcesElements` variant, picked up by B20Publish via the `java` component
             extensions.configure<JavaPluginExtension> {
                 withSourcesJar()
+            }
+
+            // IDEs ask only for the plain `sources` variant, so fixtures sources go in there too
+            tasks.named<Jar>("sourcesJar") {
+                from(sourceSets()["testFixtures"].allSource)
+                // both source sets share package directories
+                duplicatesStrategy = DuplicatesStrategy.EXCLUDE
             }
 
             val testFixturesSourcesJar = tasks.register<Jar>("testFixturesSourcesJar") {
