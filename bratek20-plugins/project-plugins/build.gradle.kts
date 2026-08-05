@@ -1,4 +1,4 @@
-version = "1.1.2"
+version = "1.1.3"
 
 val kotlinVersion = "1.9.25"
 val shadowVersion = "8.1.1"

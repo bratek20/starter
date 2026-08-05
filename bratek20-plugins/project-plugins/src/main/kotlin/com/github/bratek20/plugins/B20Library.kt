@@ -39,6 +39,7 @@ class B20Library : Plugin<Project> {
                 apply(B20Kotlin::class.java)
 
                 apply(B20Test::class.java)
+                apply(B20Sources::class.java)
 
                 afterEvaluate {
                     if (ext.testsInTestFixtures) {

@@ -4,7 +4,7 @@ plugins {
 }
 
 val logsGroup = "com.github.bratek20.logs"
-val logsVersion = "1.1.0"
+val logsVersion = "1.1.1"
 
 group = logsGroup
 version = logsVersion
