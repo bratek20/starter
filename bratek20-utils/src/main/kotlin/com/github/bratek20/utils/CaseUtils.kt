@@ -9,9 +9,7 @@ fun camelToPascalCase(name: String): String {
 }
 
 fun camelToScreamingSnakeCase(name: String): String {
-    return name.replace(Regex("([a-z])([A-Z])")) {
-        "${it.groupValues[1]}_${it.groupValues[2]}"
-    }.uppercase()
+    return name.replace(Regex("([a-z0-9])([A-Z])"), "$1_$2").uppercase()
 }
 
 fun stringify(name: String): String {
