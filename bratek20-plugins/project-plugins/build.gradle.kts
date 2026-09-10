@@ -1,4 +1,4 @@
-version = "1.1.3"
+version = "2.0.0"
 
 val shadowVersion = "8.1.1"
 

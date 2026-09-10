@@ -4,7 +4,7 @@ plugins {
     kotlin("plugin.spring")
 }
 
-version = "1.1.3"
+version = "2.0.0"
 
 dependencies {
     api(project(":bratek20-architecture"))
