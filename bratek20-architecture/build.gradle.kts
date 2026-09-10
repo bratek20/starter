@@ -19,6 +19,7 @@ dependencies {
 
     //spring context
     implementation("org.springframework:spring-context")
+    testFixturesImplementation("org.springframework:spring-context")
 
     //guice context
     implementation("com.google.inject:guice:$guiceVersion")

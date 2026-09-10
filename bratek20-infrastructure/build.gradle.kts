@@ -13,6 +13,7 @@ dependencies {
 
     implementation(project(":bratek20-logs:logs-core"))
     testFixturesImplementation(testFixtures(project(":bratek20-logs")))
+    testImplementation(testFixtures(project(":bratek20-logs")))
 
     //http client
     implementation("org.springframework:spring-web")
