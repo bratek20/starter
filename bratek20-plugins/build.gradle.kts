@@ -30,4 +30,8 @@ subprojects {
             }
         }
     }
+
+    extensions.configure<JavaPluginExtension> {
+        toolchain { languageVersion.set(JavaLanguageVersion.of(25)) }
+    }
 }
