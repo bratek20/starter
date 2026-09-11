@@ -3,7 +3,7 @@ plugins {
     id("com.github.bratek20.plugins.b20-publish")
 }
 
-version = "1.1.6"
+version = "2.0.0"
 
 b20Library {
     testsInTestFixtures = true
@@ -19,6 +19,7 @@ dependencies {
 
     //spring context
     implementation("org.springframework:spring-context")
+    testFixturesImplementation("org.springframework:spring-context")
 
     //guice context
     implementation("com.google.inject:guice:$guiceVersion")

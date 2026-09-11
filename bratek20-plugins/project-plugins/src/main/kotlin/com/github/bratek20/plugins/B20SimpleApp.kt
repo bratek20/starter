@@ -13,7 +13,7 @@ class B20SimpleApp : B20App() {
         super.apply(project)
 
         with(project) {
-            plugins.apply("com.github.johnrengelman.shadow")
+            plugins.apply("com.gradleup.shadow")
 
             val mainClassName = findMainClassName(project)
             if (mainClassName != null) {

@@ -4,15 +4,16 @@ plugins {
     kotlin("plugin.spring")
 }
 
-version = "1.1.3"
+version = "2.0.0"
 
 dependencies {
     api(project(":bratek20-architecture"))
     testFixturesImplementation(testFixtures(project(":bratek20-architecture")))
-    testApi(testFixtures(project(":bratek20-architecture")))
+    testImplementation(testFixtures(project(":bratek20-architecture")))
 
     implementation(project(":bratek20-logs:logs-core"))
     testFixturesImplementation(testFixtures(project(":bratek20-logs")))
+    testImplementation(testFixtures(project(":bratek20-logs")))
 
     //http client
     implementation("org.springframework:spring-web")

@@ -6,17 +6,17 @@ plugins {
 }
 
 // change it when publishing new version
-val catalogVersion = "1.1.13"
+val catalogVersion = "2.0.0"
 
 // other versions
-val b20ArchVersion = "1.1.6"
-val b20InfraVersion = "1.1.3"
-val b20SpringVersion = "1.1.3"
-val b20UtilsVersion = "1.2.1"
+val b20ArchVersion = "2.0.0"
+val b20InfraVersion = "2.0.0"
+val b20SpringVersion = "2.0.0"
+val b20UtilsVersion = "2.0.0"
 
-val b20LogsVersion = "1.1.1"
-val b20PluginsVersion = "1.1.3"
-val b20BomVersion = "1.1.2"
+val b20LogsVersion = "2.0.0"
+val b20PluginsVersion = "2.0.0"
+val b20BomVersion = "2.0.0"
 
 catalog {
     versionCatalog {

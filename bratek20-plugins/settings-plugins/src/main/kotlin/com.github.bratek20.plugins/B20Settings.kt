@@ -3,6 +3,7 @@ package com.github.bratek20.plugins
 import org.gradle.api.Plugin
 import org.gradle.api.initialization.Settings
 import org.gradle.kotlin.dsl.create
+import org.gradle.toolchains.foojay.FoojayToolchainsConventionPlugin
 
 open class B20SettingsExtension {
     var catalogVersion: String? = null
@@ -11,6 +12,10 @@ open class B20SettingsExtension {
 class B20Settings : Plugin<Settings> {
     override fun apply(settings: Settings) {
         val ext = settings.extensions.create<B20SettingsExtension>("b20Settings")
+
+        //Registers the foojay toolchain resolver, so Gradle can provision the JDK a
+        //project asks for. Applied here rather than in each consumer's settings file.
+        settings.pluginManager.apply(FoojayToolchainsConventionPlugin::class.java)
 
         settings.gradle.settingsEvaluated {
             settings.dependencyResolutionManagement {

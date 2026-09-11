@@ -26,6 +26,9 @@ class B20Test : Plugin<Project> {
             }
 
             tasks.withType<Test>().configureEach {
+                //Mockito and other tooling self-attach as agents; JDK 24+ warns on every dynamic load
+                jvmArgs("-XX:+EnableDynamicAgentLoading")
+
                 useJUnitPlatform()
 
                 if (ext.printTestLogs) {

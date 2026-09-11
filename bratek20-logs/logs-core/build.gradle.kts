@@ -5,5 +5,6 @@ plugins {
 
 dependencies {
     implementation(project(":bratek20-architecture"))
+    testFixturesImplementation(project(":bratek20-architecture"))
     testImplementation(testFixtures(project(":bratek20-architecture")))
 }

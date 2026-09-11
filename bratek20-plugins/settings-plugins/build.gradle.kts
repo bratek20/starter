@@ -1,4 +1,12 @@
-version = "1.1.0"
+version = "2.0.0"
+
+val foojayResolverVersion = "1.0.0"
+
+dependencies {
+    //So B20Settings can register the toolchain resolver on behalf of consumers,
+    //instead of every repo declaring the foojay plugin itself.
+    implementation("org.gradle.toolchains:foojay-resolver:$foojayResolverVersion")
+}
 
 gradlePlugin {
     plugins {

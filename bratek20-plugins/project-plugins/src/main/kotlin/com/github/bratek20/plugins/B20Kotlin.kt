@@ -10,7 +10,7 @@ class B20Kotlin : Plugin<Project> {
         project.pluginManager.apply("org.jetbrains.kotlin.jvm")
 
         project.extensions.configure<KotlinJvmProjectExtension> {
-            jvmToolchain(21)
+            jvmToolchain(25)
         }
     }
 }
