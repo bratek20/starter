@@ -1,13 +1,13 @@
 version = "2.0.0"
 
-val shadowVersion = "8.1.1"
+val shadowVersion = "9.6.1"
 
 dependencies {
     implementation(project(":settings-plugins"))
     implementation("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:${common.versions.kotlin.get()}")
     implementation("org.springframework.boot:spring-boot-gradle-plugin:${common.versions.springBoot.get()}")
     implementation("org.jetbrains.kotlin.plugin.spring:org.jetbrains.kotlin.plugin.spring.gradle.plugin:${common.versions.kotlin.get()}")
-    implementation("com.github.johnrengelman:shadow:$shadowVersion")
+    implementation("com.gradleup.shadow:shadow-gradle-plugin:$shadowVersion")
 }
 
 gradlePlugin {
