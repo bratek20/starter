@@ -2,7 +2,7 @@
   <configuration default="false" name="[spring] publish " type="GradleRunConfiguration" factoryName="Gradle">
     <ExternalSystemSettings>
       <option name="executionName" />
-      <option name="externalProjectPath" value="D:\Private\bratek20-starter\bratek20-spring" />
+      <option name="externalProjectPath" value="$PROJECT_DIR$/bratek20-spring" />
       <option name="externalSystemIdString" value="GRADLE" />
       <option name="scriptParameters" value="" />
       <option name="taskDescriptions">
