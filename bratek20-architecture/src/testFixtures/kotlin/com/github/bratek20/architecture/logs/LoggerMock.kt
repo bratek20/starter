@@ -1,6 +1,6 @@
-package com.github.bratek20.logs
+package com.github.bratek20.architecture.logs
 
-import com.github.bratek20.logs.api.Logger
+import com.github.bratek20.architecture.logs.api.Logger
 import com.github.bratek20.architecture.context.api.ContextBuilder
 import com.github.bratek20.architecture.context.api.ContextModule
 import org.assertj.core.api.Assertions.assertThat

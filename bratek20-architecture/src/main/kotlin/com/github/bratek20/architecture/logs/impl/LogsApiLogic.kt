@@ -1,8 +1,8 @@
-package com.github.bratek20.logs.impl
+package com.github.bratek20.architecture.logs.impl
 
-import com.github.bratek20.logs.api.Logger
-import com.github.bratek20.logs.api.LoggerIntegration
-import com.github.bratek20.logs.api.LogsApi
+import com.github.bratek20.architecture.logs.api.Logger
+import com.github.bratek20.architecture.logs.api.LoggerIntegration
+import com.github.bratek20.architecture.logs.api.LogsApi
 
 class LogsApiLogic(
     private val integration: LoggerIntegration

@@ -1,4 +1,4 @@
-package com.github.bratek20.logs.api
+package com.github.bratek20.architecture.logs.api
 
 //outgoing
 interface Logger {

@@ -1,7 +1,7 @@
 package com.github.bratek20.logs
 
 import com.github.bratek20.architecture.context.someContextBuilder
-import com.github.bratek20.logs.api.Logger
+import com.github.bratek20.architecture.logs.api.Logger
 import com.github.bratek20.logs.context.Slf4jLogsImpl
 import com.github.bratek20.logs.slf4j.Slf4jLogger
 import nl.altindag.log.LogCaptor

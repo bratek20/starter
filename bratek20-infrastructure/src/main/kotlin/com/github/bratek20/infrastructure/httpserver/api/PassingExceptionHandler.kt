@@ -1,7 +1,7 @@
 package com.github.bratek20.infrastructure.httpserver.api
 
 import com.github.bratek20.architecture.exceptions.ApiException
-import com.github.bratek20.logs.api.Logger
+import com.github.bratek20.architecture.logs.api.Logger
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice

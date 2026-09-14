@@ -28,7 +28,6 @@ catalog {
         library("bratek20-bom", "com.github.bratek20", "bratek20-bom").version(b20BomVersion)
 
         library("bratek20-logs", "com.github.bratek20.logs", "bratek20-logs").version(b20LogsVersion)
-        library("bratek20-logs-core", "com.github.bratek20.logs", "logs-core").version(b20LogsVersion)
         library("bratek20-logs-slf4j", "com.github.bratek20.logs", "logs-slf4j").version(b20LogsVersion)
         library("bratek20-logs-logback", "com.github.bratek20.logs", "logs-logback").version(b20LogsVersion)
 

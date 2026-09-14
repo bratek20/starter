@@ -11,10 +11,6 @@ dependencies {
     testFixturesImplementation(testFixtures(project(":bratek20-architecture")))
     testImplementation(testFixtures(project(":bratek20-architecture")))
 
-    implementation(project(":bratek20-logs:logs-core"))
-    testFixturesImplementation(testFixtures(project(":bratek20-logs")))
-    testImplementation(testFixtures(project(":bratek20-logs")))
-
     //http client
     implementation("org.springframework:spring-web")
     compileOnly("jakarta.servlet:jakarta.servlet-api")

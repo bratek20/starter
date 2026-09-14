@@ -3,7 +3,7 @@ package com.github.bratek20.spring.mongo
 import com.github.bratek20.architecture.data.api.DataManipulator
 import com.github.bratek20.architecture.serialization.api.SerializationType
 import com.github.bratek20.architecture.serialization.api.SerializedValue
-import com.github.bratek20.logs.api.Logger
+import com.github.bratek20.architecture.logs.api.Logger
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query

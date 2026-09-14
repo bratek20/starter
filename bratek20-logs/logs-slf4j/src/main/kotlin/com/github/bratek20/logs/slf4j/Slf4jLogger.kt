@@ -1,6 +1,6 @@
 package com.github.bratek20.logs.slf4j
 
-import com.github.bratek20.logs.api.LoggerIntegration
+import com.github.bratek20.architecture.logs.api.LoggerIntegration
 import org.slf4j.LoggerFactory
 
 class Slf4jLogger : LoggerIntegration {

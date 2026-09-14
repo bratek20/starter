@@ -3,7 +3,7 @@ package com.github.bratek20.spring.webapp
 import com.github.bratek20.architecture.context.api.ContextBuilder
 import com.github.bratek20.architecture.context.api.ContextModule
 import com.github.bratek20.infrastructure.httpserver.api.WebServerModule
-import com.github.bratek20.logs.context.SystemLogsImpl
+import com.github.bratek20.architecture.logs.context.SystemLogsImpl
 import io.restassured.RestAssured
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.jupiter.api.Test

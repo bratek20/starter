@@ -6,8 +6,8 @@ import com.github.bratek20.infrastructure.httpclient.api.*
 import com.github.bratek20.infrastructure.httpclient.context.HttpClientBaseImpl
 import com.github.bratek20.infrastructure.httpclient.context.HttpClientImpl
 import com.github.bratek20.infrastructure.httpclient.fixtures.*
-import com.github.bratek20.logs.LoggerMock
-import com.github.bratek20.logs.LogsMocks
+import com.github.bratek20.architecture.logs.LoggerMock
+import com.github.bratek20.architecture.logs.LogsMocks
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
