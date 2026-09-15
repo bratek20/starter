@@ -3,7 +3,7 @@ plugins {
     id("com.github.bratek20.plugins.b20-publish")
 }
 
-version = "2.0.0"
+version = "2.1.0"
 
 b20Library {
     testsInTestFixtures = true
