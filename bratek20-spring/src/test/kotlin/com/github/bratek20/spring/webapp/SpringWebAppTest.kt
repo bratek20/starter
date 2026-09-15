@@ -6,7 +6,7 @@ import com.github.bratek20.architecture.context.api.DependentClassNotFoundInCont
 import com.github.bratek20.architecture.exceptions.ApiException
 import com.github.bratek20.architecture.exceptions.assertApiExceptionThrown
 import com.github.bratek20.infrastructure.httpserver.api.WebServerModule
-import com.github.bratek20.logs.context.SystemLogsImpl
+import com.github.bratek20.architecture.logs.context.SystemLogsImpl
 import io.restassured.RestAssured
 import org.assertj.core.api.Assertions.assertThatCode
 import org.hamcrest.CoreMatchers.equalTo

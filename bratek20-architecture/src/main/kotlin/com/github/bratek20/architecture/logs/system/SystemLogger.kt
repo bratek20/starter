@@ -1,6 +1,6 @@
-package com.github.bratek20.logs.system
+package com.github.bratek20.architecture.logs.system
 
-import com.github.bratek20.logs.api.LoggerIntegration
+import com.github.bratek20.architecture.logs.api.LoggerIntegration
 
 class SystemLogger : LoggerIntegration {
     override fun debug(message: String, source: Any?) {

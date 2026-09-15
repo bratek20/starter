@@ -6,7 +6,7 @@ import com.github.bratek20.architecture.context.spring.SpringContextBuilder
 import com.github.bratek20.infrastructure.httpserver.api.WebApp
 import com.github.bratek20.infrastructure.httpserver.api.WebAppContext
 import com.github.bratek20.infrastructure.httpserver.api.WebServerModule
-import com.github.bratek20.logs.context.SystemLogsImpl
+import com.github.bratek20.architecture.logs.context.SystemLogsImpl
 import org.springframework.beans.factory.config.BeanDefinitionCustomizer
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.context.support.GenericApplicationContext

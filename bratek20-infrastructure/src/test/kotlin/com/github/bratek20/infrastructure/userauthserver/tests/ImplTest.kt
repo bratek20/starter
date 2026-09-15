@@ -10,8 +10,8 @@ import com.github.bratek20.infrastructure.userauthserver.api.*
 import com.github.bratek20.infrastructure.userauthserver.impl.UserAuthServerBaseImpl
 import com.github.bratek20.infrastructure.userauthserver.fixtures.assertUserMapping
 import com.github.bratek20.infrastructure.userauthserver.fixtures.userAuthServerConfig
-import com.github.bratek20.logs.LoggerMock
-import com.github.bratek20.logs.LogsMocks
+import com.github.bratek20.architecture.logs.LoggerMock
+import com.github.bratek20.architecture.logs.LogsMocks
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 

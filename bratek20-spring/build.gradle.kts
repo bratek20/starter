@@ -14,8 +14,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     testFixturesImplementation("org.springframework.boot:spring-boot-starter-web")
 
-    implementation(project(":bratek20-logs:logs-core"))
-
     // web testing
     testImplementation("io.rest-assured:rest-assured")
 

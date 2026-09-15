@@ -1,9 +1,9 @@
-package com.github.bratek20.logs
+package com.github.bratek20.architecture.logs
 
 import com.github.bratek20.architecture.context.someContextBuilder
-import com.github.bratek20.logs.api.Logger
-import com.github.bratek20.logs.api.LogsApi
-import com.github.bratek20.logs.context.SystemLogsImpl
+import com.github.bratek20.architecture.logs.api.Logger
+import com.github.bratek20.architecture.logs.api.LogsApi
+import com.github.bratek20.architecture.logs.context.SystemLogsImpl
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

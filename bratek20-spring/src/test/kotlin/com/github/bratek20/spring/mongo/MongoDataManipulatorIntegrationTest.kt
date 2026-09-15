@@ -2,7 +2,7 @@ package com.github.bratek20.spring.mongo
 
 import com.github.bratek20.architecture.data.DataManipulatorTest
 import com.github.bratek20.architecture.data.api.DataManipulator
-import com.github.bratek20.logs.context.SystemLogsImpl
+import com.github.bratek20.architecture.logs.context.SystemLogsImpl
 import com.github.bratek20.spring.webapp.SpringWebApp
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach

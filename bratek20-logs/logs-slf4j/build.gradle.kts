@@ -4,10 +4,8 @@ plugins {
 }
 
 dependencies {
-    api(project(":bratek20-logs:logs-core"))
-    testFixturesApi(testFixtures(project(":bratek20-logs:logs-core")))
-
-    implementation(project(":bratek20-architecture"))
+    api(project(":bratek20-architecture"))
+    testFixturesApi(testFixtures(project(":bratek20-architecture")))
     testImplementation(testFixtures(project(":bratek20-architecture")))
 
     // logs

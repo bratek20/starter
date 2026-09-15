@@ -4,8 +4,8 @@ import com.github.bratek20.architecture.context.api.ContextModule
 import com.github.bratek20.infrastructure.httpserver.api.WebApp
 import com.github.bratek20.infrastructure.httpserver.api.WebAppContext
 import com.github.bratek20.infrastructure.httpserver.api.WebServerModule
-import com.github.bratek20.logs.LoggerMock
-import com.github.bratek20.logs.LogsMocks
+import com.github.bratek20.architecture.logs.LoggerMock
+import com.github.bratek20.architecture.logs.LogsMocks
 import com.github.bratek20.spring.webapp.SpringWebApp
 
 class TestWebApp(

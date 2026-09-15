@@ -23,8 +23,6 @@ include("bratek20-bom")
 include("bratek20-architecture")
 
 include("bratek20-logs")
-include("bratek20-logs:logs-core")
-findProject(":bratek20-logs:logs-core")?.name = "logs-core"
 include("bratek20-logs:logs-slf4j")
 findProject(":bratek20-logs:logs-slf4j")?.name = "logs-slf4j"
 include("bratek20-logs:logs-logback")

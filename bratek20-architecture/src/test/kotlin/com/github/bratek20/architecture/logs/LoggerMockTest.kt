@@ -1,7 +1,7 @@
-package com.github.bratek20.logs
+package com.github.bratek20.architecture.logs
 
 import com.github.bratek20.architecture.context.someContextBuilder
-import com.github.bratek20.logs.api.Logger
+import com.github.bratek20.architecture.logs.api.Logger
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
